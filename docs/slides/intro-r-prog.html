@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction To R Programming</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Introduction To R Programming"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="Introduction To R Programming"/>
+    <meta name="twitter:description" content="Introduction To R Programming"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Introduction To R Programming"/>
+    <meta property="og:description" content="Introduction To R Programming"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://mjfrigaard.github.io/CSUC-JOUR301-FA22/&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Introduction To R Programming
+#.fancy[R objects and functions]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 30 2021
+
+Updated: August 15 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: center, middle
+
+# R Programming
+
+### R is a versatile language for data wrangling, visualization, and modeling
+
+---
+class: left, top
+
+# Exercises 
+
+## Links 
+
+- [Atomic vectors](https://mjfrigaard.shinyapps.io/atomic-vectors/) (*This provides a brief introduction to R’s most common object: the vector.*)
+
+- [S3 vectors](https://mjfrigaard.shinyapps.io/S3-vectors/) (*This introduces more complex vectors (factors, dates, date-times and difftimes*)
+
+- [`data.frame`s](https://mjfrigaard.shinyapps.io/dataframes/) (*An introduction to rectangular (spreadsheet) data in R.*)
+
+
+---
+background-image: url("https://www.r-project.org/logo/Rlogo.png")
+background-size: contain
+class: inverse, center, middle
+
+# Getting Started
+
+
+.rightcol[Image credit: [R Project](https://www.r-project.org)]
+
+
+---
+background-image: url("img/rstudio-launch.png")
+background-size: contain
+class: left, middle
+
+# .red[The RStudio IDE]
+
+
+---
+class: left, top
+
+# Running R Commands
+
+You can run R commands in the Console by entering them after the `&gt;` operator (see example in R below)
+
+.leftcol[
+
+
+```r
+print("Hello World")
+```
+
+```
+  [1] "Hello World"
+```
+
+]
+
+--
+
+.rightcol[
+
+
+&lt;img src="img/commands-console.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left
+
+# Running R Commands
+
+You can also run them in R scripts (see example in RStudio below)
+
+--
+
+&lt;img src="img/script-rstudio.png" width="110%" height="110%" style="display: block; margin: auto;" /&gt;
+
+---
+class: left, middle
+
+# R Syntax
+
+--
+
+### The R syntax is comprised of two major elements:
+
+--
+
+.leftcol[
+
+## Functions
+
+#### *Functions perform operations: calculate a mean, build a table, create a graph, etc.*
+
+]
+
+
+--
+
+.rightcol[
+
+## Objects
+
+#### *Objects hold information: a collection of numbers, dates, words, models results, etc.* 
+
+]
+
+---
+class: inverse, center, middle
+
+# *We use .yellow[functions] to perform operations on .yellow[objects]*
+
+---
+class: left, top
+
+# Example: create a vector of numbers
+
+The standard assignment operator in R is `&lt;-`. We can use this in combination with `c()` to create an object `x`, which contains five numbers (`1`, `3`, `5`, `7`, `9`).  
+
+
+```r
+# create vector x
+*x &lt;- c(1, 3, 5, 7, 9)
+```
+
+--
+
+Place `x` inside `print()` to print `x` to the console  
+
+
+```r
+x &lt;- c(1, 3, 5, 7, 9)
+*print(x)
+```
+
+NOTE: We can also use the `=` and move `-&gt;` to the end of the expression, but this is not recommended
+
+
+---
+class: left 
+
+# R Syntax: functions
+
+
+```r
+x &lt;- c(1, 3, 5, 7, 9)
+print(x)
+```
+
+```
+  [1] 1 3 5 7 9
+```
+
+In the example above, we've created object `x`, but what are `&lt;-` and `c()`?
+
+--
+
+We can check this by passing them both in backticks to the `class()` function below.
+
+--
+
+
+```r
+class(`&lt;-`)
+```
+
+```
+  [1] "function"
+```
+
+--
+
+
+```r
+class(`c`)
+```
+
+```
+  [1] "function"
+```
+
+---
+class: left
+
+# Functions in R
+
+&gt; ***Functions*** perform operations (calculate, model, graph, etc.) on various ***objects*** that contain information (blood pressures, sales, political party affiliation, etc.)
+
+.leftcol[
+
+Objects are similar to **nouns**: they hold information
+
+
+```r
+sally &lt;- "Sally"
+dog &lt;- "dog"
+road &lt;- "road"
+```
+
+]
+
+--
+
+.rightcol[
+
+Functions are similar to **verbs**: they perform actions on nouns
+
+
+```r
+work()
+bark()
+build()
+```
+
+]
+
+---
+class: left
+
+# Functions and objects
+
+Place an object inside the parenthesis of a function to perform the action.
+
+.cols3[
+
+
+```r
+sally &lt;- "Sally"
+*work(sally)
+```
+
+&gt; *Sally works.*
+
+]
+
+.cols3[
+
+
+```r
+dog &lt;- "dog"
+*bark(dog)
+```
+
+&gt; *A dog barks.*
+
+]
+
+.cols3[
+
+
+```r
+road &lt;- "road"
+*build(road)
+```
+
+&gt; *Build a road.*
+
+]
+
+
+---
+class: left, top
+
+## Packages and functions in R 
+
+
+Functions are stored in R packages.
+
+Fortunately, R comes 'out-of-the-box' with a set of functions for basic data management and statistical calculations.
+
+To access the functions in a package, use the following syntax:
+
+
+```r
+package::function(object)
+```
+
+
+---
+class: left, top
+
+## Packages and functions in R 
+
+
+The `median()` function comes from the `stats` package.
+
+
+```r
+stats::median(x)
+```
+
+```
+  [1] 5
+```
+
+The `typeof()` function comes from the `base` package.
+
+
+```r
+base::typeof(x)
+```
+
+```
+  [1] "double"
+```
+
+
+
+---
+class: left
+
+# Packages and functions
+
+Use tab-completion and the arrow keys in RStudio to explore a packages functions.
+
+--
+
+&lt;img src="img/tab-completion.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.small[
+
+&gt; *We can take advantage of tab-completion by using names that allow us to look up common objects. For example, naming plot objects with a `plot_` prefix will allow us to use tab-completion to scroll through each object without having to remember the specific name.*
+
+]
+
+
+---
+class: left
+
+# Installing packages from CRAN
+
+To install packages from CRAN, we can use the `install.packages()` function:
+
+--
+
+
+```r
+install.packages("package name")
+```
+
+.small[
+
+&gt; NOTE: *if this is the first time installing packages, you'll probably be presented with a list of CRAN “mirrors” to use--choose the mirror closest to you.*
+
+
+]
+
+
+--
+
+To load the package into your environment, use `library(package name)`
+
+
+```r
+library(package name)
+```
+
+
+---
+class: left, top
+
+# Installing packages from CRAN in RStudio
+
+You can also use the **Packages** pane in RStudio
+
+&lt;img src="img/install-package.png" width="40%" height="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: left
+
+# Installing user packages
+
+The code for user-written packages are typically stored in code repository, like [Github.](https://github.com/) 
+
+.leftcol40[
+
+.small[
+
+To access user-written packages, you'll need to install the `devtools` or `remotes` packages.
+
+]
+ 
+
+.code50[
+
+
+```r
+install.packages("devtools")
+install.packages("remotes")
+```
+
+]
+
+]
+
+
+
+.rightcol60[
+
+.small[
+
+Use `devtools::install_github()` or `remotes::install_github()` (with the author's username and package repository name)
+
+]
+
+.code50[
+
+
+```r
+devtools::install_github(&lt;username&gt;/&lt;package&gt;)
+remotes::install_github(&lt;username&gt;/&lt;package&gt;)
+```
+
+]
+
+]
+
+ 
+
+---
+class: inverse, left, middle
+
+# Objects
+
+--
+
+### *R is typically referred to as an "object-oriented programming" language*
+
+--
+
+### *We've covered functions, so now we'll dive into the aspects of some common R objects*
+
+--
+
+### *In this course, we're going to focus on rectangular data objects (like spreadsheets)*
+
+---
+class: left, top
+
+# Data frames and tibbles 
+
+
+If you're importing spreadsheet data, you'll be working with rectangular data objects (i.e. `data.frame`s and `tibble`s).
+
+--
+
+.leftcol[.border[
+
+&lt;img src="img/data-frame-tibble.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+
+.rightcol[
+
+.small[
+
+&gt; *These are the common rectangular data storage object for tabular data in R*
+
+]
+
+
+]
+
+
+---
+class: left, top
+
+# Data Frames
+
+.leftcol[
+
+Data frames are rectangular data with rows and columns (or observations and variables).
+
+
+.code60[
+
+
+```r
+DataFrame &lt;- data.frame(
+               character = c("A", "B", "C"), 
+               integer = c(0.1, 1.0, 10.01), 
+               logical = c(TRUE, FALSE, TRUE))
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+Print the `DataFrame` object to the console:
+
+.code60[
+
+
+```r
+DataFrame
+```
+
+```
+    character integer logical
+  1         A    0.10    TRUE
+  2         B    1.00   FALSE
+  3         C   10.01    TRUE
+```
+
+]
+
+.small[
+
+&gt; NOTE: the `stringsAsFactors = FALSE`  
+&gt; argument is not required as of R 
+&gt;  version 4.0.0.
+
+]
+]
+
+
+
+---
+class: left
+
+# Data Frame structure 
+
+.leftcol[
+
+Check the structure of the `data.frame` with `str()`
+
+.code60[
+
+
+```r
+str(DataFrame)
+```
+
+```
+  'data.frame':	3 obs. of  3 variables:
+   $ character: chr  "A" "B" "C"
+   $ integer  : num  0.1 1 10
+   $ logical  : logi  TRUE FALSE TRUE
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+`str()` gives us a transposed view of the `DataFrame` object, and tells us the dimensions of the object.
+
+.small[
+
+&gt; "`3 obs. of  3 variables`"
+
+]
+
+]
+
+
+
+---
+class: left
+
+# Tibbles 
+
+.leftcol[
+
+Tibbles are a special kind of `data.frame` (*they print better to the console and character vectors are never coerced into factors*). 
+
+
+```r
+Tibble &lt;- tibble::tribble(
+*      ~character, ~integer,  ~logical,
+              "A",      0.1,      TRUE,
+              "B",        1,     FALSE,
+              "C",    10.01,      TRUE)
+```
+
+]
+
+.rightcol[
+
+The syntax to build them is slightly different, too.
+
+
+```r
+Tibble
+```
+
+```
+  # A tibble: 3 × 3
+    character integer logical
+    &lt;chr&gt;       &lt;dbl&gt; &lt;lgl&gt;  
+  1 A             0.1 TRUE   
+  2 B             1   FALSE  
+  3 C            10.0 TRUE
+```
+
+]
+
+
+---
+class: left
+
+# Tibble structure
+
+.leftcol[
+
+Check the structure of `Tibble`.
+
+
+```r
+str(Tibble)
+```
+
+```
+  tibble [3 × 3] (S3: tbl_df/tbl/data.frame)
+   $ character: chr [1:3] "A" "B" "C"
+   $ integer  : num [1:3] 0.1 1 10
+   $ logical  : logi [1:3] TRUE FALSE TRUE
+```
+
+]
+
+.rightcol[
+
+`str()` tells us the dimensions of a tibble, and some additional information: 
+
+.small[
+
+&gt; `tibbles` are `S3` objects, with types  `tbl_df`, `tbl`, and `data.frame`.
+
+]
+
+
+]
+
+
+
+---
+class: left, top
+
+# Data frames and tibbles 
+
+Both `DataFrame` and `Tibble` contain the same information, but in slightly different objects. 
+
+.leftcol[
+
+
+```r
+DataFrame
+```
+
+```
+    character integer logical
+  1         A    0.10    TRUE
+  2         B    1.00   FALSE
+  3         C   10.01    TRUE
+```
+
+]
+
+.rightcol[
+
+
+```r
+Tibble
+```
+
+```
+  # A tibble: 3 × 3
+    character integer logical
+    &lt;chr&gt;       &lt;dbl&gt; &lt;lgl&gt;  
+  1 A             0.1 TRUE   
+  2 B             1   FALSE  
+  3 C            10.0 TRUE
+```
+
+]
+
+
+---
+class: left
+
+# Data frames &amp; tibbles 
+
+.leftcol[.small[
+
+
+```r
+DataFrame
+```
+
+```
+    character integer logical
+  1         A    0.10    TRUE
+  2         B    1.00   FALSE
+  3         C   10.01    TRUE
+```
+
+&gt; the `data.frame` prints the column names and contents
+
+]]
+
+.rightcol[.small[
+
+
+```r
+Tibble
+```
+
+```
+  # A tibble: 3 × 3
+    character integer logical
+    &lt;chr&gt;       &lt;dbl&gt; &lt;lgl&gt;  
+  1 A             0.1 TRUE   
+  2 B             1   FALSE  
+  3 C            10.0 TRUE
+```
+
+&gt; the `tibble` prints the column names, dimensions, formats, and contents
+
+]]
+
+---
+class: left
+
+# Data frames &amp; tibbles 
+
+
+If we check the `type` of the `DataFrame` and `Tibble`...
+
+.leftcol[
+
+
+```r
+typeof(DataFrame)
+```
+
+```
+  [1] "list"
+```
+
+]
+
+.rightcol[
+
+
+```r
+typeof(Tibble)
+```
+
+```
+  [1] "list"
+```
+
+]
+
+--
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+&gt; ...we see they are `lists`
+
+
+
+---
+class: left
+
+# Data Frames &amp; Tibbles 
+
+Both `data.frame`s and `tibble`s are their own class, 
+
+.leftcol40[
+
+
+```r
+class(DataFrame)
+```
+
+```
+  [1] "data.frame"
+```
+
+]
+
+.rightcol60[
+
+
+```r
+class(Tibble)
+```
+
+```
+  [1] "tbl_df"     "tbl"        "data.frame"
+```
+
+]
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+&gt; So we can think of `data.frame`s and `tibble`s as special kinds of *rectangular* lists, made with different types of vectors, with each vector being of equal length.
+
+
+---
+class: left, top
+
+# Types of objects in R 
+
+.leftcol[
+
+- **Vectors**
+
+ - atomic (logical, integer, double, and character)
+ 
+ - S3 (factors, dates, date-times, durations)
+
+- **Matrices**
+
+ - two dimensional objects
+ 
+ ]
+ 
+ .rightcol[
+
+- **Arrays**
+
+ - multidimensional objects
+
+- **Data frames &amp; tibbles**  
+
+ - rectangular objects
+
+- **Lists** 
+
+ - recursive objects
+ 
+ ]
+
+---
+class: left, top
+
+# Atomic vectors
+
+Vectors are the fundamental data type in R. 
+
+--
+
+Many of R's functions are *vectorised*, which means they're designed for performing operations on vectors.
+
+--
+
+The "atomic" in atomic vectors means, "*of or forming a single irreducible unit or component in a larger system.*"
+
+--
+
+Atomic vectors can be logical, integer, double, or character (strings). 
+
+--
+
+We will build each of these vectors using the previously covered assignment operator (`&lt;-`) and `c()` function (*which stands for 'combine'*).
+
+---
+class: left, top
+
+# Store and explore
+
+--
+
+.leftcol[
+
+A common practice in R is to create an object, perform an operation on that object with a function, and store the results in new object.
+
+We then explore the contents of the new object with another function. 
+
+]
+
+--
+
+.rightcol[.border[
+
+&lt;img src="img/store-explore.png"/&gt;
+
+
+
+]
+]
+
+--
+
+***
+
+Many of the functions in R are written with this *store and explore* process in mind.
+
+---
+class: left, top
+
+# Atomic vectors: numeric
+
+The two atomic numeric vectors are integer and double. 
+
+--
+
+Integer vectors are created with a number and capital letter `L` (i.e. `1L`, `10L`)
+
+
+```r
+vec_integer &lt;- c(1L, 10L, 100L)
+```
+
+--
+
+Double vectors can be entered as decimals, but they can also be created in scientific notation (`2.46e8`), or values determined by the floating point standard (`Inf`, `-Inf` and `NaN`).
+
+
+```r
+vec_double &lt;- c(0.1, 1.0, 10.01)
+```
+
+---
+class: left, top
+
+# Atomic vectors: numeric
+
+We will use the `typeof()` and `is.numeric()` functions to explore the contents of `vec_integer` and `vec_double`.
+
+
+```r
+typeof(vec_integer)
+```
+
+```
+  [1] "integer"
+```
+
+--
+
+
+```r
+is.numeric(vec_integer)
+```
+
+```
+  [1] TRUE
+```
+
+--
+
+`typeof()` tells us that this is an `"integer"` vector, and `is.numeric()` tests to see if it is numeric (which is `TRUE`).
+
+
+---
+class: left, top
+
+# Atomic vectors: logical vectors
+
+Logical vectors can be `TRUE` or `FALSE` (or `T` or `F` for short). Below we use `typeof()` and `is.logical()` to explore the contents of `vec_logical`.
+
+--
+
+
+```r
+vec_logical &lt;- c(TRUE, FALSE)
+typeof(vec_logical)
+```
+
+```
+  [1] "logical"
+```
+
+--
+
+
+```r
+is.logical(vec_logical)
+```
+
+```
+  [1] TRUE
+```
+
+---
+class: left, top
+
+# Atomic vectors: logical vectors
+
+
+Logical vectors are handy because when we add them together, and the total number tells us how many `TRUE` values there are. 
+
+
+```r
+TRUE + TRUE + FALSE + TRUE
+```
+
+```
+  [1] 3
+```
+
+--
+
+Logical vectors can be useful for subsetting (a way of extracting certain elements from a particular object) based on a set of conditions. 
+
+--
+
+*How many elements in `vec_integer` are greater than `5`?*
+
+
+```r
+vec_integer &gt; 5
+```
+
+```
+  [1] FALSE  TRUE  TRUE
+```
+
+
+
+---
+class: left, top
+
+# Atomic vectors: character vectors
+
+Character vectors store text data (note the double quotes). We'll *store and explore* again.
+
+--
+
+
+```r
+vec_character &lt;- c("A", "B", "C")
+typeof(vec_character)
+```
+
+```
+  [1] "character"
+```
+
+--
+
+
+```r
+is.character(vec_character)
+```
+
+```
+  [1] TRUE
+```
+
+--
+
+Character vectors typically store text information that we need to include in a calculation, visualization, or model. In these cases, we'll need to convert them into `factor`s. We'll cover those next. 
+
+---
+class: inverse, center, middle
+
+# S3 vectors
+
+### *S3 vectors can be factors, dates, date-times, and difftimes.*
+
+---
+class: left, top
+
+# S3 vectors: factors
+
+Factors are categorical vectors with a given set of responses. Below we create a factor with three levels: `low`, `medium`, and `high`
+
+--
+
+
+```r
+vec_factor &lt;- factor(x = c("low", "medium", "high"))
+class(vec_factor)
+```
+
+```
+  [1] "factor"
+```
+
+--
+
+Factors are not character variables, though. They get stored with an integer indicator for each character level. 
+
+
+```r
+typeof(vec_factor)
+```
+
+```
+  [1] "integer"
+```
+
+---
+class: left, top
+
+# S3 vectors: factor attributes
+
+Factors are integer vectors with two additional attributes: `class` is set to `factor`, and `levels` for each unique response.
+
+--
+
+We can check this with `unique()` and `attributes()` functions. 
+
+
+```r
+unique(vec_factor)
+```
+
+```
+  [1] low    medium high  
+  Levels: high low medium
+```
+
+--
+
+
+```r
+attributes(vec_factor)
+```
+
+```
+  $levels
+  [1] "high"   "low"    "medium"
+  
+  $class
+  [1] "factor"
+```
+
+---
+class: left, top
+
+# S3 vectors: factor attributes 
+
+
+
+.leftcol[
+
+.small[Levels are assigned alphabetically, but we can manually assign the order of factor levels with the `levels` argument in `factor()`.]
+
+
+```r
+vec_factor &lt;- factor(
+      x = c("medium", "high", "low"), 
+      levels = c("low", "medium", "high"))
+```
+
+]
+
+.rightcol[
+
+.small[We can check the levels with `levels()` or `unclass()`]
+
+
+```r
+levels(vec_factor)
+```
+
+```
+  [1] "low"    "medium" "high"
+```
+
+
+```r
+unclass(vec_factor)
+```
+
+```
+  [1] 2 3 1
+  attr(,"levels")
+  [1] "low"    "medium" "high"
+```
+
+]
+
+---
+class: left, top
+
+# S3 vectors: date
+
+Dates are stored as `double` vectors with a `class` attribute set to `Date`.  
+
+.leftcol60[
+
+.small[
+R has a function for getting today's date, `Sys.Date()`. We'll create a `vec_date` using `Sys.Date()` and adding `1` and `2` to this value.
+]
+
+
+```r
+vec_date &lt;- c(Sys.Date(), 
+              Sys.Date() + 1, 
+              Sys.Date() + 2)
+vec_date
+```
+
+```
+  [1] "2022-08-15" "2022-08-16" "2022-08-17"
+```
+
+]
+
+
+.rightcol40[
+.small[
+We can see adding units to the `Sys.Date()` added days to today's date. The `attributes()` function tells us this vector has it's own class.
+]
+
+
+```r
+attributes(vec_date)
+```
+
+```
+  $class
+  [1] "Date"
+```
+
+]
+
+---
+class: left, top
+
+# S3 vectors: date calculations
+
+Dates are stored as a number because they represent the amount of days since January 1, 1970, which is referred to as the [UNIX Epoch](https://en.wikipedia.org/wiki/Unix_time).
+
+--
+
+`unclass()` tells us what the actual number is.
+
+
+```r
+unclass(vec_date)
+```
+
+```
+  [1] 19219 19220 19221
+```
+
+
+---
+class: left, top
+
+# S3 vectors: date-time
+
+Date-times contain a bit more information than dates. The function to create a datetime vector is `as.POSIXct()`. 
+
+We'll convert `vec_date` to a date-time and store it in `vec_datetime_ct`. View the results below.
+
+--
+
+
+```r
+vec_date
+```
+
+```
+  [1] "2022-08-15" "2022-08-16" "2022-08-17"
+```
+
+--
+
+
+```r
+vec_datetime_ct &lt;- as.POSIXct(x = vec_date)
+vec_datetime_ct
+```
+
+```
+  [1] "2022-08-14 17:00:00 PDT" "2022-08-15 17:00:00 PDT" "2022-08-16 17:00:00 PDT"
+```
+
+We can see `vec_datetime_ct` stores some additional information. 
+
+---
+class: left, top
+
+# S3 vectors: date-time attributes
+
+`vec_datetime_ct` is a `double` vector with an additional attribute of `class` set to `"POSIXct" "POSIXt"`.
+
+
+```r
+typeof(vec_datetime_ct)
+```
+
+```
+  [1] "double"
+```
+
+--
+
+
+```r
+attributes(vec_datetime_ct)
+```
+
+```
+  $class
+  [1] "POSIXct" "POSIXt"
+```
+
+---
+class: left, top
+
+# S3 vectors: date-time help
+
+.leftcol[
+
+Read more about date-times by entering the `as.POSIXct` function into the console preceded by a question mark. 
+
+
+```r
+?as.POSIXct
+```
+
+]
+
+--
+
+.rightcol[
+
+&lt;img src="img/help-date-time.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+
+# S3 vectors: difftime
+
+
+.leftcol[
+
+Difftimes are durations, so we to create them with `time_01` and `time_02`:
+
+
+```r
+time_01 &lt;- Sys.Date()
+time_02 &lt;- Sys.Date() + 10
+time_01
+```
+
+```
+  [1] "2022-08-15"
+```
+
+```r
+time_02
+```
+
+```
+  [1] "2022-08-25"
+```
+
+]
+
+
+.rightcol[
+
+Difftimes are stored as a `double` vector. 
+
+
+```r
+vec_difftime &lt;- difftime(time_01, 
+                         time_02, 
+                         units = "days")
+vec_difftime
+```
+
+```
+  Time difference of -10 days
+```
+
+
+
+```r
+typeof(vec_difftime)
+```
+
+```
+  [1] "double"
+```
+
+]
+
+
+
+---
+class: left, top
+
+# S3 vectors: difftime attributes
+
+.leftcol[
+
+Difftimes are their own `class` and have a `units` attribute set to whatever we've specified in the `units` argument.
+
+
+
+```r
+attributes(vec_difftime)
+```
+
+```
+  $class
+  [1] "difftime"
+  
+  $units
+  [1] "days"
+```
+
+]
+
+.rightcol[
+
+We can see the actual number stored in the vector with `unclass()`
+
+
+```r
+unclass(vec_difftime)
+```
+
+```
+  [1] -10
+  attr(,"units")
+  [1] "days"
+```
+
+]
+
+
+
+
+---
+class: left, top
+
+# Matrices 
+
+.leftcol[
+
+A matrix is several vectors stored together into two a two-dimensional object. 
+
+
+```r
+mat_data &lt;- matrix(
+              data = c(vec_double, vec_integer), 
+                     nrow = 3, ncol = 2, 
+                     byrow = FALSE)
+mat_data
+```
+
+```
+        [,1] [,2]
+  [1,]  0.10    1
+  [2,]  1.00   10
+  [3,] 10.01  100
+```
+
+]
+
+.rightcol[
+
+We can check the dimensions of `mat_data` with `dim()`.
+
+
+```r
+dim(mat_data)
+```
+
+```
+  [1] 3 2
+```
+
+This is a three-column, two-row matrix. 
+
+]
+
+
+
+
+---
+class: left, top
+
+# Matrix positions
+
+The output in the console tells us where each element is located in `mat_data`. 
+
+
+.leftcol[
+
+For example, if I want to get the `10` that's stored in `vec_integer`, I can use look at the output and use the indexes. 
+
+
+```r
+mat_data
+```
+
+```
+        [,1] [,2]
+  [1,]  0.10    1
+  [2,]  1.00   10
+  [3,] 10.01  100
+```
+
+]
+
+.rightcol[
+
+By placing the index (`[2, 2]`) next to the object, I am telling R, "*only return the value in this position*".
+
+
+```r
+mat_data[2, 2]
+```
+
+```
+  [1] 10
+```
+
+]
+
+
+
+
+
+---
+class: left, top
+
+# Arrays
+
+
+.leftcol[
+
+Arrays are like matrices, but they can have more dimensions. 
+
+
+```r
+dat_array &lt;- array(
+                data = c(1, 2, 3, 4, 5,
+                        6, 7, 8, 9, 10,
+                        11, 12, 13, 14, 
+                        15, 16, 17, 18), 
+                   dim = c(3, 3, 2))
+```
+
+]
+
+.rightcol[
+
+
+```r
+dat_array
+```
+
+```
+  , , 1
+  
+       [,1] [,2] [,3]
+  [1,]    1    4    7
+  [2,]    2    5    8
+  [3,]    3    6    9
+  
+  , , 2
+  
+       [,1] [,2] [,3]
+  [1,]   10   13   16
+  [2,]   11   14   17
+  [3,]   12   15   18
+```
+
+]
+
+
+
+
+---
+class: left, top
+
+# Array layers
+
+.leftcol[.border[
+
+`dat_array` contains numbers 1 through 18 in three columns and three rows, stacked in two *layers*. 
+
+&lt;!-- &lt;img src="img/array.png"/&gt; --&gt;
+
+&lt;img src="img/array.png" width="55%" height="55%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+.rightcol[ 
+
+
+```r
+class(dat_array)
+```
+
+```
+  [1] "array"
+```
+
+```r
+class(mat_data)
+```
+
+```
+  [1] "matrix" "array"
+```
+
+&gt; Matrices are arrays, but arrays 
+&gt; are not matrices
+
+]
+
+---
+class: left
+
+# Lists 
+
+.leftcol55[
+
+Lists are special objects because they can contain all other objects (including other lists).
+
+.small[
+
+
+```r
+dat_list &lt;- list(
+             "integer" = vec_integer, 
+             "array" = dat_array,
+             "matrix data" = mat_data, 
+             "data frame" = DataFrame, 
+             "tibble" = Tibble)
+```
+
+]]
+
+.rightcol45[
+
+Lists have a `names` attribute, which we've defined above in double quotes.
+
+.small[
+
+
+```r
+attributes(dat_list)
+```
+
+```
+  $names
+  [1] "integer"     "array"       "matrix data" "data frame"  "tibble"
+```
+
+]]
+
+
+---
+class: left
+
+# List structure
+
+If we check the structure of the `dat_list`, we see the structure of list, and the structure of the elements in the list.
+
+
+```r
+str(dat_list)
+```
+
+```
+  List of 5
+   $ integer    : int [1:3] 1 10 100
+   $ array      : num [1:3, 1:3, 1:2] 1 2 3 4 5 6 7 8 9 10 ...
+   $ matrix data: num [1:3, 1:2] 0.1 1 10 1 10 ...
+   $ data frame :'data.frame':	3 obs. of  3 variables:
+    ..$ character: chr [1:3] "A" "B" "C"
+    ..$ integer  : num [1:3] 0.1 1 10
+    ..$ logical  : logi [1:3] TRUE FALSE TRUE
+   $ tibble     : tibble [3 × 3] (S3: tbl_df/tbl/data.frame)
+    ..$ character: chr [1:3] "A" "B" "C"
+    ..$ integer  : num [1:3] 0.1 1 10
+    ..$ logical  : logi [1:3] TRUE FALSE TRUE
+```
+
+---
+class: left, top
+
+# Recap
+
+**In R, two major elements: functions and objects.** 
+
+ - *functions are verbs, objects are nouns*
+ 
+--
+
+**Packages: use `install.packages()` and `library()` to load functions from packages**  
+
+ - *or `devtools::install_github(&lt;username&gt;/&lt;package&gt;)` or `remotes::install_github(&lt;username&gt;/&lt;package&gt;)`*
+
+--
+
+**The most common R object is a vector**
+
+ - Atomic vectors: *logical, integer, double, or character (strings)*  
+ - S3 vectors: *factors, dates, date-times, and difftimes*  
+ 
+---
+class: left, top
+
+# Recap, cont.
+
+**More complicated data structures: matrices and arrays**  
+
+  - Matrix: *two-dimensional object*   
+  - Array: *multidimensional object*  
+
+--
+
+**Rectangular data structures:**
+
+  - *`data.frame`s &amp; `tibble`s are special kinds of rectangular lists, which can hold different types of vectors, with each vector being of equal length* 
+--
+
+
+**Catch-all data structures:**
+
+  - *lists can contain all other objects (including other lists)*
+
+---
+class: left, top
+
+# More resources
+
+Learn more about R objects in the help files or the following online texts: 
+
+1. [R for Data Science](https://r4ds.had.co.nz/) 
+
+2. [Advanced R](https://adv-r.hadley.nz/)  
+
+3. [Hands on Programming with R](https://rstudio-education.github.io/hopr/r-objects.html)
+
+4. [R Language Definition](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects)
+
+---
+class: center, top
+
+# THANK YOU!
+
+## Feedback
+
+@mjfrigaard on Twitter and Github
+
+mjfrigaard@gmail.com 
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

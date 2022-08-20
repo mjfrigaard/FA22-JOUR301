@@ -1,0 +1,1411 @@
+---
+title: "Data Visualization with `ggplot2` (part 1)"
+subtitle: "An introduction to the grammar of graphics"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Visualization with ggplot2 (part 1)",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name("github-repo" = "mjfrigaard/csuc-data-journalism") %>%
+  meta_social(
+    title = "Data Visualization with ggplot2 (part 1)",
+    url = "https://mjfrigaard.github.io/csuc-data-journalism/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+source("../code/copy-slide-images.R")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://github.com/mjfrigaard/csuc-data-journalism</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+
+```{r ggplot2_masterpiece, out.height="65%", out.width="65%", echo = FALSE, fig.align='center'}
+# copy_slide_images("ggplot2_masterpiece.png")
+knitr::include_graphics("img/ggplot2_masterpiece.png")
+```
+
+.footer-large[.right[Art by Allison Horst]]
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 30%
+
+# Intro to Data Visualization with R with `ggplot2` (part 1)
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Objectives
+
+## 1) Introduce the grammar of graphics
+
+## 2) Identifying graph aesthetics 
+
+## 3) Recognizing and using `geoms` 
+
+## 4) Faceting graphs
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Resources 
+
+## Link to slides 
+
+https://mjfrigaard.github.io/csuc-data-journalism/slides.html
+
+## Link to exercises 
+
+https://mjfrigaard.github.io/csuc-data-journalism/lessons.html
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Why use `ggplot2` for data visualization?
+
+<br>
+
+--
+
+### 1) `ggplot2` provides a comprehensive grammar for creating graphs/figures
+
+--
+
+### 2) It works hand-and-hand with the `tidyverse` 
+
+--
+
+### 3) Better plots = better communication
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Why do we create data visualizations? 
+
+## Exploration and Clarification 
+
+.large[
+
+> "The simple graph has brought more information to the data analyst’s mind than any other device." - John Tukey
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Why do we create data visualizations? 
+
+## Better decision making
+
+.large[
+
+> "Data visualization is a collection of methods that use visual representations to explore, make sense of, and communicate quantitative data... the ultimate purpose of data visualization, beyond understanding, is to enable better decisions and actions." - Stephen Few
+
+]
+
+
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+# How should we start creating data visualizations?
+
+--
+
+## Start with pen and paper
+
+--
+
+### *get those first (bad) ideas out of the way*
+
+--
+
+## Import and inspect your data 
+
+--
+
+### *so you know what to expect*
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 96% 8%
+background-size: 6%
+
+## Layered grammar of graphics
+
+--
+
+> *"appreciating the engineering design behind a sentence – **a linear ordering of phrases which conveys a gnarly network of ideas** — is the key to understanding what you are trying to accomplish when you compose a sentence."* - Stephen Pinker
+
+--
+
+> *"language is a system for making infinite use of finite means."* - Wilhelm von Humboldt
+
+--
+
+### `ggplot2` is a **language of layers, organized linearly**
+
+--
+
+The layers give us a "*linear ordering of phrases*" to build an infinite number of graphs ("*which convey a gnarly network of ideas.*") 
+
+### ...infinitely extensible
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 96% 8%
+background-size: 6%
+
+### Let's load some data! 
+
+The `NHANES` package comes with data from the [2014 American National Health and Nutrition Examination surveys](http://www.cdc.gov/nchs/data/series/sr_02/sr02_162.pdf). We will load a sample from it below: 
+
+```{r NHANES, include=FALSE}
+library(NHANES)
+NHANES %>% 
+  select(ID, Gender, Age, AgeDecade, Race1, HealthGen,
+         Height, BMI, Weight, Pulse, BPSysAve) %>% 
+  write_csv(x = ., file = "data/small-nhanes.csv")
+```
+
+```{r import-SmallNhanes, eval=FALSE}
+SmallNhanes <- read_csv("https://bit.ly/nhanes-small")
+head(SmallNhanes)
+```
+
+```{r paged-SmallNhanes, echo=FALSE}
+SmallNhanes <- read_csv("https://bit.ly/nhanes-small")
+rmarkdown::paged_table(
+head(SmallNhanes))
+```
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Quick Tip: Column Names
+
+**Standardize names**
+
+```{r show-clean_names, eval=FALSE}
+SmallNhanes <- SmallNhanes %>% janitor::clean_names()
+head(SmallNhanes)
+```
+
+```{r paged-clean_names, echo=FALSE}
+SmallNhanes <- SmallNhanes %>% 
+  janitor::clean_names()
+rmarkdown::paged_table(head(SmallNhanes))
+```
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 20%
+background-size: 6%
+
+### Quick Tip: Factors
+
+**Format factors:** We have a `health_gen` variable with the following levels: 
+
+`Excellent`, `Vgood`, `Good`, `Fair`, or `Poor`. These are ordered. 
+
+--
+
+```{r factor-health_gen}
+SmallNhanes <- 
+  SmallNhanes %>% mutate(
+  health_gen = factor(x = health_gen, 
+                       levels = c("Poor", "Fair", 
+                                  "Good", "Vgood", 
+                                  "Excellent"), 
+                      ordered = TRUE))
+```
+
+--
+
+
+```{r levels-health_gen}
+levels(SmallNhanes$health_gen)
+```
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 96% 8%
+background-size: 6%
+
+## Layered grammar of graphics
+
+## How it works:
+
+--
+
+#### 1) Graphs are *initialized* with *ggplot()* 
+
+--
+
+#### 2) Variables are *mapped* to *aesthetics*
+
+--
+
+#### 3) Geoms are linked to *statistics*
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 96% 8%
+background-size: 6%
+
+# Our First Graph
+
+<br><br><br>
+
+## *What relationship do you expect to see between `height` and `weight`*?
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 6%
+
+## 1. Use data with pipe to initialize graph
+
+`SmallNhanes %>%`   
+
+--
+
+## 2. Map variables to aesthetics 
+
+`SmallNhanes %>%`   
+`ggplot(mapping = aes(x = weight, y = height))`
+
+--
+
+## 3. Add geoms and layers 
+
+`SmallNhanes %>% `  
+    `ggplot(mapping = aes(x = weight, y = height)) +`  
+    `geom_point()`
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 6%
+
+.border[
+
+```{r initialize, fig.align='center', out.height='80%', out.width='80%'}
+SmallNhanes %>% 
+  ggplot() # initialize #<<
+```
+
+]
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 5%
+
+.border[
+
+```{r mapping, fig.align='center', out.height='80%', out.width='80%'}
+SmallNhanes %>% 
+  ggplot(mapping = aes(x = weight, y = height)) # map variables #<<
+```
+
+]
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 6%
+
+.border[
+
+```{r geoms, fig.align='center', out.height='80%', out.width='80%'}
+SmallNhanes %>% 
+  ggplot(mapping = aes(x = weight, y = height)) + 
+  geom_point() # add geoms #<<
+```
+
+]
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+# `ggplot2` template
+
+#### Initialize the plot the `ggplot()`, map the aesthetics, and add a `<GEOM_FUNCTION>`
+
+```{r temp-1, eval=FALSE}
+<DATA> %>% 
+  ggplot(mapping = aes(<MAPPINGS>)) + 
+  <GEOM_FUNCTION>()
+```
+
+--
+
+#### We can add more aesthetics *inside* geoms
+
+```{r temp-2, eval=FALSE}
+<DATA> %>% 
+  ggplot(mapping = aes(<MAPPINGS>)) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) #<<
+```
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+# `ggplot2` template
+
+#### Because `ggplot2` is a language of layers, we can continue adding *more* geoms
+
+```{r temp-3, eval=FALSE}
+<DATA> %>% 
+  ggplot(mapping = aes(<MAPPINGS>)) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) + #<<
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) #<<
+```
+
+#### Note the different syntax (.red[%>%] vs. .red[+])
+
+
+```{r temp-4, eval=FALSE}
+<DATA> %>% #<< pipe!
+  ggplot(mapping = aes(<MAPPINGS>)) + #<< plus!
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 60%
+background-size: 30%
+
+# Graph Aesthetics 
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Aesthetics
+
+#### Is the relationship between `weight` and `height` the same for both `gender`s?
+
+*We can explore this by mapping the variables to different aesthetics*
+
+--
+
+#### Aesthetics as graph elements (`color`, `size`, `shape`, and `alpha`)
+
+.border[
+
+```{r graph-elements, echo=FALSE, fig.align='center', out.width='80%', out.height='80%'}
+# copy_slide_images("graph-elements.png")
+knitr::include_graphics(path = "img/graph-elements.png")
+```
+
+]
+
+
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 60%
+background-size: 30%
+
+# Mapping (global vs. local)
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Global `ggplot2` mapping
+
+### ***inside the `ggplot()` function*** = setting variables ***globally***
+
+```{r ggplot2-template-01, echo=FALSE, out.width='90%', out.height='90%'}
+# copy_slide_images("ggplot2-template-01.png")
+knitr::include_graphics(path = "img/ggplot2-template-01.png")
+```
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Local `ggplot2` mapping
+
+### ***inside the `geom()` function*** = setting variables ***locally***
+
+```{r ggplot2-template-02, echo=FALSE, out.width='85%', out.height='85%'}
+# copy_slide_images("ggplot2-template-02.png")
+knitr::include_graphics(path = "img/ggplot2-template-02.png")
+```
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+## Your Turn
+
+### Set local vs. global aesthetic mappings
+
+.leftcol[
+
+*From here...*
+
+```{r aes-in-ggplot, eval=FALSE}
+SmallNhanes %>% 
+  ggplot( 
+      mapping = #<<
+          aes(x = weight, y = height)) + #<<
+  geom_point() + 
+  geom_smooth()
+```
+
+]
+
+
+--
+
+.rightcol[
+
+*...to here.*
+
+```{r aes-in-geom, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() + 
+  geom_point( 
+      mapping = #<< 
+          aes(x = weight, y = height)) + #<< 
+  geom_smooth(
+      mapping = #<< 
+          aes(x = weight, y = height)) #<< 
+```
+
+]
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+### Your Turn (solution 1)
+
+.border[
+
+```{r aes-in-ggplot2-sol, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot(mapping = aes(x = weight, y = height)) + #<<
+  geom_point() + 
+  geom_smooth()
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+### Your Turn (solution 2)
+
+.border[
+
+```{r aes-in-geom-sol, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot() + 
+  geom_point(mapping = aes(x = weight, y = height)) + #<< 
+  geom_smooth(mapping = aes(x = weight, y = height)) #<< 
+```
+
+]
+
+
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 60%
+background-size: 30%
+
+# Variables, Aestheitcs, and Geoms
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+### Variables, Aestheitcs, and Geoms (1)
+
+Each graph needs a variable or value, an aesthetic, and geom (the accompanying graphic, geometry)
+
+--
+
+```{r same-aethetics, eval=FALSE}
+geom_point(mapping = aes(x = weight, y = height)) + # layer 1 #<< 
+geom_smooth(mapping = aes(x = weight, y = height)) # layer 2 #<< 
+```
+
+--
+
+| variable  |   aesthetic   |  geom            |
+|:---------:|:-------------:|:----------------:|
+| `weight`  | position = `x`| dots = `point`   |
+| `height`  | position = `y`| dots = `point`   |
+| `weight`  | position = `x`| line = `smooth`  |
+| `height`  | position = `y`| line = `smooth`  |
+
+--
+
+These have the same aesthetics! What if we added a layer with a variable mapped to a different aesthetic?
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+### Variables, Aestheitcs, and Geoms (2)
+
+But we can add *more* variables, map them to *different* aesthetics, and *adding* another `geom` layer
+
+--
+
+Add another layer, coloring the points by `gender`
+
+```{r add-color-geom-point-layer, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() + 
+  geom_point(mapping = aes(x = weight, y = height)) + #<< 
+  geom_point(mapping = aes(color = gender)) #<< 
+```
+
+--
+
+| variable  |   aesthetic    |  geom            |
+|:---------:|:--------------:|:----------------:|
+| `weight`  | position = `x` | dots = `point`   |
+| `height`  | position = `y` | dots = `point`   |
+| `gender`  | color = `color`| dots = `point`   |
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+### Variables, Aestheitcs, and Geoms (3)
+
+
+.leftcol55[
+
+#### ERROR!
+
+```{r add-color-geom-point-layer-error, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() + 
+  geom_point(
+      aes(x = weight, y = height)) + #<<
+  geom_point(
+      aes(color = gender)) #<<
+```
+
+```{r aes-geom-error, eval=FALSE}
+# Error: geom_point requires the following missing aesthetics: x and y
+```
+
+]
+
+
+.rightcol45[
+
+#### SOLUTION
+
+All `geom`s have required aesthetics--map variables globally 
+
+```{r global-mapping-layer, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(
+    aes(x = weight, y = height)) + #<<
+    geom_point(aes(color = gender)) #<<
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Aesthetics: color 
+
+
+.border[
+
+```{r color, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = gender)) #<<
+```
+
+]
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Aesthetics: size 
+
+.border[
+
+```{r size-point, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = gender, size = gender)) #<<
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Aesthetics: shape
+
+.border[
+
+```{r shape-point, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = gender, size = gender, shape = gender)) #<<
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Aesthetics: alpha (opacity)
+
+.border[
+
+```{r alpha-point, fig.align='center', out.height='60%', out.width='60%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = gender, alpha = gender)) #<<
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+# Aesthetic mappings 
+
+--
+
+.pull-left[
+
+#### Legend is automatically included 
+
+#### Continuous variables best with `size`
+
+]
+
+--
+
+.pull-right[.border[
+
+```{r aes-settings, echo=FALSE, out.width='100%', out.height='100%', fig.align='center'}
+# copy_slide_images("aes-settings.png")
+knitr::include_graphics(path = "img/aes-settings.png")
+```
+
+]]
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+## Setting values vs. mapping variables
+
+### How can we create this plot?
+
+.border[
+
+```{r red-points-1, echo=FALSE, out.width='70%', out.height='70%', fig.align='center'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(color = "red") # outside aes #<<
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Inside `aes()`
+
+.border[
+
+```{r inside-aes-no-eval, fig.align='center', out.height='65%', out.width='65%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = "red")) # inside aes #<<
+```
+
+]
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+### Outside `aes()`
+
+.border[
+
+```{r red-points, fig.align='center', out.height='65%', out.width='65%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(color = "red") # outside aes #<<
+```
+
+]
+
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+## What happened?
+
+`aes()` expected a variable, not a value (`"red"`).
+
+```{r color-outside-aes, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = "red")) # "value" in aes #<<
+```
+
+--
+
+.border[
+
+```{r inside-aes-no-eval-2, echo=FALSE, out.height='50%', out.width='50%', fig.align='center'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+    geom_point(aes(color = "red")) # inside aes #<<
+```
+
+]
+
+
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 60%
+background-size: 30%
+
+# Geoms (geometric objects)
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 6%
+
+## Geoms 
+
+--
+
+### These are visual elements used to represent the data of the graph
+
+--
+
+### Examples include: 
+
+- `geom_boxplot`  
+- `geom_col` 
+- `geom_line` 
+- `geom_smooth`
+
+--
+
+### See the cheatsheet for more examples: 
+
+https://bit.ly/ggplot2-cheat
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+## Your Turn
+
+--
+
+### *How does BMI vary across levels of self-reported general health?*
+
+--
+
+### Complete the code below: 
+
+Map the variables locally inside the `geom_boxplot()` function
+
+```{r box-plot-fill-in, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() %>% 
+  geom_boxplot(mapping = aes(x = __________, y = ___))
+```
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+```{r box-plot-show, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(mapping = aes(x = health_gen, y = bmi)) #<<
+```
+
+--
+
+#### Box-plots are great for seeing how a continuous variable varies across a categorical variable
+
+.border[
+
+```{r box-plot-show-1, echo=FALSE, fig.align='center', out.width='60%', out.height='60%'}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(mapping = aes(x = health_gen, y = bmi)) #<<
+```
+
+]
+
+
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+## Your Turn
+
+<br>
+
+--
+
+### Fill in the code below to change the colors in the boxplot for each level of `health_gen` 
+
+
+```{r boxplot-color-or-fill, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = health_gen, y = bmi, _____ = health_gen)) #<<
+```
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+```{r box-plot-color, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = health_gen, y = bmi, color = health_gen)) #<<
+```
+
+--
+
+.border[
+
+*Color is not the setting we want here...*
+
+```{r box-plot-color-1, echo=FALSE,fig.align='center', out.width='60%', out.height='60%'}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = health_gen, y = bmi, color = health_gen)) #<<
+```
+
+]
+
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 4%
+
+```{r box-plot-fill, eval=FALSE}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = health_gen, y = bmi, fill = health_gen)) #<<
+```
+
+--
+
+.border[
+
+*Fill is better*
+
+```{r box-plot-fill-1, echo=FALSE, fig.align='center', out.width='60%', out.height='60%'}
+SmallNhanes %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = health_gen, y = bmi, fill = health_gen)) #<<
+```
+
+]
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 6%
+
+# Adding layers 
+
+--
+
+### The 'infinitely extensible' part of `ggplot2` is where we start to really see it's power
+
+--
+
+### Consider the relationship between `height` and `weight` again 
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 7%
+
+```{r layer-1-plot, eval=FALSE, results='hide'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + # global #<<
+  geom_point(aes(color = gender))
+```
+
+--
+
+.border[
+
+```{r layer-1-plot-1, echo=FALSE, fig.align='center', out.width='70%', out.height='70%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + # global #<<
+  geom_point(aes(color = gender))
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 7%
+
+```{r layer-2-plot, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  geom_smooth(data = # data 2 #<<
+                filter(SmallNhanes, gender == "male"), # layer 2 #<<
+              aes(x = weight, y = height), 
+              color = "blue") 
+```
+
+--
+
+.border[
+
+```{r layer-2-plot-1, echo=FALSE, fig.align='center', out.width='64%', out.height='64%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  geom_smooth(data = # data 2 #<<
+                filter(SmallNhanes, gender == "male"), # layer 2 #<<
+              aes(x = weight, y = height), 
+              color = "blue") 
+```
+
+]
+
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 90%
+background-size: 7%
+
+```{r layer-3-plot, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  geom_smooth(data = 
+                filter(SmallNhanes, gender == "male"), 
+              aes(x = weight, y = height), 
+              color = "blue") + 
+    geom_smooth(data = # data 3 #<<
+                  filter(SmallNhanes, gender == "female"), # layer 3 #<<
+              aes(x = weight, y = height), 
+              color = "red") 
+```
+
+--
+
+.border[
+
+```{r layer-3-plot-1, echo=FALSE, fig.align='center', out.width='48%', out.height='18%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  geom_smooth(data = 
+                filter(SmallNhanes, gender == "male"), 
+              aes(x = weight, y = height), 
+              color = "blue") + 
+    geom_smooth(data = # data 3 #<<
+                  filter(SmallNhanes, gender == "female"), # layer 3 #<<
+              aes(x = weight, y = height), 
+              color = "red") 
+```
+
+]
+
+
+
+---
+class: inverse, center
+background-image: url(img/ggplot2.png)
+background-position: 50% 60%
+background-size: 30%
+
+# Facets
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 9%
+
+## Faceting 
+
+### Facet layers display subplots for levels of categorical variables 
+
+<br>
+
+| Facet layer                  |   Display                                  |
+|:-----------------------------|:-------------------------------------------|
+| `facet_wrap(. ~ gender)`     | Plot for each level of `gender`            |
+| `facet_wrap(race1 ~ gender)` | Plot for each level of `gender` and `race` |
+| `facet_wrap(. ~ gender, ncol = 1)` | Specify the number of columns        |
+| `facet_wrap(. ~ gender, nrow = 1)` | Specify the number of rows           |
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 9%
+
+## Facet Single Variable
+
+```{r facet_wrap, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(. ~ gender) #<<
+```
+
+.border[
+
+```{r facet_wrap-1, echo=FALSE, fig.align='center', out.width='52%', out.height='35%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(. ~ gender)
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 9%
+
+## Facet Two Variables
+
+```{r facet_wrap-2vars, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender) #<<
+```
+
+.border[
+
+```{r facet_wrap-2vars-1, echo=FALSE, fig.align='center', out.width='52%', out.height='42%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender)
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 9%
+
+## Facet: Set Columns
+
+```{r facet_wrap-cols, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender, ncol = 5) #<<
+```
+
+.border[
+
+```{r facet_wrap-cols-1, echo=FALSE, fig.align='center', out.width='52%', out.height='42%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender, ncol = 5) 
+```
+
+]
+
+
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 9%
+
+## Facet: Set Rows
+
+```{r facet_wrap-rows, eval=FALSE}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender, nrow = 2) #<<
+```
+
+.border[
+
+```{r facet_wrap-rows-1, echo=FALSE, fig.align='center', out.width='52%', out.height='42%'}
+SmallNhanes %>% 
+  ggplot(aes(x = weight, y = height)) + 
+  geom_point(aes(color = gender)) + 
+  facet_wrap(race1 ~ gender, nrow = 2)
+```
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 93% 7%
+background-size: 6%
+
+# Recap
+
+#### 1) Introduction the grammar of graphics syntax
+
+#### 2) Identifying graph aesthetics (position, color, shape, opacity, etc.)
+
+#### 3) Recognizing and using `geoms` (`geom_point`, `geom_smooth`, etc.)
+
+#### 4) Facetting graphs (`facet_wrap` with 1 or two variables)
+
+---
+background-image: url(img/ggplot2.png)
+background-position: 95% 7%
+background-size: 12%
+
+# More resources 
+
+#### The [`ggplot2` book](https://ggplot2-book.org/) 
+
+#### [`ggplot2`](https://ggplot2.tidyverse.org/) on the tidyverse website 
+
+#### [Flowing Data](https://flowingdata.com/) 
+
+```{r chrome_print, echo=FALSE, results='hide', eval=FALSE}
+html_slides <- list.files(".", pattern = ".html")
+pdf_slides <- str_replace(html_slides, 
+  pattern = ".html", 
+  replacement = ".pdf")
+pdf_slides <- paste0("pdfs/", pdf_slides)
+print_files <- tibble("pdfs" = pdf_slides,
+  "htmls" = html_slides)
+# print_files$pdfs[8]
+
+pagedown::chrome_print(input = print_files$htmls[8], output = print_files$pdfs[8], timeout = 120)
+```

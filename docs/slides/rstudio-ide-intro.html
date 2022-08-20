@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>The RStudio IDE</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="The RStudio IDE"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="The RStudio IDE"/>
+    <meta name="twitter:description" content="The RStudio IDE"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="The RStudio IDE"/>
+    <meta property="og:description" content="The RStudio IDE"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://mjfrigaard.github.io/CSUC-JOUR301-FA22/&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# The RStudio IDE
+#.fancy[using RStudio to manage code, data, and files]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 30 2021
+
+Updated: August 13 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: center, middle
+
+# The RStudio IDE
+
+### Managing your code, data, and files with RStudio
+
+---
+class: left, top
+
+# Outline 
+
+.leftcol[
+
+- Downloading &amp; Installing RStudio
+
+  - *See instructions in Exercise 1 on course website!*
+
+- RStudio IDE Settings 
+
+- RStudio Projects
+
+- Folder Structure
+
+
+
+
+]
+
+.rightcol[
+
+- Naming things 
+
+- File Paths 
+
+- The Terminal
+
+- Reproducible Examples 
+
+- Getting help
+
+]
+
+
+---
+class: left, top
+
+## Change RStudio's Default Restore &amp; Saving Settings 
+
+.leftcol[
+
+#### Click on **Tools** &gt; **Global Options...**
+
+#### - We want to uncheck "*Restore .RData into work space at start up*"  
+
+#### - We also want to make sure we change "*Save work space to .Rdata on exit*" to "*Never*"
+
+]
+
+.rightcol[
+
+&lt;img src="img/settings.png" width="200%" height="200%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+class: inverse, center, middle
+
+# Customize RStudio 
+
+.leftcol[
+### Code
+### Console
+### Appearance
+### Pane Layout
+### R Markdown
+]
+
+.rightcol[
+
+&lt;img src="img/setting-options.png" width="40%" height="40%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+
+# Code Editing
+
+.leftcol[
+
+## - Auto indent?
+
+## - Continue comment lines?
+
+## - Save R scripts before sourcing?
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/code-settings.png" width="64%" height="64%" style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+class: left, top
+
+# Code Display
+
+.leftcol[
+
+## - Margins?
+
+## - Scrolling?
+
+## - Rainbow parentheses?
+
+]
+
+
+.rightcol[.border[
+
+&lt;img src="img/code-display.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+class: left, top
+
+# Code Saving
+
+.leftcol[
+
+## - Cursor position?
+
+## - Line endings?
+
+## - Text encoding?
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/code-savings.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Code Completion
+
+.leftcol[
+
+## - Insert parentheses?
+
+## - Insert spaces?
+
+## - Completion delay setting?
+
+]
+
+
+.rightcol[.border[
+
+&lt;img src="img/code-completion.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Code Diagnostics
+
+.leftcol[
+
+## - Check your R Code?
+
+## - Check other languages?
+
+## - How long?
+
+]
+
+
+.rightcol[.border[
+
+&lt;img src="img/code-diagnostics.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Console
+
+.leftcol[
+
+## - Display?
+
+## - Debugging?
+
+## - Other?
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/console.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Appearance
+
+.leftcol[
+
+#### - RStudio theme?
+
+#### - Zoom?
+
+##### - Also hold `⌘` and press `+` on macOS
+
+##### - Also hold `ctrl` and press `+` on Windows
+
+#### - Font?
+
+#### - Editor theme?
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/appearance.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+
+## Pane layout
+
+.leftcol[
+
+#### - Source?
+
+#### - Console?
+
+#### Combining pane elements?
+
+##### - Plots, Connections, Build, VCS, Presentation 
+
+##### - Files, Packages, Help, Tutorial, Viewer
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/default-layout.png" width="75%" height="75%" /&gt;
+
+]]
+
+---
+
+# Pane layout view
+
+Standard layout options 
+
+.border[
+
+&lt;img src="img/default-layout-view.png" width="65%" height="65%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+
+# Pane layout: add column
+
+#### Two screens? 
+
+--
+
+.small[
+
+*add a Source column and rearrange the panes*
+
+]
+
+
+--
+
+.leftcol[.border[
+
+&lt;img src="img/add-pane-column.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+.rightcol[.border[
+
+&lt;img src="img/add-column-switch-panes.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Pane layout: add column view
+
+Now you see **Source**, **Tutorial**, and **Console** panes on a single screen!
+
+.border[
+
+&lt;img src="img/three-column-layout.png" width="65%" height="65%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+class: inverse, center, middle
+
+# RStudio Projects
+
+
+---
+class: left, top
+
+# Why RStudio Projects?
+
+### Keep track of all your files with RStudio project files (`.Rproj`).  
+
+--
+
+####  Self contained
+
+&gt; Using R projects keeps track or your current working directory!
+
+--
+
+#### Project orientated
+
+&gt; .Rproj files make bundling and shipping files and folders easier!
+
+
+---
+class: left, top
+
+# Why RStudio Projects?
+
+### Keep track of all your files with RStudio project files (`.Rproj`). 
+
+--
+
+#### Avoid removing all the files 
+
+--
+
+**Don't do this!**
+
+
+```r
+rm(list = ls())
+```
+
+--
+
+&gt; `.Rproj` files keep all the files associated with a project together — input data, R scripts, analytic results, figures.
+
+---
+class: left, top
+
+# Creating RStudio project in existing folder
+
+#### Click on *'Project: (None)'* &gt; *'New Project'* 
+
+--
+
+.border[
+
+&lt;img src="img/proj-existing-dir.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+
+# Creating RStudio project in existing folder
+
+#### Click on *'Browse* &gt; *'Create Project'*
+
+--
+
+.border[
+
+&lt;img src="img/proj-existing-dir-create.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+
+# Creating RStudio projects in new folder
+
+--
+
+.leftcol[
+
+#### Click on .blue[Project: (None)] &gt; .blue[New Project] 
+
+.border[
+
+&lt;img src="img/proj-new-dir.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+--
+
+.rightcol[
+
+#### Select project type
+
+.border[
+
+&lt;img src="img/proj-new-project.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Creating RStudio projects in new folder
+
+--
+
+.leftcol[
+
+#### Create new folder name
+
+.border[
+
+&lt;img src="img/proj-new-dir-name.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+--
+
+.rightcol[
+
+#### Choose parent folder
+
+.border[
+
+&lt;img src="img/proj-new-parent-dir-name.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Creating RStudio projects in new folder
+
+#### If you have Git installed, select *'Create a git repository'*
+
+.border[
+
+&lt;img src="img/proj-new-dir-version-crtl.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+
+# Creating RStudio projects in new folder
+
+#### Check for new project name &amp; *Git* pane
+
+.border[
+
+&lt;img src="img/proj-new-dir-view.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: inverse, left, middle
+
+# Folder Structure
+
+- separate raw and cleaned data  
+
+- keep documents and code separate  
+
+- keep figures separate  
+
+- name files appropriately (preferably 2 digit prefix)
+
+- structure is reusable and easy to understand
+
+---
+class: left, top
+
+.leftcol[
+
+.small[
+
+```
+project-name/
+    |-- CITATION
+    |-- project-name.Rproj
+    |-- README.md
+    |-- LICENSE
+    |-- requirements.txt
+    |--data/
+       |--raw/
+            |--raw-birds-data.csv
+       |--processed/
+            |--processed-birds-data.csv
+    |--doc/
+        |-- notebook.Rmd
+        |-- manuscript.Rmd
+        |-- changelog.txt
+    |--results/
+        |-- summarized-results.csv
+    |--code/
+        |-- 01-sightings-import.R
+        |-- 02-sightings-wrangle.R
+        |-- 03-sightings-model.R
+        |-- runall.R
+```
+
+]
+]
+
+.rightcol[
+
+# Folder structure 
+
+#### Adapted from from '[Good enough practices in scientific computing](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510)' 
+
+]
+
+---
+class: inverse, center, middle
+
+# Naming things 
+
+---
+class: left, top
+
+# Naming files
+
+### File names should be: 
+
+.leftcol[
+
+#### 1. human readable -&gt; (makes sense)
+
+#### 2. machine readable -&gt; (regex)
+
+#### 3. sort/order well -&gt; (ISO 8601 date)
+
+]
+
+--
+
+.rightcol[
+
+##### 2020-10-12-270-301-**central-lab-metrics**.csv
+
+##### 2020-10-12-**270-301**-central-lab-metrics.csv
+
+##### **2020-10-12**-270-301-central-lab-metrics.csv
+
+]
+
+---
+class: left, top
+
+# Naming files*
+
+We can perform regular expression searches for files like this:
+
+*Find 270-301 files*
+
+
+```r
+grepl(pattern = "270-301", 
+      x = "2020-10-12-270-301-central-lab-metrics.csv")
+```
+
+```
+  [1] TRUE
+```
+
+--
+
+
+.small[
+
+&gt; *Adapted from [Jenny Byran's slides](https://speakerdeck.com/jennybc/how-to-name-files)
+
+]
+
+
+---
+class: left, top
+
+# Naming files*
+
+### Also acceptable: Logical order and underscores `_`
+
+
+
+--
+
+
+```r
+files
+```
+
+```
+  [1] "01.0_import_lab-data.R"  "02.0_wrangle_lab-data.R"
+  [3] "03.0_eda_lab-data.R"
+```
+
+
+--
+
+
+```r
+stringr::str_split_fixed(string = files, pattern = "_", 3)
+```
+
+```
+       [,1]   [,2]      [,3]        
+  [1,] "01.0" "import"  "lab-data.R"
+  [2,] "02.0" "wrangle" "lab-data.R"
+  [3,] "03.0" "eda"     "lab-data.R"
+```
+
+.small[
+
+&gt; *Adapted from [Jenny Byran's slides](https://speakerdeck.com/jennybc/how-to-name-files)
+
+
+]
+
+---
+class: inverse, center, middle
+
+# File paths
+
+---
+class: left, top
+
+# Use relative rather than absolute file paths
+
+--
+
+### **Absolute paths** are specific to a system  
+
+`/project-name/data` -&gt; absolute path in macOS
+
+`\\project-name\\data` -&gt; absolute path in Windows
+
+--
+
+### **Relative paths** are specific to a folder
+
+`project-name/data` -&gt; relative path in macOS
+
+`project-name\\data` -&gt; relative path in Windows
+
+---
+class: left, top
+
+# Or use the `here` package
+
+### The `here::set_here()` function solves a lot of file path problems (*especially if you're not using R projects*)
+
+
+```r
+library(here)
+here::set_here(".")
+list.files(all.files = TRUE, pattern = "here")
+```
+
+```
+  [1] ".here"
+```
+
+--
+
+This creates a `.here` file (similar to `.Rproj` files)
+
+
+
+As long as the `.here` file stays in the referenced folder, you can include simply include `here::here()` in the top of your code files.
+
+---
+class: left, top
+
+# Terminal pane
+
+.leftcol[
+
+#### Learn a handful of command-line tools to make life easier 
+
+`cd`, `pwd`, `mkdir`, `rm`, `ls`, etc.
+
+#### RStudio comes with a Terminal pane for quick access to the command-line
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/terminal-pane.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+
+---
+class: left, top
+
+# Asking good questions (reproducible examples)
+
+You'll get better results if you ask a question with a reproducible example. The [`reprex` package](https://github.com/tidyverse/reprex) was designed to help you create one!
+
+
+```r
+install.packages("reprex")
+library(reprex)
+```
+
+### *Use the RStudio Addin to create a reproducible example from code you've copied onto your clipboard!* 
+
+---
+class: left, top
+
+# Reprex Addin 1
+
+.leftcol40[
+
+1. Copy code
+2. Select .blue[Addin] &gt; .blue[Render selection] 
+
+]
+
+.rightcol60[.border[
+
+&lt;img src="img/copy-render-reprex.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+
+
+---
+class: left, top
+
+# Reprex Addin 2
+
+.leftcol40[
+
+1. Copy code
+2. Select .blue[Addin] &gt; .blue[Render selection] 
+3. Wait for console  
+4. Paste reprex
+
+]
+
+.rightcol60[.border[
+
+&lt;img src="img/paste-reprex.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+
+# Reprex + datapasta
+
+### To copy + paste actual data in a reproducible example, try `datapasta`!
+
+https://reprex.tidyverse.org/articles/articles/datapasta-reprex.html
+
+
+&lt;img src="https://raw.githubusercontent.com/tidyverse/reprex/main/img/datapasta_w_reprex_sheet_to_tribble.gif" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: left, top
+
+# Getting help
+
+.leftcol[
+
+R comes with a *ton* of accessible help files 
+
+
+```r
+?read.csv
+```
+
+]
+
+.rightcol[.border[
+
+&lt;img src="img/help-pane.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+---
+class: left, top
+
+## Getting help online
+
+R also help an incredible community! Click on the links below to see some of the common places for Q &amp; A. 
+
+### 1) [Dedicated forum on RStudio Community](https://community.rstudio.com/)
+
+### 2) [Questions tagged R on StackOverflow](https://stackoverflow.com/questions/tagged/r)
+
+### 3) [Twitter topics with #rstats hashtag](https://twitter.com/hashtag/rstats)
+
+---
+class: left, top
+
+## Learn more about R best practices: 
+
+### 1) [R for Data Science](https://r4ds.had.co.nz/) 
+
+### 2) [Tidyverse](https://www.tidyverse.org/)  
+
+### 3) [RViews Community Blog](https://rviews.rstudio.com/)
+
+
+---
+class: center, top
+
+# THANK YOU!
+
+## Feedback
+
+@mjfrigaard on Twitter and Github
+
+mjfrigaard@gmail.com 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

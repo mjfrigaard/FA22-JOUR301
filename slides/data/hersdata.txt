@@ -1,0 +1,55 @@
+use "/Users/martinfrigaard/Google Drive/UCSF/STATA prog/vgsm data files/hersdata.dta"
+
+single predictor regression
+
+. regress glucose exercise if diabetes == 0
+
+      Source |       SS           df       MS      Number of obs   =     2,032
+-------------+----------------------------------   F(1, 2030)      =     14.97
+       Model |  1412.50418         1  1412.50418   Prob > F        =    0.0001
+    Residual |  191605.195     2,030  94.3867954   R-squared       =    0.0073
+-------------+----------------------------------   Adj R-squared   =    0.0068
+       Total |  193017.699     2,031  95.0357946   Root MSE        =    9.7153
+
+------------------------------------------------------------------------------
+     glucose |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    exercise |  -1.692789   .4375862    -3.87   0.000    -2.550954   -.8346242
+       _cons |   97.36104   .2815138   345.85   0.000     96.80895    97.91313
+------------------------------------------------------------------------------
+
+
+The coefficient estimate (Coef.) for exercise shows that average baseline glucose levels were about 1.7 mg/dL lower among women who exercised at least three times a week than among women who exercised less. This
+difference is statistically significant (t = -3.87;P < 0:0005).
+
+multiple predictor regression
+
+regress glucose exercise age drinkany BMI if diabetes == 0
+
+      Source |       SS           df       MS      Number of obs   =     2,028
+-------------+----------------------------------   F(4, 2023)      =     39.22
+       Model |  13828.8486         4  3457.21214   Prob > F        =    0.0000
+    Residual |  178319.973     2,023  88.1463042   R-squared       =    0.0720
+-------------+----------------------------------   Adj R-squared   =    0.0701
+       Total |  192148.822     2,027  94.7946828   Root MSE        =    9.3886
+
+------------------------------------------------------------------------------
+     glucose |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    exercise |   -.950441     .42873    -2.22   0.027    -1.791239   -.1096426
+         age |   .0635495   .0313911     2.02   0.043     .0019872    .1251118
+    drinkany |   .6802641   .4219569     1.61   0.107    -.1472514     1.50778
+         BMI |    .489242   .0415528    11.77   0.000     .4077512    .5707328
+       _cons |   78.96239   2.592844    30.45   0.000     73.87747    84.04732
+------------------------------------------------------------------------------
+
+
+-we see that in a multiple regression model that adjusts for age, alcohol use (drinkany), and BMI, average glucose is estimated to be only about 1mg/dL lower among women who exercise (95% CI 0.1–1.8, P D 0:027), holding the other three factors constant
+
+-the multipredictor model also shows that average glucose levels are about 0.7mg/dL higher among alcohol
+users than among nonusers.
+
+-average levels also increase by about 0.5mg/dL per unit increase in BMI, and by 0.06mg/dL for each additional year of age. 
+
+-each of these associations is statistically significant after adjustment for the other predictors in
+the model.

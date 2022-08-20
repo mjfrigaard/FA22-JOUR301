@@ -1,0 +1,24 @@
+---
+title: "Syllabus"
+description: ""
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Course title and instructor
+
+**Title:** JOUR 301 Data Journalism <br>
+**Unique:** (online) 5-7:50 Mondays<br>
+
+
+**Instructor:** Martin Frigaard<br>
+**Email:** mfrigaard@csuchico.edu<br>
+**Office Hours:** Mon. 9am - 9:45am (open Zoom), Thurs. 10am - 11am (open Zoom), or by appointment <br>
+**GitHub:** [mjfrigaard](https://github.com/mjfrigaard) <br>
