@@ -3,6 +3,8 @@ title: "JOUR 301: Data Journalism"
 description: |
   Data Journalism
 output_dir: "docs"
+repository_url: https://github.com/mjfrigaard/FA22-JOUR301
+include: [".nojekyll"]
 theme: "theme.css"
 navbar:
   source_url: true
