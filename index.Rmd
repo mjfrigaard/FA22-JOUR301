@@ -1,5 +1,5 @@
 ---
-title: "FA22 - Data Journalism 301"
+title: "FA22 - JOUR 301"
 description: |
   Welcome to Data Journalism 301!
 site: distill::distill_website
@@ -14,5 +14,66 @@ knitr::opts_chunk$set(echo = FALSE)
 # Learn more about publishing to GitHub Pages at:
 # https://rstudio.github.io/distill/publish_website.html#github-pages
 
+```
+
+This is the home page for JOUR 301, Data Journalism. All course materials will be posted on this site.
+
+Instructor: [Martin Frigaard](https://www.martinfrigaard.io/)  
+Meeting times: Mon 5:00pm to 7:50pm  
+Syllabus: [click here](syllabus.html)  
+Upcoming lectures and assignments: [click here](schedule.html)  
+
+## Software requirements
+
+For students enrolled in this course, you will need a computer with a working web browser. Computational requirements for using R & RStudio are described [here](https://support.rstudio.com/hc/en-us/articles/201853926-RStudio-IDE-System-Recommendations), but most modern laptops will run both programs without issue. 
+
+### R
+
+Download a recent version of R [here](https://cloud.r-project.org/)
+
+### RStudio
+
+Download a recent version of RStudio [here](https://rstudio.com/products/rstudio/download/#download)
+
+### Installation Instructions
+
+See instructions for installing R and RStudio are available here. 
+
+### R packages for this course 
+
+This course required the use of two packages on Github: 
+
+1. [`goodenuffR`](https://mjfrigaard.github.io/goodenuffR/)  
+
+2. [`sheetcheatR`](https://mjfrigaard.github.io/sheetcheatR/)
+
+Install these packages with the following lines of code in your R console: 
+
+```{r eval = FALSE, echo = TRUE}
+install.packages("remotes")
+remotes::install_github("mjfrigaard/goodenuffR")
+remotes::install_github("mjfrigaard/sheetcheatR")
+```
+
+
+### Additional R packages used in this course
+
+`dplyr`, `tidyr`, `fs`, `forcats`, `stringr`, `rmarkdown`, `lubridate`, 
+`ggplot2`, `cowplot`, `gapminder`, `GGally`, `gganimate`, `ggiraph`, `ggdendro`,
+`ggdist`, `ggforce`, `ggplot2movies`, `ggrepel`, `ggridges`, `ggthemes`, 
+`gifski`, `glue`, `knitr`, `learnr`, `naniar`, `margins`, `MASS`, `Matrix`, 
+`nycflights13`, `palmerpenguins`, `patchwork`, `rgdal`, `rmarkdown`, `umap`, 
+`xaringan`, `distill`
+
+Install these packages with the following lines of code in your R console:
+
+```{r eval = FALSE, echo = TRUE}
+install.packages(c("dplyr", "tidyr", "fs", "forcats", "stringr", "rmarkdown",
+  "lubridate", "ggplot2", "cowplot", "gapminder", "GGally", "gganimate", 
+  "ggiraph", "ggdendro", "ggdist", "ggforce", "ggplot2movies", "ggrepel", 
+  "ggridges", "ggthemes", "gifski", "glue", "knitr", "learnr", "naniar", 
+  "margins", "MASS", "Matrix", "nycflights13", "palmerpenguins", "patchwork",
+  "rgdal", "rmarkdown", "umap", "xaringan", "distill"
+))
 ```
 

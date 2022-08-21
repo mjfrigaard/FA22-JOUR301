@@ -110,7 +110,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Syllabus"]},{"type":"character","attributes":{},"value":[""]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","editor_options"]}},"value":[{"type":"character","attributes":{},"value":["Syllabus"]},{"type":"character","attributes":{},"value":[""]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["markdown"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["wrap"]}},"value":[{"type":"integer","attributes":{},"value":[72]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2448,7 +2448,7 @@ Slides
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="slides/intro-to-files-directories.html">Class 1: Introduction to data technologies</a>
+<a href="slides/intro-to-files-directories.html">Class 1: Introduction to folders, files, and software</a>
 <a href="slides/rstudio-ide-intro.html">Class 2: The RStudio IDE &amp; goodenuffR package</a>
 <a href="slides/intro-to-rmarkdown.html">Class 3: R Markdown</a>
 <a href="slides/intro-r-prog.html">Class 4: Introduction to R</a>
@@ -2468,14 +2468,23 @@ Slides
 </div>
 <div class="nav-dropdown">
 <button class="nav-dropbtn">
+Resources
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="resources/install-r-rstudio.html">Installing R &amp; RStudio</a>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
 Exercises
  
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
 <a href="https://mjfrigaard.shinyapps.io/command-line/">Exercise 1: Introduction to the command line (tutorial)</a>
-<a href="exercises/install-r-rstudio.html">Exercise 2: Installing Rstudio (lesson)</a>
-<a href="exercises/intro-to-goodenuffR.html">Exercise 3: the goodenuffR package (slides)</a>
+<a href="exercises/intro-to-goodenuffR.html">Exercise 2: the goodenuffR package (slides)</a>
 </div>
 </div>
 <a href="https://github.com/mjfrigaard/FA22-JOUR301" aria-label="Link to source">
@@ -2505,18 +2514,237 @@ Exercises
 <li><a href="#course-title-and-instructor"
 id="toc-course-title-and-instructor">Course title and
 instructor</a></li>
+<li><a href="#description" id="toc-description">Description</a></li>
+<li><a href="#student-learning-outcomes"
+id="toc-student-learning-outcomes">Student Learning Outcomes</a></li>
+<li><a href="#what-this-course-is-about"
+id="toc-what-this-course-is-about">What this course is about</a></li>
+<li><a href="#topics" id="toc-topics">Topics</a></li>
+<li><a href="#assignments-and-grading"
+id="toc-assignments-and-grading">Assignments and grading</a></li>
+<li><a href="#the-weekly-agenda" id="toc-the-weekly-agenda">The Weekly
+Agenda</a></li>
+<li><a href="#plagarism" id="toc-plagarism">Plagarism</a></li>
+<li><a href="#writing-code" id="toc-writing-code">Writing code</a></li>
+<li><a href="#books-and-materials" id="toc-books-and-materials">Books
+and materials</a></li>
+<li><a href="#disabilities" id="toc-disabilities">Disabilities</a></li>
+<li><a href="#grading" id="toc-grading">Grading</a></li>
 </ul>
 </nav>
 </div>
 <h2 id="course-title-and-instructor">Course title and instructor</h2>
 <p><strong>Title:</strong> JOUR 301 Data Journalism <br>
-<strong>Unique:</strong> (online) 5-7:50 Mondays<br></p>
+<strong>Meeting:</strong> (online) 5-7:50 Mondays<br></p>
 <p><strong>Instructor:</strong> Martin Frigaard<br>
 <strong>Email:</strong> <a href="mailto:mfrigaard@csuchico.edu"
 class="email">mfrigaard@csuchico.edu</a><br> <strong>Office
 Hours:</strong> Mon. 9am - 9:45am (open Zoom), Thurs. 10am - 11am (open
 Zoom), or by appointment <br> <strong>GitHub:</strong> <a
 href="https://github.com/mjfrigaard">mjfrigaard</a> <br></p>
+<h2 id="description">Description</h2>
+<p>This course trains students to use the tools (software, methods and
+theory) required to access, process, analyze and compose findings in the
+manner of public interest and data journalism. The course will introduce
+students to the R programming language, data manipulation, and
+visualizations.</p>
+<h2 id="student-learning-outcomes">Student Learning Outcomes</h2>
+<ol type="1">
+<li>What is data journalism (and why it exists)<br />
+</li>
+<li>Data science technologies<br />
+</li>
+<li>Common sources for data (open datasets, websites, etc.)<br />
+</li>
+<li>Using R for data manipulation<br />
+</li>
+<li>A grammar of graphics<br />
+</li>
+<li>Creating data visualizations<br />
+</li>
+<li>Identifying good, bad, ugly, and wrong data visualizations</li>
+</ol>
+<h2 id="what-this-course-is-about">What this course is about</h2>
+<p>This course is about data visualizations and how to reason about and
+communicate with data visualizations. A substantial portion of this
+course is dedicated to the underlying technologies behind data
+visualizations (R code, markdown, and data in various formats). Students
+will learn to combine code and prose with visualizations into
+reproducible outputs (such as html reports, websites or blogs).</p>
+<h2 id="topics">Topics</h2>
+<ol type="1">
+<li>Data science technologies<br />
+</li>
+<li>Methods for data storage, extraction and manipulation<br />
+</li>
+<li>Performing basic data summaries<br />
+</li>
+<li>Creating and interpreting data visualizations</li>
+</ol>
+<p>Data Journalism requires both theoretical and practical applications
+of statistical summaries and visualizations. The theoretical, here, is
+concerned with what is required to determine the truth about a topic,
+and how to present that truth in a compelling and comprehensible way to
+your audience. The practical application addresses how data are
+collected, stored, retrieved, manipulated and analyzed in the pursuit of
+that truth. Because of the wide range of topics and technical details
+required to do this work, it’s imperative that students commit to
+attending class, completing readings and homework, and consult me if and
+when difficulties arise.</p>
+<p>Further, this is a course in a professional program. This means that
+students approach this coursework as they would a professional
+commitment with timeliness (in attendance and submission of
+assignments), responsibilities (to readings and assignments), and
+respectful interactions with others in the course.</p>
+<p>By taking this course, students commit to attending every meeting
+(absent medical documentation) and arriving in class prepared and
+on-time. This course meets only sixteen times, which necessitates
+student attendance for comprehension of material. Therefore, attendance
+is mandatory and each missed meeting (sans medical documentation) will
+result in final grade reduction of one full letter grade. There will be
+opportunities to make up missed assignments and absences throughout the
+course.</p>
+<h2 id="assignments-and-grading">Assignments and grading</h2>
+<p>This course requires that students attend class to learn basic data
+manipulation and data visualization skills. Therefore, much of the
+student evaluation, besides the weekly exercises conducted to ensure
+comprehension, is based on participation and the data journalism
+projects.</p>
+<p><strong>Homework and exercises (50%):</strong> These are in-class
+exercises and homework assignments. Each missed exercise after the first
+will cost the student a full letter grade for the course. Completion of
+these assignments is obligatory.</p>
+<p><strong>Project 1 (25%):</strong> Reproduce a data visualization and
+provide accompanying narrative. This project gives students an
+opportunity to practice data manipulation, visualization, graphing
+techniques, presentation and framing. Length: 1,200-1,500 words.</p>
+<p><strong>Project 2 (25%):</strong> Exploratory Data Analysis (EDA)
+project. Students will choose from a list of data sources, create a
+sequence of data visualizations and displays, and provide related
+commentary and narrative. This project will be published online. This
+project requires the student to use the R programming to examine an
+issue of social significance. Length: 1,200-1,500 words.</p>
+<p>I will keep the gradebook current in Blackboard. If you have
+difficulty with material or concepts, please contact me. There will be
+many opportunities to review material individually, but I need to be
+aware of any such difficulties.</p>
+<h2 id="the-weekly-agenda">The Weekly Agenda</h2>
+<p>We meet once a week, during which I give a brief lecture, following a
+discussion. We will then walk-through ‘live coding’ activities that
+demonstrate how to collect, clean and visualize a variety of data types.
+The last portion of class can be used to complete the assigned
+activities for the week. Exercises are due at the end of each week, and
+completion will constitute your participation grade for that week.</p>
+<p>Prior to our meeting each week, there will be assigned readings.
+There will be a quiz on this material given immediately at the beginning
+of each week’s class.</p>
+<h2 id="plagarism">Plagarism</h2>
+<p>In this course, we are following standard definitions of plagiarism
+that include: no copying of text (verbatim or partial), no introduction
+of someone else’s idea without attribution, no use of someone else’s
+intellectual property without consent and clear attribution of source.
+Cheating on any quiz or exam will be considered a similar violation.</p>
+<h2 id="writing-code">Writing code</h2>
+<p>Students will encounter a fair amount of code in this course. While
+this is not a programming course, it’s standard practice to use code
+snippets from online resources like StackOverflow or online vignettes. R
+is an open-source programming language, and reusing code encourages
+collaborators to build on the work of others. Therefore, students are
+encouraged to copy and paste code from other sources. However, this code
+usually needs to be adapted to fit a particular use. This is the one
+exception to the plagiarism policy. All story text and photos must be
+exclusively your own. I loathe dishonesty, in nearly every form and
+circumstance. I will immediately fail and request the maximum possible
+punishment for any student that violates these policies.</p>
+<h2 id="books-and-materials">Books and materials</h2>
+<h3 id="data-journalism-texts">Data Journalism texts:</h3>
+<ul>
+<li><p>The Data Journalism Handbook, Gray, et al., (2012). Online at <a
+href="http://datajournalismhandbook.org/1.0/en/index.html"
+class="uri">http://datajournalismhandbook.org/1.0/en/index.html</a></p></li>
+<li><p>The Data Journalism Handbook 2, Gray, et al., (2018). Online at
+<a href="https://datajournalism.com/read/handbook/two"
+class="uri">https://datajournalism.com/read/handbook/two</a></p></li>
+</ul>
+<h3 id="r-programming-texts">R programming texts:</h3>
+<p>The following texts are available online free of charge:</p>
+<p><a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
+<p><a href="https://r4ds.hadley.nz/">R for Data Science, 2nd ed</a></p>
+<p><a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: the
+definitive guide</a></p>
+<h3 id="data-visualization-texts">Data visualization texts:</h3>
+<p>The following texts are available online free of charge:</p>
+<p><a href="https://socviz.co/">Data Visualization: A practical
+introduction</a></p>
+<p><a href="https://clauswilke.com/dataviz/">Fundamentals of Data
+Visualization</a></p>
+<p>Additionally, several online readings will be required and assigned
+in class. Students are expected to have consistent high-speed Internet
+availability and have access to a computer with modern processing
+capabilities (open lab is available for those without such a
+machine).</p>
+<h2 id="disabilities">Disabilities</h2>
+<p>If you have a disability and require special accommodations, please
+see me to discuss possible arrangements with ARC.</p>
+<h2 id="grading">Grading</h2>
+<p>All tests, quizzes and large presentations will be graded on a
+100-point scale. All percentages are rounded to the nearest whole
+percent. Letter grades are based on the following scale:</p>
+<table>
+<caption>Grading scale</caption>
+<thead>
+<tr class="header">
+<th>Percentage</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>92 and above</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>90-91</td>
+<td>A-</td>
+</tr>
+<tr class="odd">
+<td>88-89</td>
+<td>B+</td>
+</tr>
+<tr class="even">
+<td>82-87</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>80-81</td>
+<td>B-</td>
+</tr>
+<tr class="even">
+<td>78-79</td>
+<td>C+</td>
+</tr>
+<tr class="odd">
+<td>72-77</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>70-71</td>
+<td>C-</td>
+</tr>
+<tr class="odd">
+<td>68-69</td>
+<td>D+</td>
+</tr>
+<tr class="even">
+<td>60-67</td>
+<td>D</td>
+</tr>
+<tr class="odd">
+<td>below 60</td>
+<td>F</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

@@ -13,10 +13,11 @@ navbar:
       href: schedule.html
     - text: "Syllabus"
       href: syllabus.html
+      
   right:
     - text: "Slides"
       menu:
-        - text: "Class 1: Introduction to data technologies"
+        - text: "Class 1: Introduction to folders, files, and software"
           href: slides/intro-to-files-directories.html
         - text: "Class 2: The RStudio IDE & goodenuffR package"
           href: slides/rstudio-ide-intro.html
@@ -48,15 +49,17 @@ navbar:
           href: 
         - text: "Class 16: "
           href: 
-
+          
+    - text: "Resources"
+      menu:
+        - text: "Installing R & RStudio"
+          href: resources/install-r-rstudio.html
           
     - text: "Exercises"
       menu:
         - text: "Exercise 1: Introduction to the command line (tutorial)"
           href: https://mjfrigaard.shinyapps.io/command-line/
-        - text: "Exercise 2: Installing Rstudio (lesson)"
-          href: exercises/install-r-rstudio.html
-        - text: "Exercise 3: the goodenuffR package (slides)"
+        - text: "Exercise 2: the goodenuffR package (slides)"
           href: exercises/intro-to-goodenuffR.html
       
 output: distill::distill_article

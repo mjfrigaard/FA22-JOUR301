@@ -108,18 +108,11 @@ class: left, top
 
 .leftcol[
 
-- Downloading & Installing RStudio
-
-  - *See instructions in Exercise 1 on course website!*
-
 - RStudio IDE Settings 
 
 - RStudio Projects
 
 - Folder Structure
-
-
-
 
 ]
 

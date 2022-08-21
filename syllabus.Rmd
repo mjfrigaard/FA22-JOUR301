@@ -5,20 +5,208 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 2
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
 ## Course title and instructor
 
-**Title:** JOUR 301 Data Journalism <br>
-**Unique:** (online) 5-7:50 Mondays<br>
+**Title:** JOUR 301 Data Journalism <br> **Meeting:** (online) 5-7:50
+Mondays<br>
 
+**Instructor:** Martin Frigaard<br> **Email:**
+[mfrigaard\@csuchico.edu](mailto:mfrigaard@csuchico.edu){.email}<br>
+**Office Hours:** Mon. 9am - 9:45am (open Zoom), Thurs. 10am - 11am
+(open Zoom), or by appointment <br> **GitHub:**
+[mjfrigaard](https://github.com/mjfrigaard) <br>
 
-**Instructor:** Martin Frigaard<br>
-**Email:** mfrigaard@csuchico.edu<br>
-**Office Hours:** Mon. 9am - 9:45am (open Zoom), Thurs. 10am - 11am (open Zoom), or by appointment <br>
-**GitHub:** [mjfrigaard](https://github.com/mjfrigaard) <br>
+## Description
+
+This course trains students to use the tools (software, methods and
+theory) required to access, process, analyze and compose findings in the
+manner of public interest and data journalism. The course will introduce
+students to the R programming language, data manipulation, and
+visualizations.
+
+## Student Learning Outcomes
+
+1.  What is data journalism (and why it exists)\
+2.  Data science technologies\
+3.  Common sources for data (open datasets, websites, etc.)\
+4.  Using R for data manipulation\
+5.  A grammar of graphics\
+6.  Creating data visualizations\
+7.  Identifying good, bad, ugly, and wrong data visualizations
+
+## What this course is about
+
+This course is about data visualizations and how to reason about and
+communicate with data visualizations. A substantial portion of this
+course is dedicated to the underlying technologies behind data
+visualizations (R code, markdown, and data in various formats). Students
+will learn to combine code and prose with visualizations into
+reproducible outputs (such as html reports, websites or blogs).
+
+## Topics
+
+1)  Data science technologies\
+2)  Methods for data storage, extraction and manipulation\
+3)  Performing basic data summaries\
+4)  Creating and interpreting data visualizations
+
+Data Journalism requires both theoretical and practical applications of
+statistical summaries and visualizations. The theoretical, here, is
+concerned with what is required to determine the truth about a topic,
+and how to present that truth in a compelling and comprehensible way to
+your audience. The practical application addresses how data are
+collected, stored, retrieved, manipulated and analyzed in the pursuit of
+that truth. Because of the wide range of topics and technical details
+required to do this work, it's imperative that students commit to
+attending class, completing readings and homework, and consult me if and
+when difficulties arise.
+
+Further, this is a course in a professional program. This means that
+students approach this coursework as they would a professional
+commitment with timeliness (in attendance and submission of
+assignments), responsibilities (to readings and assignments), and
+respectful interactions with others in the course.
+
+By taking this course, students commit to attending every meeting
+(absent medical documentation) and arriving in class prepared and
+on-time. This course meets only sixteen times, which necessitates
+student attendance for comprehension of material. Therefore, attendance
+is mandatory and each missed meeting (sans medical documentation) will
+result in final grade reduction of one full letter grade. There will be
+opportunities to make up missed assignments and absences throughout the
+course.
+
+## Assignments and grading
+
+This course requires that students attend class to learn basic data
+manipulation and data visualization skills. Therefore, much of the
+student evaluation, besides the weekly exercises conducted to ensure
+comprehension, is based on participation and the data journalism
+projects.
+
+**Homework and exercises (50%):** These are in-class exercises and
+homework assignments. Each missed exercise after the first will cost the
+student a full letter grade for the course. Completion of these
+assignments is obligatory.
+
+**Project 1 (25%):** Reproduce a data visualization and provide
+accompanying narrative. This project gives students an opportunity to
+practice data manipulation, visualization, graphing techniques,
+presentation and framing. Length: 1,200-1,500 words.
+
+**Project 2 (25%):** Exploratory Data Analysis (EDA) project. Students
+will choose from a list of data sources, create a sequence of data
+visualizations and displays, and provide related commentary and
+narrative. This project will be published online. This project requires
+the student to use the R programming to examine an issue of social
+significance. Length: 1,200-1,500 words.
+
+I will keep the gradebook current in Blackboard. If you have difficulty
+with material or concepts, please contact me. There will be many
+opportunities to review material individually, but I need to be aware of
+any such difficulties.
+
+## The Weekly Agenda
+
+We meet once a week, during which I give a brief lecture, following a
+discussion. We will then walk-through 'live coding' activities that
+demonstrate how to collect, clean and visualize a variety of data types.
+The last portion of class can be used to complete the assigned
+activities for the week. Exercises are due at the end of each week, and
+completion will constitute your participation grade for that week.
+
+Prior to our meeting each week, there will be assigned readings. There
+will be a quiz on this material given immediately at the beginning of
+each week's class.
+
+## Plagarism
+
+In this course, we are following standard definitions of plagiarism that
+include: no copying of text (verbatim or partial), no introduction of
+someone else's idea without attribution, no use of someone else's
+intellectual property without consent and clear attribution of source.
+Cheating on any quiz or exam will be considered a similar violation.
+
+## Writing code
+
+Students will encounter a fair amount of code in this course. While this
+is not a programming course, it's standard practice to use code snippets
+from online resources like StackOverflow or online vignettes. R is an
+open-source programming language, and reusing code encourages
+collaborators to build on the work of others. Therefore, students are
+encouraged to copy and paste code from other sources. However, this code
+usually needs to be adapted to fit a particular use. This is the one
+exception to the plagiarism policy. All story text and photos must be
+exclusively your own. I loathe dishonesty, in nearly every form and
+circumstance. I will immediately fail and request the maximum possible
+punishment for any student that violates these policies.
+
+## Books and materials
+
+### Data Journalism texts:
+
+-   The Data Journalism Handbook, Gray, et al., (2012). Online at
+    <http://datajournalismhandbook.org/1.0/en/index.html>
+
+-   The Data Journalism Handbook 2, Gray, et al., (2018). Online at
+    <https://datajournalism.com/read/handbook/two>
+
+### R programming texts:
+
+The following texts are available online free of charge:
+
+[R for Data Science](https://r4ds.had.co.nz/)
+
+[R for Data Science, 2nd ed](https://r4ds.hadley.nz/)
+
+[R Markdown: the definitive
+guide](https://bookdown.org/yihui/rmarkdown/)
+
+### Data visualization texts:
+
+The following texts are available online free of charge:
+
+[Data Visualization: A practical introduction](https://socviz.co/)
+
+[Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
+
+Additionally, several online readings will be required and assigned in
+class. Students are expected to have consistent high-speed Internet
+availability and have access to a computer with modern processing
+capabilities (open lab is available for those without such a machine).
+
+## Disabilities
+
+If you have a disability and require special accommodations, please see
+me to discuss possible arrangements with ARC.
+
+## Grading
+
+All tests, quizzes and large presentations will be graded on a 100-point
+scale. All percentages are rounded to the nearest whole percent. Letter
+grades are based on the following scale:
+
+| Percentage   | Grade |
+|--------------|-------|
+| 92 and above | A     |
+| 90-91        | A-    |
+| 88-89        | B+    |
+| 82-87        | B     |
+| 80-81        | B-    |
+| 78-79        | C+    |
+| 72-77        | C     |
+| 70-71        | C-    |
+| 68-69        | D+    |
+| 60-67        | D     |
+| below 60     | F     |
+
+: Grading scale

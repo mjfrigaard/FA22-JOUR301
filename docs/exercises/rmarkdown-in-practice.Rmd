@@ -1,0 +1,392 @@
+---
+title: "R Markdown in Practice"
+description: "*Using R markdown*"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 2
+    
+params: 
+  data_dir: !r file.path("../data/starwars.rds")
+  list_vars: !r c("films", "vehicles", "starships")
+  
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(ipcwswitch)
+library(skimr)
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      tidy = FALSE,
+                      size = "Huge")
+```
+
+## Objectives
+
+This section provides advanced exercises to improve your understanding of R Markdown. 
+
+## Outline
+
+1. Parameters 
+2. Caching data 
+3. Dependent chunks  
+4. Figure size  
+5. Figure location  
+6. Interactive figures  
+
+## Materials
+
+View the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html).
+
+
+## Parameters
+
+YAML parameters give us the ability to add variables we can later refer to in our document. We will add some parameters to our report to see how these can be used. Add the following code to the YAML header (at the bottom):
+
+```{.yaml}
+params:
+  data_dir: !r file.path("data/starwars.rds")
+  list_vars: !r c("films", "vehicles", "starships")
+```
+
+These parameters will give us global control over the data we will be importing (even if that file changes in the future).
+
+
+## Importing and Viewing Data {.tabset}
+
+It's hard to do any analyses without data! We will load a toy dataset from the [Star Wars API](https://swapi.dev/). Add the code below to your .Rmd file to import the `StarWars` data. We will also name the code chunk `StarWars`, because it's the object this [code creates](https://twitter.com/drob/status/738786604731490304).
+
+
+````md
+```{r StarWars}`r ''`
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+````
+
+Note that we've loaded these data using the parameters we've defined above.
+
+```{r import-StarWars, echo=FALSE}
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+
+### Help files
+
+Details about the variables in the `StarWars` dataset are accessible in RStudio's help files, which we can access using `??starwars`
+
+
+````md
+```{r StarWars-help}`r ''`
+??starwars
+```
+````
+
+When we read the help file, we find there are three variables that are lists: `films`, `vehicles`, and `starships`. We have list-columns because the Star Wars API exports data as a JSON file, which is not tabular (like a spreadsheet).
+
+### `glimpse()`
+
+We can see a basic transposed display of the `StarWars` data with `dplyr`'s `glimpse()` function.
+
+```{r glimpse-StarWars}
+dplyr::glimpse(StarWars)
+```
+
+`glimpse()` shows us the format and first few values of each variable in `StarWars`.
+
+### `skim()`
+
+Below is a `skimr::skim()` view of the `StarWars` data. We can see each variable broken down by type, along with some summary information.
+
+```{r skim-StarWars}
+skimr::skim(StarWars)
+```
+
+The `skimr` package is great for looking at large data summaries. Read more [here](https://docs.ropensci.org/skimr/).
+
+### `jsonedit()`
+
+If you have JSON or lists (non-rectangular data) in R, sometimes these objects can be hard to visualize. The `jsonedit()` function from `listviewer` makes this easier by giving us an interactive display to click-through.
+
+```{r jsonedit-StarWars}
+library(listviewer)
+listviewer::jsonedit(listdata = StarWars, mode = "view")
+```
+
+
+## Caching data {.tabset}
+
+When we are analyzing large datasets that take awhile to load, it might make sense to cache the data when it's loaded into a code chunk.
+
+We can do this by including `cache=TRUE` in the previous `StarWars` code chunk.
+
+````md
+```{r StarWars, cache=TRUE}`r ''`
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+````
+
+Re-knit this chunk with the new `cache` option.
+
+### Dataset size
+
+We can determine the size of our dataset using `object.size()` from the `utils` package (which is loaded by default).
+
+```{r object.size-StarWars}
+object.size(StarWars)
+```
+
+Another option is using the `inspect_mem()` function from the  [`inspectdf` package](https://alastairrushworth.github.io/inspectdf/).
+
+```{r inspect_mem-StarWars}
+library(inspectdf)
+inspectdf::inspect_mem(df1 = StarWars) %>%
+  inspectdf::show_plot(text_labels = TRUE,
+                       col_palette = 1)
+```
+
+We can see from the data visualization that the list variables are accounting for most of the memory.
+
+
+### Caching data
+
+Including the `cache=TRUE` option stores the `StarWars` data, so that R holds the data in memory until the `StarWars` import chunk is changed. Sometimes we will only want to analyze a subset of a dataset, so it makes sense to cache the larger dataset import chunk.
+
+````md
+```{r StarWars, cache=TRUE}`r ''`
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+````
+
+With the `StarWars` data cached, we can remove the list variables from `StarWars` and create a `StarWarsSmall` dataset. We saved the names of the list-columns in `params$list_vars`.
+
+````md
+```{r StarWarsSmall}`r ''`
+StarWarsSmall <- StarWars %>% dplyr::select(-c(params$list_vars))
+```
+````
+
+```{r StarWars, echo=FALSE, cache=TRUE}
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+
+```{r StarWarsSmall, echo=FALSE, dependson='StarWars'}
+StarWarsSmall <- StarWars %>% dplyr::select(-c(params$list_vars))
+```
+
+Lets check the size of the new `StarWarsSmall` data by comparing it to the original `StarWars` dataset. This code chunk should look like this:
+
+````md
+```{r inspect_mem-StarWars-StarWarsSmall}`r ''`
+inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
+  inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+```
+````
+
+```{r inspect_mem-StarWars-StarWarsSmall, echo=FALSE}
+inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
+  inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+```
+
+### Cache path
+
+When we cache data, a new folder named `your-file-name` + `_cache/html/` is created in the same directory as our R Markdown file. 
+
+We can see the `rmarkdown-reports_cache/html/` folder contents below:
+
+```{r mk01_rmarkdown-reports_cache, echo=FALSE}
+fs::dir_tree("rmarkdown-in-practice_cache/html/")
+```
+
+We can change the location of the data `cache` by specifying `cache.path` either in the code chunk, or in the `setup` chunk.
+
+````md
+```{r StarWars, cache=TRUE, cache.path='data/'}`r ''`
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+````
+
+**Note:** you will need to make sure the `cache.path` folder exists, which can be solved by adding `dir.create()` in a code chunk above the `StarWars` chunk. I like using [`fs::dir_create()`](https://fs.r-lib.org/reference/create.html), because it checks to see if a folder exists, then creates one if it doesn't.
+
+If we want to add cache options to the `setup` chunk, it would look like this,
+
+````md
+```{r setup, include=FALSE}`r ''`
+# create data folder
+fs::dir_create(path = "data/")
+# set chunk options
+knitr::opts_chunk$set(cache = TRUE,
+                      cache.path = "data/")
+```
+````
+
+### Dependent chunks
+
+Data analysis and exploration typically moves along in a (somewhat) linear fashion, which means our code chunks should be run sequentially. Sometimes this isn't true, and we need some code chunks to depend on other, specific code chunks. In this case, we can use the `dependson` option in our code chunk.
+
+In the `Caching Data` tab, we compared `StarWars` and `StarWarsSmall` datasets using `inspect_mem()` in a code chunk named `inspect_mem-StarWars-StarWarsSmall`. Running this code is only possible *after* running the code in the `StarWars` chunk.
+
+We can make the ``inspect_mem-StarWars-StarWarsSmall`` dependent on `StarWars` by adding `dependson` and the code chunk name.
+
+````md
+```{r inspect_mem-StarWars-StarWarsSmall, dependson = "StarWars"}`r ''`
+inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
+  inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+```
+````
+
+Now the `inspect_mem-StarWars-StarWarsSmall` will only execute *after* the `StarWarsSmall` chunk has been run.
+
+## Figures {.tabset}
+
+Graphs and figures are great tools for communicating results, and we want to keep track of all the visualizations we create in our report. R Markdown comes with multiple options for controlling the size, location, and quality of images in our reports.
+
+### Size
+
+We can adjust the size of our figures with `fig.height=` or `fig.width=`. These both take numeric values, and control the dimensions of the figure in inches. We can also control the size with `out.width=` and `out.height=`.
+
+Below we visualize the average BMI by `species` and `gender` in the Star Wars universe. We also load the [`hrbrthemes` package](https://cinc.rud.is/web/packages/hrbrthemes/) to give us more control over the aesthetics in our plot.
+
+````md
+```{r gg_avg_bmi_spec_gend, fig.height=5.5, fig.width=8, out.width='100%', out.height='100%'}`r ''`
+library(hrbrthemes)
+StarWars %>%
+  dplyr::filter(!is.na(mass) & !is.na(height) & !is.na(species)) %>%
+  dplyr::mutate(bmi = mass / ((height / 100)  ^ 2)) %>%
+  dplyr::group_by(species, gender) %>%
+  dplyr::summarize(mean_bmi = mean(bmi, na.rm = TRUE)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(desc(mean_bmi)) %>%
+  dplyr::mutate(species = reorder(species, mean_bmi)) %>%
+  ggplot2::ggplot(aes(x = mean_bmi, y = species,
+                      color = as.factor(species),
+                      group = gender)) +
+  ggplot2::geom_point(show.legend = FALSE) +
+  ggplot2::facet_wrap(. ~ gender, scales = "free") +
+  ggplot2::labs(title = "Average BMI in Star Wars Universe",
+                subtitle = "Grouped by species and gender",
+                caption = "source = https://swapi.dev/",
+                x = "Mean BMI", y = "Species") +
+  hrbrthemes::theme_ipsum_rc(axis_text_size = 9,
+                             axis_title_size = 13,
+                             strip_text_size = 13) -> gg_avg_bmi_spec_gend
+gg_avg_bmi_spec_gend
+```
+````
+
+
+```{r gg_avg_bmi_spec_gend, fig.height=5.5, fig.width=8, echo=FALSE, message=FALSE, warning=FALSE}
+library(hrbrthemes)
+StarWars %>%
+  dplyr::filter(!is.na(mass) & !is.na(height) & !is.na(species)) %>%
+  dplyr::mutate(bmi = mass / ((height / 100)  ^ 2)) %>%
+  dplyr::group_by(species, gender) %>%
+  dplyr::summarize(mean_bmi = mean(bmi, na.rm = TRUE)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(desc(mean_bmi)) %>%
+  dplyr::mutate(species = reorder(species, mean_bmi)) %>%
+  ggplot2::ggplot(aes(x = mean_bmi, y = species,
+                      color = as.factor(species),
+                      group = gender)) +
+  ggplot2::geom_point(show.legend = FALSE) +
+  ggplot2::facet_wrap(. ~ gender, scales = "free") +
+  ggplot2::labs(title = "Average BMI in Star Wars Universe",
+                subtitle = "Grouped by species and gender",
+                caption = "source = https://swapi.dev/",
+                x = "Mean BMI", y = "Species") +
+  hrbrthemes::theme_ipsum(axis_text_size = 9,
+                             axis_title_size = 13,
+                             strip_text_size = 13) -> gg_avg_bmi_spec_gend
+gg_avg_bmi_spec_gend
+```
+
+We can see this figure fits the page well because we are able to control the size of the height and width.
+
+### Location
+
+Now that we've created a few figures, we can see how these get stored to be used in the final .html file. Much like the default `cache` settings, when we create graphs in R Markdown, a default folder is created that is `your-file-name` + `_files`, and a subfolder `figure-html` contains the images for the document.
+
+We can see the figure we created above `gg_avg_bmi_spec_gend` in the `figure-html` folder below:
+
+```{r rmarkdown-figure-files, echo=FALSE}
+fs::dir_tree("rmarkdown-in-practice_files/figure-html", regexp = "gg_avg_bmi_spec_gend")
+```
+
+We can also manually specify where we want the figures saved with `fig.path=`. If we're setting a folder for the figures, we can do it in the code chunk,
+
+````md
+```{r figure-title, fig.path="img/"}`r ''`
+# code to create figure...
+```
+````
+
+Or in the `setup` chunk (but we need to make sure the folder exists!)
+
+````md
+```{r setup, include=FALSE}`r ''`
+# create image folder
+fs::dir_create(path = "img/")
+knitr::opts_chunk$set(fig.path = "img/")
+```
+````
+
+
+Most graphs also have options for saving, which we will demonstrate using the [`dm`](https://krlmlr.github.io/dm/) and [`starwarsdb`](https://github.com/gadenbuie/starwarsdb) packages to show how the Star Wars data are related to one another.
+
+The `starwarsdb` package comes with a data model function (`starwars_dm()`), which we will pass to `dm_draw()` from the `dm` package. `dm` stands for 'data model', and this package is great for visualizing relational data
+
+````md
+```{r StarWarsDataModel}`r ''`
+library(dm)
+library(starwarsdb)
+StarWarsDataModel <- dm_draw(dm = starwars_dm(),
+                             graph_name = "StarWarsDataModel")
+StarWarsDataModel
+```
+````
+
+```{r StarWarsDataModel, echo=FALSE}
+library(dm)
+library(starwarsdb)
+StarWarsDataModel <- dm_draw(dm = starwars_dm(),
+                             graph_name = "StarWarsDataModel")
+StarWarsDataModel
+```
+
+We can see the individual data tables, and which keys link them together.
+
+This graph requires some additional steps to save as a .png, but we can see we're allowed to specify the file and folder path in the `rsvg::rsvg_png()` function.
+
+```{r export-StarWarsDataModel}
+# packages to export
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(rsvg)
+# export file
+StarWarsDataModel %>%
+  DiagrammeRsvg::export_svg(gv = .) %>%
+  base::charToRaw() %>%
+  rsvg::rsvg_png(svg = ., 
+                 height = 1440,
+                 file = "../img/StarWarsDataModel.png")
+```
+
+
+### Interactive figures
+
+The biggest benefit to using HTML is the ability to create interactive graphs. One example comes from the [`plotly` package](https://github.com/ropensci/plotly#readme).
+
+We can easily convert a `ggplot2` graph to `plotly` using the `toWebGL()` and `ggplotly()` functions. We also remove the legend with ` plotly::hide_legend()` so the plot looks identical to the version above.
+
+```{r ggplotly, fig.height=5, fig.width=7}
+library(plotly)
+plotly::toWebGL(plotly::ggplotly(gg_avg_bmi_spec_gend)) %>%
+  # remove legend
+  plotly::hide_legend(p = .)
+```
+
+
+
+
+
