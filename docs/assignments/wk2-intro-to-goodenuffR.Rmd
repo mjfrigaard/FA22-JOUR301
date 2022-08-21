@@ -21,6 +21,26 @@ We'll be using R Markdown for most of the assignments in this course. As you'll 
 
 In this assignment, we're going to cover how to use the `goodenuffR` package to organize your folders and files in this course. 
 
+To get credit for this assignment, you'll need to 
+
+1) successfully install the `goodenuffR` package,  
+2) create a course folder  
+3) create a homework assignment folder  
+4) use the `goodenuffR` to create a project folder for this assignment following the example on the course website: https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html
+5) run the code chunk in the **Folder Tree** section to confirm the project was built correctly. 
+
+Save this R Markdown file and name it with the following conventions: 
+
+`YYYY-MM-DD-LASTNAME-wk3-rmarkdown-in-practice.Rmd`
+
+*Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
+
+Place this file in the top-level folder of the project: 
+
+**Edit only <Your Name> above and below this line.**
+
+---------------------------------------------
+
 # Installtion
 
 Run the code chunk below to install and load `goodenuffR`. 
@@ -30,7 +50,17 @@ install.packages("remotes")
 remotes::install_github("mjfrigaard/goodenuffR")
 ```
 
-Follow the instructions on using `goodenuffR` on the [package website.](https://mjfrigaard.github.io/goodenuffR/).
+# Folder Tree 
+
+The code chunk below runs the `fs::dir_tree(".")` function, which prints the files and folders in given directory (and their structure). 
+
+```{r dir_tree}
+install.packages("fs")
+library(fs)
+fs::dir_tree(".")
+```
+
+
 
 
 

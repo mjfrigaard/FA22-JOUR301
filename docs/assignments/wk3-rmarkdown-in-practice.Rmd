@@ -22,7 +22,9 @@ knitr::opts_chunk$set(warning = FALSE,
 
 We'll be using R Markdown for most of the assignments in this course. As you'll discover, R Markdown is a powerful tool because it can combine prose/text, R code chunks and outputs (like figures and tables).
 
-In this assignment, you will get a broad overview of what R markdown can do. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1), 
+For this assignment, you will get a broad overview of what R markdown can do. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1),
+
+All of the exercises below have the code chunks set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument).
 
 When you've reached the end of this document, click on the "Knit" icon in R Studio and review the output.
 
@@ -34,13 +36,13 @@ When you've reached the end of this document, click on the "Knit" icon in R Stud
 
 Follow the instructions on using `goodenuffR` on the course website [here](https://mjfrigaard.github.io/FA22-JOUR301/#using-goodenuffr-for-homework-assignments) or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
 
-Create a new R Markdown file and name it with the following conventions: 
+Save this R Markdown file and name it with the following conventions: 
 
 `YYYY-MM-DD-LASTNAME-wk3-rmarkdown-in-practice.Rmd`
 
 *Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
 
-Save this file in the top-level folder of the project: 
+Place this file in the top-level folder of the project: 
 
 ```{r tree, echo=TRUE, eval=FALSE}
 ├── CITATION
