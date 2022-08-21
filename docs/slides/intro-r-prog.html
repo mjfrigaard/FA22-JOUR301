@@ -64,7 +64,7 @@ class: title-slide, center, middle, inverse
 
 Written: September 30 2021
 
-Updated: August 15 2022
+Updated: August 20 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -73,6 +73,9 @@ Updated: August 15 2022
 
 ---
 class: center, middle
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # R Programming
 
@@ -80,16 +83,19 @@ class: center, middle
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# Exercises 
+# Extra Exercises 
 
 ## Links 
 
-- [Atomic vectors](https://mjfrigaard.shinyapps.io/atomic-vectors/) (*This provides a brief introduction to R’s most common object: the vector.*)
+- [Atomic vectors](https://mjfrigaard.shinyapps.io/atomic-vectors/): *Provides a brief introduction to R’s most common object: the vector.*
 
-- [S3 vectors](https://mjfrigaard.shinyapps.io/S3-vectors/) (*This introduces more complex vectors (factors, dates, date-times and difftimes*)
+- [S3 vectors](https://mjfrigaard.shinyapps.io/S3-vectors/): *Introduces more complex vectors (factors, dates, date-times and difftimes*
 
-- [`data.frame`s](https://mjfrigaard.shinyapps.io/dataframes/) (*An introduction to rectangular (spreadsheet) data in R.*)
+- [data.frames](https://mjfrigaard.shinyapps.io/dataframes/) (*An introduction to rectangular (spreadsheet) data in R.*)
 
 
 ---
@@ -106,13 +112,18 @@ class: inverse, center, middle
 ---
 background-image: url("img/rstudio-launch.png")
 background-size: contain
-class: left, middle
+class: left, top
+
+&lt;br&gt;
 
 # .red[The RStudio IDE]
 
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Running R Commands
 
@@ -153,8 +164,11 @@ You can also run them in R scripts (see example in RStudio below)
 
 ---
 class: left, middle
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# R Syntax
+# R Basics: Syntax Elements
 
 --
 
@@ -177,63 +191,488 @@ class: left, middle
 
 ## Objects
 
-#### *Objects hold information: a collection of numbers, dates, words, models results, etc.* 
+#### *Objects hold values: a collection of numbers, dates, words, models results, etc.* 
 
 ]
 
 ---
 class: inverse, center, middle
 
-# *We use .yellow[functions] to perform operations on .yellow[objects]*
+# *R uses .yellow[functions] to perform operations on .yellow[objects]*
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# Example: create a vector of numbers
+# R Basics: The assignment operator 
 
-The standard assignment operator in R is `&lt;-`. We can use this in combination with `c()` to create an object `x`, which contains five numbers (`1`, `3`, `5`, `7`, `9`).  
+### A **.red[variable]** is an object that holds a value (or values)
 
-
-```r
-# create vector x
-*x &lt;- c(1, 3, 5, 7, 9)
-```
+### Create variables using the assignment operator: `&lt;-` 
 
 --
 
-Place `x` inside `print()` to print `x` to the console  
+.leftcol55[
+
+#### .font80[*Use `&lt;-` to create variable `x`, an object which contains the following text:*]
+
+### `"hello world"`
+
+]
+
+--
+
+.rightcol45[
+
+&lt;br&gt;
+
+.code80[
 
 
 ```r
-x &lt;- c(1, 3, 5, 7, 9)
-*print(x)
+# create variable x
+*x &lt;- "hello world"
 ```
 
-NOTE: We can also use the `=` and move `-&gt;` to the end of the expression, but this is not recommended
+]
+
+.small[
+*NOTE: We can also use the `=` and move `-&gt;` to the end of the expression, but this is not recommended*
+]
+
+]
+
+---
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: combining values 
+
+&lt;br&gt;
+
+### Use the `c()` function to combine values into a variable 
+
+--
+
+.leftcol55[
+
+#### .font80[*Assign the following values to variable `y` using the assignment operator and `c()`*]
+
+#### `1`, `3`, `5`, `7`, `9`
+
+]
+
+--
+
+.rightcol45[
+
+&lt;br&gt;
+
+.code70[
+
+
+```r
+# create variable y
+*y &lt;- c(1, 3, 5, 7, 9)
+```
+
+]
+]
+
+---
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: Viewing objects
+
+## We can view object using .orange[print(].blue[object].orange[)] or .orange[View(].blue[object].orange[)]
+
+--
+
+.leftcol[
+
+.font70[***Place `x` inside `print()` to view it in the console***]
+
+.code70[
+
+```r
+print(x) 
+```
+
+```
+  [1] "hello world"
+```
+]
+
+
+.font70[***This is the same as placing `x` in the console and hitting enter/return***]
+
+.code70[
+
+```r
+x
+```
+
+```
+  [1] "hello world"
+```
+]
+
+]
+
+--
+
+.rightcol[
+
+.font70[***Place `y` inside `View()` to view it in the data viewer***]
+
+.code70[
+
+```r
+*View(y)
+```
+]
+
+&lt;img src="img/view-y.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: inverse, center, middle
+
+# *The .yellow[store] and .yellow[explore] workflow*
+
+---
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: Store and explore (workflow)
+
+--
+
+1) Place **.black[data]** in variable **.red[x]** 
+
+#### .center[.font120[ .red[x] &lt;- 'data' ]]
+
+--
+
+2) Perform an operation on **.red[x]** with a **.darkblue[function()]** and store the output in variable **.darkgreen[y]**
+
+#### .center[.font120[ .darkgreen[y] &lt;- .darkblue[function(].red[x].darkblue[)] ]]
+
+--
+
+3) Perform another operation or view the contents of **.darkgreen[y]** with another **.purple[function()]**
+
+#### .center[.font120[ .purple[function(].darkgreen[y].purple[)] ]]
 
 
 ---
-class: left 
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# R Syntax: functions
+# R Basics: Store and explore (workflow)
 
+### Most R functions assume the 'store and explore' workflow
+
+.leftcol[
+
+&gt; Store values in variable, explore variable values with function
+
+.border[
+&lt;img src="img/store-explore-01.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+]
+
+]
+
+--
+
+.rightcol[
+
+&gt; Store function output in variable, explore output with function
+
+.border[
+&lt;img src="img/store-explore-02.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+]
+
+
+]
+
+
+---
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: Store and explore (example 1)
+
+--
+
+.leftcol[
+
+### .darkblue[We've already seen this above!]
+
+.font70[*1) .red[Store] data in variable `x` with `&lt;-` and `c()`*]
+
+.code70[
 
 ```r
-x &lt;- c(1, 3, 5, 7, 9)
+# store x
+x &lt;- "hello world" 
+```
+]
+
+.font70[*2) .red[Explore] variable `x` using `print()`*]
+
+.code70[
+
+```r
+# explore x
 print(x)
+```
+
+```
+  [1] "hello world"
+```
+]
+]
+
+--
+
+.rightcol[
+
+### .darkblue[Add another function and variable]
+
+.font70[***3) Apply `toupper()` to `x` and .red[*store*] the results in `x_caps`***]
+
+.code70[
+
+```r
+# perform operation and store in new object
+*x_caps &lt;- toupper(x)
+```
+]
+
+
+.font70[***4) Use `print()` to .red[*explore*] `x_caps` in the console***]
+
+.code70[
+
+```r
+# explore new object 
+*print(x_caps)
+```
+
+```
+  [1] "HELLO WORLD"
+```
+]
+]
+
+---
+class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: Store and explore (example 2)
+
+--
+
+.leftcol45[
+
+.font70[*1) .red[Store] data in variable `y` with `&lt;-` and `c()`*]
+
+.code70[
+
+```r
+# store 
+y &lt;- c(1, 3, 5, 7, 9) 
+```
+]
+
+.font70[*2) .red[Explore] `y` using `print()`*]
+
+.code70[
+
+```r
+# explore y
+print(y) 
 ```
 
 ```
   [1] 1 3 5 7 9
 ```
+]
+]
 
-In the example above, we've created object `x`, but what are `&lt;-` and `c()`?
+--
+
+.rightcol55[
+
+.font70[***3) Apply `exp()` to `y` (exponential) and .red[*store*] the results in `y_exp`***]
+.code70[
+
+```r
+# perform operation and store in new object
+*y_exp &lt;- exp(y)
+```
+]
+
+.font70[***4) Use `View()` to .red[*explore*] `y_exp` in the viewer***]
+.code70[
+
+```r
+# explore 
+*View(y_exp)
+```
+]
+
+.border[
+
+&lt;img src="img/view-y_exp.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# Recap: Functions and objects in R
+
+&gt; ***Functions*** perform operations (calculate, model, graph, etc.)
+
+&gt; - The assignment operator (`&lt;-`) and `c()` are both functions for creating objects
 
 --
 
-We can check this by passing them both in backticks to the `class()` function below.
+&lt;br&gt;
+
+&gt; ***Objects*** hold information (blood pressures, sales, political party affiliation, etc.)
+
+&gt; - Variables are objects that contain values (numbers, dates, words, etc.)
+
+---
+class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# Recap: Functions and objects in R
+
+.cols3[
+
+Objects are similar to **nouns**: they hold information
+
+.code80[
+
+```r
+sally &lt;- "Sally"
+dog &lt;- "dog"
+road &lt;- "road"
+```
+]
+
+]
+
+.cols3[
+
+Functions are similar to **verbs**: they perform actions on nouns
+
+.code80[
+
+```r
+work()
+bark()
+build()
+```
+]
+]
+
+.cols3[
+
+Together, these two create a complete statement (or expression)
+
+.code80[
+
+```r
+# Sally works
+work(sally) 
+# A dog barks
+bark(dog) 
+# Build a road
+build(road) 
+```
+]
+
+]
+
+---
+class: inverse, center, middle
+
+# *Handy R .yellow[functions] for exploring .yellow[objects]*
+
+---
+class: left 
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
+
+# R Basics: What is this?
+
+### How can we tell if something is a variable or a function?
 
 --
+
+.leftcol[
+
+.small[Check using `class()` or `mode()`]
+
+.code60[
+
+
+```r
+class(x)
+```
+
+```
+  [1] "character"
+```
+
+
+```r
+mode(y)
+```
+
+```
+  [1] "numeric"
+```
+
+]
+
+]
+
+--
+
+.rightcol[
+
+.small[*Check `&lt;-` and `c()` by wrapping them in backticks*]
+
+.code60[
 
 
 ```r
@@ -244,33 +683,45 @@ class(`&lt;-`)
   [1] "function"
 ```
 
---
-
 
 ```r
-class(`c`)
+mode(`c`)
 ```
 
 ```
   [1] "function"
 ```
 
+]
+]
+
 ---
-class: left
+class: left 
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# Functions in R
+# R Basics: How can I re-create this?
 
-&gt; ***Functions*** perform operations (calculate, model, graph, etc.) on various ***objects*** that contain information (blood pressures, sales, political party affiliation, etc.)
+If you come across an object in R and want to see the code used to create it, use `dput()`
 
 .leftcol[
 
-Objects are similar to **nouns**: they hold information
-
 
 ```r
-sally &lt;- "Sally"
-dog &lt;- "dog"
-road &lt;- "road"
+dput(x)
+```
+
+```
+  "hello world"
+```
+
+```r
+dput(x_caps)
+```
+
+```
+  "HELLO WORLD"
 ```
 
 ]
@@ -279,65 +730,38 @@ road &lt;- "road"
 
 .rightcol[
 
-Functions are similar to **verbs**: they perform actions on nouns
-
 
 ```r
-work()
-bark()
-build()
+dput(y)
+```
+
+```
+  c(1, 3, 5, 7, 9)
+```
+
+```r
+dput(y_exp)
+```
+
+```
+  c(2.71828182845905, 20.0855369231877, 148.413159102577, 1096.63315842846, 
+  8103.08392757538)
 ```
 
 ]
 
 ---
-class: left
+class: inverse, center, middle
 
-# Functions and objects
-
-Place an object inside the parenthesis of a function to perform the action.
-
-.cols3[
-
-
-```r
-sally &lt;- "Sally"
-*work(sally)
-```
-
-&gt; *Sally works.*
-
-]
-
-.cols3[
-
-
-```r
-dog &lt;- "dog"
-*bark(dog)
-```
-
-&gt; *A dog barks.*
-
-]
-
-.cols3[
-
-
-```r
-road &lt;- "road"
-*build(road)
-```
-
-&gt; *Build a road.*
-
-]
-
+# *R .yellow[packages] come from .yellow[functions]*
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-## Packages and functions in R 
+# R Basics: Packages and functions in R 
 
 
 Functions are stored in R packages.
@@ -354,20 +778,37 @@ package::function(object)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 ## Packages and functions in R 
 
+
+.leftcol[
 
 The `median()` function comes from the `stats` package.
 
 
 ```r
-stats::median(x)
+stats::median(y)
 ```
 
 ```
   [1] 5
 ```
+
+```r
+stats::median(y_exp)
+```
+
+```
+  [1] 148.4132
+```
+
+]
+
+.rightcol[
 
 The `typeof()` function comes from the `base` package.
 
@@ -377,13 +818,25 @@ base::typeof(x)
 ```
 
 ```
-  [1] "double"
+  [1] "character"
 ```
 
+```r
+base::typeof(x_caps)
+```
+
+```
+  [1] "character"
+```
+
+]
 
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Packages and functions
 
@@ -391,11 +844,15 @@ Use tab-completion and the arrow keys in RStudio to explore a packages functions
 
 --
 
+.border[
+
 &lt;img src="img/tab-completion.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]
 
 --
 
-.small[
+.font80[
 
 &gt; *We can take advantage of tab-completion by using names that allow us to look up common objects. For example, naming plot objects with a `plot_` prefix will allow us to use tab-completion to scroll through each object without having to remember the specific name.*
 
@@ -404,6 +861,9 @@ Use tab-completion and the arrow keys in RStudio to explore a packages functions
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Installing packages from CRAN
 
@@ -416,10 +876,11 @@ To install packages from CRAN, we can use the `install.packages()` function:
 install.packages("package name")
 ```
 
-.small[
+--
 
-&gt; NOTE: *if this is the first time installing packages, you'll probably be presented with a list of CRAN “mirrors” to use--choose the mirror closest to you.*
+.font80[
 
+&gt; **NOTE:** *if this is the first time installing packages, you'll probably be presented with a list of CRAN “mirrors” to use--choose the mirror closest to you.*
 
 ]
 
@@ -436,6 +897,9 @@ library(package name)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Installing packages from CRAN in RStudio
 
@@ -446,21 +910,24 @@ You can also use the **Packages** pane in RStudio
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
-# Installing user packages
+# Installing user-written packages
 
 The code for user-written packages are typically stored in code repository, like [Github.](https://github.com/) 
 
-.leftcol40[
 
-.small[
+
+.font80[
 
 To access user-written packages, you'll need to install the `devtools` or `remotes` packages.
 
 ]
  
 
-.code50[
+.code70[
 
 
 ```r
@@ -470,19 +937,16 @@ install.packages("remotes")
 
 ]
 
-]
+--
 
 
-
-.rightcol60[
-
-.small[
+.font80[
 
 Use `devtools::install_github()` or `remotes::install_github()` (with the author's username and package repository name)
 
 ]
 
-.code50[
+.code70[
 
 
 ```r
@@ -492,29 +956,18 @@ remotes::install_github(&lt;username&gt;/&lt;package&gt;)
 
 ]
 
-]
-
- 
-
 ---
-class: inverse, left, middle
+class: inverse, center, middle
 
-# Objects
+# *Rectangular data*
 
---
-
-### *R is typically referred to as an "object-oriented programming" language*
-
---
-
-### *We've covered functions, so now we'll dive into the aspects of some common R objects*
-
---
-
-### *In this course, we're going to focus on rectangular data objects (like spreadsheets)*
+# *(.yellow[data.frame]s and .yellow[tibble]s)*
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data frames and tibbles 
 
@@ -533,7 +986,7 @@ If you're importing spreadsheet data, you'll be working with rectangular data ob
 
 .rightcol[
 
-.small[
+.font90[
 
 &gt; *These are the common rectangular data storage object for tabular data in R*
 
@@ -545,6 +998,9 @@ If you're importing spreadsheet data, you'll be working with rectangular data ob
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data Frames
 
@@ -553,14 +1009,14 @@ class: left, top
 Data frames are rectangular data with rows and columns (or observations and variables).
 
 
-.code60[
+.code70[
 
 
 ```r
 DataFrame &lt;- data.frame(
-               character = c("A", "B", "C"), 
-               integer = c(0.1, 1.0, 10.01), 
-               logical = c(TRUE, FALSE, TRUE))
+             character = c("A", "B", "C"), 
+             integer = c(0.1, 1.0, 10.01), 
+             logical = c(TRUE, FALSE, TRUE))
 ```
 
 ]
@@ -572,7 +1028,7 @@ DataFrame &lt;- data.frame(
 
 Print the `DataFrame` object to the console:
 
-.code60[
+.code80[
 
 
 ```r
@@ -588,7 +1044,7 @@ DataFrame
 
 ]
 
-.small[
+.font80[
 
 &gt; NOTE: the `stringsAsFactors = FALSE`  
 &gt; argument is not required as of R 
@@ -601,6 +1057,9 @@ DataFrame
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data Frame structure 
 
@@ -608,7 +1067,7 @@ class: left
 
 Check the structure of the `data.frame` with `str()`
 
-.code60[
+.code80[
 
 
 ```r
@@ -631,7 +1090,7 @@ str(DataFrame)
 
 `str()` gives us a transposed view of the `DataFrame` object, and tells us the dimensions of the object.
 
-.small[
+.font90[
 
 &gt; "`3 obs. of  3 variables`"
 
@@ -643,6 +1102,9 @@ str(DataFrame)
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Tibbles 
 
@@ -650,6 +1112,7 @@ class: left
 
 Tibbles are a special kind of `data.frame` (*they print better to the console and character vectors are never coerced into factors*). 
 
+.code80[
 
 ```r
 Tibble &lt;- tibble::tribble(
@@ -658,6 +1121,8 @@ Tibble &lt;- tibble::tribble(
               "B",        1,     FALSE,
               "C",    10.01,      TRUE)
 ```
+]
+
 
 ]
 
@@ -665,6 +1130,7 @@ Tibble &lt;- tibble::tribble(
 
 The syntax to build them is slightly different, too.
 
+.code80[
 
 ```r
 Tibble
@@ -678,12 +1144,17 @@ Tibble
   2 B             1   FALSE  
   3 C            10.0 TRUE
 ```
+]
+
 
 ]
 
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Tibble structure
 
@@ -691,6 +1162,7 @@ class: left
 
 Check the structure of `Tibble`.
 
+.code70[
 
 ```r
 str(Tibble)
@@ -702,14 +1174,14 @@ str(Tibble)
    $ integer  : num [1:3] 0.1 1 10
    $ logical  : logi [1:3] TRUE FALSE TRUE
 ```
-
+]
 ]
 
 .rightcol[
 
 `str()` tells us the dimensions of a tibble, and some additional information: 
 
-.small[
+.font90[
 
 &gt; `tibbles` are `S3` objects, with types  `tbl_df`, `tbl`, and `data.frame`.
 
@@ -722,10 +1194,13 @@ str(Tibble)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data frames and tibbles 
 
-Both `DataFrame` and `Tibble` contain the same information, but in slightly different objects. 
+Both `DataFrame` and `Tibble` contain the same information, but with a slightly different display: 
 
 .leftcol[
 
@@ -764,10 +1239,13 @@ Tibble
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data frames &amp; tibbles 
 
-.leftcol[.small[
+.leftcol[
 
 
 ```r
@@ -781,11 +1259,12 @@ DataFrame
   3         C   10.01    TRUE
 ```
 
+.font70[
 &gt; the `data.frame` prints the column names and contents
 
 ]]
 
-.rightcol[.small[
+.rightcol[
 
 
 ```r
@@ -801,12 +1280,16 @@ Tibble
   3 C            10.0 TRUE
 ```
 
+.font70[
 &gt; the `tibble` prints the column names, dimensions, formats, and contents
 
 ]]
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data frames &amp; tibbles 
 
@@ -849,6 +1332,9 @@ typeof(Tibble)
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Data Frames &amp; Tibbles 
 
@@ -885,8 +1371,30 @@ class(Tibble)
 &gt; So we can think of `data.frame`s and `tibble`s as special kinds of *rectangular* lists, made with different types of vectors, with each vector being of equal length.
 
 
+
+---
+class: inverse, left, middle
+
+# object-oriented programming
+
+--
+
+### *R is typically referred to as an .yellow["object-oriented programming"] language*
+
+--
+
+### *In this course, we're going to focus on rectangular data objects (like spreadsheets)*
+
+--
+
+### *The next slides cover some other common R objects*
+
+
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Types of objects in R 
 
@@ -897,22 +1405,18 @@ class: left, top
  - atomic (logical, integer, double, and character)
  
  - S3 (factors, dates, date-times, durations)
-
-- **Matrices**
-
- - two dimensional objects
  
  ]
  
  .rightcol[
+ 
+ - **Matrices**
+
+ - two dimensional objects
 
 - **Arrays**
 
  - multidimensional objects
-
-- **Data frames &amp; tibbles**  
-
- - rectangular objects
 
 - **Lists** 
 
@@ -922,6 +1426,9 @@ class: left, top
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors
 
@@ -929,7 +1436,7 @@ Vectors are the fundamental data type in R.
 
 --
 
-Many of R's functions are *vectorised*, which means they're designed for performing operations on vectors.
+Most R's functions are *vectorised*, which means they're designed for performing operations on vectors.
 
 --
 
@@ -945,38 +1452,9 @@ We will build each of these vectors using the previously covered assignment oper
 
 ---
 class: left, top
-
-# Store and explore
-
---
-
-.leftcol[
-
-A common practice in R is to create an object, perform an operation on that object with a function, and store the results in new object.
-
-We then explore the contents of the new object with another function. 
-
-]
-
---
-
-.rightcol[.border[
-
-&lt;img src="img/store-explore.png"/&gt;
-
-
-
-]
-]
-
---
-
-***
-
-Many of the functions in R are written with this *store and explore* process in mind.
-
----
-class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors: numeric
 
@@ -1002,6 +1480,9 @@ vec_double &lt;- c(0.1, 1.0, 10.01)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors: numeric
 
@@ -1034,6 +1515,9 @@ is.numeric(vec_integer)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors: logical vectors
 
@@ -1064,6 +1548,9 @@ is.logical(vec_logical)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors: logical vectors
 
@@ -1100,6 +1587,9 @@ vec_integer &gt; 5
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Atomic vectors: character vectors
 
@@ -1141,6 +1631,9 @@ class: inverse, center, middle
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: factors
 
@@ -1173,6 +1666,9 @@ typeof(vec_factor)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: factor attributes
 
@@ -1209,6 +1705,9 @@ attributes(vec_factor)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: factor attributes 
 
@@ -1255,6 +1754,9 @@ unclass(vec_factor)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: date
 
@@ -1275,7 +1777,7 @@ vec_date
 ```
 
 ```
-  [1] "2022-08-15" "2022-08-16" "2022-08-17"
+  [1] "2022-08-20" "2022-08-21" "2022-08-22"
 ```
 
 ]
@@ -1300,6 +1802,9 @@ attributes(vec_date)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: date calculations
 
@@ -1315,12 +1820,15 @@ unclass(vec_date)
 ```
 
 ```
-  [1] 19219 19220 19221
+  [1] 19224 19225 19226
 ```
 
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: date-time
 
@@ -1336,7 +1844,7 @@ vec_date
 ```
 
 ```
-  [1] "2022-08-15" "2022-08-16" "2022-08-17"
+  [1] "2022-08-20" "2022-08-21" "2022-08-22"
 ```
 
 --
@@ -1348,13 +1856,16 @@ vec_datetime_ct
 ```
 
 ```
-  [1] "2022-08-14 17:00:00 PDT" "2022-08-15 17:00:00 PDT" "2022-08-16 17:00:00 PDT"
+  [1] "2022-08-19 17:00:00 PDT" "2022-08-20 17:00:00 PDT" "2022-08-21 17:00:00 PDT"
 ```
 
 We can see `vec_datetime_ct` stores some additional information. 
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: date-time attributes
 
@@ -1383,6 +1894,9 @@ attributes(vec_datetime_ct)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: date-time help
 
@@ -1407,6 +1921,9 @@ Read more about date-times by entering the `as.POSIXct` function into the consol
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: difftime
 
@@ -1423,7 +1940,7 @@ time_01
 ```
 
 ```
-  [1] "2022-08-15"
+  [1] "2022-08-20"
 ```
 
 ```r
@@ -1431,7 +1948,7 @@ time_02
 ```
 
 ```
-  [1] "2022-08-25"
+  [1] "2022-08-30"
 ```
 
 ]
@@ -1469,6 +1986,9 @@ typeof(vec_difftime)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # S3 vectors: difftime attributes
 
@@ -1514,6 +2034,9 @@ unclass(vec_difftime)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Matrices 
 
@@ -1561,6 +2084,9 @@ This is a three-column, two-row matrix.
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Matrix positions
 
@@ -1606,6 +2132,9 @@ mat_data[2, 2]
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Arrays
 
@@ -1656,6 +2185,9 @@ dat_array
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Array layers
 
@@ -1696,6 +2228,9 @@ class(mat_data)
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Lists 
 
@@ -1738,6 +2273,9 @@ attributes(dat_list)
 
 ---
 class: left
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # List structure
 
@@ -1765,6 +2303,9 @@ str(dat_list)
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # Recap
 
@@ -1809,6 +2350,9 @@ class: left, top
 
 ---
 class: left, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # More resources
 
@@ -1824,6 +2368,9 @@ Learn more about R objects in the help files or the following online texts:
 
 ---
 class: center, top
+background-image: url("img/Rlogo.png")
+background-position: 93% 10%
+background-size: 7%
 
 # THANK YOU!
 
