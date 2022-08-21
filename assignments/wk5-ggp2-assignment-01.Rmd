@@ -1,0 +1,55 @@
+---
+#############################################################
+#                                                           #
+#   Click on "Knit" in RStudio to render this worksheet.    #
+#                                                           #
+#############################################################
+title: "Week 5: ggplot2 part 1"
+author: "<Your Name>"
+output: html_document
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(ipcwswitch)
+library(skimr)
+library(listviewer)
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      tidy = FALSE,
+                      size = "Huge")
+```
+
+In this assignment, we're going to follow the steps in the first set of exercises for ggplot2. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1), 
+
+In all of the exercises below, the code chunks have been set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument).
+
+When you've reached the end of this document, click on the "Knit" icon in R Studio and review the output.
+
+**Edit only <Your Name> above and below this line.**
+
+---------------------------------------------
+
+# Project setup 
+
+Follow the instructions for setting up your project with `goodenuffR` on the [course website.](https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html) 
+
+# Load the packages
+
+The main packages we're going to use are `dplyr`, `tidyr`, and `ggplot2`. These are all part of the `tidyverse`, so we'll import this package below:
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+# Import
+
+Import the data below
+
+```{r import-AppleMobRaw, eval=FALSE}
+AppleMobRaw <- readr::read_csv("https://bit.ly/3ALws1X")
+```
+
+
+

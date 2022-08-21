@@ -62,6 +62,8 @@ navbar:
           href: exercises/intro-to-goodenuffR.html
         - text: "R markdown in practice (exercises)"
           href: exercises/rmarkdown-in-practice.html
+        - text: "ggplot2 part 1 (exercises)"
+          href: exercises/intro-to-ggplot2.html
           
     - text: "Assignments"
       menu:
@@ -69,5 +71,7 @@ navbar:
           href: assignments/wk2-intro-to-goodenuffR.Rmd
         - text: "R markdown in practice (assignment)"
           href: assignments/wk3-rmarkdown-in-practice.Rmd
+        - text: "ggplot2 part 1 (assignment)"
+          href: assignments/wk5-ggp2-assignment-01.Rmd
       
 output: distill::distill_article

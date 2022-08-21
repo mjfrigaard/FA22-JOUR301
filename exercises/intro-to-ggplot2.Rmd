@@ -1,0 +1,509 @@
+---
+title: "Data Visualization with ggplot2 (part 1)"
+description: |
+  *counting things, variable distributions, ridgelines, and violin plots*
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 2
+
+always_allow_html: true
+---
+
+```{r, echo = FALSE}
+# don't name this setup!
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 60)
+```
+
+# Outline
+
+1. Import Apple Mobility Data  
+2. Wrangle Apple Mobility Data  
+3. Counting things  
+4. Histograms  
+5. Density plots  
+6. Ridgeline plots  
+7. Violin plots  
+
+# Objectives
+
+In order to use graphs and figures to effectively communicate with our audience, we need to consider a few things: 
+
+1. Recognize the needs of your audience (who are they, and where are they coming from?)
+
+  - *level of data literacy, subject matter expertise, etc.*
+
+2. Communicate the quality of the data with stakeholders (can we answer their question(s) with the available data?)
+
+  - *let them know the good and the bad news*
+
+3. Identify the correct data visualization (based on the data *and* the problem/question)
+
+  - *single variable, bivariate, and multivariate graphs*
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1).
+
+# More resources 
+
+Read more about [`ggplot2`](https://ggplot2.tidyverse.org/index.html) on the tidyverse website, and in the [Data Visualisation](https://r4ds.had.co.nz/data-visualisation.html) chapter of R for Data Science.
+
+# Load the packages
+
+The main packages we're going to use are `dplyr`, `tidyr`, and `ggplot2`. These are all part of the `tidyverse`, so we'll import this package below:
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+# Example: COVID and Mobility
+
+Assume we received the following questions:
+
+***How has COVID changed our modes of transportation?***
+
+Or
+
+***Are people using fewer or different forms of transportation since the COVID pandemic?***
+
+Questions we should be considering:
+
+1. What kind of measurements would this be?  
+
+  - *how people travel (walk, drive, etc.)*
+
+2. What would these data look like?
+
+  - *what would the columns and rows look like?*
+
+## Data Import {.tabset}
+
+We did some digging and came up with the following dataset to try and answer the questions above:
+
+- Apple mobility data: https://covid19.apple.com/mobility
+
+### Import
+
+Import the data below
+
+```{r import-AppleMobRaw, message=FALSE, warning=FALSE}
+AppleMobRaw <- readr::read_csv("https://bit.ly/3DEDa8T")
+```
+
+```{r -export-AppleMobRaw-, include=FALSE, eval=FALSE}
+readr::write_csv(AppleMobRaw, file = "../data/AppleMobRaw.csv")
+```
+
+View the `head()` and `tail()`
+
+```{r head-AppleMobRaw}
+head(AppleMobRaw)
+```
+
+```{r tail-AppleMobRaw}
+tail(AppleMobRaw)
+```
+
+### Tidy 
+
+We can see the dates are structured across the columns, so we need to restructure these into a tidy format. Read more about this format [here](https://r4ds.had.co.nz/tidy-data.html).
+
+```{r pivot_longer}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+                      names_to = "date", 
+                      values_to = "dir_request")
+```
+
+### Missing 
+
+Now that we have the data in a tidy format, we should remove the missing values from `country` and `sub-region`
+
+```{r filter}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+                      names_to = "date", values_to = "dir_request") %>% 
+    # remove missing country and missing sub-region data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`))
+```
+
+### Mutate
+
+Use `mutate()` to create a properly formatted `date` variable, and `rename()` the `transportation_type` variable to `trans_type`. Apply `janitor::clean_names()` to the entire dataset and assign the final output to `TidyApple`.
+
+```{r assign-TidyApple}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+                      names_to = "date", values_to = "dir_request") %>% 
+    # remove missing country and missing sub-region data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # format date
+  mutate(date = lubridate::ymd(date)) %>% 
+  # change name of transportation types
+  rename(trans_type = transportation_type) %>% 
+  # clean names 
+  janitor::clean_names() -> TidyApple
+```
+
+## Counting {.tabset}
+
+One of the most important jobs of analytic work is [counting things](https://cran.r-project.org/web/packages/janitor/vignettes/tabyls.html). There are many ways to accomplish this in R, but we'll stick with the `dplyr` package because it's part of the `tidyverse`. 
+
+The `dplyr` function for counting responses of a categorical or factor variable is `count()`, and it works like this: 
+
+```{r count, eval=FALSE}
+Data %>% 
+  count(variable)
+```
+
+### Count
+
+So, if we wanted to count the number of different transportation types in the `TidyApple` data frame, it would look like this,
+
+```{r count-trans_type}
+TidyApple %>% 
+  dplyr::count(trans_type)
+```
+
+### Sort
+
+We can also sort the responses using the `sort = TRUE` argument. 
+
+```{r count-sort}
+TidyApple %>% 
+  dplyr::count(trans_type, sort = TRUE)
+```
+
+### Iterate 
+
+We can also combine `dplyr::select_if()` and `purrr::map()` to pass the `count()` function to all the character variables in `TidyApple`. 
+
+```{r tidy_apple_counts}
+TidyApple %>% 
+  select_if(is.character) %>% 
+  map(~count(data.frame(x = .x), x, sort = TRUE)) -> tidy_apple_counts
+```
+
+We can example the counts of each value by using the `$` to subset the `tidy_apple_counts` list.
+
+```{r tidy_apple_counts-country}
+tidy_apple_counts$sub_region
+tidy_apple_counts$region
+```
+
+# Visualizing Distributions
+
+Before we start looking at relationships *between* variables, we should examine each variable's underlying distribution. In the next section, we're going to cover a few graphs that display variable distributions: histograms, density, violin, and ridgeline plots, 
+
+## Histograms {.tabset} 
+
+A histogram is a special kind of bar graph--it only takes a single continuous variable (in this case, `dir_request`), and it displays a relative breakdown of the values. 
+
+The `x` axis for the histogram will have the direction requests, and the `y` variable will display a count of the values. 
+
+```{r lab_hist}
+lab_hist <- labs(x = "Apple directions requests",
+                 y = "Count",
+     title = "Distribution of Direction Requests",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+### exercise
+
+Create a histogram of direction requests using `dir_request`
+
+```{r geom_histogram-ex, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = ____________)) + 
+  lab_hist
+```
+
+### solution
+
+```{r geom_histogram-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + 
+  lab_hist
+```
+
+## Adjusting Y Axes {.tabset}
+
+We can see the `y` axis of the histogram is in scientific notation. This might be hard for some audiences to interpret, so we will change this to use the whole number with commas with the [`scales` package](https://scales.r-lib.org/). 
+
+### exercise
+
+Add the `scales::comma` value to the `scale_y_continuous()` function.
+
+```{r scales-ex, eval=FALSE}
+library(scales)
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + 
+  scale_y_continuous(labels = __________) +
+  lab_hist
+```
+
+### solution
+
+```{r scales-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+library(scales)
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist
+```
+
+
+## Histogram Shape {.tabset}
+
+We can control the shape of the histogram with the `bins` argument. The default is `30`.
+
+### exercie 
+
+Set `bins` to `15`.
+
+```{r bins-15-ex, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), bins = __) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist
+```
+
+### solution
+
+```{r bins-15-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), bins = 15) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist
+```
+
+### exercise 
+
+Set `bins` to `45` and assign it to `gg_hist45`.
+
+```{r bins-45-gg_hist45-ex, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), bins = __) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist -> _____________
+```
+
+### solution
+
+```{r bins-45-gg_hist45-sol, message=FALSE, warning=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), bins = 45) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist -> gg_hist45
+```
+
+```{r gg_hist45-show, fig.height=4, fig.width=6, out.height='100%', out.width='100%', echo=FALSE, message=FALSE, warning=FALSE}
+gg_hist45
+```
+
+
+## Density Plots {.tabset}
+
+What if we want to see how a continuous variable is distributed across a categorical variable? We covered this in the [previous lesson with a boxplot](https://mjfrigaard.github.io/data-viz-intro/Index.html#87).  
+
+Density plots come in handy here (so do `geom_boxplot()`s!). Read more about the density geom [here](https://ggplot2.tidyverse.org/reference/geom_density.html).
+
+We are going to create the graph labels so we know what to expect when we build our graph, and we want to see the distribution of the directions request, filled by the levels of transportation type.
+
+```{r lab_density}
+lab_density <- labs(x = "Apple directions requests",
+                    fill = "Transit Type",
+     title = "Distribution of Direction Requests vs. Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+Now we build the density plot, passing the variables so they match our labels above. 
+
+### exercise 
+
+Create a density plot of direction requests colored by the type of transportation.
+
+```{r density-ex, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = __________, fill = __________)) + 
+  lab_density
+```
+
+### solution
+
+*One drawback to density plots is the `y` axis can be hard to interpret*
+
+```{r density-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, fill = trans_type)) + 
+  lab_density
+```
+
+### exercise
+
+Adjust the overlapping densities by setting `alpha` to `1/3`. Assign this plot to `gg_density`.
+
+```{r density-alpha-ex, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, fill = trans_type), 
+               alpha = __________) + 
+  
+  lab_density -> __________
+```
+
+### solution
+
+```{r density-alpha, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, fill = trans_type), 
+               alpha = 1/3) + 
+  lab_density -> gg_density
+
+gg_density
+```
+
+## Ridgeline Plots {.tabset}
+
+Another option is a ridgeline plot (from the `ggridges` package). These display multiple densities. 
+
+```{r lab_ridges}
+lab_ridges <- labs(
+     title = "Direction Requests by Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility",
+     fill = "Transit type",
+     x = "Apple directions requests",
+     y = "Transportation Types")
+```
+
+```{r geom_density_ridges-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+library(ggridges)
+TidyApple %>%  
+  ggplot() + 
+  geom_density_ridges(aes(x = dir_request, 
+                          y = trans_type, 
+                          fill = trans_type), 
+                      alpha = 1/5) + 
+  lab_ridges
+```
+
+
+## Violin Plots {.tabset}
+
+Another alternative to the density plot is the violin plot.
+
+### exercise 
+
+- assign `"Apple directions requests"` to the `x` axis 
+- assign `"Transit Type"` to the `y` axis 
+
+```{r lab_violin-ex, eval=FALSE}
+lab_violin <- labs(x = _________________________,
+                    y = _________________________,
+                   fill = "Transit Type",
+     title = "Distribution of Direction Requests vs. Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+### solution
+
+```{r lab_violin-sol}
+lab_violin <- labs(x = "Transit Type",
+                   y = "Apple directions requests",
+                   fill = "Transit Type",
+     title = "Distribution of Direction Requests vs. Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+### exercise 
+
+Add a `geom_violin()` to the code below:
+
+```{r geom_violin-ex, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  ____________(aes(y = dir_request, x = trans_type, 
+                  fill = trans_type)) + 
+  lab_violin
+```
+
+### solution
+
+```{r geom_violin-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, x = trans_type, 
+                  fill = trans_type)) + 
+  lab_violin
+```
+
+### exercise 
+
+The great thing about `ggplot2`s layered syntax, is that we can add `geoms` with similar aesthetics to the same graph! For example, we can see how `geom_violin`s and `geom_boxplot`s are related by adding a `geom_boxplot()` layer to the graph above. 
+
+```{r geom_violin-boxplot-ex, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, x = trans_type, 
+                  fill = trans_type), alpha = 1/5) + 
+  ___________(aes(y = dir_request, x = trans_type, 
+                   color = trans_type)) + 
+  lab_violin
+```
+
+### solution
+
+Note we set the `alpha` to `1/5` for the `geom_violin()`, and the `color` to `trans_type` for the `geom_boxplot()`.
+
+```{r geom_violin-boxplot-sol, message=FALSE, warning=FALSE, fig.height=4, fig.width=6, out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, x = trans_type, 
+                  fill = trans_type), alpha = 1/5) + 
+  geom_boxplot(aes(y = dir_request, x = trans_type, 
+                   color = trans_type)) + 
+  lab_violin
+```
+
+## Export the data {.tabset}
+
+You'll want to export the `TidyApple` dataset for the next set of exercise. 
+
+The code chunk below exports the dataset as a .csv.
+
+```{r export-TidyApple-USCities}
+fs::dir_create("../data/wk5-01-intro-to-ggp2-part-02/")
+readr::write_csv(x = TidyApple, 
+                 file = "../data/wk5-01-intro-to-ggp2-part-02/TidyApple.csv")
+```
+
