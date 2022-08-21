@@ -37,20 +37,21 @@ Download a recent version of RStudio [here](https://rstudio.com/products/rstudio
 
 ### Installation Instructions
 
-See instructions for installing R and RStudio are available here. 
+Instructions for installing R and RStudio are available [here.](https://mjfrigaard.github.io/FA22-JOUR301/resources/install-r-rstudio.html) 
 
 ## R packages for this course 
 
-This course requires two packages on Github: 
+This course requires two packages from Github: 
 
 1. [`goodenuffR`](https://mjfrigaard.github.io/goodenuffR/)  
 
 2. [`sheetcheatR`](https://mjfrigaard.github.io/sheetcheatR/)
 
-Install these packages with the following lines of code in your R console: 
+Install these packages with the following code in your R console: 
 
 ```{r eval = FALSE, echo = TRUE}
 install.packages("remotes")
+library(remotes)
 remotes::install_github("mjfrigaard/goodenuffR")
 remotes::install_github("mjfrigaard/sheetcheatR")
 ```
@@ -59,7 +60,7 @@ remotes::install_github("mjfrigaard/sheetcheatR")
 
 Follow these instructions to use the `goodenuffR` package for your homework assignments: 
 
-1. Install and load the package
+1. Install and load the `goodenuffR` package
 
 ```{r , echo=TRUE, eval=FALSE}
 library(goodenuffR)
@@ -72,7 +73,7 @@ Navigate to your course `hw` folder and enter the `project_name` and `folder_pat
 ```{r goodenuff_project, echo=TRUE, eval=FALSE}
 goodenuffR::goodenuff_project(
   project_name = "wk3-assignment", 
-  folder_path =  "/Users/mjfrigaard/FA22-JOUR-301/hw/wk3-rmarkdown-assignment")
+  folder_path =  "/Users/mjfrigaard/FA22-JOUR-301/hw/")
 ```
 
 3. After your new RStudio session opens, create the project files using `goodenuffR::goodenuff_files()`.
@@ -84,30 +85,33 @@ goodenuffR::goodenuff_files()
 You should see the following files: 
 
 ```{r tree, echo=TRUE, eval=FALSE}
-├── CITATION
-├── LICENSE
-├── README.Rmd
-├── code
-│   ├── 01-import.R
-│   ├── 02-tidy.R
-│   ├── 03-wrangle.R
-│   ├── 04-visualize.R
-│   ├── 05-model.R
-│   ├── 06-communicate.R
-│   └── runall.R
-├── data
-│   ├── README.md
-│   └── raw
-├── docs
-│   ├── changelog.txt
-│   ├── manuscript.Rmd
-│   └── notebook.Rmd
-├── requirements.txt
-├── results
-│   ├── figures
-│   ├── manuscript
-│   └── tables
-└── wk_3assignment.Rproj
+FA22-JOUR-301/
+    hw/
+      wk3-assignment/
+                ├── CITATION
+                ├── LICENSE
+                ├── README.Rmd
+                ├── code
+                │   ├── 01-import.R
+                │   ├── 02-tidy.R
+                │   ├── 03-wrangle.R
+                │   ├── 04-visualize.R
+                │   ├── 05-model.R
+                │   ├── 06-communicate.R
+                │   └── runall.R
+                ├── data
+                │   ├── README.md
+                │   └── raw
+                ├── docs
+                │   ├── changelog.txt
+                │   ├── manuscript.Rmd
+                │   └── notebook.Rmd
+                ├── requirements.txt
+                ├── results
+                │   ├── figures
+                │   ├── manuscript
+                │   └── tables
+                └── wk_3assignment.Rproj
 ```
 
 
