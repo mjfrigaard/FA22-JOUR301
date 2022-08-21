@@ -1,0 +1,129 @@
+---
+title: "Week 2: Intro to the goodenuffR package"
+comment: "*Using goodenuffR*"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 2
+
+always_allow_html: true
+---
+
+```{r, echo = FALSE}
+# don't name this setup!
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+The `goodenuffR` package helps you organize your files and folders. This document is meant to guide you through HW2 and serve as a reference for future use. 
+
+# Install `goodenuffR` using the code below: 
+
+```{r install-goodenuffR, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("mjfrigaard/goodenuffR")
+```
+
+# 1) Create a course folder 
+
+Somewhere on your computer (**not your Downloads/ folder**), create a folder for this course. Follow the naming conventions covered in the [intro slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-files-directories.html#1) or [this great lecture.](http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf).
+
+Let's assume I've chosen to create my course folder in my `Dropbox/` and I've named it `FA22-JOUR301/`
+
+```{r , eval=FALSE}
+└── Dropbox/
+      └── FA22-JOUR301/
+```
+
+# 2) Create an assignments folder 
+
+Inside your course folder, create a sub-folder for the assignments.
+
+```{r , eval=FALSE}
+└── Dropbox/
+      └── FA22-JOUR301/
+               └── hw/
+```
+
+*Before* navigating to the [Assignments menu]() on the course website, I want to create a folder for any homework files.  
+
+# 3) Get your working directory
+
+I start by getting the current working directory in RStudio: 
+
+```{r , eval=FALSE}
+getwd()
+```
+
+```
+# [1] "/Users/mjfrigaard/R/"
+```
+
+This tells me where RStudio is currently 'looking' for files. I know I created the course folder in my `Dropbox/` folder, so I can navigate to the folder using the `dir()` function. 
+
+`dir()` is a handy function because we can take advantage of RStudio's tab-completion by entering the beginning of the path (`"/Users/mjfrigaard/Dropbox/"`) and hitting the tab key to see what other folders are available. 
+
+```{r dir-tab-completion, echo=FALSE}
+knitr::include_graphics("img/dir-tab-completion.png")
+```
+
+# 4) Create your HW project
+
+Once we have the path to the homework folder, we can use the `goodenuffR::goodenuff_project()` function to create the new project. 
+
+```{r dir-tab-completion-02, echo=FALSE}
+knitr::include_graphics("img/dir-tab-completion-02.png")
+```
+
+The **`project_name`** is name of the project, which is a sub-folder in **`folder_path`** argument. See the example below:
+
+```{r goodenuff_project, eval=FALSE}
+goodenuffR::goodenuff_project(
+  project_name = "wk2-goodenuffR-assignment", 
+  folder_path =  "/Users/mjfrigaard/Dropbox/FA22-JOUR301/hw/")
+```
+
+This should open a new RStudio session. In the **Console** pane, you should see the name of the new project and the folder path. 
+
+```{r new-goodenuffR-console-pane, echo=FALSE, fig.height=7, fig.width=7, out.width='100%', out.height='100%'}
+knitr::include_graphics("img/new-goodenuffR-console-pane.png")
+```
+
+In the **Files** pane, you should see the folder path and your new RStudio project file (with the `.Rproj` extension).
+
+```{r new-goodenuffR-file-pane, echo=FALSE, fig.height=7, fig.width=7, out.width='100%', out.height='100%'}
+knitr::include_graphics("img/new-goodenuffR-file-pane.png")
+```
+
+# 5) Create your HW folders 
+
+In the R console, run the `goodenuffR::goodenuff_files()` function to create the files and folders. 
+
+```{r goodenuff_files, eval=FALSE}
+goodenuffR::goodenuff_files()
+```
+
+```
+trying URL 'https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt'
+downloaded 7048 bytes
+
+trying URL 'https://raw.githubusercontent.com/mjfrigaard/goodenuffR/main/inst/rmarkdown/templates/goodenuffR_readme/goodenuffR-readme.Rmd'
+Content type 'text/plain; charset=utf-8' length 787 bytes
+==================================================
+downloaded 787 bytes
+```
+
+This creates the follow files and folder (you can see them in the **Files** pane): 
+
+```{r new-goodenuffR-new-files, echo=FALSE, fig.height=7, fig.width=7, out.width='100%', out.height='100%'}
+knitr::include_graphics("img/new-goodenuffR-new-files.png")
+```
+
+## 6) Download the HW Assignment 
+
+Now we're ready to head over to the course website and download the Assignment for HW 2. We can save this file the top-level folder as: 
+

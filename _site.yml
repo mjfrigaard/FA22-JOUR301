@@ -54,6 +54,8 @@ navbar:
       menu:
         - text: "Installing R & RStudio"
           href: resources/install-r-rstudio.html
+        - text: "goodenuffR"
+          href: resources/goodenuffR.html
           
     - text: "Exercises"
       menu:
@@ -66,7 +68,9 @@ navbar:
           
     - text: "Assignments"
       menu:
-        - text: "Intro to R Markdown"
-          href: assignments/wk3-intro-rmarkdown.Rmd
+        - text: "Intro to goodenuffR (assignment)"
+          href: assignments/wk2-intro-to-goodenuffR.Rmd
+        - text: "R markdown in practice (assignment)"
+          href: assignments/wk3-rmarkdown-in-practice.Rmd
       
 output: distill::distill_article

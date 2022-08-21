@@ -32,11 +32,11 @@ When you've reached the end of this document, click on the "Knit" icon in R Stud
 
 # Project setup 
 
-Follow the instructions on using `goodenuffR` on the course website [here]() or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
+Follow the instructions on using `goodenuffR` on the course website [here](https://mjfrigaard.github.io/FA22-JOUR301/#using-goodenuffr-for-homework-assignments) or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
 
 Create a new R Markdown file and name it with the following conventions: 
 
-`YYYY-MM-DD-LASTNAME-wk3-rmarkdown-assignment.Rmd`
+`YYYY-MM-DD-LASTNAME-wk3-rmarkdown-in-practice.Rmd`
 
 *Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
 
@@ -46,7 +46,7 @@ Save this file in the top-level folder of the project:
 ├── CITATION
 ├── LICENSE
 ├── README.Rmd
-├── YYYY-MM-DD-LASTNAME-wk3-rmarkdown-assignment.Rmd <- YOUR HW FILE!
+├── YYYY-MM-DD-LASTNAME-wk3-rmarkdown-in-practice.Rmd <- YOUR HW FILE!
 ├── code
 │   ├── 01-import.R
 │   ├── 02-tidy.R
