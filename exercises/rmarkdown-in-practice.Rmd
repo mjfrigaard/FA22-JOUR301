@@ -188,7 +188,7 @@ inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
 ```
 ````
 
-```{r inspect_mem-StarWars-StarWarsSmall, echo=FALSE}
+```{r inspect_mem-StarWars-StarWarsSmall, echo=FALSE, fig.height=5.5, fig.width=8}
 inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
   inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
 ```

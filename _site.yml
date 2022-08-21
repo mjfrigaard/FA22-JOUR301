@@ -50,20 +50,17 @@ navbar:
         - text: "Class 16: "
           href: 
           
-    - text: "Resources"
-      menu:
-        - text: "Installing R & RStudio"
-          href: resources/install-r-rstudio.html
-        - text: "goodenuffR"
-          href: resources/goodenuffR.html
-          
     - text: "Exercises"
       menu:
-        - text: "Exercise 1: Introduction to the command line (tutorial)"
+        - text: "Installing R & RStudio (exercises)"
+          href: exercises/install-r-rstudio.html
+        - text: "Introduction to the command line (tutorial)"
           href: https://mjfrigaard.shinyapps.io/command-line/
-        - text: "Exercise 2: the goodenuffR package (assignment)"
+        - text: "goodenuffR (exercises)"
+          href: exercises/goodenuffR.html
+        - text: "the goodenuffR package (slides)"
           href: exercises/intro-to-goodenuffR.html
-        - text: "Exercise 3: R markdown in practice (assignment)"
+        - text: "R markdown in practice (exercises)"
           href: exercises/rmarkdown-in-practice.html
           
     - text: "Assignments"
