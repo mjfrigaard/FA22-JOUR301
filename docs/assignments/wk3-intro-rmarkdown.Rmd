@@ -1,0 +1,252 @@
+---
+#############################################################
+#                                                           #
+#   Click on "Knit" in RStudio to render this worksheet.    #
+#                                                           #
+#############################################################
+title: "Week 3: R Markdown in Practice"
+author: "<Your Name>"
+output: html_document
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(ipcwswitch)
+library(skimr)
+library(listviewer)
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      tidy = FALSE,
+                      size = "Huge")
+```
+
+We'll be using R Markdown for most of the assignments in this course. As you'll discover, R Markdown is a powerful tool because it can combine prose/text, R code chunks and outputs (like figures and tables).
+
+In this assignment, you will get a broad overview of what R markdown can do. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1), 
+
+When you've reached the end of this document, click on the "Knit" icon in R Studio and review the output.
+
+**Edit only <Your Name> above and below this line.**
+
+---------------------------------------------
+
+# Project setup 
+
+Follow the instructions on using `goodenuffR` on the course website [here]() or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
+
+Create a new R Markdown file and name it with the following conventions: 
+
+`YYYY-MM-DD-LASTNAME-wk3-rmarkdown-assignment.Rmd`
+
+*Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
+
+Save this file in the top-level folder of the project: 
+
+```{r tree, echo=TRUE, eval=FALSE}
+├── CITATION
+├── LICENSE
+├── README.Rmd
+├── YYYY-MM-DD-LASTNAME-wk3-rmarkdown-assignment.Rmd <- YOUR HW FILE!
+├── code
+│   ├── 01-import.R
+│   ├── 02-tidy.R
+│   ├── 03-wrangle.R
+│   ├── 04-visualize.R
+│   ├── 05-model.R
+│   ├── 06-communicate.R
+│   └── runall.R
+├── data
+│   ├── README.md
+│   └── raw
+├── docs
+│   ├── changelog.txt
+│   ├── manuscript.Rmd
+│   └── notebook.Rmd
+├── requirements.txt
+├── results
+│   ├── figures
+│   ├── manuscript
+│   └── tables
+└── wk_3assignment.Rproj
+```
+
+# Downloading the files for this assignment 
+
+Download the files for this assignment by running the code chunk below:
+
+```{r download.file, eval=FALSE}
+download.file(
+  url = "https://github.com/mjfrigaard/FA22-JOUR301/raw/main/data/starwars.rds", 
+  destfile = "data/starwars.rds")
+```
+
+## Parameters
+
+Add the following code to the YAML header (at the top of this file):
+
+```{.yaml}
+params:
+  data_dir: !r file.path("data/starwars.rds")
+  list_vars: !r c("films", "vehicles", "starships")
+```
+
+These parameters will give us global control over the data we will be importing (even if that file changes in the future).
+
+## Importing and Viewing Data 
+
+```{r StarWars, eval=FALSE}
+StarWars <- readr::read_rds(file = params$data_dir)
+```
+
+Note that we've loaded these data using the parameters we've defined above.
+
+### Help files
+
+Read about the variables in the `StarWars` dataset using `??starwars`
+
+### `glimpse()`
+
+View a basic transposed display of the `StarWars` data with `dplyr`'s `glimpse()` function.
+
+```{r glimpse-StarWars, eval=FALSE}
+dplyr::glimpse(StarWars)
+```
+
+`glimpse()` shows us the format and first few values of each variable in `StarWars`.
+
+### `skim()`
+
+Below is a `skimr::skim()` view of the `StarWars` data. We can see each variable broken down by type, along with some summary information.
+
+```{r skimr, eval=FALSE}
+install.packages("skimr")
+library(skimr)
+```
+
+
+```{r skim-StarWars, eval=FALSE}
+skimr::skim(StarWars)
+```
+
+Read more [here](https://docs.ropensci.org/skimr/).
+
+### `jsonedit()`
+
+If you have JSON or lists (non-rectangular data) in R, sometimes these objects can be hard to visualize. The `jsonedit()` function from `listviewer` makes this easier by giving us an interactive display to click-through.
+
+```{r jsonedit-StarWars, eval=FALSE}
+library(listviewer)
+listviewer::jsonedit(listdata = StarWars, mode = "view")
+```
+
+## Caching data 
+
+Include `cache=TRUE` in `StarWars` code chunk above and re-knit this chunk with the new `cache` option.
+
+### Dataset size
+
+Use `object.size()` from the `utils` package (which is loaded by default).
+
+```{r object.size-StarWars, eval=FALSE}
+library(utils)
+object.size(StarWars)
+```
+
+Another option is using the `inspect_mem()` function from the  [`inspectdf` package](https://alastairrushworth.github.io/inspectdf/).
+
+```{r inspect_mem-StarWars, eval=FALSE}
+install.packages("inspectdf")
+library(inspectdf)
+```
+
+```{r , eval=FALSE}
+inspectdf::inspect_mem(df1 = StarWars) %>%
+  inspectdf::show_plot(text_labels = TRUE,
+                       col_palette = 1)
+```
+
+### Get a subset of StarWars
+
+Create a `StarWarsSmall` dataset from the saved the names of the list-columns in `params$list_vars`.
+
+```{r StarWarsSmall, eval=FALSE}
+StarWarsSmall <- # enter the code from this section
+```
+
+Check the size of the new `StarWarsSmall` data by comparing it to the original `StarWars` dataset.
+
+```{r inspect_mem-StarWars-StarWarsSmall, eval=FALSE}
+inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
+  inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+```
+
+### Cache path
+
+When we cache data, a new folder named `your-file-name` + `_cache/html/` is created in the same directory as our R Markdown file. 
+
+View the `<file name>_cache/html/` folder contents below:
+
+```{r cache, eval=FALSE}
+fs::dir_tree(".")
+```
+
+## Figures 
+
+We want to keep track of all the visualizations we create in our report. R Markdown comes with multiple options for controlling the size, location, and quality of images in our reports.
+
+### Size
+
+Below we visualize the average BMI by `species` and `gender` in the Star Wars universe. We also load the [`hrbrthemes` package](https://cinc.rud.is/web/packages/hrbrthemes/) to give us more control over the aesthetics in our plot.
+
+```{r hrbrthemes, eval=FALSE}
+install.packages("hrbrthemes")
+library(hrbrthemes)
+```
+
+
+Adjust the size of the figure with `fig.height=5.5` and `fig.width=8`. 
+
+```{r gg_avg_bmi_spec_gend, eval=FALSE, fig.height=, fig.width=, out.width='100%', out.height='100%'}
+StarWars %>%
+  dplyr::filter(!is.na(mass) & !is.na(height) & !is.na(species)) %>%
+  dplyr::mutate(bmi = mass / ((height / 100)  ^ 2)) %>%
+  dplyr::group_by(species, gender) %>%
+  dplyr::summarize(mean_bmi = mean(bmi, na.rm = TRUE)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(desc(mean_bmi)) %>%
+  dplyr::mutate(species = reorder(species, mean_bmi)) %>%
+  ggplot2::ggplot(aes(x = mean_bmi, y = species,
+                      color = as.factor(species),
+                      group = gender)) +
+  ggplot2::geom_point(show.legend = FALSE) +
+  ggplot2::facet_wrap(. ~ gender, scales = "free") +
+  ggplot2::labs(title = "Average BMI in Star Wars Universe",
+                subtitle = "Grouped by species and gender",
+                caption = "source = https://swapi.dev/",
+                x = "Mean BMI", y = "Species") +
+  hrbrthemes::theme_ipsum_rc(axis_text_size = 9,
+                             axis_title_size = 13,
+                             strip_text_size = 13) -> gg_avg_bmi_spec_gend
+gg_avg_bmi_spec_gend
+```
+
+
+### Location
+
+Manually specify the figures to be saved in `results/figures` with `fig.path="results/figures/`. If we're setting a folder for the figures, we can do it in the code chunk,
+
+### Interactive figures
+
+Recreate the plotly graph below 
+
+```{r ggplotly, eval=FALSE, fig.height=5, fig.width=7}
+library(plotly)
+
+```
+
+
+Knit this file and view the results. 
+
+
+
+

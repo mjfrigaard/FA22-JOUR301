@@ -37,9 +37,13 @@ This section provides advanced exercises to improve your understanding of R Mark
 5. Figure location  
 6. Interactive figures  
 
-## Materials
+# Resources 
 
-View the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html).
+## Link to slides 
+
+## Link to exercises 
+
+
 
 
 ## Parameters

@@ -59,7 +59,14 @@ navbar:
       menu:
         - text: "Exercise 1: Introduction to the command line (tutorial)"
           href: https://mjfrigaard.shinyapps.io/command-line/
-        - text: "Exercise 2: the goodenuffR package (slides)"
+        - text: "Exercise 2: the goodenuffR package (assignment)"
           href: exercises/intro-to-goodenuffR.html
+        - text: "Exercise 3: R markdown in practice (assignment)"
+          href: exercises/rmarkdown-in-practice.html
+          
+    - text: "Assignments"
+      menu:
+        - text: "Intro to R Markdown"
+          href: assignments/wk3-intro-rmarkdown.Rmd
       
 output: distill::distill_article

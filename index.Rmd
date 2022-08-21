@@ -39,9 +39,9 @@ Download a recent version of RStudio [here](https://rstudio.com/products/rstudio
 
 See instructions for installing R and RStudio are available here. 
 
-### R packages for this course 
+## R packages for this course 
 
-This course required the use of two packages on Github: 
+This course requires two packages on Github: 
 
 1. [`goodenuffR`](https://mjfrigaard.github.io/goodenuffR/)  
 
@@ -53,6 +53,61 @@ Install these packages with the following lines of code in your R console:
 install.packages("remotes")
 remotes::install_github("mjfrigaard/goodenuffR")
 remotes::install_github("mjfrigaard/sheetcheatR")
+```
+
+### Using `goodenuffR` for homework assignments 
+
+Follow these instructions to use the `goodenuffR` package for your homework assignments: 
+
+1. Install and load the package
+
+```{r , echo=TRUE, eval=FALSE}
+library(goodenuffR)
+```
+
+2. Create a project folder: 
+
+Navigate to your course `hw` folder and enter the `project_name` and `folder_path` (see examples below): 
+
+```{r goodenuff_project, echo=TRUE, eval=FALSE}
+goodenuffR::goodenuff_project(
+  project_name = "wk3-assignment", 
+  folder_path =  "/Users/mjfrigaard/FA22-JOUR-301/hw/wk3-rmarkdown-assignment")
+```
+
+3. After your new RStudio session opens, create the project files using `goodenuffR::goodenuff_files()`.
+
+```{r goodenuff_files, echo=TRUE, eval=FALSE}
+goodenuffR::goodenuff_files()
+```
+
+You should see the following files: 
+
+```{r tree, echo=TRUE, eval=FALSE}
+├── CITATION
+├── LICENSE
+├── README.Rmd
+├── code
+│   ├── 01-import.R
+│   ├── 02-tidy.R
+│   ├── 03-wrangle.R
+│   ├── 04-visualize.R
+│   ├── 05-model.R
+│   ├── 06-communicate.R
+│   └── runall.R
+├── data
+│   ├── README.md
+│   └── raw
+├── docs
+│   ├── changelog.txt
+│   ├── manuscript.Rmd
+│   └── notebook.Rmd
+├── requirements.txt
+├── results
+│   ├── figures
+│   ├── manuscript
+│   └── tables
+└── wk_3assignment.Rproj
 ```
 
 
