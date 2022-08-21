@@ -1,22 +1,3 @@
-athlete,sanction_announced,sport,substance_reason,sanction_terms
-"fischbach, dylan",original: 12/18/2015; updated: 04/11/2016,paralympic basketball,non-analytical: refusal to submit to sample collection,2-year suspension - loss of results - additional results disqualified
-"trafeh, mohamed",original: 12/18/2014; updated: 08/25/2015,track and field,"non-analytical: use and possession (epo), and evading sample collection",4-year suspension - loss of results
-"lea, robert",original: 12/17/2015; updated: 02/25/2016,cycling,noroxycodone,6-month suspension - loss of results
-"young, jerome",original: 11/10/2004; updated: 06/17/2008,track and field,erythropoietin (epo) and non-analytical: use (epo & hgh),lifetime suspension - loss of results
-"hay, amy",original: 10/31/2017; updated: 12/16/2019,weightlifting,ostarine,2-year suspension; loss of results; sanction reduced; unretired - eligible to compete starting 07/25/2020
-"hunter, adam",original: 10/28/2016; updated: 09/26/2018,mixed martial arts,"tamoxifen; boldenone, methandienone, drostanolone, and clenbuterol",2-year suspension - loss of results - additional loss of results
-"tovar, oscar",original: 10/28/2015; updated: 10/04/2016,cycling,androgenic anabolic steroid,2-year suspension - loss of results - additional results disqualified
-"dotti, juan pablo",original: 10/20/2011; updated: 06/05/2013,cycling,androgenic anabolic steroid & amphetamine,"2-year suspension - loss of results; 
-2-year suspension restarted - loss of results"
-"murdock, vince",original: 09/05/2019; updated: 08/26/2020,mixed martial arts,gw1516,20-month suspension - sanction reduced
-"thomas, tammy",original: 08/30/2002; updated: 02/13/2017,cycling,norbolethone,lifetime ban - loss of results - sanction reduced
-"orbon, joane",original: 08/12/2019; updated: 09/10/2019,karate,lgd-4033,9-month suspension; loss of results
-"bailey, ryan",original: 08/03/2017; updated: 12/01/2017,"bobsled and skeleton, track and field","1,3-dimethylbutylamine (dmba)",2-year suspension with 161 day credit - loss of results
-"garcia del moral, luis",original: 07/10/2012;updated: 10/26/2018,cycling - athlete support personnel,non-analytical,5-year suspension
-"jones, stirley",original: 06/17/2019; updated: 12/16/2019,paralympic track and field,stanozolol,4-year suspension; loss of results
-"miyao, paulo",original: 05/10/2017;updated: 11/27/2018,brazilian jiu-jitsu,clomiphene,2-year suspension - loss of results; additional 3 months of suspension - loss of results
-"moffett, shaun",original: 04/24/2018updated: 10/19/2018,cycling,testosterone and clomiphene,21-month suspension - loss of results; additional 3 months of suspension - loss of results
-"bruyneel, johan",original: 04/22/2014;updated: 10/24/2018,cycling - athlete support personnel,non-analytical: administration and trafficking,lifetime suspension
-"celaya lazama, pedro",original: 04/22/2014;updated: 10/24/2018,cycling - athlete support personnel,non-analytical,lifetime suspension
-"marti, jose",original: 04/22/2014;updated: 10/24/2018,cycling - athlete support personnel,non-analytical,15-year suspension
-"oliveira, flavia",original: 04/13/2010; updated 12/10/2010,cycling,oxilofrine,18-month suspension - loss of results
+version https://git-lfs.github.com/spec/v1
+oid sha256:6322c4a4eb8c50e0fbeef7327dc1029e755e632f0f7846b3ce02704c7b72394c
+size 3208

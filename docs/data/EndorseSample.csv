@@ -1,11 +1,3 @@
-date,position,location,endorser,endorsee,points,order
-2019-02-20,mayor,"PR, San Juan",Carmen Yulín Cruz,Bernie Sanders,3,55
-2019-04-14,mayor,"TX, Austin",Steve Adler,Pete Buttigieg,3,11
-2019-06-28,mayor,"GA, Atlanta",Keisha Lance Bottoms,Joe Biden,3,37
-2019-07-22,mayor,"MI, Detroit",Mike Duggan,Joe Biden,3,22
-2019-02-10,mayor,"MN, Minneapolis",Jacob Frey,Amy Klobuchar,3,45
-2019-03-07,mayor,"CA, Sacramento",Darrell Steinberg,Kamala Harris,3,34
-2019-01-27,mayor,"CA, San Francisco",London Breed,Kamala Harris,3,13
-2019-01-27,mayor,"CA, Oakland",Libby Schaaf,Kamala Harris,3,44
-2019-01-12,mayor,"TX, San Antonio",Ron Nirenberg,Julian Castro,3,7
-2019-03-07,mayor,"CA, San Jose",Sam Liccardo,Kamala Harris,3,10
+version https://git-lfs.github.com/spec/v1
+oid sha256:79569c1779091f9512a7957d98ff4f374060c7a6e980548714a38a976878590f
+size 711

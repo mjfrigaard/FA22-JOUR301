@@ -1,11 +1,3 @@
-year,google_knowledge_occupation,show,group,first_name,last_name
-2013,united states senator,2013-08-08,Politician,Kirsten,Gillibrand
-2011,former lieutenant governor of maryland,2011-02-01,Politician,Michael,Steele
-2013,journalist,2013-06-13,Media,Fareed,Zakaria
-2004,journalist,2004-02-09,Media,Charles,Lewis
-2006,editor,2006-04-17,Media,Jon,Meacham
-1999,actor,1999-06-14,Acting,Mike,Myers
-2006,author,2006-03-21,Media,Georges,Sada
-2008,film actor,2008-09-24,Acting,Aaron,Eckhart
-2013,actor,2013-09-18,Acting,Hugh,Jackman
-2013,actor,2013-08-14,Acting,Regis,Philbin
+version https://git-lfs.github.com/spec/v1
+oid sha256:d5a513f607256f65adb1fad76a070871f52f2db90d91ece9bef7c30d55055e1b
+size 565
