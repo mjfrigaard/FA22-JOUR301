@@ -26,7 +26,7 @@ navbar:
         - text: "Class 4: Introduction to R"
           href: slides/intro-r-prog.html
         - text: "Class 5: Data Visualization with ggplot2 (part 1)"
-          href: slides/ggpl2-part-01.html
+          href: slides/ggp2-part-01.html
         - text: "Class 6: "
           href: 
         - text: "Class 7: "
