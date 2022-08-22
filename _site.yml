@@ -25,29 +25,29 @@ navbar:
           href: slides/intro-to-rmarkdown.html
         - text: "Class 4: Introduction to R"
           href: slides/intro-r-prog.html
-        - text: "Class 5: Data Visualization with ggplot2 (part 1)"
+        - text: "Class 5: Data Visualization with ggplot2 part 1"
           href: slides/ggp2-part-01.html
-        - text: "Class 6: "
+        - text: "Class 6: Data manipulation with dplyr part 1 (under construction)"
           href: 
-        - text: "Class 7: "
+        - text: "Class 7: Data Visualization with ggplot2 part 2 (under construction)"
           href: 
-        - text: "Class 8: "
+        - text: "Class 8: Data manipulation with dplyr part 2 (under construction)"
           href: 
-        - text: "Class 9: "
+        - text: "Class 9: Data Visualization with ggplot2 part 3 (under construction)"
           href: 
-        - text: "Class 10: "
+        - text: "Class 10: Buidling maps in R"
           href: 
-        - text: "Class 11: "
+        - text: "Class 11: Case study: Twitter data"
           href: 
-        - text: "Class 12: "
+        - text: "Class 12: Case study: Scraping data from the web"
           href: 
-        - text: "Class 13: "
+        - text: "Class 13: Case study: Image files & iteration (under construction)"
           href: 
-        - text: "Class 14: "
+        - text: "Class 14: Collaborating with Git & GitHub (under construction)"
           href: 
-        - text: "Class 15: "
+        - text: "Class 15: Building websites with R Markdown (under construction)"
           href: 
-        - text: "Class 16: "
+        - text: "Class 16: Finals"
           href: 
           
     - text: "Exercises"
@@ -60,8 +60,16 @@ navbar:
           href: exercises/goodenuffR.html
         - text: "the goodenuffR package (slides)"
           href: exercises/intro-to-goodenuffR.html
+        - text: "Intro to R: Introduction to atomic vectors (tutorial)"
+          href: https://mjfrigaard.shinyapps.io/atomic-vectors/
+        - text: "Intro to R: S3 vectors (tutorial)"
+          href: https://mjfrigaard.shinyapps.io/S3-vectors/
+        - text: "Intro to R: Rectangular data in R (tutorial)"
+          href: https://mjfrigaard.shinyapps.io/dataframes/
         - text: "R markdown in practice (exercises)"
           href: exercises/rmarkdown-in-practice.html
+        - text: "Importing data with readr, readxl, and googlesheets4 (tutorial)"
+          href: https://mjfrigaard.shinyapps.io/import/
         - text: "ggplot2 part 1 (exercises)"
           href: exercises/intro-to-ggplot2.html
           
