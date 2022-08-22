@@ -1,6 +1,6 @@
 ---
-title: "Introduction to folders, files, and software"
-subtitle: "How to organize your stuff"
+title: "Intro to Data Journalism"
+subtitle: "folders, files, and software"
 author: "Martin Frigaard"
 institute: "California State University | Journalism & Public Relations: Data Journalism"
 output:
@@ -22,7 +22,7 @@ output:
 library(metathis)
 meta() %>%
   meta_general(
-    description = "Introduction to folders, files, and software",
+    description = "Intro to Data Journalism (folders, files, and software)",
     generator = "xaringan and remark.js"
   ) %>%
   meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
