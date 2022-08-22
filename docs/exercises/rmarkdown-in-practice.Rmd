@@ -41,10 +41,7 @@ This section provides advanced exercises to improve your understanding of R Mark
 
 ## Link to slides 
 
-## Link to exercises 
-
-
-
+### [R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)
 
 ## Parameters
 
