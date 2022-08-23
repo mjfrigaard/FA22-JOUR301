@@ -17,7 +17,7 @@ navbar:
   right:
     - text: "Slides"
       menu:
-        - text: "Class 1: Intro to Data Journalism (folders, files, and software)"
+        - text: "Class 1: Intro to Data Journalism (files, data, and software)"
           href: slides/intro-to-course.html
         - text: "Class 2: The RStudio IDE & goodenuffR package"
           href: slides/rstudio-ide-intro.html
