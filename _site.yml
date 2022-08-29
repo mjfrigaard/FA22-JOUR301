@@ -72,6 +72,8 @@ navbar:
           href: https://mjfrigaard.shinyapps.io/import/
         - text: "ggplot2 part 1 (exercises)"
           href: exercises/intro-to-ggplot2.html
+        - text: "ggplot2 cheatsheet part 1 (tutorial)"
+          href: https://mjfrigaard.shinyapps.io/ggp2-01/
           
     - text: "Assignments"
       menu:
