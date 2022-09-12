@@ -42,6 +42,9 @@ today <- format(Sys.Date(), format = "%B %d %Y")
 library(knitr)
 library(tidyverse)
 library(fontawesome)
+library(xaringan)
+library(xaringanExtra)
+library(xaringanthemer)
 options(
     htmltools.dir.version = FALSE,
     knitr.table.format = "html",
@@ -103,6 +106,33 @@ knitr::include_graphics("img/rmarkdown_wizards.png")
 .footer-large[.right[Artwork by @allison_horst]]
 
 ---
+background-image: url(img/rmarkdown.png)
+background-position: 95% 8%
+background-size: 7%
+class: inverse
+
+# Resources 
+
++ [Course website](https://mjfrigaard.github.io/FA22-JOUR301/)
+
++ [Exercises: R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html) 
+
++ [`rmarkdown` text](https://bookdown.org/yihui/rmarkdown/) 
+
++ [Package website](https://rmarkdown.rstudio.com/)
+
+<br><br>
+
+
+.small[
+Some of this content had been adapted from these geniuses:
+1. Dr. Alison Hill [CDC](https://www.apreshill.com/talk/2020-rmd4cdc/) & [R4Pharma](https://rmd4pharma.netlify.app/): CC-BY
+2. Tom Mock, PhD @ RStudio [RMarkdown:
+reproducible reporting](https://github.com/jthomasmock/rmd-nhs/tree/master/workshop): CC-BY
+]
+
+
+---
 class: inverse, center
 background-image: url(img/rmarkdown.png)
 background-position: 93% 10%
@@ -126,12 +156,14 @@ background-size: 7%
 
 ### 3) Multiple .blue[output options] for creating PDFs, Word docs, PowerPoints, HTML, etc.
 
+
+
 ---
-class: center, top
+class: inverse, middle, center
 
 # How R Markdown works 
 
-## `rmarkdown` works directly with `knitr`
+## `rmarkdown` works with `knitr` + `pandoc`
 
 .leftcol[
 
@@ -149,9 +181,9 @@ knitr::include_graphics("img/rmarkdown.png")
 
 `knitr` uses `pandoc` (a universal document conversion tool) to generate the specified document format
 
-```{r knitr, echo=FALSE, echo=FALSE, fig.align='center', out.width="20%", out.height="20%"}
+```{r knitr-plus-pandoc, echo=FALSE, echo=FALSE, fig.align='center', out.width="55%", out.height="55%"}
 # copy_slide_images("knitr.png")
-knitr::include_graphics("img/knitr.png")
+knitr::include_graphics("img/knitr-plus-pandoc.png")
 ```
 
 ]
@@ -189,7 +221,7 @@ class: left, top
 
 ***Or use the drop-down menu***
 
-```{r new-rmarkdown, echo = FALSE, out.height="30%", out.width="30%", fig.align='center'}
+```{r new-rmarkdown, echo = FALSE, out.height="34%", out.width="34%", fig.align='center'}
 # copy_slide_images("new-rmarkdown.png")
 knitr::include_graphics("img/new-rmarkdown.png")
 ```
@@ -241,7 +273,7 @@ class: middle
 
 # New R Markdown File
 
-### Enter ***'Title'*** and ***'Author'*** of your report and click ***OK***
+### Enter ***'Title'***, ***'Author'***, and ***'Date'*** of your report and click ***OK***
 
 .border[
 
@@ -274,6 +306,8 @@ knitr::include_graphics("img/save-rmd-file.png")
 
 ]
 
+
+
 ---
 background-image: url(img/rmarkdown.png)
 background-position: 93% 7%
@@ -282,18 +316,29 @@ class: left, top
 
 # Knit your .Rmd file
 
+.leftcol40[
+
+### Change the date to today's data (YYYY-MM-DD format)
+
 ### Click on the small gear, select .blue[Preview in Viewer Pane]
 
 ### Click on the knit icon (ball of yarn)
 
-.border[
+]
 
-```{r knit-rmd-file, echo = FALSE, out.height="60%", out.width="60%", fig.align='center'}
+.rightcol60[
+
+<br><br>
+
+```{r knit-rmd-file, echo = FALSE, out.height="100%", out.width="100%", fig.align='center'}
 # copy_slide_images("knit-rmd-file.png")
 knitr::include_graphics("img/knit-rmd-file.png")
 ```
 
+
 ]
+
+
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -324,19 +369,23 @@ class: inverse, middle, center
 
 ## (under the hood)
 
+--
+
+### .red[R Markdown is made up of three elements]
+
 ---
 background-image: url(img/rmarkdown.png)
 background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #1
 
 ## 1) [YAML](https://en.wikipedia.org/wiki/YAML) 
 
 --
 
-```{r rmd-yaml, echo = FALSE, out.height="90%", out.width="90%", fig.align='center'}
+```{r rmd-yaml, echo = FALSE, out.height="85%", out.width="85%", fig.align='center'}
 # copy_slide_images("r-plus-md.png")
 knitr::include_graphics("img/rmd-yaml.png")
 ```
@@ -347,13 +396,13 @@ background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #2
 
 ## 2) [Markdown](https://en.wikipedia.org/wiki/Markdown) 
 
 --
 
-```{r rmd-markdown, echo = FALSE, out.height="95%", out.width="95%", fig.align='center'}
+```{r rmd-markdown, echo = FALSE, out.height="100%", out.width="100%", fig.align='center'}
 # copy_slide_images("r-plus-md.png")
 knitr::include_graphics("img/rmd-markdown.png")
 ```
@@ -364,9 +413,9 @@ background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #3
 
-## 3) R Code Chunks
+## 3) Code Chunks
 
 --
 
@@ -437,9 +486,9 @@ background-size: 7%
 
 ```yaml
 ---
-title: "My Report"
-author: "Martin Frigaard"
-date: "2022-08-14"
+title: "Title"
+author: "Author"
+date: "2022-09-12"
 output: html_document
 ---
 ```
@@ -451,7 +500,7 @@ background-size: 7%
 
 # R Markdown: YAML format
 
-```{r yaml-formatting-01, echo = FALSE, out.height="50%", out.width="50%", fig.align='center'}
+```{r yaml-formatting-01, echo = FALSE, out.height="70%", out.width="70%", fig.align='center'}
 # copy_slide_images("yaml-formatting-01.png")
 knitr::include_graphics("img/yaml-formatting-01.png")
 ```
@@ -542,7 +591,7 @@ background-size: 7%
 
 ### Floating table of contents (rendered)
 
-```{r yaml-toc-settings, fig.align='center', echo = FALSE, out.height="65%", out.width="65%"}
+```{r yaml-toc-settings, fig.align='center', echo = FALSE, out.height="85%", out.width="85%"}
 # copy_slide_images("yaml-toc-settings.png")
 knitr::include_graphics("img/yaml-toc-settings.png")
 ```
@@ -1018,12 +1067,24 @@ background-size: 7%
 
 # Exercise 5: Markdown Formatting
 
+.leftcol35[
+
 Delete the top portion of the markdown in `my-report.Rmd`. 
 
-```{r delete-rmarkdown, echo = FALSE, out.height="60%", out.width="60%", fig.align='center'}
+]
+
+.rightcol65[
+
+```{r delete-rmarkdown, echo = FALSE, out.height="80%", out.width="80%", fig.align='center'}
 # copy_slide_images("delete-rmarkdown.png")
 knitr::include_graphics("img/delete-rmarkdown.png")
 ```
+
+]
+
+
+
+
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -1067,7 +1128,7 @@ background-size: 7%
 
 <br>
 
-```{r rmarkdown-exercise, echo = FALSE, out.height="90%", out.width="90%", fig.align='center'}
+```{r rmarkdown-exercise, echo = FALSE, out.height="80%", out.width="80%", fig.align='center'}
 # copy_slide_images("rmarkdown-exercise.png")
 knitr::include_graphics("img/rmarkdown-exercise.png")
 ```
@@ -1116,7 +1177,7 @@ background-size: 7%
 
 <br>
 
-```{r tabset-1-render, echo = FALSE, out.height="100%", out.width="100%", fig.align='center'}
+```{r tabset-1-render, echo = FALSE, out.height="75%", out.width="75%", fig.align='center'}
 # copy_slide_images("tabset-1-render.png")
 knitr::include_graphics("img/tabset-1-render.png")
 ```
@@ -1128,7 +1189,7 @@ background-size: 7%
 
 # Exercise 6: Tabsets (rendered)
 
-```{r tabset-2-render, echo = FALSE, out.height="95%", out.width="95%", fig.align='center'}
+```{r tabset-2-render, echo = FALSE, out.height="75%", out.width="75%", fig.align='center'}
 # copy_slide_images("tabset-2-render.png")
 knitr::include_graphics("img/tabset-2-render.png")
 ```

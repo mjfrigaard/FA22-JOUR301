@@ -64,7 +64,7 @@ class: title-slide, center, middle, inverse
 
 Written: October 03 2021
 
-Updated: August 14 2022
+Updated: September 12 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -75,6 +75,33 @@ Updated: August 14 2022
 &lt;img src="img/rmarkdown_wizards.png" width="70%" height="70%" /&gt;
 
 .footer-large[.right[Artwork by @allison_horst]]
+
+---
+background-image: url(img/rmarkdown.png)
+background-position: 95% 8%
+background-size: 7%
+class: inverse
+
+# Resources 
+
++ [Course website](https://mjfrigaard.github.io/FA22-JOUR301/)
+
++ [Exercises: R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html) 
+
++ [`rmarkdown` text](https://bookdown.org/yihui/rmarkdown/) 
+
++ [Package website](https://rmarkdown.rstudio.com/)
+
+&lt;br&gt;&lt;br&gt;
+
+
+.small[
+Some of this content had been adapted from these geniuses:
+1. Dr. Alison Hill [CDC](https://www.apreshill.com/talk/2020-rmd4cdc/) &amp; [R4Pharma](https://rmd4pharma.netlify.app/): CC-BY
+2. Tom Mock, PhD @ RStudio [RMarkdown:
+reproducible reporting](https://github.com/jthomasmock/rmd-nhs/tree/master/workshop): CC-BY
+]
+
 
 ---
 class: inverse, center
@@ -100,12 +127,14 @@ background-size: 7%
 
 ### 3) Multiple .blue[output options] for creating PDFs, Word docs, PowerPoints, HTML, etc.
 
+
+
 ---
-class: center, top
+class: inverse, middle, center
 
 # How R Markdown works 
 
-## `rmarkdown` works directly with `knitr`
+## `rmarkdown` works with `knitr` + `pandoc`
 
 .leftcol[
 
@@ -121,7 +150,7 @@ class: center, top
 
 `knitr` uses `pandoc` (a universal document conversion tool) to generate the specified document format
 
-&lt;img src="img/knitr.png" width="20%" height="20%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/knitr-plus-pandoc.png" width="55%" height="55%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -158,7 +187,7 @@ class: left, top
 
 ***Or use the drop-down menu***
 
-&lt;img src="img/new-rmarkdown.png" width="30%" height="30%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/new-rmarkdown.png" width="34%" height="34%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -201,7 +230,7 @@ class: middle
 
 # New R Markdown File
 
-### Enter ***'Title'*** and ***'Author'*** of your report and click ***OK***
+### Enter ***'Title'***, ***'Author'***, and ***'Date'*** of your report and click ***OK***
 
 .border[
 
@@ -228,6 +257,8 @@ class: left, top
 
 ]
 
+
+
 ---
 background-image: url(img/rmarkdown.png)
 background-position: 93% 7%
@@ -236,15 +267,26 @@ class: left, top
 
 # Knit your .Rmd file
 
+.leftcol40[
+
+### Change the date to today's data (YYYY-MM-DD format)
+
 ### Click on the small gear, select .blue[Preview in Viewer Pane]
 
 ### Click on the knit icon (ball of yarn)
 
-.border[
+]
 
-&lt;img src="img/knit-rmd-file.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+.rightcol60[
+
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="img/knit-rmd-file.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
 
 ]
+
+
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -272,19 +314,23 @@ class: inverse, middle, center
 
 ## (under the hood)
 
+--
+
+### .red[R Markdown is made up of three elements]
+
 ---
 background-image: url(img/rmarkdown.png)
 background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #1
 
 ## 1) [YAML](https://en.wikipedia.org/wiki/YAML) 
 
 --
 
-&lt;img src="img/rmd-yaml.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/rmd-yaml.png" width="85%" height="85%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -292,13 +338,13 @@ background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #2
 
 ## 2) [Markdown](https://en.wikipedia.org/wiki/Markdown) 
 
 --
 
-&lt;img src="img/rmd-markdown.png" width="95%" height="95%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/rmd-markdown.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -306,9 +352,9 @@ background-position: 7% 93%
 background-size: 7%
 class: left, center
 
-# R Markdown is made up of three elements
+# R Markdown element #3
 
-## 3) R Code Chunks
+## 3) Code Chunks
 
 --
 
@@ -373,9 +419,9 @@ background-size: 7%
 
 ```yaml
 ---
-title: "My Report"
-author: "Martin Frigaard"
-date: "2022-08-14"
+title: "Title"
+author: "Author"
+date: "2022-09-12"
 output: html_document
 ---
 ```
@@ -387,7 +433,7 @@ background-size: 7%
 
 # R Markdown: YAML format
 
-&lt;img src="img/yaml-formatting-01.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/yaml-formatting-01.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -472,7 +518,7 @@ background-size: 7%
 
 ### Floating table of contents (rendered)
 
-&lt;img src="img/yaml-toc-settings.png" width="65%" height="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/yaml-toc-settings.png" width="85%" height="85%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -929,9 +975,21 @@ background-size: 7%
 
 # Exercise 5: Markdown Formatting
 
+.leftcol35[
+
 Delete the top portion of the markdown in `my-report.Rmd`. 
 
-&lt;img src="img/delete-rmarkdown.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.rightcol65[
+
+&lt;img src="img/delete-rmarkdown.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -975,7 +1033,7 @@ background-size: 7%
 
 &lt;br&gt;
 
-&lt;img src="img/rmarkdown-exercise.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/rmarkdown-exercise.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -1018,7 +1076,7 @@ background-size: 7%
 
 &lt;br&gt;
 
-&lt;img src="img/tabset-1-render.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/tabset-1-render.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
@@ -1027,7 +1085,7 @@ background-size: 7%
 
 # Exercise 6: Tabsets (rendered)
 
-&lt;img src="img/tabset-2-render.png" width="95%" height="95%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/tabset-2-render.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
 
 ---
 background-image: url(img/rmarkdown.png)
