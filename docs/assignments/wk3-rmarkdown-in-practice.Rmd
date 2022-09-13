@@ -9,30 +9,27 @@ author: "<Your Name>"
 output: html_document
 ---
 
-```{r , include=FALSE}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(ipcwswitch)
 library(skimr)
 library(listviewer)
 knitr::opts_chunk$set(warning = FALSE, 
                       message = FALSE,
-                      tidy = FALSE,
-                      size = "Huge")
+                      error = TRUE)
 ```
+
+***INSTRUCTIONS (don't edit below)***
 
 We'll be using R Markdown for most of the assignments in this course. As you'll discover, R Markdown is a powerful tool because it can combine prose/text, R code chunks and outputs (like figures and tables).
 
 For this assignment, you will get a broad overview of what R markdown can do. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1),
 
-All of the exercises below have the code chunks set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument).
+All of the exercises below have the code chunks set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument). Notice that the `setup` chunk has error set to `TRUE`, so if a code chunk doesn't render and look like the example in the exercises, read the error and try to de-bug (this is a huge part of coding). 
 
-When you've reached the end of this document, click on the "Knit" icon in R Studio and review the output.
+Every time you change an `eval` argument, click on the "Knit" icon in R Studio and review the output. This will prevent errors from building up (and you get to see your handy work!)
 
-**Edit only <Your Name> above and below this line.**
-
----------------------------------------------
-
-# Project setup 
+**Project setup**
 
 Follow the instructions on using `goodenuffR` on the course website [here](https://mjfrigaard.github.io/FA22-JOUR301/#using-goodenuffr-for-homework-assignments) or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
 
@@ -69,17 +66,23 @@ Place this file in the top-level folder of the project:
 │   ├── figures
 │   ├── manuscript
 │   └── tables
-└── wk_3assignment.Rproj
+└── wk_3_rmarkdown_in_practice.Rproj
 ```
+
+***INSTRUCTIONS (edit below this line)***
+
+---------------------------------------------
 
 # Downloading the files for this assignment 
 
 Download the files for this assignment by running the code chunk below:
 
-```{r download.file, eval=FALSE}
+```{r download.file, eval=TRUE}
+# change eval to TRUE
 download.file(
   url = "https://github.com/mjfrigaard/FA22-JOUR301/raw/main/data/starwars.rds", 
-  destfile = "data/starwars.rds")
+  destfile = "data/raw/starwars.rds")
+# knit the file
 ```
 
 ## Parameters
@@ -88,7 +91,7 @@ Add the following code to the YAML header (at the top of this file):
 
 ```{.yaml}
 params:
-  data_dir: !r file.path("data/starwars.rds")
+  data_dir: !r file.path("data/raw/starwars.rds")
   list_vars: !r c("films", "vehicles", "starships")
 ```
 
@@ -97,7 +100,9 @@ These parameters will give us global control over the data we will be importing 
 ## Importing and Viewing Data 
 
 ```{r StarWars, eval=FALSE}
+# change eval to TRUE
 StarWars <- readr::read_rds(file = params$data_dir)
+# knit the file
 ```
 
 Note that we've loaded these data using the parameters we've defined above.
@@ -111,7 +116,9 @@ Read about the variables in the `StarWars` dataset using `??starwars`
 View a basic transposed display of the `StarWars` data with `dplyr`'s `glimpse()` function.
 
 ```{r glimpse-StarWars, eval=FALSE}
+# change eval to TRUE
 dplyr::glimpse(StarWars)
+# knit the file
 ```
 
 `glimpse()` shows us the format and first few values of each variable in `StarWars`.
@@ -121,13 +128,17 @@ dplyr::glimpse(StarWars)
 Below is a `skimr::skim()` view of the `StarWars` data. We can see each variable broken down by type, along with some summary information.
 
 ```{r skimr, eval=FALSE}
+# change eval to TRUE
 install.packages("skimr")
 library(skimr)
+# knit the file
 ```
 
 
 ```{r skim-StarWars, eval=FALSE}
+# change eval to TRUE
 skimr::skim(StarWars)
+# knit the file
 ```
 
 Read more [here](https://docs.ropensci.org/skimr/).
@@ -136,9 +147,17 @@ Read more [here](https://docs.ropensci.org/skimr/).
 
 If you have JSON or lists (non-rectangular data) in R, sometimes these objects can be hard to visualize. The `jsonedit()` function from `listviewer` makes this easier by giving us an interactive display to click-through.
 
+```{r install-listviewer, eval=FALSE}
+# change eval to TRUE
+install.packages("listviewer")
+# knit the file
+```
+
 ```{r jsonedit-StarWars, eval=FALSE}
+# change eval to TRUE
 library(listviewer)
 listviewer::jsonedit(listdata = StarWars, mode = "view")
+# knit the file
 ```
 
 ## Caching data 
@@ -150,36 +169,46 @@ Include `cache=TRUE` in `StarWars` code chunk above and re-knit this chunk with 
 Use `object.size()` from the `utils` package (which is loaded by default).
 
 ```{r object.size-StarWars, eval=FALSE}
+# change eval to TRUE
 library(utils)
 object.size(StarWars)
+# knit the file
 ```
 
 Another option is using the `inspect_mem()` function from the  [`inspectdf` package](https://alastairrushworth.github.io/inspectdf/).
 
 ```{r inspect_mem-StarWars, eval=FALSE}
+# change eval to TRUE
 install.packages("inspectdf")
 library(inspectdf)
+# knit the file
 ```
 
 ```{r , eval=FALSE}
+# change eval to TRUE
 inspectdf::inspect_mem(df1 = StarWars) %>%
   inspectdf::show_plot(text_labels = TRUE,
                        col_palette = 1)
+# knit the file
 ```
 
 ### Get a subset of StarWars
 
-Create a `StarWarsSmall` dataset from the saved the names of the list-columns in `params$list_vars`.
+Create a `StarWarsSmall` dataset from the saved column names in `params$list_vars`.
 
 ```{r StarWarsSmall, eval=FALSE}
-StarWarsSmall <- # enter the code from this section
+# change eval to TRUE
+StarWarsSmall <- # enter the code from this section to create StarWarsSmall
+# knit the file
 ```
 
 Check the size of the new `StarWarsSmall` data by comparing it to the original `StarWars` dataset.
 
 ```{r inspect_mem-StarWars-StarWarsSmall, eval=FALSE}
+# change eval to TRUE
 inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
   inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+# knit the file
 ```
 
 ### Cache path
@@ -189,7 +218,10 @@ When we cache data, a new folder named `your-file-name` + `_cache/html/` is crea
 View the `<file name>_cache/html/` folder contents below:
 
 ```{r cache, eval=FALSE}
+# enter the file path
+# change eval to TRUE
 fs::dir_tree(".")
+# knit the file
 ```
 
 ## Figures 
@@ -201,14 +233,16 @@ We want to keep track of all the visualizations we create in our report. R Markd
 Below we visualize the average BMI by `species` and `gender` in the Star Wars universe. We also load the [`hrbrthemes` package](https://cinc.rud.is/web/packages/hrbrthemes/) to give us more control over the aesthetics in our plot.
 
 ```{r hrbrthemes, eval=FALSE}
+# change eval to TRUE
 install.packages("hrbrthemes")
 library(hrbrthemes)
+# knit the file
 ```
 
 
 Adjust the size of the figure with `fig.height=5.5` and `fig.width=8`. 
 
-```{r gg_avg_bmi_spec_gend, eval=FALSE, fig.height=, fig.width=, out.width='100%', out.height='100%'}
+```{r gg_avg_bmi_spec_gend, eval=FALSE, out.width='100%', out.height='100%'}
 StarWars %>%
   dplyr::filter(!is.na(mass) & !is.na(height) & !is.na(species)) %>%
   dplyr::mutate(bmi = mass / ((height / 100)  ^ 2)) %>%
@@ -243,11 +277,12 @@ Recreate the plotly graph below
 
 ```{r ggplotly, eval=FALSE, fig.height=5, fig.width=7}
 library(plotly)
-
+# copy the code from the exercises 
+# knit the file
 ```
 
 
-Knit this file and view the results. 
+Knit this file a final time and view the results. 
 
 
 

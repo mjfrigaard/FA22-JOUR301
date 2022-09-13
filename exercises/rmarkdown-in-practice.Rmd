@@ -28,39 +28,179 @@ knitr::opts_chunk$set(warning = FALSE,
 
 This section provides advanced exercises to improve your understanding of R Markdown. 
 
-## Setup 
-
-You need to download the dataset used in this file `starwars.rds`. 
-
 ## Outline
 
-1. Parameters 
-2. Caching data 
-3. Dependent chunks  
-4. Figure size  
-5. Figure location  
-6. Interactive figures  
+1. Setup
+2. Parameters 
+3. Caching data 
+4. Dependent chunks  
+5. Figure size  
+6. Figure location  
+7. Interactive figures  
+
+## Setup 
+
+Before you get started, you'll want to create the project folder using the `goodenuffR` package. First, install and load the latest version from GitHub: 
+
+```{r install-goodenuffR, eval=FALSE}
+# install the package 
+devtools::install_github("mjfrigaard/goodenuffR")
+Using github PAT from envvar GITHUB_PAT
+Downloading GitHub repo mjfrigaard/goodenuffR@HEAD
+✔  checking for file ‘/private/var/folders/0x/x5wkbhmx0k74tncn9swz7xpr0000gn/T/
+  RtmpMEKbyF/remotesf34816e089a0/mjfrigaard-goodenuffR-a05b005/DESCRIPTION’ ...
+─  preparing ‘goodenuffR’:
+✔  checking DESCRIPTION meta-information ...
+─  checking for LF line-endings in source and make files and shell scripts
+─  checking for empty or unneeded directories
+─  building ‘goodenuffR_0.1.0.tar.gz’
+   
+* installing *source* package ‘goodenuffR’ ...
+** using staged installation
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (goodenuffR)
+```
+
+*after installing the package, load it with `library(goodenuffR)`: 
+
+```{r load-goodenuffR, eval=FALSE}
+# load the package
+library(goodenuffR)
+```
+
+We'll assume I have the folder for this course on my Dropbox folder named `FA22-JOUR301`, and a sub-folder inside for homework assignments (`hw`). 
+
+Below is an example of what this folder should look like after completing the **previous** homework assignment: 
+
+```{bash, eval=FALSE}
+FA22-JOUR301 # course folder 
+  └── hw/ # sub-folder
+      └── wk_2_goodenuff_r_assignment/ # week 2 homework files
+        ├── 2022-09-01-mfrigaard-wk2-intro-to-goodenuffR.Rmd
+        ├── CITATION
+        ├── LICENSE
+        ├── README.Rmd
+        ├── README.md
+        ├── code
+        │   ├── 01-import.R
+        │   ├── 02-tidy.R
+        │   ├── 03-wrangle.R
+        │   ├── 04-visualize.R
+        │   ├── 05-model.R
+        │   ├── 06-communicate.R
+        │   └── runall.R
+        ├── data
+        │   ├── README.md
+        │   └── raw
+        ├── docs
+        │   ├── changelog.txt
+        │   ├── manuscript.Rmd
+        │   └── notebook.Rmd
+        ├── requirements.txt
+        ├── results
+        │   ├── figures
+        │   ├── manuscript
+        │   └── tables
+        └── wk_2_goodenuff_r_assignment.Rproj
+```
+
+To create the project folder for week 3, I should enter the following commands into RStudio's console: 
+
+```{r goodenuff-setup, eval=FALSE}
+# enter the name of the project and parent folder 
+goodenuffR::goodenuff_project(project_name = "wk 3 rmarkdown in practice", 
+  folder_path = "/Users/mjfrigaard/Dropbox/FA22-JOUR301/hw/")
+```
+
+A new RStudio project should open (see example below)
+
+```{r wk3-rmd-proj, echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics("img/wk3-rmd-proj.png")
+```
+
+After your project folder is created, run the `goodenuffR::goodenuff_files()` to create the project files. Your folder should look something like the example below: 
+
+```{r new-wk3-rmd-proj, echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics("img/new-wk3-rmd-proj.png")
+```
+
+## Download the assignment (`.Rmd`)
+
+After creating your project, head over to the course website and download the .Rmd file for this assignment. 
+
+```{r download-wk3-rmd, echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics("img/download-wk3-rmd.png")
+```
+
+Save the file in the folder you create above. 
+
+```{r wk3-rmd-file-placement, echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics("img/wk3-rmd-file-placement.png")
+```
+
+Click on the file to open it.
+
+```{r wk3-rmd-file-open, echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics("img/wk3-rmd-file-open.png")
+```
+
+Follow the instructions in the top of the .Rmd file. 
+
 
 # Resources 
 
-## Link to slides 
+## [Link to R Markdown slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)
 
-### [R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)
+# Parameters
 
-## Parameters
+YAML parameters give us the ability to add variables we can later refer to in our document. We will add some parameters to our report to see how these can be used.
 
-YAML parameters give us the ability to add variables we can later refer to in our document. We will add some parameters to our report to see how these can be used. Add the following code to the YAML header (at the bottom):
+## Downloading the data
+
+**Before** downloading the data file, we should think about where we're going to store it. Recall we always want to store new datasets in the `data/raw` folder. 
+
+Add the following code to the bottom of the YAML header (like so):
 
 ```{.yaml}
+title: "Week 3: R Markdown in Practice"
+author: "<Your Name>"
+output: html_document
+
 params:
-  data_dir: !r file.path("data/starwars.rds")
+  data_dir: !r file.path("data/raw/starwars.rds")
   list_vars: !r c("films", "vehicles", "starships")
 ```
 
 These parameters will give us global control over the data we will be importing (even if that file changes in the future).
 
+The first code chunk in assignment 3 is below:
 
-## Importing and Viewing Data {.tabset}
+````md
+```{r download.file, eval=FALSE}`r ''`
+# change eval to TRUE
+download.file(
+  url = "https://github.com/mjfrigaard/FA22-JOUR301/raw/main/data/starwars.rds", 
+  destfile = "data/raw/starwars.rds")
+```
+````
+
+Note that `destfile` in the `download.file()` function is identical to the location we passed to `file.path()` in our `params` above.
+
+When you set `eval` to `TRUE` in this code chunk, the code will download the data file and place it in the `data/raw/` folder. 
+
+# Importing and Viewing Data 
 
 It's hard to do any analyses without data! We will load a toy dataset from the [Star Wars API](https://swapi.dev/). Add the code below to your .Rmd file to import the `StarWars` data. We will also name the code chunk `StarWars`, because it's the object this [code creates](https://twitter.com/drob/status/738786604731490304).
 
@@ -77,7 +217,7 @@ Note that we've loaded these data using the parameters we've defined above.
 StarWars <- readr::read_rds(file = params$data_dir)
 ```
 
-### Help files
+## Help files
 
 Details about the variables in the `StarWars` dataset are accessible in RStudio's help files, which we can access using `??starwars`
 
@@ -90,7 +230,7 @@ Details about the variables in the `StarWars` dataset are accessible in RStudio'
 
 When we read the help file, we find there are three variables that are lists: `films`, `vehicles`, and `starships`. We have list-columns because the Star Wars API exports data as a JSON file, which is not tabular (like a spreadsheet).
 
-### `glimpse()`
+## `glimpse()`
 
 We can see a basic transposed display of the `StarWars` data with `dplyr`'s `glimpse()` function.
 
@@ -100,7 +240,7 @@ dplyr::glimpse(StarWars)
 
 `glimpse()` shows us the format and first few values of each variable in `StarWars`.
 
-### `skim()`
+## `skim()`
 
 Below is a `skimr::skim()` view of the `StarWars` data. We can see each variable broken down by type, along with some summary information.
 
@@ -110,7 +250,7 @@ skimr::skim(StarWars)
 
 The `skimr` package is great for looking at large data summaries. Read more [here](https://docs.ropensci.org/skimr/).
 
-### `jsonedit()`
+## `jsonedit()`
 
 If you have JSON or lists (non-rectangular data) in R, sometimes these objects can be hard to visualize. The `jsonedit()` function from `listviewer` makes this easier by giving us an interactive display to click-through.
 
@@ -120,7 +260,7 @@ listviewer::jsonedit(listdata = StarWars, mode = "view")
 ```
 
 
-## Caching data {.tabset}
+# Caching data 
 
 When we are analyzing large datasets that take awhile to load, it might make sense to cache the data when it's loaded into a code chunk.
 
@@ -134,7 +274,7 @@ StarWars <- readr::read_rds(file = params$data_dir)
 
 Re-knit this chunk with the new `cache` option.
 
-### Dataset size
+## Dataset size
 
 We can determine the size of our dataset using `object.size()` from the `utils` package (which is loaded by default).
 
@@ -154,7 +294,7 @@ inspectdf::inspect_mem(df1 = StarWars) %>%
 We can see from the data visualization that the list variables are accounting for most of the memory.
 
 
-### Caching data
+## Caching data
 
 Including the `cache=TRUE` option stores the `StarWars` data, so that R holds the data in memory until the `StarWars` import chunk is changed. Sometimes we will only want to analyze a subset of a dataset, so it makes sense to cache the larger dataset import chunk.
 
@@ -194,7 +334,7 @@ inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
   inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
 ```
 
-### Cache path
+## Cache paths
 
 When we cache data, a new folder named `your-file-name` + `_cache/html/` is created in the same directory as our R Markdown file. 
 
@@ -226,7 +366,7 @@ knitr::opts_chunk$set(cache = TRUE,
 ```
 ````
 
-### Dependent chunks
+# Dependent chunks
 
 Data analysis and exploration typically moves along in a (somewhat) linear fashion, which means our code chunks should be run sequentially. Sometimes this isn't true, and we need some code chunks to depend on other, specific code chunks. In this case, we can use the `dependson` option in our code chunk.
 
@@ -243,11 +383,11 @@ inspectdf::inspect_mem(df1 = StarWars, df2 = StarWarsSmall) %>%
 
 Now the `inspect_mem-StarWars-StarWarsSmall` will only execute *after* the `StarWarsSmall` chunk has been run.
 
-## Figures {.tabset}
+# Figures 
 
 Graphs and figures are great tools for communicating results, and we want to keep track of all the visualizations we create in our report. R Markdown comes with multiple options for controlling the size, location, and quality of images in our reports.
 
-### Size
+## Figure Size
 
 We can adjust the size of our figures with `fig.height=` or `fig.width=`. These both take numeric values, and control the dimensions of the figure in inches. We can also control the size with `out.width=` and `out.height=`.
 
@@ -308,7 +448,7 @@ gg_avg_bmi_spec_gend
 
 We can see this figure fits the page well because we are able to control the size of the height and width.
 
-### Location
+## Figure Location
 
 Now that we've created a few figures, we can see how these get stored to be used in the final .html file. Much like the default `cache` settings, when we create graphs in R Markdown, a default folder is created that is `your-file-name` + `_files`, and a subfolder `figure-html` contains the images for the document.
 
@@ -378,7 +518,7 @@ StarWarsDataModel %>%
 ```
 
 
-### Interactive figures
+## Interactive Figures
 
 The biggest benefit to using HTML is the ability to create interactive graphs. One example comes from the [`plotly` package](https://github.com/ropensci/plotly#readme).
 
