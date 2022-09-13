@@ -28,6 +28,10 @@ knitr::opts_chunk$set(warning = FALSE,
 
 This section provides advanced exercises to improve your understanding of R Markdown. 
 
+## Setup 
+
+You need to download the dataset used in this file `starwars.rds`. 
+
 ## Outline
 
 1. Parameters 
