@@ -21,7 +21,15 @@ knitr::opts_chunk$set(collapse = TRUE,
 
 The `goodenuffR` package helps you organize your files and folders. This document is meant to guide you through HW2 and serve as a reference for future use. 
 
+# Video demonstrations
+
+I've also created a set of videos to walk you through this set of exercises, which you can access [here.](https://capture.dropbox.com/collection/SmS6lLsEH8YviiKN) 
+
 # Install `goodenuffR` using the code below: 
+
+[Watch video for Mac](https://capture.dropbox.com/4SzjWK6hAVdhLaFm)
+
+[Watch video for Windows](https://capture.dropbox.com/v9QxdNCtd45MAy0C)
 
 ```{r install-goodenuffR, eval=FALSE}
 install.packages("devtools")
@@ -39,7 +47,15 @@ Let's assume I've chosen to create my course folder in my `Dropbox/` and I've na
       └── FA22-JOUR301/
 ```
 
-# 2) Create an assignments folder 
+[Watch video for  creating a course folder (Mac)](https://capture.dropbox.com/Z8CIVRlPkST6RuxS)
+
+[Watch video for creating a course folder from RStudio (Mac)](https://capture.dropbox.com/YjqAiH7TkJMb61wc)
+
+[Watch a video for creating a hw folder (Mac)](https://capture.dropbox.com/6vyCXTkXiDMaDIIt)
+
+[Watch video on creating a course and homeowrk folder (Windows)](https://capture.dropbox.com/6vyCXTkXiDMaDIIt)
+
+# 2) Create an homework folder 
 
 Inside your course folder, create a sub-folder for the assignments.
 
@@ -49,7 +65,11 @@ Inside your course folder, create a sub-folder for the assignments.
                └── hw/
 ```
 
-*Before* navigating to the [Assignments menu]() on the course website, I want to create a folder for any homework files.  
+*Before* navigating to the [Assignments menu](https://mjfrigaard.github.io/FA22-JOUR301/) on the course website, I want to create a folder for any homework files.  
+
+[Watch video for Mac](https://capture.dropbox.com/6vyCXTkXiDMaDIIt)
+
+[Watch video on creating a course and homeowrk folder (Windows)](https://capture.dropbox.com/6vyCXTkXiDMaDIIt)
 
 # 3) Get your working directory
 
@@ -65,13 +85,17 @@ getwd()
 
 This tells me where RStudio is currently 'looking' for files. I know I created the course folder in my `Dropbox/` folder, so I can navigate to the folder using the `dir()` function. 
 
-`dir()` is a handy function because we can take advantage of RStudio's tab-completion by entering the beginning of the path (`"/Users/mjfrigaard/Dropbox/"`) and hitting the tab key to see what other folders are available. 
+`dir()` is a handy function because we can take advantage of RStudio's tab-completion by entering the beginning of the path (`"/"`) and hitting the tab key to see what other folders are available. 
 
 ```{r dir-tab-completion, echo=FALSE}
 knitr::include_graphics("img/dir-tab-completion.png")
 ```
 
-# 4) Create your HW project
+[Watch video for Mac](https://capture.dropbox.com/dvQ84gitba8hGxan)
+
+[Watch video for Windows](https://capture.dropbox.com/fwN6Fr9NxiVudAxy)
+
+# 4) Create your homework project
 
 Once we have the path to the homework folder, we can use the `goodenuffR::goodenuff_project()` function to create the new project. 
 
@@ -79,7 +103,13 @@ Once we have the path to the homework folder, we can use the `goodenuffR::gooden
 knitr::include_graphics("img/dir-tab-completion-02.png")
 ```
 
-The **`project_name`** is name of the project, which is a sub-folder in **`folder_path`** argument. See the example below:
+The **`project_name`** is name of the project, which is a sub-folder in **`folder_path`** argument. 
+
++ In the `project_name` argument, enter the name of the homework (**`"wk2-goodenuffR-assignment"`**)  
+
++ In the `folder_path` argument, enter the path from above (**`"/Users/mjfrigaard/Dropbox/FA22-JOUR301/hw/"`**)
+
+See the example below:
 
 ```{r goodenuff_project, eval=FALSE}
 goodenuffR::goodenuff_project(
@@ -99,13 +129,21 @@ In the **Files** pane, you should see the folder path and your new RStudio proje
 knitr::include_graphics("img/new-goodenuffR-file-pane.png")
 ```
 
-# 5) Create your HW folders 
+[Watch video for Mac](https://capture.dropbox.com/mZXTVPEIwvGuGTkV)
+
+[Watch video for Windows](https://capture.dropbox.com/Z9EfDN0vpk3xKn2N)
+
+# 5) Create your project folders 
 
 In the R console, run the `goodenuffR::goodenuff_files()` function to create the files and folders. 
 
 ```{r goodenuff_files, eval=FALSE}
 goodenuffR::goodenuff_files()
 ```
+
+[Watch video for Mac](https://capture.dropbox.com/9KD5oP6Js54GZ1RR)
+
+[Watch video for Windows](https://capture.dropbox.com/Px9HEXyiIHsu9vgV)
 
 ```
 trying URL 'https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt'
@@ -123,7 +161,7 @@ This creates the follow files and folder (you can see them in the **Files** pane
 knitr::include_graphics("img/new-goodenuffR-new-files.png")
 ```
 
-# 6) Download the HW Assignment 
+# 6) Download the Assignment 
 
 Now we're ready to head over to the course website and download the Assignment for HW 2. We can save this file the top-level folder as:
 
@@ -135,7 +173,24 @@ knitr::include_graphics("img/new-goodenuffR-hw-file.png")
 
 *Swap out the `YYYY-MM-DD` for today's date and `LASTNAME` with your last name.*
 
-# 7) Last but not least--edit the `README.Rmd`
+[Watch video for Mac](https://capture.dropbox.com/sehHgZrzMlgNQ0iT)
+
+[Watch video for Windows](https://capture.dropbox.com/uMwwbjcsn7qc2I0Y)
+
+# 7) Knit the homework .Rmd file
+
+**Knit this file.**
+
+```{r knit-hw-wk2, echo=FALSE}
+knitr::include_graphics("img/knit-hw-wk2.gif")
+```
+
+
+[Watch video for Mac](https://capture.dropbox.com/ZcSowva8iT7EDBDj)
+
+[Watch video for Windows](https://capture.dropbox.com/0sXHYH8KZObbjQX0)
+
+# 8) Last but not least--edit the `README.Rmd`
 
 It's always a good practice to write a quick description of what a project folder contains. This way, when you come back to this folder later, you can open the `README` and know what you're looking at! 
 

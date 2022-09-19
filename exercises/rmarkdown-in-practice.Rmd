@@ -40,11 +40,24 @@ This section provides advanced exercises to improve your understanding of R Mark
 
 ## Setup 
 
-Before you get started, you'll want to create the project folder using the `goodenuffR` package. First, install and load the latest version from GitHub: 
+Before you get started, you'll want to create the project folder using the `goodenuffR` package. 
+
+First, install and load the `remotes` package. 
+
+```{r inst-remotes, eval=FALSE}
+install.packages("remotes")
+```
+
+
+```{r inst-remotes-gif, echo=FALSE}
+knitr::include_graphics("img/inst-remotes.gif")
+```
+
+Then, use `remotes::install_github()` to download the latest version from GitHub. 
 
 ```{r install-goodenuffR, eval=FALSE}
 # install the package 
-devtools::install_github("mjfrigaard/goodenuffR")
+remotes::install_github("mjfrigaard/goodenuffR")
 Using github PAT from envvar GITHUB_PAT
 Downloading GitHub repo mjfrigaard/goodenuffR@HEAD
 ✔  checking for file ‘/private/var/folders/0x/x5wkbhmx0k74tncn9swz7xpr0000gn/T/
@@ -73,11 +86,19 @@ Downloading GitHub repo mjfrigaard/goodenuffR@HEAD
 * DONE (goodenuffR)
 ```
 
+```{r inst-goodenuffR-gif, echo=FALSE}
+knitr::include_graphics("img/inst-goodenuffR.gif")
+```
+
 *after installing the package, load it with `library(goodenuffR)`: 
 
 ```{r load-goodenuffR, eval=FALSE}
 # load the package
 library(goodenuffR)
+```
+
+```{r load-goodenuffR-gif, echo=FALSE}
+knitr::include_graphics("img/load-goodenuffR.gif")
 ```
 
 We'll assume I have the folder for this course on my Dropbox folder named `FA22-JOUR301`, and a sub-folder inside for homework assignments (`hw`). 
@@ -116,23 +137,43 @@ FA22-JOUR301 # course folder
         └── wk_2_goodenuff_r_assignment.Rproj
 ```
 
-To create the project folder for week 3, I should enter the following commands into RStudio's console: 
+First I want to find the course folder using `dir()`
+
+```{r use-dir, echo=FALSE}
+knitr::include_graphics(path = "img/use-dir.gif")
+```
+
+Then, to create the project folder for week 3, I should enter a name in the `project_name` argument, and the path to the course folder from above. 
+
+The commands should look something like this: 
 
 ```{r goodenuff-setup, eval=FALSE}
 # enter the name of the project and parent folder 
-goodenuffR::goodenuff_project(project_name = "wk 3 rmarkdown in practice", 
+goodenuffR::goodenuff_project(
+  project_name = "wk 3 rmarkdown in practice", 
   folder_path = "/Users/mjfrigaard/Dropbox/FA22-JOUR301/hw/")
 ```
 
 A new RStudio project should open (see example below)
 
+```{r new-wk3-proj, echo=FALSE}
+knitr::include_graphics(path = "img/new-wk3-proj.gif")
+```
+
+A new RStudio session should open and have only the .Rproj file in the **Files** pane:
+
 ```{r wk3-rmd-proj, echo=FALSE, out.height='100%', out.width='100%'}
 knitr::include_graphics("img/wk3-rmd-proj.png")
 ```
 
-After your project folder is created, run the `goodenuffR::goodenuff_files()` to create the project files. Your folder should look something like the example below: 
+After your project folder is created, run the `goodenuffR::goodenuff_files()` to create the project files. 
 
-```{r new-wk3-rmd-proj, echo=FALSE, out.height='100%', out.width='100%'}
+```{r wk3-goodenuff-files-gif, echo=FALSE}
+knitr::include_graphics(path = "img/wk3-goodenuff-files.gif")
+```
+
+
+```{r new-wk3-rmd-proj, echo=FALSE, out.height='100%', out.width='100%', eval=FALSE}
 knitr::include_graphics("img/new-wk3-rmd-proj.png")
 ```
 
