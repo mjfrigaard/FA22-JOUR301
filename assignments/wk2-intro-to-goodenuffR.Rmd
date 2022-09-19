@@ -43,9 +43,9 @@ Place this file in the top-level folder of the project:
 
 # Installtion
 
-Run the code chunk below to install and load `goodenuffR`. 
+Copy the code below and run it in the console to install and load the `goodenuffR` package.  
 
-```{r install}
+```{r install, eval=FALSE}
 install.packages("remotes")
 remotes::install_github("mjfrigaard/goodenuffR")
 ```
@@ -55,7 +55,7 @@ remotes::install_github("mjfrigaard/goodenuffR")
 The code chunk below runs the `fs::dir_tree(".")` function, which prints the files and folders in given directory (and their structure). 
 
 ```{r dir_tree}
-install.packages("fs")
+install.packages("fs", repos = "https://cloud.r-project.org")
 library(fs)
 fs::dir_tree(".")
 ```

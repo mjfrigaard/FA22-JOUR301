@@ -788,6 +788,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1860,15 +1861,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -2408,7 +2415,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2518,36 +2525,24 @@ Assignments
 
 
 <div class="d-article">
-<p>This is the home page for JOUR 301, Data Journalism. All course
-materials will be posted on this site.</p>
-<p>Instructor: <a href="https://www.martinfrigaard.io/">Martin
-Frigaard</a><br />
+<p>This is the home page for JOUR 301, Data Journalism. All course materials will be posted on this site.</p>
+<p>Instructor: <a href="https://www.martinfrigaard.io/">Martin Frigaard</a><br />
 Meeting times: Mon 5:00pm to 7:50pm<br />
 Syllabus: <a href="syllabus.html">click here</a><br />
-Upcoming lectures and assignments: <a href="schedule.html">click
-here</a></p>
+Upcoming lectures and assignments: <a href="schedule.html">click here</a></p>
 <h2 id="software-requirements">Software requirements</h2>
-<p>For students enrolled in this course, you will need a computer with a
-working web browser. Computational requirements for using R &amp;
-RStudio are described <a
-href="https://support.rstudio.com/hc/en-us/articles/201853926-RStudio-IDE-System-Recommendations">here</a>,
-but most modern laptops will run both programs without issue.</p>
+<p>For students enrolled in this course, you will need a computer with a working web browser. Computational requirements for using R &amp; RStudio are described <a href="https://support.rstudio.com/hc/en-us/articles/201853926-RStudio-IDE-System-Recommendations">here</a>, but most modern laptops will run both programs without issue.</p>
 <h3 id="r">R</h3>
-<p>Download a recent version of R <a
-href="https://cloud.r-project.org/">here</a></p>
+<p>Download a recent version of R <a href="https://cloud.r-project.org/">here</a></p>
 <h3 id="rstudio">RStudio</h3>
-<p>Download a recent version of RStudio <a
-href="https://rstudio.com/products/rstudio/download/#download">here</a></p>
+<p>Download a recent version of RStudio <a href="https://rstudio.com/products/rstudio/download/#download">here</a></p>
 <h3 id="installation-instructions">Installation Instructions</h3>
-<p>Instructions for installing R and RStudio are available <a
-href="https://mjfrigaard.github.io/FA22-JOUR301/resources/install-r-rstudio.html">here.</a></p>
+<p>Instructions for installing R and RStudio are available <a href="https://mjfrigaard.github.io/FA22-JOUR301/resources/install-r-rstudio.html">here.</a></p>
 <h2 id="r-packages-for-this-course">R packages for this course</h2>
 <p>This course requires two packages from Github:</p>
 <ol type="1">
-<li><p><a
-href="https://mjfrigaard.github.io/goodenuffR/"><code>goodenuffR</code></a></p></li>
-<li><p><a
-href="https://mjfrigaard.github.io/sheetcheatR/"><code>sheetcheatR</code></a></p></li>
+<li><p><a href="https://mjfrigaard.github.io/goodenuffR/"><code>goodenuffR</code></a></p></li>
+<li><p><a href="https://mjfrigaard.github.io/sheetcheatR/"><code>sheetcheatR</code></a></p></li>
 </ol>
 <p>Install these packages with the following code in your R console:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2558,10 +2553,8 @@ href="https://mjfrigaard.github.io/sheetcheatR/"><code>sheetcheatR</code></a></p
 <span><span class='fu'>remotes</span><span class='fu'>::</span><span class='fu'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='op'>(</span><span class='st'>"mjfrigaard/sheetcheatR"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<h3 id="using-goodenuffr-for-homework-assignments">Using
-<code>goodenuffR</code> for homework assignments</h3>
-<p>Follow these instructions to use the <code>goodenuffR</code> package
-for your homework assignments:</p>
+<h3 id="using-goodenuffr-for-homework-assignments">Using <code>goodenuffR</code> for homework assignments</h3>
+<p>Follow these instructions to use the <code>goodenuffR</code> package for your homework assignments:</p>
 <ol type="1">
 <li>Install and load the <code>goodenuffR</code> package</li>
 </ol>
@@ -2573,9 +2566,7 @@ for your homework assignments:</p>
 <ol start="2" type="1">
 <li>Create a project folder:</li>
 </ol>
-<p>Navigate to your course <code>hw</code> folder and enter the
-<code>project_name</code> and <code>folder_path</code> (see examples
-below):</p>
+<p>Navigate to your course <code>hw</code> folder and enter the <code>project_name</code> and <code>folder_path</code> (see examples below):</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>goodenuffR</span><span class='fu'>::</span><span class='fu'><a href='https://mjfrigaard.github.io/goodenuffR/reference/goodenuff_project.html'>goodenuff_project</a></span><span class='op'>(</span></span>
@@ -2584,8 +2575,7 @@ below):</p>
 </div>
 </div>
 <ol start="3" type="1">
-<li>After your new RStudio session opens, create the project files using
-<code>goodenuffR::goodenuff_files()</code>.</li>
+<li>After your new RStudio session opens, create the project files using <code>goodenuffR::goodenuff_files()</code>.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2622,23 +2612,14 @@ below):</p>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                │   └── tables</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                └── wk_3assignment.Rproj</span></code></pre></div>
 </div>
-<h3 id="additional-r-packages-used-in-this-course">Additional R packages
-used in this course</h3>
-<p><code>dplyr</code>, <code>tidyr</code>, <code>fs</code>,
-<code>forcats</code>, <code>stringr</code>, <code>rmarkdown</code>,
-<code>lubridate</code>, <code>ggplot2</code>, <code>cowplot</code>,
-<code>gapminder</code>, <code>GGally</code>, <code>gganimate</code>,
-<code>ggiraph</code>, <code>ggdendro</code>, <code>ggdist</code>,
-<code>ggforce</code>, <code>ggplot2movies</code>, <code>ggrepel</code>,
-<code>ggridges</code>, <code>ggthemes</code>, <code>gifski</code>,
-<code>glue</code>, <code>knitr</code>, <code>learnr</code>,
-<code>naniar</code>, <code>margins</code>, <code>MASS</code>,
-<code>Matrix</code>, <code>nycflights13</code>,
-<code>palmerpenguins</code>, <code>patchwork</code>, <code>rgdal</code>,
-<code>rmarkdown</code>, <code>umap</code>, <code>xaringan</code>,
-<code>distill</code></p>
-<p>Install these packages with the following lines of code in your R
-console:</p>
+<h3 id="additional-r-packages-used-in-this-course">Additional R packages used in this course</h3>
+<p><code>dplyr</code>, <code>tidyr</code>, <code>fs</code>, <code>forcats</code>, <code>stringr</code>, <code>rmarkdown</code>, <code>lubridate</code>,
+<code>ggplot2</code>, <code>cowplot</code>, <code>gapminder</code>, <code>GGally</code>, <code>gganimate</code>, <code>ggiraph</code>, <code>ggdendro</code>,
+<code>ggdist</code>, <code>ggforce</code>, <code>ggplot2movies</code>, <code>ggrepel</code>, <code>ggridges</code>, <code>ggthemes</code>,
+<code>gifski</code>, <code>glue</code>, <code>knitr</code>, <code>learnr</code>, <code>naniar</code>, <code>margins</code>, <code>MASS</code>, <code>Matrix</code>,
+<code>nycflights13</code>, <code>palmerpenguins</code>, <code>patchwork</code>, <code>rgdal</code>, <code>rmarkdown</code>, <code>umap</code>,
+<code>xaringan</code>, <code>distill</code></p>
+<p>Install these packages with the following lines of code in your R console:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dplyr"</span>, <span class='st'>"tidyr"</span>, <span class='st'>"fs"</span>, <span class='st'>"forcats"</span>, <span class='st'>"stringr"</span>, <span class='st'>"rmarkdown"</span>,</span>
@@ -2650,8 +2631,7 @@ console:</p>
 <span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
