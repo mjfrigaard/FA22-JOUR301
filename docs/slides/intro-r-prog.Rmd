@@ -704,7 +704,7 @@ dput(y_exp)
 ---
 class: inverse, center, middle
 
-# *R .yellow[packages] come from .yellow[functions]*
+# *R .yellow[functions] come from .yellow[packages]*
 
 ---
 class: left, top
