@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Using the goodenuffR package</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Using the goodenuffR package"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/csuc-data-journalism"/>
+    <meta name="twitter:title" content="Using the goodenuffR package"/>
+    <meta name="twitter:description" content="Using the goodenuffR package"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/csuc-data-journalism/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Using the goodenuffR package"/>
+    <meta property="og:description" content="Using the goodenuffR package"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/csuc-data-journalism/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://github.com/mjfrigaard/csuc-data-journalism&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Using the `goodenuffR` package
+#.fancy[Everything...in its right place]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: October 21 2021
+
+Updated: October 03 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/goodenuffR.png)
+background-position: 50% 70%
+background-size: 35%
+
+## `goodenuffR` = good enuff practices in R computing 
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Outline 
+
+.leftcol[
+### 1) The Problem
+
+### 2) A Solution 
+
+### 3) Installation 
+
+### 4) Quick Start
+]
+
+.rightcol[
+
+### 5) Package functions 
+
++ `goodenuff_code()`  
++ `goodenuff_collab()`  
++ `goodenuff_data()`   
++ `goodenuff_doc()`  
++ `goodenuff_results()`
++ `goodenuff_files()`
+
+### 6) Using `goodenuffR`
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# The Problem
+
+.leftcol35[
+
+&gt; *Where is my stuff?*
+
+]
+
+.rightcol65[
+
+### [THE VERGE: FILE NOT FOUND](https://www.theverge.com/22684730/students-file-folder-directory-structure-education-gen-z)
+
+&lt;img src="img/verge-file-not-found.png" width="95%" height="95%" /&gt;
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# The Problem
+
+.leftcol70[
+
+&lt;img src="img/files-tweet-01.png" width="100%" height="100%" /&gt;
+
+]
+
+--
+
+.rightcol30[
+
+&gt; *Store stuff in a particular place*
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# The Problem
+
+.leftcol[
+
+&lt;img src="img/files-tweet-02.png" width="100%" height="100%" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+&gt; *Most soul-destroying "bug" when trying to learn programming*
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# A Solution: `goodenuffR`!
+
+### Based on the excellent paper, [*Good enough practices in scientific computing*](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510)
+
+by Greg Wilson, Jennifer Bryan, Karen Cranston, Justin Kitzes, Lex Nederbragt, Tracy K. Teal
+
+--
+
+.border[
+
+&lt;img src="img/plos-gepisc.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# A Solution
+
+#### The paper focuses on...
+
+&gt; *"a minimum set of tools and techniques that we believe every researcher can and should consider adopting"*
+
+--
+
+#### Specifically
+
+.leftcol[
+.medium[
+
++ Data management
+
++ Software
+
++ Collaboration
+
+]]
+
+.rightcol[
+.medium[
+
++ Project organization
+
++ Tracking changes
+
++ Manuscripts
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# A Solution
+
+
+.leftcol[
+
+#### `goodenuffR` focuses on:
+
++ Data management
+
++ Project organization
+
+]
+
+--
+
+.rightcol[
+
+#### Specifically
+
+.code70[
+
+```bash
+|-- CITATION
+|-- README
+|-- LICENSE
+|-- requirements.txt
+|-- data
+|  |-- birds_count_table.csv
+|-- doc
+|  |-- notebook.md
+|  |-- manuscript.md
+|  |-- changelog.txt
+|-- results
+|  |-- summarized_results.csv
+|-- src
+|  |-- sightings_analysis.py
+|  |-- runall.py
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Installation
+
+&lt;br&gt;
+
+### Available on GitHub here: 
+
+https://github.com/mjfrigaard/goodenuffR
+
+--
+
+&lt;br&gt;
+
+### Install `goodenuffR` using the code below: 
+
+
+```r
+install.packages("devtools")
+devtools::install_github("mjfrigaard/goodenuffR")
+```
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### In a fresh RStudio Session
+
+]
+
+.rightcol65[.border[
+
+&lt;img src="img/goodenuffR-fresh.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### 1) Install `devtools`, then install and load `goodenuffR`
+
+]
+
+.rightcol65[.border[
+
+&lt;img src="img/goodenuffR-install-load.png" width="65%" height="65%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### 2) Enter a project name
+
+### 3) Enter the folder path for your project
+
+]
+
+.rightcol65[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+```r
+goodenuffR::goodenuff_project(
+  project_name = "my awesome project", 
+  folder_path = "/Users/mjfrigaard/Projects")
+```
+
+#### TIP: *use `getwd()` in the Console or `pwd` in the Terminal to locate current folder*
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### RStudio will open a new session for your project
+
+]
+
+.leftcol65[.border[
+
+&lt;img src="img/goodenuffR-new.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### 4) Run 
+
+.code70[
+
+
+```r
+goodenuffR::goodenuff_files()
+```
+
+]]
+
+.leftcol65[.border[
+
+&lt;img src="img/goodenuffR-run.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Quick Start
+
+.leftcol35[
+
+### Now you're good (enuff) to go! 
+
+]
+
+.leftcol65[.border[
+
+&lt;img src="img/goodenuffR-ready.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+#### `goodenuff_code()`  
+
+.leftcol[ 
+
+### Paper
+
+- *readable, reusable, and testable* 
+- *short, single-purpose functions with clearly-defined inputs and outputs*
+- *name all files to reflect their content or function*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+
+```r
+goodenuffR::goodenuff_code()
+# └── code
+#    ├── 01-import.R
+#    ├── 02-tidy.R
+#    ├── 03-wrangle.R
+#    ├── 04-visualize.R
+#    ├── 05-model.R
+#    ├── 06-communicate.R
+#    └── runall.R
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+#### `goodenuff_code()` 
+
+.leftcol[ 
+
+### Paper
+
+- *Place a brief explanatory comment at the start of every program*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+Each `code` file has a header: 
+
+
+```r
+#=======================
+# This is code to create:
+# Authored by and feedback to:
+# MIT License
+# Version:
+#=======================
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+#### `goodenuff_collab()` 
+
+.leftcol[ 
+
+### Paper
+
+- *Make the project citable* 
+- *Make the license explicit*
+- *Create an overview of your project*
+- *Make dependencies and requirements explicit*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+
+```r
+goodenuffR::goodenuff_collab()
+# └── CITATION
+# └── LICENSE
+# └── README.Rmd
+# └── requirements.txt
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+#### `goodenuff_data()`   
+
+.leftcol[ 
+
+### Paper
+
+- *Save the raw data*
+- *Record all the steps used to process data*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+
+```r
+goodenuffR::goodenuff_data()
+# data
+# ├── README.md
+# └── raw
+```
+
+*Folder for keeping `raw/` data separate from other data files*  
+
+*Document in `README.md`*
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+### `goodenuff_data()` (BONUS!)
+
+`data/README.md` provides some guidance on storing and documenting data. 
+
+.code60[
+
+```
+# Project Data  
+
+For guidance please see:
+https://help.osf.io/hc/en-us/articles/360019739054-How-to-Make-a-Data-Dictionary
+
+## Additional Resources
+
+1. Sharing data
+http://bit.ly/data-4-sharing  
+2. Data in spreadsheets
+http://bit.ly/data-in-sheets  
+3. External data (https://r-pkgs.org/)
+https://r-pkgs.org/data.html
+
+source: 
+https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/
+```
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+   
+#### `goodenuff_doc()`  
+
+.leftcol[ 
+
+### Paper
+
+- *Put text documents associated with the project in the `doc` directory*
+- *Add a file called `CHANGELOG.txt` to the project's docs subfolder*
+- *a running lab notebook describing various ideas for the project and how these were implemented*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+
+```r
+goodenuffR::goodenuff_doc() 
+# docs
+# ├── changelog.txt
+# ├── manuscript.Rmd
+# └── notebook.Rmd
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+#### `goodenuff_results()`
+
+
+.leftcol[ 
+
+### Paper
+
+- *Put raw data and metadata in a `data/` directory and files generated during cleanup and analysis in a `results/` directory*
+
+]
+
+.rightcol[ 
+
+### `goodenuffR`
+
+
+```r
+goodenuffR::goodenuff_results()
+# results
+# ├── figures
+# ├── manuscript
+# └── tables
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Package functions 
+
+.leftcol[
+
+#### `goodenuff_files()`
+
+]
+
+.rightcol[ 
+.border[
+
+&lt;img src="img/goodenuffR-files.png" width="65%" height="65%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+## BONUS: RMarkdown Template
+
+.leftcol[
+
+### `goodenuffR` also comes with a `rmarkdown` template: 
+
+]
+
+.rightcol[ 
+
+&lt;br&gt;
+
+.border[
+
+&lt;img src="img/new-rmd.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/goodenuffR.png)
+background-position: 93% 8%
+background-size: 8%
+
+# Thank you! 
+
+## Feedback to
+
+### - `@mjfrigaard` on Github and Twitter 
+
+### - `mjfrigaard(at)pm.me` email
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

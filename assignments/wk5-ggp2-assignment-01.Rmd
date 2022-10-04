@@ -14,6 +14,7 @@ library(tidyverse)
 library(ipcwswitch)
 library(skimr)
 library(listviewer)
+options(repos = "https://cloud.r-project.org")
 knitr::opts_chunk$set(warning = FALSE, 
                       message = FALSE,
                       tidy = FALSE,

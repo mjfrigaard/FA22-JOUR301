@@ -17,6 +17,8 @@ navbar:
   right:
     - text: "Slides"
       menu:
+        - text: "(Setup) the goodenuffR package"
+          href: slides/intro-to-goodenuffR.html
         - text: "Class 1: Intro to Data Journalism (files, data, and software)"
           href: slides/intro-to-course.html
         - text: "Class 2: The RStudio IDE & goodenuffR package"
@@ -27,8 +29,8 @@ navbar:
           href: slides/intro-r-prog.html
         - text: "Class 5: Data Visualization with ggplot2 part 1"
           href: slides/ggp2-part-01.html
-        - text: "Class 6: Data manipulation with dplyr part 1 (under construction)"
-          href: 
+        - text: "Class 6: Data manipulation with dplyr part 1"
+          href: slides/dplyr-part-01.html
         - text: "Class 7: Data Visualization with ggplot2 part 2 (under construction)"
           href: 
         - text: "Class 8: Data manipulation with dplyr part 2 (under construction)"
@@ -49,31 +51,34 @@ navbar:
           href: 
         - text: "Class 16: Finals"
           href: 
+
+    - text: "Tutorials"
+      menu:
+        - text: "Introduction to the command line"
+          href: https://mjfrigaard.shinyapps.io/command-line/
+        - text: "Atomic vectors"
+          href: https://mjfrigaard.shinyapps.io/atomic-vectors/
+        - text: "S3 vectors"
+          href: https://mjfrigaard.shinyapps.io/S3-vectors/
+        - text: "Rectangular data in R"
+          href: https://mjfrigaard.shinyapps.io/rectangles/
+        - text: "Importing data"
+          href: https://mjfrigaard.shinyapps.io/import/
+        - text: "ggplot2 part 1"
+          href: https://mjfrigaard.shinyapps.io/ggp2-01/
           
     - text: "Exercises"
       menu:
         - text: "Installing R & RStudio (exercises)"
           href: exercises/install-r-rstudio.html
-        - text: "Introduction to the command line (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/command-line/
         - text: "goodenuffR (exercises)"
           href: exercises/goodenuffR.html
-        - text: "the goodenuffR package (slides)"
-          href: exercises/intro-to-goodenuffR.html
-        - text: "Intro to R: Introduction to atomic vectors (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/atomic-vectors/
-        - text: "Intro to R: S3 vectors (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/S3-vectors/
-        - text: "Intro to R: Rectangular data in R (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/dataframes/
         - text: "R markdown in practice (exercises)"
           href: exercises/rmarkdown-in-practice.html
-        - text: "Importing data with readr, readxl, and googlesheets4 (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/import/
-        - text: "ggplot2 part 1 (exercises)"
+        - text: "ggplot2 intro (exercises)"
           href: exercises/intro-to-ggplot2.html
-        - text: "ggplot2 cheatsheet part 1 (tutorial)"
-          href: https://mjfrigaard.shinyapps.io/ggp2-01/
+        - text: "dplyr intro (exercises)"
+          href: exercises/intro-to-dplyr.html
           
     - text: "Assignments"
       menu:

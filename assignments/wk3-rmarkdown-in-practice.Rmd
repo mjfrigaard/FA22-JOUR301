@@ -14,6 +14,7 @@ library(tidyverse)
 library(ipcwswitch)
 library(skimr)
 library(listviewer)
+options(repos = "https://cloud.r-project.org")
 knitr::opts_chunk$set(warning = FALSE, 
                       message = FALSE,
                       error = TRUE)
@@ -129,7 +130,7 @@ Below is a `skimr::skim()` view of the `StarWars` data. We can see each variable
 
 ```{r skimr, eval=FALSE}
 # change eval to TRUE
-install.packages("skimr")
+install.packages("skimr", repos = "https://cloud.r-project.org")
 library(skimr)
 # knit the file
 ```
@@ -149,7 +150,7 @@ If you have JSON or lists (non-rectangular data) in R, sometimes these objects c
 
 ```{r install-listviewer, eval=FALSE}
 # change eval to TRUE
-install.packages("listviewer")
+install.packages("listviewer", repos = "https://cloud.r-project.org")
 # knit the file
 ```
 
@@ -179,7 +180,7 @@ Another option is using the `inspect_mem()` function from the  [`inspectdf` pack
 
 ```{r inspect_mem-StarWars, eval=FALSE}
 # change eval to TRUE
-install.packages("inspectdf")
+install.packages("inspectdf", repos = "https://cloud.r-project.org")
 library(inspectdf)
 # knit the file
 ```
@@ -234,7 +235,7 @@ Below we visualize the average BMI by `species` and `gender` in the Star Wars un
 
 ```{r hrbrthemes, eval=FALSE}
 # change eval to TRUE
-install.packages("hrbrthemes")
+install.packages("hrbrthemes", repos = "https://cloud.r-project.org")
 library(hrbrthemes)
 # knit the file
 ```

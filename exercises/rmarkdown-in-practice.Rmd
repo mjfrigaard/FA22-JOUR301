@@ -45,7 +45,7 @@ Before you get started, you'll want to create the project folder using the `good
 First, install and load the `remotes` package. 
 
 ```{r inst-remotes, eval=FALSE}
-install.packages("remotes")
+install.packages("remotes", repos = "https://cloud.r-project.org")
 ```
 
 
