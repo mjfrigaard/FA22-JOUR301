@@ -11,7 +11,7 @@ output:
 always_allow_html: true
 
 params: 
-  data_file: !r file.path("https://bit.ly/3qgjqSC")
+  data_file: !r dplyr::starwars
 ---
 
 ```{r , echo = FALSE, include=FALSE}
@@ -52,45 +52,62 @@ library(tidyverse)
 
 We'll cover two methods for importing data into RStudio. 
 
-## Import data {.tabset}
+1. importing data from a package    
+2. Importing data using `params` in the YAML header  
 
-We have the path to the `original_starwars` data stored in our `params`, but we will also go over how to build this dataset from `dplyr::starwars`. 
+We have the path to the `starwars` data stored in our `params`, but we will also go over how to build this dataset from `dplyr::starwars`. 
 
-### URLs
+## Importing data from the `dplyr` package
 
-Below we import the `original_starwars` dataset from the slides using the url. This is similar to providing a local file path (`data/original-starwars.csv`).
+Below we import the `starwars` dataset from the `dplyr` package. This is similar to the way we'd access a function from a package (`dplyr::starwars`).
 
-```{r import-url}
-read_csv("https://bit.ly/3qgjqSC")
+```{r import-pkg_starwars}
+pkg_starwars <- dplyr::starwars
+glimpse(pkg_starwars)
 ```
 
-### `params`
+## Importing data using `params`
 
 We have the `params` list from our YAML header, which we can also use to import the data. 
 
 ```{.yaml}
 params: 
-  data_file: !r file.path("https://bit.ly/3qgjqSC")
+  data_file: !r dplyr::starwars
 ```
 
 ```{r import-params}
-readr::read_csv(params$data_file)
+params_starwars <- params$data_file
+glimpse(params_starwars)
 ```
+
+Check to see if these two are identical: 
+
+```{r identical-starwars}
+identical(x = pkg_starwars, y = params_starwars)
+```
+
 
 # `dplyr` verbs 
 
 This section covers four common `dplyr` verbs for data manipulation: 
 
-- `select`  
-- `filter`  
-- `arrange`  
-- `mutate`  
+- `select`: works on **columns**/**variables**
+- `filter`: works on **rows**/**observations**  
+- `arrange`: sorts values (either ascending or descending (with `desc()`))
+- `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
 
-## Selecting columns {.tabset}
+## Selecting columns 
 
-These are exercises to try on your own using the `select()` function.
+We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
 
-### exercise
+The general form of `select()` is below: 
+
+```{r select-args, eval=FALSE}
+select(.data = , ... = )
+```
+
+
+## Select exercise 1
 
 Alter the code below to select just the `name` and `homeoworld` column:
 

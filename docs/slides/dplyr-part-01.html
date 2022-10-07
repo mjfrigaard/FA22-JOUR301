@@ -68,7 +68,7 @@ class: title-slide, center, middle, inverse
 
 Written: September 21 2021
 
-Updated: October 03 2022
+Updated: October 07 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -83,11 +83,11 @@ background-size: 6%
 
 # Objectives 
 
-## 1) Common data manipulation tasks
+## 1) the pipes `%&gt;%` and `|&gt;`
 
-## 2) `dplyr`'s verbs 
+## 2) Common data manipulation tasks
 
-## 3) the pipe `%&gt;%` 
+## 3) `dplyr`'s verbs 
 
 ---
 class: left, top
@@ -187,7 +187,7 @@ background-image: url(img/dplyr.png)
 background-position: 90% 10%
 background-size: 6%
 
-# The `starwars` dataset  
+# The `big_starwars` dataset  
 
 ### These data come from the Star Wars API: 
 
@@ -195,30 +195,9 @@ background-size: 6%
 
 --
 
-#### Read more about the data here:
+`big_starwars` is similar to the `starwars` data in the `dplyr` package:
 
 https://dplyr.tidyverse.org/reference/starwars.html
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 95% 9%
-background-size: 6%
-
-# Load the `starwars` dataset
-
-### The `starwars` data comes from the `dplyr` package, so we can access it using the code below:
-
-
-```r
-install.packages("dplyr")
-library(dplyr)
-dplyr::starwars
-```
-
---
-
-### We'll use a smaller version of this dataset (`original_starwars`) to show `dplyr`'s common data manipluation verbs
 
 
 ---
@@ -227,7 +206,7 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-# Import `original_starwars` 
+# Import `big_starwars` 
 
 --
 
@@ -236,7 +215,7 @@ background-size: 7%
 
 ```r
 library(readr)
-original_starwars &lt;- read_csv("https://bit.ly/mini-strwrs")
+big_starwars &lt;- read_csv("https://bit.ly/big-sw")
 ```
 
 --
@@ -249,6 +228,158 @@ original_starwars &lt;- read_csv("https://bit.ly/mini-strwrs")
 
 ]
 
+---
+class: inverse, center, middle
+background-image: url(img/pipe.png)
+background-position: 50% 15%
+background-size: 20%
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# Writing code with pipes 
+
+##  .orange[|&gt;] and .blue[%&gt;%]
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Background on pipes
+
+***.purple[What is a 'pipe'?]***
+
+--
+
+&gt; A pipe is an operator for making code "*easier to read or to express*" and "*'sweeter' for human use*" (which is why it's also known as ['*syntactic sugar*')](https://en.wikipedia.org/wiki/Syntactic_sugar)
+
+&gt; The original pipe in R (.blue[%&gt;%]) comes from [the `magrittr` package](https://magrittr.tidyverse.org/), R released a 'native' pipe ( .orange[|&gt;] ) as of version 4.1
+
+--
+
+***.purple[What do pipes do?]***
+
+--
+
+&gt; Pipes combine ["*a set of processes chained together ... so that the output text of each process ... is passed directly as input to the next one*"](https://en.wikipedia.org/wiki/Pipeline_(Unix)
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Background on pipes
+
+***.purple[How can I use them?]***
+
+--
+
+&gt; Create pipes easily with keyboard shortcuts
+
+--
+
+.leftcol[.center[
+
+
+### ***Mac***
+
+### `Cmd` + `Shift` + `M` = .blue[%&gt;%] or .orange[|&gt;]
+
+]]
+
+
+--
+
+.rightcol[.center[
+
+### ***Windows***
+
+### `Crtl` + `Shift` + `M` = .blue[%&gt;%] or .orange[|&gt;]
+
+]]
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Pipe settings 
+
+.leftcol40[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+Set which pipe to use in **Tools** &gt; **Global Options** &gt; **Code**
+
+]
+
+--
+
+.rightcol60[
+
+&lt;img src="img/use-native-pipe.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 10%
+background-size: 6%
+
+# How pipes work 
+
+--
+
+#### *Without the pipe, we have to constantly assign the output to new object:*
+
+--
+
+&lt;img src="img/pipe-00.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+#### *Or use nested functions:*
+
+--
+
+&lt;img src="img/pipe-01.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+ 
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 10%
+background-size: 6%
+
+# How pipes work
+
+#### *Pipes allow us to pass inputs/outputs from functions left-to-right*
+
+--
+
+&lt;img src="img/pipe-03.png" width="48%" height="48%" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+***`%&gt;%` can be read as "then"***
+
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(img/dplyr.png)
+background-position: 50% 15%
+background-size: 20%
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# `dplyr` 
 
 
 ---
@@ -280,9 +411,9 @@ background-size: 25%
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
-# Viewing the data = `glimpse()`
+# Viewing .red[all] the data = `glimpse()`
 
-### *We need to view the data we're manipulating to see if the changes are correct*
+
 
 
 ---
@@ -291,29 +422,43 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-# View = `glimpse()`
+# View with `glimpse()`
 
-#### Take a look at the entire dataset using `dplyr::glimpse()`
+### `glimpse()` transposes the data and prints as much of it to the screen as possible
 
 --
 
+.code50[
+
 
 ```r
-glimpse(original_starwars)
+glimpse(big_starwars)
 ```
 
 ```
-  Rows: 6
-  Columns: 6
-  $ name       &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Leia Organa", "Chewbac…
-  $ height     &lt;dbl&gt; 172, 167, 96, 150, 228, 180
-  $ mass       &lt;dbl&gt; 77, 75, 32, 49, 112, 80
-  $ hair_color &lt;chr&gt; "blond", NA, NA, "brown", "brown", "brown"
-  $ species    &lt;chr&gt; "Human", "Droid", "Droid", "Human", "Wookiee", "Human"
-  $ homeworld  &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Alderaan", "Kashyyyk", "C…
+  Rows: 82
+  Columns: 18
+  $ name          &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia…
+  $ height        &lt;dbl&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 180…
+  $ mass          &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0, …
+  $ hair_color    &lt;chr&gt; "blond", NA, NA, "none", "brown", "brown, grey", "brown"…
+  $ skin_color    &lt;chr&gt; "fair", "gold", "white, blue", "white", "light", "light"…
+  $ eye_color     &lt;chr&gt; "blue", "yellow", "red", "yellow", "brown", "blue", "blu…
+  $ birth_year    &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 57.…
+  $ gender        &lt;chr&gt; "masculine", "masculine", "masculine", "masculine", "fem…
+  $ homeworld     &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan",…
+  $ species       &lt;chr&gt; "Human", "Droid", "Droid", "Human", "Human", "Human", "H…
+  $ sex           &lt;chr&gt; "male", "none", "none", "male", "female", "male", "femal…
+  $ species_class &lt;chr&gt; "mammal", "artificial", "artificial", "mammal", "mammal"…
+  $ species_desig &lt;chr&gt; "sentient", "sentient", "sentient", "sentient", "sentien…
+  $ vehicle       &lt;chr&gt; "X-wing, Imperial shuttle, Snowspeeder, Imperial Speeder…
+  $ hw_climate    &lt;chr&gt; "arid", "arid", "temperate", "arid", "temperate", "arid"…
+  $ hw_gravity    &lt;chr&gt; "1 standard", "1 standard", "1 standard", "1 standard", …
+  $ hw_terrain    &lt;chr&gt; "desert", "desert", "grassy hills, swamps, forests, moun…
+  $ hw_pop        &lt;dbl&gt; 2.0e+05, 2.0e+05, 4.5e+09, 2.0e+05, 2.0e+09, 2.0e+05, 2.…
 ```
 
-#### `glimpse()` transposes the data and prints as much of it to the screen as possible
+]
 
 ---
 class: left, top
@@ -321,22 +466,41 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-## View the data in the ***Console***
+# View in the ***Console***
 
-*Enter the name of the dataset to print it to the Console*
+If you view the dataset in the Console, you'll see a plain-text `tibble`
 
 
 ```r
-original_starwars
+big_starwars
 ```
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine"},{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"Chewbacca","2":"228","3":"112","4":"brown","5":"Wookiee","6":"Kashyyyk"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+.code50[
+
+
+```
+  # A tibble: 82 × 18
+     name      height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵ species
+     &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sky…    172    77 blond   fair    blue       19   mascu… Tatooi… Human  
+   2 C-3PO        167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi… Droid  
+   3 R2-D2         96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo   Droid  
+   4 Darth Va…    202   136 none    white   yellow     41.9 mascu… Tatooi… Human  
+   5 Leia Org…    150    49 brown   light   brown      19   femin… Aldera… Human  
+   6 Owen Lars    178   120 brown,… light   blue       52   mascu… Tatooi… Human  
+   7 Beru Whi…    165    75 brown   light   blue       47   femin… Tatooi… Human  
+   8 R5-D4         97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi… Droid  
+   9 Biggs Da…    183    84 black   light   brown      24   mascu… Tatooi… Human  
+  10 Obi-Wan …    182    77 auburn… fair    blue-g…    57   mascu… Stewjon Human  
+  # … with 72 more rows, 8 more variables: sex &lt;chr&gt;, species_class &lt;chr&gt;,
+  #   species_desig &lt;chr&gt;, vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;,
+  #   hw_terrain &lt;chr&gt;, hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+  #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld
+```
+
+]
 
 
 ---
@@ -345,13 +509,29 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-## View the data in the *Data Viewer*
+# View in ***R Markdown ***
 
-#### View the `original_starwars` dataset using RStudio's data editor
+If you're using R Markdown, you'll see a `paged_table()`
 
-&lt;img src="img/starwars-dataviewer.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+--
+
+&lt;img src="img/rmd-paged-table.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
 
 
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+# View in ***Data Viewer***
+
+View the `big_starwars` dataset using RStudio's data editor
+
+--
+
+&lt;img src="img/starwars-dataviewer.png" width="55%" height="55%" style="display: block; margin: auto;" /&gt;
 
 ---
 class: inverse, center, middle
@@ -361,7 +541,7 @@ background-size: 25%
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 
-# Choosing columns = `select()`
+# **Selecting** columns = `select()`
 
 ---
 class: left, top
@@ -369,22 +549,45 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()`
+## **Select** columns with `select()`
 
 #### `select()` allows us to pick specific columns out of a dataset
 
+.code60[
+
 
 ```r
-select(original_starwars, name, homeworld, species)
+select(.data = big_starwars, 
+                name, homeworld, species)
 ```
+
+]
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[2],"type":["chr"],"align":["left"]},{"label":["species"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"Tatooine","3":"Human"},{"1":"C-3PO","2":"Tatooine","3":"Droid"},{"1":"R2-D2","2":"Naboo","3":"Droid"},{"1":"Leia Organa","2":"Alderaan","3":"Human"},{"1":"Chewbacca","2":"Kashyyyk","3":"Wookiee"},{"1":"Han Solo","2":"Corellia","3":"Human"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+.code60[
+
+
+```
+  # A tibble: 82 × 3
+     name               homeworld species
+     &lt;chr&gt;              &lt;chr&gt;     &lt;chr&gt;  
+   1 Luke Skywalker     Tatooine  Human  
+   2 C-3PO              Tatooine  Droid  
+   3 R2-D2              Naboo     Droid  
+   4 Darth Vader        Tatooine  Human  
+   5 Leia Organa        Alderaan  Human  
+   6 Owen Lars          Tatooine  Human  
+   7 Beru Whitesun lars Tatooine  Human  
+   8 R5-D4              Tatooine  Droid  
+   9 Biggs Darklighter  Tatooine  Human  
+  10 Obi-Wan Kenobi     Stewjon   Human  
+  # … with 72 more rows
+```
+
+]
+
+
 
 ---
 class: left, top
@@ -392,22 +595,46 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()`
+## **Select** columns with `select()`
 
 #### We can use negation (`-`) to remove columns
 
+.code60[
+
 
 ```r
-select(original_starwars, -c(mass, height, hair_color))
+select(.data = big_starwars, 
+                  -c(mass, height, hair_color))
 ```
+
+]
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"Human","3":"Tatooine"},{"1":"C-3PO","2":"Droid","3":"Tatooine"},{"1":"R2-D2","2":"Droid","3":"Naboo"},{"1":"Leia Organa","2":"Human","3":"Alderaan"},{"1":"Chewbacca","2":"Wookiee","3":"Kashyyyk"},{"1":"Han Solo","2":"Human","3":"Corellia"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+.code60[
+
+
+```
+  # A tibble: 82 × 15
+     name     skin_…¹ eye_c…² birth…³ gender homew…⁴ species sex   speci…⁵ speci…⁶
+     &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sk… fair    blue       19   mascu… Tatooi… Human   male  mammal  sentie…
+   2 C-3PO    gold    yellow    112   mascu… Tatooi… Droid   none  artifi… sentie…
+   3 R2-D2    white,… red        33   mascu… Naboo   Droid   none  artifi… sentie…
+   4 Darth V… white   yellow     41.9 mascu… Tatooi… Human   male  mammal  sentie…
+   5 Leia Or… light   brown      19   femin… Aldera… Human   fema… mammal  sentie…
+   6 Owen La… light   blue       52   mascu… Tatooi… Human   male  mammal  sentie…
+   7 Beru Wh… light   blue       47   femin… Tatooi… Human   fema… mammal  sentie…
+   8 R5-D4    white,… red        NA   mascu… Tatooi… Droid   none  artifi… sentie…
+   9 Biggs D… light   brown      24   mascu… Tatooi… Human   male  mammal  sentie…
+  10 Obi-Wan… fair    blue-g…    57   mascu… Stewjon Human   male  mammal  sentie…
+  # … with 72 more rows, 5 more variables: vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;,
+  #   hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;, hw_pop &lt;dbl&gt;, and abbreviated variable
+  #   names ¹​skin_color, ²​eye_color, ³​birth_year, ⁴​homeworld, ⁵​species_class,
+  #   ⁶​species_desig
+```
+
+]
 
 ---
 class: left, top
@@ -419,6 +646,8 @@ background-size: 6%
 
 #### `select()` comes with 'helpers' to make chosing columns easier (and reduces typing!)
 
+.small[
+
 Helper                | Outputs
 :-------------------  | :--------------------------------------
 `starts_with()`       | choose columns starting with...
@@ -427,6 +656,11 @@ Helper                | Outputs
 `matches()`           | choose columns matching regex...
 `one_of()`            | choose columns from a set of names...
 `num_range()`         | choose columns from a numerical index...
+`where()`             | choose columns where the function returns `TRUE`
+
+]
+
+
 
 
 ---
@@ -435,22 +669,137 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()` 
+## **Select** columns with `select()` 
 
-### Select columns using `matches()` 
+### Select columns using `starts_with()` 
+
+.code60[
 
 
 ```r
-select(original_starwars, name, matches("_"))
+select(.data = big_starwars, 
+                    name, starts_with("h"))
 ```
+
+]
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["hair_color"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"blond"},{"1":"C-3PO","2":"NA"},{"1":"R2-D2","2":"NA"},{"1":"Leia Organa","2":"brown"},{"1":"Chewbacca","2":"brown"},{"1":"Han Solo","2":"brown"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+.code60[
+
+
+```
+  # A tibble: 82 × 8
+     name               height hair_color   homew…¹ hw_cl…² hw_gr…³ hw_te…⁴ hw_pop
+     &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;
+   1 Luke Skywalker        172 blond        Tatooi… arid    1 stan… desert   2  e5
+   2 C-3PO                 167 &lt;NA&gt;         Tatooi… arid    1 stan… desert   2  e5
+   3 R2-D2                  96 &lt;NA&gt;         Naboo   temper… 1 stan… grassy…  4.5e9
+   4 Darth Vader           202 none         Tatooi… arid    1 stan… desert   2  e5
+   5 Leia Organa           150 brown        Aldera… temper… 1 stan… grassl…  2  e9
+   6 Owen Lars             178 brown, grey  Tatooi… arid    1 stan… desert   2  e5
+   7 Beru Whitesun lars    165 brown        Tatooi… arid    1 stan… desert   2  e5
+   8 R5-D4                  97 &lt;NA&gt;         Tatooi… arid    1 stan… desert   2  e5
+   9 Biggs Darklighter     183 black        Tatooi… arid    1 stan… desert   2  e5
+  10 Obi-Wan Kenobi        182 auburn, whi… Stewjon temper… 1 stan… grass   NA    
+  # … with 72 more rows, and abbreviated variable names ¹​homeworld, ²​hw_climate,
+  #   ³​hw_gravity, ⁴​hw_terrain
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 15%
+background-size: 6%
+
+## **Select** columns with `select()` 
+
+### Select columns using `matches()` 
+
+.code60[
+
+
+```r
+select(.data = big_starwars, 
+                    name, matches("_"))
+```
+
+]
+
+--
+
+.code60[
+
+
+```
+  # A tibble: 82 × 11
+     name  hair_…¹ skin_…² eye_c…³ birth…⁴ speci…⁵ speci…⁶ hw_cl…⁷ hw_gr…⁸ hw_te…⁹
+     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke… blond   fair    blue       19   mammal  sentie… arid    1 stan… desert 
+   2 C-3PO &lt;NA&gt;    gold    yellow    112   artifi… sentie… arid    1 stan… desert 
+   3 R2-D2 &lt;NA&gt;    white,… red        33   artifi… sentie… temper… 1 stan… grassy…
+   4 Dart… none    white   yellow     41.9 mammal  sentie… arid    1 stan… desert 
+   5 Leia… brown   light   brown      19   mammal  sentie… temper… 1 stan… grassl…
+   6 Owen… brown,… light   blue       52   mammal  sentie… arid    1 stan… desert 
+   7 Beru… brown   light   blue       47   mammal  sentie… arid    1 stan… desert 
+   8 R5-D4 &lt;NA&gt;    white,… red        NA   artifi… sentie… arid    1 stan… desert 
+   9 Bigg… black   light   brown      24   mammal  sentie… arid    1 stan… desert 
+  10 Obi-… auburn… fair    blue-g…    57   mammal  sentie… temper… 1 stan… grass  
+  # … with 72 more rows, 1 more variable: hw_pop &lt;dbl&gt;, and abbreviated variable
+  #   names ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​species_class,
+  #   ⁶​species_desig, ⁷​hw_climate, ⁸​hw_gravity, ⁹​hw_terrain
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 15%
+background-size: 6%
+
+## **Select** columns with `select()` 
+
+### Select columns using `where()` 
+
+.code60[
+
+
+```r
+select(.data = big_starwars, 
+                    name, where(is.character))
+```
+
+]
+
+--
+
+.code60[
+
+
+```
+  # A tibble: 82 × 14
+     name     hair_…¹ skin_…² eye_c…³ gender homew…⁴ species sex   speci…⁵ speci…⁶
+     &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sk… blond   fair    blue    mascu… Tatooi… Human   male  mammal  sentie…
+   2 C-3PO    &lt;NA&gt;    gold    yellow  mascu… Tatooi… Droid   none  artifi… sentie…
+   3 R2-D2    &lt;NA&gt;    white,… red     mascu… Naboo   Droid   none  artifi… sentie…
+   4 Darth V… none    white   yellow  mascu… Tatooi… Human   male  mammal  sentie…
+   5 Leia Or… brown   light   brown   femin… Aldera… Human   fema… mammal  sentie…
+   6 Owen La… brown,… light   blue    mascu… Tatooi… Human   male  mammal  sentie…
+   7 Beru Wh… brown   light   blue    femin… Tatooi… Human   fema… mammal  sentie…
+   8 R5-D4    &lt;NA&gt;    white,… red     mascu… Tatooi… Droid   none  artifi… sentie…
+   9 Biggs D… black   light   brown   mascu… Tatooi… Human   male  mammal  sentie…
+  10 Obi-Wan… auburn… fair    blue-g… mascu… Stewjon Human   male  mammal  sentie…
+  # … with 72 more rows, 4 more variables: vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;,
+  #   hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;, and abbreviated variable names
+  #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​homeworld, ⁵​species_class,
+  #   ⁶​species_desig
+```
+
+]
 
 
 ---
@@ -484,18 +833,38 @@ background-size: 7%
 
 ### `filter()` lets us pull out rows based on logical conditions
 
+.code60[
+
 
 ```r
-filter(original_starwars, species == "Human")
+filter(.data = big_starwars, 
+                    species == "Human")
 ```
+
+]
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+
+```
+  # A tibble: 35 × 18
+     name      height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵ species
+     &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sky…    172    77 blond   fair    blue       19   mascu… Tatooi… Human  
+   2 Darth Va…    202   136 none    white   yellow     41.9 mascu… Tatooi… Human  
+   3 Leia Org…    150    49 brown   light   brown      19   femin… Aldera… Human  
+   4 Owen Lars    178   120 brown,… light   blue       52   mascu… Tatooi… Human  
+   5 Beru Whi…    165    75 brown   light   blue       47   femin… Tatooi… Human  
+   6 Biggs Da…    183    84 black   light   brown      24   mascu… Tatooi… Human  
+   7 Obi-Wan …    182    77 auburn… fair    blue-g…    57   mascu… Stewjon Human  
+   8 Anakin S…    188    84 blond   fair    blue       41.9 mascu… Tatooi… Human  
+   9 Wilhuff …    180    NA auburn… fair    blue       64   mascu… Eriadu  Human  
+  10 Han Solo     180    80 brown   fair    brown      29   mascu… Corell… Human  
+  # … with 25 more rows, 8 more variables: sex &lt;chr&gt;, species_class &lt;chr&gt;,
+  #   species_desig &lt;chr&gt;, vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;,
+  #   hw_terrain &lt;chr&gt;, hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+  #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld
+```
 
 ---
 class: left top
@@ -506,6 +875,8 @@ background-size: 6%
 # Choose rows with `filter()` 
 
 #### `filter()` logical conditions include: 
+
+.small[
 
 Logical Test        | Outputs
 :--------------:    | :--------------------------:
@@ -518,6 +889,10 @@ Logical Test        | Outputs
 `%in%`              | Group membership
 `is.na()`           | is NA (missing)
 `!is.na()`          | is not NA (non-missing)
+
+]
+
+
 
 
 ---
@@ -534,17 +909,32 @@ background-size: 6%
 
 
 ```r
-filter(original_starwars, 
+filter(.data = big_starwars, 
           species == "Human" &amp; !is.na(hair_color))
 ```
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+
+```
+  # A tibble: 35 × 18
+     name      height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵ species
+     &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sky…    172    77 blond   fair    blue       19   mascu… Tatooi… Human  
+   2 Darth Va…    202   136 none    white   yellow     41.9 mascu… Tatooi… Human  
+   3 Leia Org…    150    49 brown   light   brown      19   femin… Aldera… Human  
+   4 Owen Lars    178   120 brown,… light   blue       52   mascu… Tatooi… Human  
+   5 Beru Whi…    165    75 brown   light   blue       47   femin… Tatooi… Human  
+   6 Biggs Da…    183    84 black   light   brown      24   mascu… Tatooi… Human  
+   7 Obi-Wan …    182    77 auburn… fair    blue-g…    57   mascu… Stewjon Human  
+   8 Anakin S…    188    84 blond   fair    blue       41.9 mascu… Tatooi… Human  
+   9 Wilhuff …    180    NA auburn… fair    blue       64   mascu… Eriadu  Human  
+  10 Han Solo     180    80 brown   fair    brown      29   mascu… Corell… Human  
+  # … with 25 more rows, 8 more variables: sex &lt;chr&gt;, species_class &lt;chr&gt;,
+  #   species_desig &lt;chr&gt;, vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;,
+  #   hw_terrain &lt;chr&gt;, hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+  #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld
+```
 
 
 
@@ -562,17 +952,32 @@ background-size: 6%
 
 
 ```r
-filter(original_starwars, 
+filter(.data = big_starwars, 
           species == "Human" , !is.na(hair_color))
 ```
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+
+```
+  # A tibble: 35 × 18
+     name      height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵ species
+     &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  
+   1 Luke Sky…    172    77 blond   fair    blue       19   mascu… Tatooi… Human  
+   2 Darth Va…    202   136 none    white   yellow     41.9 mascu… Tatooi… Human  
+   3 Leia Org…    150    49 brown   light   brown      19   femin… Aldera… Human  
+   4 Owen Lars    178   120 brown,… light   blue       52   mascu… Tatooi… Human  
+   5 Beru Whi…    165    75 brown   light   blue       47   femin… Tatooi… Human  
+   6 Biggs Da…    183    84 black   light   brown      24   mascu… Tatooi… Human  
+   7 Obi-Wan …    182    77 auburn… fair    blue-g…    57   mascu… Stewjon Human  
+   8 Anakin S…    188    84 blond   fair    blue       41.9 mascu… Tatooi… Human  
+   9 Wilhuff …    180    NA auburn… fair    blue       64   mascu… Eriadu  Human  
+  10 Han Solo     180    80 brown   fair    brown      29   mascu… Corell… Human  
+  # … with 25 more rows, 8 more variables: sex &lt;chr&gt;, species_class &lt;chr&gt;,
+  #   species_desig &lt;chr&gt;, vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;,
+  #   hw_terrain &lt;chr&gt;, hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+  #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld
+```
 
 
 ---
@@ -583,34 +988,34 @@ background-size: 6%
 
 # Choose rows with `filter()` 
 
-#### Remember that *any* logical condition works for `filter()`ing, so we can borrow functions from other packages to help us (like `stringr::str_detect()`)
+Remember that **.red[any logical condition works]** with `filter()`, so we can borrow functions from other packages to help us (like `stringr::str_detect()`)]
 
 --
 
 
 ```r
-filter(original_starwars, 
+filter(big_starwars, 
+        # look for names containing a number
        str_detect(string = name, pattern = "[:digit:]"))
 ```
 
 --
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine"},{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
 
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
-# See the `filter()` exercises for more examples!
+```
+  # A tibble: 5 × 18
+    name   height  mass hair_color skin_c…¹ eye_c…² birth…³ gender homew…⁴ species
+    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  
+  1 C-3PO     167    75 &lt;NA&gt;       gold     yellow      112 mascu… Tatooi… Droid  
+  2 R2-D2      96    32 &lt;NA&gt;       white, … red          33 mascu… Naboo   Droid  
+  3 R5-D4      97    32 &lt;NA&gt;       white, … red          NA mascu… Tatooi… Droid  
+  4 IG-88     200   140 none       metal    red          15 mascu… &lt;NA&gt;    Droid  
+  5 R4-P17     96    NA none       silver,… red, b…      NA femin… &lt;NA&gt;    Droid  
+  # … with 8 more variables: sex &lt;chr&gt;, species_class &lt;chr&gt;, species_desig &lt;chr&gt;,
+  #   vehicle &lt;chr&gt;, hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+  #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​skin_color, ²​eye_color,
+  #   ³​birth_year, ⁴​homeworld
+```
 
 ---
 class: inverse, center, middle
@@ -635,14 +1040,14 @@ background-size: 6%
 
 
 ```r
-arrange(original_starwars, height)
+arrange(big_starwars, height)
 ```
 
 --
 
 &lt;div data-pagedtable="false"&gt;
   &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine"},{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"},{"1":"Chewbacca","2":"228","3":"112","4":"brown","5":"Wookiee","6":"Kashyyyk"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["skin_color"],"name":[5],"type":["chr"],"align":["left"]},{"label":["eye_color"],"name":[6],"type":["chr"],"align":["left"]},{"label":["birth_year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[8],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[9],"type":["chr"],"align":["left"]},{"label":["species"],"name":[10],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["species_class"],"name":[12],"type":["chr"],"align":["left"]},{"label":["species_desig"],"name":[13],"type":["chr"],"align":["left"]},{"label":["vehicle"],"name":[14],"type":["chr"],"align":["left"]},{"label":["hw_climate"],"name":[15],"type":["chr"],"align":["left"]},{"label":["hw_gravity"],"name":[16],"type":["chr"],"align":["left"]},{"label":["hw_terrain"],"name":[17],"type":["chr"],"align":["left"]},{"label":["hw_pop"],"name":[18],"type":["dbl"],"align":["right"]}],"data":[{"1":"Yoda","2":"66","3":"17.0","4":"white","5":"green","6":"brown","7":"896.0","8":"masculine","9":"NA","10":"Yoda's species","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Ratts Tyerel","2":"79","3":"15.0","4":"none","5":"grey, blue","6":"NA","7":"NA","8":"masculine","9":"Aleen Minor","10":"Aleena","11":"male","12":"reptile","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Wicket Systri Warrick","2":"88","3":"20.0","4":"brown","5":"brown","6":"brown","7":"8.0","8":"masculine","9":"Endor","10":"Ewok","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.85 standard","17":"forests, mountains, lakes","18":"3.000e+07"},{"1":"Dud Bolt","2":"94","3":"45.0","4":"none","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Vulpter","10":"Vulptereen","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, artic","16":"1","17":"urban, barren","18":"4.210e+08"},{"1":"R2-D2","2":"96","3":"32.0","4":"NA","5":"white, blue","6":"red","7":"33.0","8":"masculine","9":"Naboo","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"R4-P17","2":"96","3":"NA","4":"none","5":"silver, red","6":"red, blue","7":"NA","8":"feminine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"R5-D4","2":"97","3":"32.0","4":"NA","5":"white, red","6":"red","7":"NA","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Sebulba","2":"112","3":"40.0","4":"none","5":"grey, red","6":"orange","7":"NA","8":"masculine","9":"Malastare","10":"Dug","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid, temperate, tropical","16":"1.56","17":"swamps, deserts, jungles, mountains","18":"2.000e+09"},{"1":"Gasgano","2":"122","3":"NA","4":"none","5":"white, blue","6":"black","7":"NA","8":"masculine","9":"Troiken","10":"Xexto","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"desert, tundra, rainforests, mountains","18":"NA"},{"1":"Watto","2":"137","3":"NA","4":"black","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Toydaria","10":"Toydarian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"swamps, lakes","18":"1.100e+07"},{"1":"Leia Organa","2":"150","3":"49.0","4":"brown","5":"light","6":"brown","7":"19.0","8":"feminine","9":"Alderaan","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Imperial Speeder Bike","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"Mon Mothma","2":"150","3":"NA","4":"auburn","5":"fair","6":"blue","7":"48.0","8":"feminine","9":"Chandrila","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests","18":"1.200e+09"},{"1":"Cordé","2":"157","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Nien Nunb","2":"160","3":"68.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Sullust","10":"Sullustan","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"superheated","16":"1","17":"mountains, volcanoes, rocky deserts","18":"1.850e+10"},{"1":"Shmi Skywalker","2":"163","3":"NA","4":"black","5":"fair","6":"brown","7":"72.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Ben Quadinaros","2":"163","3":"65.0","4":"none","5":"grey, green, yellow","6":"orange","7":"NA","8":"masculine","9":"Tund","10":"Toong","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"barren, ash","18":"0.000e+00"},{"1":"Beru Whitesun lars","2":"165","3":"75.0","4":"brown","5":"light","6":"blue","7":"47.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Dormé","2":"165","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Barriss Offee","2":"166","3":"50.0","4":"black","5":"yellow","6":"blue","7":"40.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA"},{"1":"C-3PO","2":"167","3":"75.0","4":"NA","5":"gold","6":"yellow","7":"112.0","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Jocasta Nu","2":"167","3":"NA","4":"white","5":"fair","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Zam Wesell","2":"168","3":"55.0","4":"blonde","5":"fair, green, yellow","6":"yellow","7":"NA","8":"feminine","9":"Zolan","10":"Clawdite","11":"female","12":"reptilian","13":"sentient","14":"Koro-2 Exodrive airspeeder","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Wedge Antilles","2":"170","3":"77.0","4":"brown","5":"fair","6":"hazel","7":"21.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Snowspeeder","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09"},{"1":"Palpatine","2":"170","3":"75.0","4":"grey","5":"pale","6":"yellow","7":"82.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Finis Valorum","2":"170","3":"NA","4":"blond","5":"fair","6":"blue","7":"91.0","8":"masculine","9":"Coruscant","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Luminara Unduli","2":"170","3":"56.2","4":"black","5":"yellow","6":"blue","7":"58.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA"},{"1":"Eeth Koth","2":"171","3":"NA","4":"black","5":"brown","6":"brown","7":"NA","8":"masculine","9":"Iridonia","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"rocky canyons, acid pools","18":"NA"},{"1":"Luke Skywalker","2":"172","3":"77.0","4":"blond","5":"fair","6":"blue","7":"19.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Imperial shuttle, Snowspeeder, Imperial Speeder Bike","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Greedo","2":"173","3":"74.0","4":"NA","5":"green","6":"black","7":"44.0","8":"masculine","9":"Rodia","10":"Rodian","11":"male","12":"sentient","13":"reptilian","14":"NA","15":"hot","16":"1 standard","17":"jungles, oceans, urban, swamps","18":"1.300e+09"},{"1":"Jabba Desilijic Tiure","2":"175","3":"1358.0","4":"NA","5":"green-tan, brown","6":"orange","7":"600.0","8":"masculine","9":"Nal Hutta","10":"Hutt","11":"hermaphroditic","12":"gastropod","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"urban, oceans, swamps, bogs","18":"7.000e+09"},{"1":"Lobot","2":"175","3":"79.0","4":"none","5":"light","6":"blue","7":"37.0","8":"masculine","9":"Bespin","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1.5 (surface), 1 standard (Cloud City)","17":"gas giant","18":"6.000e+06"},{"1":"Darth Maul","2":"175","3":"80.0","4":"none","5":"red","6":"yellow","7":"54.0","8":"masculine","9":"Dathomir","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"Scimitar, Sith speeder","15":"temperate","16":"0.9","17":"forests, deserts, savannas","18":"5.200e+03"},{"1":"Lando Calrissian","2":"177","3":"79.0","4":"black","5":"dark","6":"brown","7":"31.0","8":"masculine","9":"Socorro","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"arid","16":"1 standard","17":"deserts, mountains","18":"3.000e+08"},{"1":"Owen Lars","2":"178","3":"120.0","4":"brown, grey","5":"light","6":"blue","7":"52.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Ayla Secura","2":"178","3":"55.0","4":"none","5":"blue","6":"hazel","7":"48.0","8":"feminine","9":"Ryloth","10":"Twi'lek","11":"female","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09"},{"1":"Shaak Ti","2":"178","3":"57.0","4":"none","5":"red, blue, white","6":"black","7":"NA","8":"feminine","9":"Shili","10":"Togruta","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"cities, savannahs, seas, plains","18":"NA"},{"1":"Sly Moore","2":"178","3":"48.0","4":"none","5":"pale","6":"white","7":"NA","8":"feminine","9":"Umbara","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Wilhuff Tarkin","2":"180","3":"NA","4":"auburn, grey","5":"fair","6":"blue","7":"64.0","8":"masculine","9":"Eriadu","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"polluted","16":"1 standard","17":"cityscape","18":"2.200e+10"},{"1":"Han Solo","2":"180","3":"80.0","4":"brown","5":"fair","6":"brown","7":"29.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09"},{"1":"Jek Tono Porkins","2":"180","3":"110.0","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Bestine IV","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"temperate","16":"NA","17":"rocky islands, oceans","18":"6.200e+07"},{"1":"Ackbar","2":"180","3":"83.0","4":"none","5":"brown mottle","6":"orange","7":"41.0","8":"masculine","9":"Mon Cala","10":"Mon Calamari","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, reefs, islands","18":"2.700e+10"},{"1":"Bib Fortuna","2":"180","3":"NA","4":"none","5":"pale","6":"pink","7":"NA","8":"masculine","9":"Ryloth","10":"Twi'lek","11":"male","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09"},{"1":"Obi-Wan Kenobi","2":"182","3":"77.0","4":"auburn, white","5":"fair","6":"blue-gray","7":"57.0","8":"masculine","9":"Stewjon","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Jedi starfighter, Trade Federation cruiser, Naboo star skiff, Jedi Interceptor, Belbullab-22 starfighter, Tribubble bongo","15":"temperate","16":"1 standard","17":"grass","18":"NA"},{"1":"Biggs Darklighter","2":"183","3":"84.0","4":"black","5":"light","6":"brown","7":"24.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Boba Fett","2":"183","3":"78.2","4":"black","5":"fair","6":"brown","7":"31.5","8":"masculine","9":"Kamino","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Slave 1","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Ric Olié","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo Royal Starship","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Quarsh Panaka","2":"183","3":"NA","4":"black","5":"dark","6":"brown","7":"62.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Cliegg Lars","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"82.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Poggle the Lesser","2":"183","3":"80.0","4":"none","5":"green","6":"yellow","7":"NA","8":"masculine","9":"Geonosis","10":"Geonosian","11":"male","12":"insectoid","13":"sentient","14":"NA","15":"temperate, arid","16":"0.9 standard","17":"rock, desert, mountain, barren","18":"1.000e+11"},{"1":"Jango Fett","2":"183","3":"79.0","4":"black","5":"tan","6":"brown","7":"66.0","8":"masculine","9":"Concord Dawn","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"jungles, forests, deserts","18":"NA"},{"1":"Adi Gallia","2":"184","3":"50.0","4":"none","5":"dark","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Tholothian","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Padmé Amidala","2":"185","3":"45.0","4":"brown","5":"light","6":"brown","7":"46.0","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Naboo fighter, H-type Nubian yacht, Naboo star skiff","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Gregar Typho","2":"185","3":"85.0","4":"black","5":"dark","6":"brown","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Anakin Skywalker","2":"188","3":"84.0","4":"blond","5":"fair","6":"blue","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter, Trade Federation cruiser, Jedi Interceptor, Zephyr-G swoop bike, XJ-6 airspeeder","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Mace Windu","2":"188","3":"84.0","4":"none","5":"dark","6":"brown","7":"72.0","8":"masculine","9":"Haruun Kal","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.98","17":"toxic cloudsea, plateaus, volcanoes","18":"7.053e+05"},{"1":"Saesee Tiin","2":"188","3":"NA","4":"none","5":"pale","6":"orange","7":"NA","8":"masculine","9":"Iktotch","10":"Iktotchi","11":"male","12":"NA","13":"sentient","14":"NA","15":"arid, rocky, windy","16":"1","17":"rocky","18":"NA"},{"1":"Plo Koon","2":"188","3":"80.0","4":"none","5":"orange","6":"black","7":"22.0","8":"masculine","9":"Dorin","10":"Kel Dor","11":"male","12":"NA","13":"sentient","14":"Jedi starfighter","15":"temperate","16":"1","17":"NA","18":"NA"},{"1":"Raymus Antilles","2":"188","3":"79.0","4":"brown","5":"light","6":"brown","7":"NA","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"Bossk","2":"190","3":"113.0","4":"none","5":"green","6":"red","7":"53.0","8":"masculine","9":"Trandosha","10":"Trandoshan","11":"male","12":"reptile","13":"sentient","14":"NA","15":"arid","16":"0.62 standard","17":"mountains, seas, grasslands, deserts","18":"4.200e+07"},{"1":"Nute Gunray","2":"191","3":"90.0","4":"none","5":"mottled green","6":"red","7":"NA","8":"masculine","9":"Cato Neimoidia","10":"Neimodian","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, moist","16":"1 standard","17":"mountains, fields, forests, rock arches","18":"1.000e+07"},{"1":"Bail Prestor Organa","2":"191","3":"NA","4":"black","5":"tan","6":"brown","7":"67.0","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"San Hill","2":"191","3":"NA","4":"none","5":"grey","6":"gold","7":"NA","8":"masculine","9":"Muunilinst","10":"Muun","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests, hills, mountains","18":"5.000e+09"},{"1":"Qui-Gon Jinn","2":"193","3":"89.0","4":"brown","5":"fair","6":"blue","7":"92.0","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Tribubble bongo","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Dooku","2":"193","3":"80.0","4":"white","5":"fair","6":"brown","7":"102.0","8":"masculine","9":"Serenno","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Flitknot speeder","15":"NA","16":"NA","17":"rainforests, rivers, mountains","18":"NA"},{"1":"Wat Tambor","2":"193","3":"48.0","4":"none","5":"green, grey","6":"NA","7":"NA","8":"masculine","9":"Skako","10":"Skakoan","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"urban, vines","18":"5.000e+11"},{"1":"Jar Jar Binks","2":"196","3":"66.0","4":"none","5":"orange","6":"orange","7":"52.0","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Kit Fisto","2":"196","3":"87.0","4":"none","5":"green","6":"black","7":"NA","8":"masculine","9":"Glee Anselm","10":"Nautolan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"tropical, temperate","16":"1","17":"lakes, islands, swamps, seas","18":"5.000e+08"},{"1":"Mas Amedda","2":"196","3":"NA","4":"none","5":"blue","6":"blue","7":"NA","8":"masculine","9":"Champala","10":"Chagrian","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, rainforests, plateaus","18":"3.500e+09"},{"1":"Ki-Adi-Mundi","2":"198","3":"82.0","4":"white","5":"pale","6":"yellow","7":"92.0","8":"masculine","9":"Cerea","10":"Cerean","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"verdant","18":"4.500e+08"},{"1":"Dexter Jettster","2":"198","3":"102.0","4":"none","5":"brown","6":"yellow","7":"NA","8":"masculine","9":"Ojom","10":"Besalisk","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"frigid","16":"NA","17":"oceans, glaciers","18":"5.000e+08"},{"1":"IG-88","2":"200","3":"140.0","4":"none","5":"metal","6":"red","7":"15.0","8":"masculine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Darth Vader","2":"202","3":"136.0","4":"none","5":"white","6":"yellow","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"TIE Advanced x1","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Rugor Nass","2":"206","3":"NA","4":"none","5":"green","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Tion Medon","2":"206","3":"80.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Utapau","10":"Pau'an","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate, arid, windy","16":"1 standard","17":"scrublands, savanna, canyons, sinkholes","18":"9.500e+07"},{"1":"Taun We","2":"213","3":"NA","4":"none","5":"grey","6":"black","7":"NA","8":"feminine","9":"Kamino","10":"Kaminoan","11":"female","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Grievous","2":"216","3":"159.0","4":"none","5":"brown, white","6":"green, yellow","7":"NA","8":"masculine","9":"Kalee","10":"Kaleesh","11":"male","12":"reptile","13":"sentient","14":"Belbullab-22 starfighter, Tsmeu-6 personal wheel bike","15":"arid, temperate, tropical","16":"1","17":"rainforests, cliffs, canyons, seas","18":"4.000e+09"},{"1":"Roos Tarpals","2":"224","3":"82.0","4":"none","5":"grey","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Chewbacca","2":"228","3":"112.0","4":"brown","5":"NA","6":"blue","7":"200.0","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle, AT-ST","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07"},{"1":"Lama Su","2":"229","3":"88.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Kamino","10":"Kaminoan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Tarfful","2":"234","3":"136.0","4":"brown","5":"brown","6":"blue","7":"NA","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"NA","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07"},{"1":"Yarael Poof","2":"264","3":"NA","4":"none","5":"white","6":"yellow","7":"NA","8":"masculine","9":"Quermia","10":"Quermian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Arvel Crynyd","2":"NA","3":"NA","4":"brown","5":"fair","6":"brown","7":"NA","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"A-wing","15":"NA","16":"NA","17":"NA","18":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   &lt;/script&gt;
 &lt;/div&gt;
 
@@ -658,26 +1063,16 @@ background-size: 6%
 
 
 ```r
-arrange(original_starwars, desc(height))
+arrange(big_starwars, desc(height))
 ```
 
 --
 
 &lt;div data-pagedtable="false"&gt;
   &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Chewbacca","2":"228","3":"112","4":"brown","5":"Wookiee","6":"Kashyyyk"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia"},{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine"},{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan"},{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["skin_color"],"name":[5],"type":["chr"],"align":["left"]},{"label":["eye_color"],"name":[6],"type":["chr"],"align":["left"]},{"label":["birth_year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[8],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[9],"type":["chr"],"align":["left"]},{"label":["species"],"name":[10],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["species_class"],"name":[12],"type":["chr"],"align":["left"]},{"label":["species_desig"],"name":[13],"type":["chr"],"align":["left"]},{"label":["vehicle"],"name":[14],"type":["chr"],"align":["left"]},{"label":["hw_climate"],"name":[15],"type":["chr"],"align":["left"]},{"label":["hw_gravity"],"name":[16],"type":["chr"],"align":["left"]},{"label":["hw_terrain"],"name":[17],"type":["chr"],"align":["left"]},{"label":["hw_pop"],"name":[18],"type":["dbl"],"align":["right"]}],"data":[{"1":"Yarael Poof","2":"264","3":"NA","4":"none","5":"white","6":"yellow","7":"NA","8":"masculine","9":"Quermia","10":"Quermian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Tarfful","2":"234","3":"136.0","4":"brown","5":"brown","6":"blue","7":"NA","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"NA","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07"},{"1":"Lama Su","2":"229","3":"88.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Kamino","10":"Kaminoan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Chewbacca","2":"228","3":"112.0","4":"brown","5":"NA","6":"blue","7":"200.0","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle, AT-ST","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07"},{"1":"Roos Tarpals","2":"224","3":"82.0","4":"none","5":"grey","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Grievous","2":"216","3":"159.0","4":"none","5":"brown, white","6":"green, yellow","7":"NA","8":"masculine","9":"Kalee","10":"Kaleesh","11":"male","12":"reptile","13":"sentient","14":"Belbullab-22 starfighter, Tsmeu-6 personal wheel bike","15":"arid, temperate, tropical","16":"1","17":"rainforests, cliffs, canyons, seas","18":"4.000e+09"},{"1":"Taun We","2":"213","3":"NA","4":"none","5":"grey","6":"black","7":"NA","8":"feminine","9":"Kamino","10":"Kaminoan","11":"female","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Rugor Nass","2":"206","3":"NA","4":"none","5":"green","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Tion Medon","2":"206","3":"80.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Utapau","10":"Pau'an","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate, arid, windy","16":"1 standard","17":"scrublands, savanna, canyons, sinkholes","18":"9.500e+07"},{"1":"Darth Vader","2":"202","3":"136.0","4":"none","5":"white","6":"yellow","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"TIE Advanced x1","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"IG-88","2":"200","3":"140.0","4":"none","5":"metal","6":"red","7":"15.0","8":"masculine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Ki-Adi-Mundi","2":"198","3":"82.0","4":"white","5":"pale","6":"yellow","7":"92.0","8":"masculine","9":"Cerea","10":"Cerean","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"verdant","18":"4.500e+08"},{"1":"Dexter Jettster","2":"198","3":"102.0","4":"none","5":"brown","6":"yellow","7":"NA","8":"masculine","9":"Ojom","10":"Besalisk","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"frigid","16":"NA","17":"oceans, glaciers","18":"5.000e+08"},{"1":"Jar Jar Binks","2":"196","3":"66.0","4":"none","5":"orange","6":"orange","7":"52.0","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Kit Fisto","2":"196","3":"87.0","4":"none","5":"green","6":"black","7":"NA","8":"masculine","9":"Glee Anselm","10":"Nautolan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"tropical, temperate","16":"1","17":"lakes, islands, swamps, seas","18":"5.000e+08"},{"1":"Mas Amedda","2":"196","3":"NA","4":"none","5":"blue","6":"blue","7":"NA","8":"masculine","9":"Champala","10":"Chagrian","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, rainforests, plateaus","18":"3.500e+09"},{"1":"Qui-Gon Jinn","2":"193","3":"89.0","4":"brown","5":"fair","6":"blue","7":"92.0","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Tribubble bongo","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Dooku","2":"193","3":"80.0","4":"white","5":"fair","6":"brown","7":"102.0","8":"masculine","9":"Serenno","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Flitknot speeder","15":"NA","16":"NA","17":"rainforests, rivers, mountains","18":"NA"},{"1":"Wat Tambor","2":"193","3":"48.0","4":"none","5":"green, grey","6":"NA","7":"NA","8":"masculine","9":"Skako","10":"Skakoan","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"urban, vines","18":"5.000e+11"},{"1":"Nute Gunray","2":"191","3":"90.0","4":"none","5":"mottled green","6":"red","7":"NA","8":"masculine","9":"Cato Neimoidia","10":"Neimodian","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, moist","16":"1 standard","17":"mountains, fields, forests, rock arches","18":"1.000e+07"},{"1":"Bail Prestor Organa","2":"191","3":"NA","4":"black","5":"tan","6":"brown","7":"67.0","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"San Hill","2":"191","3":"NA","4":"none","5":"grey","6":"gold","7":"NA","8":"masculine","9":"Muunilinst","10":"Muun","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests, hills, mountains","18":"5.000e+09"},{"1":"Bossk","2":"190","3":"113.0","4":"none","5":"green","6":"red","7":"53.0","8":"masculine","9":"Trandosha","10":"Trandoshan","11":"male","12":"reptile","13":"sentient","14":"NA","15":"arid","16":"0.62 standard","17":"mountains, seas, grasslands, deserts","18":"4.200e+07"},{"1":"Anakin Skywalker","2":"188","3":"84.0","4":"blond","5":"fair","6":"blue","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter, Trade Federation cruiser, Jedi Interceptor, Zephyr-G swoop bike, XJ-6 airspeeder","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Mace Windu","2":"188","3":"84.0","4":"none","5":"dark","6":"brown","7":"72.0","8":"masculine","9":"Haruun Kal","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.98","17":"toxic cloudsea, plateaus, volcanoes","18":"7.053e+05"},{"1":"Saesee Tiin","2":"188","3":"NA","4":"none","5":"pale","6":"orange","7":"NA","8":"masculine","9":"Iktotch","10":"Iktotchi","11":"male","12":"NA","13":"sentient","14":"NA","15":"arid, rocky, windy","16":"1","17":"rocky","18":"NA"},{"1":"Plo Koon","2":"188","3":"80.0","4":"none","5":"orange","6":"black","7":"22.0","8":"masculine","9":"Dorin","10":"Kel Dor","11":"male","12":"NA","13":"sentient","14":"Jedi starfighter","15":"temperate","16":"1","17":"NA","18":"NA"},{"1":"Raymus Antilles","2":"188","3":"79.0","4":"brown","5":"light","6":"brown","7":"NA","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"Padmé Amidala","2":"185","3":"45.0","4":"brown","5":"light","6":"brown","7":"46.0","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Naboo fighter, H-type Nubian yacht, Naboo star skiff","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Gregar Typho","2":"185","3":"85.0","4":"black","5":"dark","6":"brown","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Adi Gallia","2":"184","3":"50.0","4":"none","5":"dark","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Tholothian","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Biggs Darklighter","2":"183","3":"84.0","4":"black","5":"light","6":"brown","7":"24.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Boba Fett","2":"183","3":"78.2","4":"black","5":"fair","6":"brown","7":"31.5","8":"masculine","9":"Kamino","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Slave 1","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09"},{"1":"Ric Olié","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo Royal Starship","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Quarsh Panaka","2":"183","3":"NA","4":"black","5":"dark","6":"brown","7":"62.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Cliegg Lars","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"82.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Poggle the Lesser","2":"183","3":"80.0","4":"none","5":"green","6":"yellow","7":"NA","8":"masculine","9":"Geonosis","10":"Geonosian","11":"male","12":"insectoid","13":"sentient","14":"NA","15":"temperate, arid","16":"0.9 standard","17":"rock, desert, mountain, barren","18":"1.000e+11"},{"1":"Jango Fett","2":"183","3":"79.0","4":"black","5":"tan","6":"brown","7":"66.0","8":"masculine","9":"Concord Dawn","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"jungles, forests, deserts","18":"NA"},{"1":"Obi-Wan Kenobi","2":"182","3":"77.0","4":"auburn, white","5":"fair","6":"blue-gray","7":"57.0","8":"masculine","9":"Stewjon","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Jedi starfighter, Trade Federation cruiser, Naboo star skiff, Jedi Interceptor, Belbullab-22 starfighter, Tribubble bongo","15":"temperate","16":"1 standard","17":"grass","18":"NA"},{"1":"Wilhuff Tarkin","2":"180","3":"NA","4":"auburn, grey","5":"fair","6":"blue","7":"64.0","8":"masculine","9":"Eriadu","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"polluted","16":"1 standard","17":"cityscape","18":"2.200e+10"},{"1":"Han Solo","2":"180","3":"80.0","4":"brown","5":"fair","6":"brown","7":"29.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09"},{"1":"Jek Tono Porkins","2":"180","3":"110.0","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Bestine IV","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"temperate","16":"NA","17":"rocky islands, oceans","18":"6.200e+07"},{"1":"Ackbar","2":"180","3":"83.0","4":"none","5":"brown mottle","6":"orange","7":"41.0","8":"masculine","9":"Mon Cala","10":"Mon Calamari","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, reefs, islands","18":"2.700e+10"},{"1":"Bib Fortuna","2":"180","3":"NA","4":"none","5":"pale","6":"pink","7":"NA","8":"masculine","9":"Ryloth","10":"Twi'lek","11":"male","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09"},{"1":"Owen Lars","2":"178","3":"120.0","4":"brown, grey","5":"light","6":"blue","7":"52.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Ayla Secura","2":"178","3":"55.0","4":"none","5":"blue","6":"hazel","7":"48.0","8":"feminine","9":"Ryloth","10":"Twi'lek","11":"female","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09"},{"1":"Shaak Ti","2":"178","3":"57.0","4":"none","5":"red, blue, white","6":"black","7":"NA","8":"feminine","9":"Shili","10":"Togruta","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"cities, savannahs, seas, plains","18":"NA"},{"1":"Sly Moore","2":"178","3":"48.0","4":"none","5":"pale","6":"white","7":"NA","8":"feminine","9":"Umbara","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Lando Calrissian","2":"177","3":"79.0","4":"black","5":"dark","6":"brown","7":"31.0","8":"masculine","9":"Socorro","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"arid","16":"1 standard","17":"deserts, mountains","18":"3.000e+08"},{"1":"Jabba Desilijic Tiure","2":"175","3":"1358.0","4":"NA","5":"green-tan, brown","6":"orange","7":"600.0","8":"masculine","9":"Nal Hutta","10":"Hutt","11":"hermaphroditic","12":"gastropod","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"urban, oceans, swamps, bogs","18":"7.000e+09"},{"1":"Lobot","2":"175","3":"79.0","4":"none","5":"light","6":"blue","7":"37.0","8":"masculine","9":"Bespin","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1.5 (surface), 1 standard (Cloud City)","17":"gas giant","18":"6.000e+06"},{"1":"Darth Maul","2":"175","3":"80.0","4":"none","5":"red","6":"yellow","7":"54.0","8":"masculine","9":"Dathomir","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"Scimitar, Sith speeder","15":"temperate","16":"0.9","17":"forests, deserts, savannas","18":"5.200e+03"},{"1":"Greedo","2":"173","3":"74.0","4":"NA","5":"green","6":"black","7":"44.0","8":"masculine","9":"Rodia","10":"Rodian","11":"male","12":"sentient","13":"reptilian","14":"NA","15":"hot","16":"1 standard","17":"jungles, oceans, urban, swamps","18":"1.300e+09"},{"1":"Luke Skywalker","2":"172","3":"77.0","4":"blond","5":"fair","6":"blue","7":"19.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Imperial shuttle, Snowspeeder, Imperial Speeder Bike","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Eeth Koth","2":"171","3":"NA","4":"black","5":"brown","6":"brown","7":"NA","8":"masculine","9":"Iridonia","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"rocky canyons, acid pools","18":"NA"},{"1":"Wedge Antilles","2":"170","3":"77.0","4":"brown","5":"fair","6":"hazel","7":"21.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Snowspeeder","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09"},{"1":"Palpatine","2":"170","3":"75.0","4":"grey","5":"pale","6":"yellow","7":"82.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Finis Valorum","2":"170","3":"NA","4":"blond","5":"fair","6":"blue","7":"91.0","8":"masculine","9":"Coruscant","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Luminara Unduli","2":"170","3":"56.2","4":"black","5":"yellow","6":"blue","7":"58.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA"},{"1":"Zam Wesell","2":"168","3":"55.0","4":"blonde","5":"fair, green, yellow","6":"yellow","7":"NA","8":"feminine","9":"Zolan","10":"Clawdite","11":"female","12":"reptilian","13":"sentient","14":"Koro-2 Exodrive airspeeder","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"C-3PO","2":"167","3":"75.0","4":"NA","5":"gold","6":"yellow","7":"112.0","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Jocasta Nu","2":"167","3":"NA","4":"white","5":"fair","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12"},{"1":"Barriss Offee","2":"166","3":"50.0","4":"black","5":"yellow","6":"blue","7":"40.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA"},{"1":"Beru Whitesun lars","2":"165","3":"75.0","4":"brown","5":"light","6":"blue","7":"47.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Dormé","2":"165","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Shmi Skywalker","2":"163","3":"NA","4":"black","5":"fair","6":"brown","7":"72.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"Ben Quadinaros","2":"163","3":"65.0","4":"none","5":"grey, green, yellow","6":"orange","7":"NA","8":"masculine","9":"Tund","10":"Toong","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"barren, ash","18":"0.000e+00"},{"1":"Nien Nunb","2":"160","3":"68.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Sullust","10":"Sullustan","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"superheated","16":"1","17":"mountains, volcanoes, rocky deserts","18":"1.850e+10"},{"1":"Cordé","2":"157","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"Leia Organa","2":"150","3":"49.0","4":"brown","5":"light","6":"brown","7":"19.0","8":"feminine","9":"Alderaan","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Imperial Speeder Bike","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09"},{"1":"Mon Mothma","2":"150","3":"NA","4":"auburn","5":"fair","6":"blue","7":"48.0","8":"feminine","9":"Chandrila","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests","18":"1.200e+09"},{"1":"Watto","2":"137","3":"NA","4":"black","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Toydaria","10":"Toydarian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"swamps, lakes","18":"1.100e+07"},{"1":"Gasgano","2":"122","3":"NA","4":"none","5":"white, blue","6":"black","7":"NA","8":"masculine","9":"Troiken","10":"Xexto","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"desert, tundra, rainforests, mountains","18":"NA"},{"1":"Sebulba","2":"112","3":"40.0","4":"none","5":"grey, red","6":"orange","7":"NA","8":"masculine","9":"Malastare","10":"Dug","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid, temperate, tropical","16":"1.56","17":"swamps, deserts, jungles, mountains","18":"2.000e+09"},{"1":"R5-D4","2":"97","3":"32.0","4":"NA","5":"white, red","6":"red","7":"NA","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05"},{"1":"R2-D2","2":"96","3":"32.0","4":"NA","5":"white, blue","6":"red","7":"33.0","8":"masculine","9":"Naboo","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09"},{"1":"R4-P17","2":"96","3":"NA","4":"none","5":"silver, red","6":"red, blue","7":"NA","8":"feminine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Dud Bolt","2":"94","3":"45.0","4":"none","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Vulpter","10":"Vulptereen","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, artic","16":"1","17":"urban, barren","18":"4.210e+08"},{"1":"Wicket Systri Warrick","2":"88","3":"20.0","4":"brown","5":"brown","6":"brown","7":"8.0","8":"masculine","9":"Endor","10":"Ewok","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.85 standard","17":"forests, mountains, lakes","18":"3.000e+07"},{"1":"Ratts Tyerel","2":"79","3":"15.0","4":"none","5":"grey, blue","6":"NA","7":"NA","8":"masculine","9":"Aleen Minor","10":"Aleena","11":"male","12":"reptile","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Yoda","2":"66","3":"17.0","4":"white","5":"green","6":"brown","7":"896.0","8":"masculine","9":"NA","10":"Yoda's species","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA"},{"1":"Arvel Crynyd","2":"NA","3":"NA","4":"brown","5":"fair","6":"brown","7":"NA","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"A-wing","15":"NA","16":"NA","17":"NA","18":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   &lt;/script&gt;
 &lt;/div&gt;
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
-# See the `arrange()` exercises for more examples!
 
 
 ---
@@ -700,7 +1095,7 @@ background-size: 6%
 
 
 ```r
-mutate(original_starwars, 
+mutate(big_starwars, 
             # create new bmi variable
             bmi = mass / ((height / 100) ^ 2))
 ```
@@ -709,7 +1104,7 @@ mutate(original_starwars,
 
 &lt;div data-pagedtable="false"&gt;
   &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]},{"label":["bmi"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine","7":"26.02758"},{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine","7":"26.89232"},{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo","7":"34.72222"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan","7":"21.77778"},{"1":"Chewbacca","2":"228","3":"112","4":"brown","5":"Wookiee","6":"Kashyyyk","7":"21.54509"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia","7":"24.69136"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["skin_color"],"name":[5],"type":["chr"],"align":["left"]},{"label":["eye_color"],"name":[6],"type":["chr"],"align":["left"]},{"label":["birth_year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[8],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[9],"type":["chr"],"align":["left"]},{"label":["species"],"name":[10],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["species_class"],"name":[12],"type":["chr"],"align":["left"]},{"label":["species_desig"],"name":[13],"type":["chr"],"align":["left"]},{"label":["vehicle"],"name":[14],"type":["chr"],"align":["left"]},{"label":["hw_climate"],"name":[15],"type":["chr"],"align":["left"]},{"label":["hw_gravity"],"name":[16],"type":["chr"],"align":["left"]},{"label":["hw_terrain"],"name":[17],"type":["chr"],"align":["left"]},{"label":["hw_pop"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["bmi"],"name":[19],"type":["dbl"],"align":["right"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77.0","4":"blond","5":"fair","6":"blue","7":"19.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Imperial shuttle, Snowspeeder, Imperial Speeder Bike","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"26.02758"},{"1":"C-3PO","2":"167","3":"75.0","4":"NA","5":"gold","6":"yellow","7":"112.0","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"26.89232"},{"1":"R2-D2","2":"96","3":"32.0","4":"NA","5":"white, blue","6":"red","7":"33.0","8":"masculine","9":"Naboo","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"34.72222"},{"1":"Darth Vader","2":"202","3":"136.0","4":"none","5":"white","6":"yellow","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"TIE Advanced x1","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"33.33007"},{"1":"Leia Organa","2":"150","3":"49.0","4":"brown","5":"light","6":"brown","7":"19.0","8":"feminine","9":"Alderaan","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Imperial Speeder Bike","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"21.77778"},{"1":"Owen Lars","2":"178","3":"120.0","4":"brown, grey","5":"light","6":"blue","7":"52.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"37.87401"},{"1":"Beru Whitesun lars","2":"165","3":"75.0","4":"brown","5":"light","6":"blue","7":"47.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"27.54821"},{"1":"R5-D4","2":"97","3":"32.0","4":"NA","5":"white, red","6":"red","7":"NA","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"34.00999"},{"1":"Biggs Darklighter","2":"183","3":"84.0","4":"black","5":"light","6":"brown","7":"24.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"25.08286"},{"1":"Obi-Wan Kenobi","2":"182","3":"77.0","4":"auburn, white","5":"fair","6":"blue-gray","7":"57.0","8":"masculine","9":"Stewjon","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Jedi starfighter, Trade Federation cruiser, Naboo star skiff, Jedi Interceptor, Belbullab-22 starfighter, Tribubble bongo","15":"temperate","16":"1 standard","17":"grass","18":"NA","19":"23.24598"},{"1":"Anakin Skywalker","2":"188","3":"84.0","4":"blond","5":"fair","6":"blue","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter, Trade Federation cruiser, Jedi Interceptor, Zephyr-G swoop bike, XJ-6 airspeeder","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"23.76641"},{"1":"Wilhuff Tarkin","2":"180","3":"NA","4":"auburn, grey","5":"fair","6":"blue","7":"64.0","8":"masculine","9":"Eriadu","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"polluted","16":"1 standard","17":"cityscape","18":"2.200e+10","19":"NA"},{"1":"Chewbacca","2":"228","3":"112.0","4":"brown","5":"NA","6":"blue","7":"200.0","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle, AT-ST","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07","19":"21.54509"},{"1":"Han Solo","2":"180","3":"80.0","4":"brown","5":"fair","6":"brown","7":"29.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09","19":"24.69136"},{"1":"Greedo","2":"173","3":"74.0","4":"NA","5":"green","6":"black","7":"44.0","8":"masculine","9":"Rodia","10":"Rodian","11":"male","12":"sentient","13":"reptilian","14":"NA","15":"hot","16":"1 standard","17":"jungles, oceans, urban, swamps","18":"1.300e+09","19":"24.72518"},{"1":"Jabba Desilijic Tiure","2":"175","3":"1358.0","4":"NA","5":"green-tan, brown","6":"orange","7":"600.0","8":"masculine","9":"Nal Hutta","10":"Hutt","11":"hermaphroditic","12":"gastropod","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"urban, oceans, swamps, bogs","18":"7.000e+09","19":"443.42857"},{"1":"Wedge Antilles","2":"170","3":"77.0","4":"brown","5":"fair","6":"hazel","7":"21.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Snowspeeder","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09","19":"26.64360"},{"1":"Jek Tono Porkins","2":"180","3":"110.0","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Bestine IV","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"temperate","16":"NA","17":"rocky islands, oceans","18":"6.200e+07","19":"33.95062"},{"1":"Yoda","2":"66","3":"17.0","4":"white","5":"green","6":"brown","7":"896.0","8":"masculine","9":"NA","10":"Yoda's species","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"39.02663"},{"1":"Palpatine","2":"170","3":"75.0","4":"grey","5":"pale","6":"yellow","7":"82.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"25.95156"},{"1":"Boba Fett","2":"183","3":"78.2","4":"black","5":"fair","6":"brown","7":"31.5","8":"masculine","9":"Kamino","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Slave 1","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"23.35095"},{"1":"IG-88","2":"200","3":"140.0","4":"none","5":"metal","6":"red","7":"15.0","8":"masculine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"35.00000"},{"1":"Bossk","2":"190","3":"113.0","4":"none","5":"green","6":"red","7":"53.0","8":"masculine","9":"Trandosha","10":"Trandoshan","11":"male","12":"reptile","13":"sentient","14":"NA","15":"arid","16":"0.62 standard","17":"mountains, seas, grasslands, deserts","18":"4.200e+07","19":"31.30194"},{"1":"Lando Calrissian","2":"177","3":"79.0","4":"black","5":"dark","6":"brown","7":"31.0","8":"masculine","9":"Socorro","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"arid","16":"1 standard","17":"deserts, mountains","18":"3.000e+08","19":"25.21625"},{"1":"Lobot","2":"175","3":"79.0","4":"none","5":"light","6":"blue","7":"37.0","8":"masculine","9":"Bespin","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1.5 (surface), 1 standard (Cloud City)","17":"gas giant","18":"6.000e+06","19":"25.79592"},{"1":"Ackbar","2":"180","3":"83.0","4":"none","5":"brown mottle","6":"orange","7":"41.0","8":"masculine","9":"Mon Cala","10":"Mon Calamari","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, reefs, islands","18":"2.700e+10","19":"25.61728"},{"1":"Mon Mothma","2":"150","3":"NA","4":"auburn","5":"fair","6":"blue","7":"48.0","8":"feminine","9":"Chandrila","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests","18":"1.200e+09","19":"NA"},{"1":"Arvel Crynyd","2":"NA","3":"NA","4":"brown","5":"fair","6":"brown","7":"NA","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"A-wing","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Wicket Systri Warrick","2":"88","3":"20.0","4":"brown","5":"brown","6":"brown","7":"8.0","8":"masculine","9":"Endor","10":"Ewok","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.85 standard","17":"forests, mountains, lakes","18":"3.000e+07","19":"25.82645"},{"1":"Nien Nunb","2":"160","3":"68.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Sullust","10":"Sullustan","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"superheated","16":"1","17":"mountains, volcanoes, rocky deserts","18":"1.850e+10","19":"26.56250"},{"1":"Qui-Gon Jinn","2":"193","3":"89.0","4":"brown","5":"fair","6":"blue","7":"92.0","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Tribubble bongo","15":"NA","16":"NA","17":"NA","18":"NA","19":"23.89326"},{"1":"Nute Gunray","2":"191","3":"90.0","4":"none","5":"mottled green","6":"red","7":"NA","8":"masculine","9":"Cato Neimoidia","10":"Neimodian","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, moist","16":"1 standard","17":"mountains, fields, forests, rock arches","18":"1.000e+07","19":"24.67038"},{"1":"Finis Valorum","2":"170","3":"NA","4":"blond","5":"fair","6":"blue","7":"91.0","8":"masculine","9":"Coruscant","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"NA"},{"1":"Padmé Amidala","2":"185","3":"45.0","4":"brown","5":"light","6":"brown","7":"46.0","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Naboo fighter, H-type Nubian yacht, Naboo star skiff","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"13.14828"},{"1":"Jar Jar Binks","2":"196","3":"66.0","4":"none","5":"orange","6":"orange","7":"52.0","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"17.18034"},{"1":"Roos Tarpals","2":"224","3":"82.0","4":"none","5":"grey","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"16.34247"},{"1":"Rugor Nass","2":"206","3":"NA","4":"none","5":"green","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Ric Olié","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo Royal Starship","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Watto","2":"137","3":"NA","4":"black","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Toydaria","10":"Toydarian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"swamps, lakes","18":"1.100e+07","19":"NA"},{"1":"Sebulba","2":"112","3":"40.0","4":"none","5":"grey, red","6":"orange","7":"NA","8":"masculine","9":"Malastare","10":"Dug","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid, temperate, tropical","16":"1.56","17":"swamps, deserts, jungles, mountains","18":"2.000e+09","19":"31.88776"},{"1":"Quarsh Panaka","2":"183","3":"NA","4":"black","5":"dark","6":"brown","7":"62.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Shmi Skywalker","2":"163","3":"NA","4":"black","5":"fair","6":"brown","7":"72.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"NA"},{"1":"Darth Maul","2":"175","3":"80.0","4":"none","5":"red","6":"yellow","7":"54.0","8":"masculine","9":"Dathomir","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"Scimitar, Sith speeder","15":"temperate","16":"0.9","17":"forests, deserts, savannas","18":"5.200e+03","19":"26.12245"},{"1":"Bib Fortuna","2":"180","3":"NA","4":"none","5":"pale","6":"pink","7":"NA","8":"masculine","9":"Ryloth","10":"Twi'lek","11":"male","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09","19":"NA"},{"1":"Ayla Secura","2":"178","3":"55.0","4":"none","5":"blue","6":"hazel","7":"48.0","8":"feminine","9":"Ryloth","10":"Twi'lek","11":"female","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09","19":"17.35892"},{"1":"Ratts Tyerel","2":"79","3":"15.0","4":"none","5":"grey, blue","6":"NA","7":"NA","8":"masculine","9":"Aleen Minor","10":"Aleena","11":"male","12":"reptile","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"24.03461"},{"1":"Dud Bolt","2":"94","3":"45.0","4":"none","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Vulpter","10":"Vulptereen","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, artic","16":"1","17":"urban, barren","18":"4.210e+08","19":"50.92802"},{"1":"Gasgano","2":"122","3":"NA","4":"none","5":"white, blue","6":"black","7":"NA","8":"masculine","9":"Troiken","10":"Xexto","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"desert, tundra, rainforests, mountains","18":"NA","19":"NA"},{"1":"Ben Quadinaros","2":"163","3":"65.0","4":"none","5":"grey, green, yellow","6":"orange","7":"NA","8":"masculine","9":"Tund","10":"Toong","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"barren, ash","18":"0.000e+00","19":"24.46460"},{"1":"Mace Windu","2":"188","3":"84.0","4":"none","5":"dark","6":"brown","7":"72.0","8":"masculine","9":"Haruun Kal","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.98","17":"toxic cloudsea, plateaus, volcanoes","18":"7.053e+05","19":"23.76641"},{"1":"Ki-Adi-Mundi","2":"198","3":"82.0","4":"white","5":"pale","6":"yellow","7":"92.0","8":"masculine","9":"Cerea","10":"Cerean","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"verdant","18":"4.500e+08","19":"20.91623"},{"1":"Kit Fisto","2":"196","3":"87.0","4":"none","5":"green","6":"black","7":"NA","8":"masculine","9":"Glee Anselm","10":"Nautolan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"tropical, temperate","16":"1","17":"lakes, islands, swamps, seas","18":"5.000e+08","19":"22.64681"},{"1":"Eeth Koth","2":"171","3":"NA","4":"black","5":"brown","6":"brown","7":"NA","8":"masculine","9":"Iridonia","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"rocky canyons, acid pools","18":"NA","19":"NA"},{"1":"Adi Gallia","2":"184","3":"50.0","4":"none","5":"dark","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Tholothian","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"14.76843"},{"1":"Saesee Tiin","2":"188","3":"NA","4":"none","5":"pale","6":"orange","7":"NA","8":"masculine","9":"Iktotch","10":"Iktotchi","11":"male","12":"NA","13":"sentient","14":"NA","15":"arid, rocky, windy","16":"1","17":"rocky","18":"NA","19":"NA"},{"1":"Yarael Poof","2":"264","3":"NA","4":"none","5":"white","6":"yellow","7":"NA","8":"masculine","9":"Quermia","10":"Quermian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Plo Koon","2":"188","3":"80.0","4":"none","5":"orange","6":"black","7":"22.0","8":"masculine","9":"Dorin","10":"Kel Dor","11":"male","12":"NA","13":"sentient","14":"Jedi starfighter","15":"temperate","16":"1","17":"NA","18":"NA","19":"22.63468"},{"1":"Mas Amedda","2":"196","3":"NA","4":"none","5":"blue","6":"blue","7":"NA","8":"masculine","9":"Champala","10":"Chagrian","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, rainforests, plateaus","18":"3.500e+09","19":"NA"},{"1":"Gregar Typho","2":"185","3":"85.0","4":"black","5":"dark","6":"brown","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"24.83565"},{"1":"Cordé","2":"157","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Cliegg Lars","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"82.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"NA"},{"1":"Poggle the Lesser","2":"183","3":"80.0","4":"none","5":"green","6":"yellow","7":"NA","8":"masculine","9":"Geonosis","10":"Geonosian","11":"male","12":"insectoid","13":"sentient","14":"NA","15":"temperate, arid","16":"0.9 standard","17":"rock, desert, mountain, barren","18":"1.000e+11","19":"23.88844"},{"1":"Luminara Unduli","2":"170","3":"56.2","4":"black","5":"yellow","6":"blue","7":"58.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA","19":"19.44637"},{"1":"Barriss Offee","2":"166","3":"50.0","4":"black","5":"yellow","6":"blue","7":"40.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA","19":"18.14487"},{"1":"Dormé","2":"165","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Dooku","2":"193","3":"80.0","4":"white","5":"fair","6":"brown","7":"102.0","8":"masculine","9":"Serenno","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Flitknot speeder","15":"NA","16":"NA","17":"rainforests, rivers, mountains","18":"NA","19":"21.47709"},{"1":"Bail Prestor Organa","2":"191","3":"NA","4":"black","5":"tan","6":"brown","7":"67.0","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"NA"},{"1":"Jango Fett","2":"183","3":"79.0","4":"black","5":"tan","6":"brown","7":"66.0","8":"masculine","9":"Concord Dawn","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"jungles, forests, deserts","18":"NA","19":"23.58984"},{"1":"Zam Wesell","2":"168","3":"55.0","4":"blonde","5":"fair, green, yellow","6":"yellow","7":"NA","8":"feminine","9":"Zolan","10":"Clawdite","11":"female","12":"reptilian","13":"sentient","14":"Koro-2 Exodrive airspeeder","15":"NA","16":"NA","17":"NA","18":"NA","19":"19.48696"},{"1":"Dexter Jettster","2":"198","3":"102.0","4":"none","5":"brown","6":"yellow","7":"NA","8":"masculine","9":"Ojom","10":"Besalisk","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"frigid","16":"NA","17":"oceans, glaciers","18":"5.000e+08","19":"26.01775"},{"1":"Lama Su","2":"229","3":"88.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Kamino","10":"Kaminoan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"16.78076"},{"1":"Taun We","2":"213","3":"NA","4":"none","5":"grey","6":"black","7":"NA","8":"feminine","9":"Kamino","10":"Kaminoan","11":"female","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"NA"},{"1":"Jocasta Nu","2":"167","3":"NA","4":"white","5":"fair","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"NA"},{"1":"R4-P17","2":"96","3":"NA","4":"none","5":"silver, red","6":"red, blue","7":"NA","8":"feminine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Wat Tambor","2":"193","3":"48.0","4":"none","5":"green, grey","6":"NA","7":"NA","8":"masculine","9":"Skako","10":"Skakoan","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"urban, vines","18":"5.000e+11","19":"12.88625"},{"1":"San Hill","2":"191","3":"NA","4":"none","5":"grey","6":"gold","7":"NA","8":"masculine","9":"Muunilinst","10":"Muun","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests, hills, mountains","18":"5.000e+09","19":"NA"},{"1":"Shaak Ti","2":"178","3":"57.0","4":"none","5":"red, blue, white","6":"black","7":"NA","8":"feminine","9":"Shili","10":"Togruta","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"cities, savannahs, seas, plains","18":"NA","19":"17.99015"},{"1":"Grievous","2":"216","3":"159.0","4":"none","5":"brown, white","6":"green, yellow","7":"NA","8":"masculine","9":"Kalee","10":"Kaleesh","11":"male","12":"reptile","13":"sentient","14":"Belbullab-22 starfighter, Tsmeu-6 personal wheel bike","15":"arid, temperate, tropical","16":"1","17":"rainforests, cliffs, canyons, seas","18":"4.000e+09","19":"34.07922"},{"1":"Tarfful","2":"234","3":"136.0","4":"brown","5":"brown","6":"blue","7":"NA","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"NA","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07","19":"24.83746"},{"1":"Raymus Antilles","2":"188","3":"79.0","4":"brown","5":"light","6":"brown","7":"NA","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"22.35174"},{"1":"Sly Moore","2":"178","3":"48.0","4":"none","5":"pale","6":"white","7":"NA","8":"feminine","9":"Umbara","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"15.14960"},{"1":"Tion Medon","2":"206","3":"80.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Utapau","10":"Pau'an","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate, arid, windy","16":"1 standard","17":"scrublands, savanna, canyons, sinkholes","18":"9.500e+07","19":"18.85192"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   &lt;/script&gt;
 &lt;/div&gt;
 
@@ -724,7 +1119,7 @@ background-size: 6%
 
 
 ```r
-mutate(original_starwars, 
+mutate(big_starwars, 
             # create bmi
             bmi = mass / ((height / 100) ^ 2),
             # change bmi
@@ -735,115 +1130,10 @@ mutate(original_starwars,
 
 &lt;div data-pagedtable="false"&gt;
   &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["species"],"name":[5],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[6],"type":["chr"],"align":["left"]},{"label":["bmi"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77","4":"blond","5":"Human","6":"Tatooine","7":"26"},{"1":"C-3PO","2":"167","3":"75","4":"NA","5":"Droid","6":"Tatooine","7":"27"},{"1":"R2-D2","2":"96","3":"32","4":"NA","5":"Droid","6":"Naboo","7":"35"},{"1":"Leia Organa","2":"150","3":"49","4":"brown","5":"Human","6":"Alderaan","7":"22"},{"1":"Chewbacca","2":"228","3":"112","4":"brown","5":"Wookiee","6":"Kashyyyk","7":"22"},{"1":"Han Solo","2":"180","3":"80","4":"brown","5":"Human","6":"Corellia","7":"25"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hair_color"],"name":[4],"type":["chr"],"align":["left"]},{"label":["skin_color"],"name":[5],"type":["chr"],"align":["left"]},{"label":["eye_color"],"name":[6],"type":["chr"],"align":["left"]},{"label":["birth_year"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[8],"type":["chr"],"align":["left"]},{"label":["homeworld"],"name":[9],"type":["chr"],"align":["left"]},{"label":["species"],"name":[10],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[11],"type":["chr"],"align":["left"]},{"label":["species_class"],"name":[12],"type":["chr"],"align":["left"]},{"label":["species_desig"],"name":[13],"type":["chr"],"align":["left"]},{"label":["vehicle"],"name":[14],"type":["chr"],"align":["left"]},{"label":["hw_climate"],"name":[15],"type":["chr"],"align":["left"]},{"label":["hw_gravity"],"name":[16],"type":["chr"],"align":["left"]},{"label":["hw_terrain"],"name":[17],"type":["chr"],"align":["left"]},{"label":["hw_pop"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["bmi"],"name":[19],"type":["dbl"],"align":["right"]}],"data":[{"1":"Luke Skywalker","2":"172","3":"77.0","4":"blond","5":"fair","6":"blue","7":"19.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Imperial shuttle, Snowspeeder, Imperial Speeder Bike","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"26"},{"1":"C-3PO","2":"167","3":"75.0","4":"NA","5":"gold","6":"yellow","7":"112.0","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"27"},{"1":"R2-D2","2":"96","3":"32.0","4":"NA","5":"white, blue","6":"red","7":"33.0","8":"masculine","9":"Naboo","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"35"},{"1":"Darth Vader","2":"202","3":"136.0","4":"none","5":"white","6":"yellow","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"TIE Advanced x1","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"33"},{"1":"Leia Organa","2":"150","3":"49.0","4":"brown","5":"light","6":"brown","7":"19.0","8":"feminine","9":"Alderaan","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Imperial Speeder Bike","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"22"},{"1":"Owen Lars","2":"178","3":"120.0","4":"brown, grey","5":"light","6":"blue","7":"52.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"38"},{"1":"Beru Whitesun lars","2":"165","3":"75.0","4":"brown","5":"light","6":"blue","7":"47.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"28"},{"1":"R5-D4","2":"97","3":"32.0","4":"NA","5":"white, red","6":"red","7":"NA","8":"masculine","9":"Tatooine","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"34"},{"1":"Biggs Darklighter","2":"183","3":"84.0","4":"black","5":"light","6":"brown","7":"24.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"25"},{"1":"Obi-Wan Kenobi","2":"182","3":"77.0","4":"auburn, white","5":"fair","6":"blue-gray","7":"57.0","8":"masculine","9":"Stewjon","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Jedi starfighter, Trade Federation cruiser, Naboo star skiff, Jedi Interceptor, Belbullab-22 starfighter, Tribubble bongo","15":"temperate","16":"1 standard","17":"grass","18":"NA","19":"23"},{"1":"Anakin Skywalker","2":"188","3":"84.0","4":"blond","5":"fair","6":"blue","7":"41.9","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter, Trade Federation cruiser, Jedi Interceptor, Zephyr-G swoop bike, XJ-6 airspeeder","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"24"},{"1":"Wilhuff Tarkin","2":"180","3":"NA","4":"auburn, grey","5":"fair","6":"blue","7":"64.0","8":"masculine","9":"Eriadu","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"polluted","16":"1 standard","17":"cityscape","18":"2.200e+10","19":"NA"},{"1":"Chewbacca","2":"228","3":"112.0","4":"brown","5":"NA","6":"blue","7":"200.0","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle, AT-ST","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07","19":"22"},{"1":"Han Solo","2":"180","3":"80.0","4":"brown","5":"fair","6":"brown","7":"29.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon, Imperial shuttle","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09","19":"25"},{"1":"Greedo","2":"173","3":"74.0","4":"NA","5":"green","6":"black","7":"44.0","8":"masculine","9":"Rodia","10":"Rodian","11":"male","12":"sentient","13":"reptilian","14":"NA","15":"hot","16":"1 standard","17":"jungles, oceans, urban, swamps","18":"1.300e+09","19":"25"},{"1":"Jabba Desilijic Tiure","2":"175","3":"1358.0","4":"NA","5":"green-tan, brown","6":"orange","7":"600.0","8":"masculine","9":"Nal Hutta","10":"Hutt","11":"hermaphroditic","12":"gastropod","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"urban, oceans, swamps, bogs","18":"7.000e+09","19":"443"},{"1":"Wedge Antilles","2":"170","3":"77.0","4":"brown","5":"fair","6":"hazel","7":"21.0","8":"masculine","9":"Corellia","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing, Snowspeeder","15":"temperate","16":"1 standard","17":"plains, urban, hills, forests","18":"3.000e+09","19":"27"},{"1":"Jek Tono Porkins","2":"180","3":"110.0","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Bestine IV","10":"Human","11":"male","12":"mammal","13":"sentient","14":"X-wing","15":"temperate","16":"NA","17":"rocky islands, oceans","18":"6.200e+07","19":"34"},{"1":"Yoda","2":"66","3":"17.0","4":"white","5":"green","6":"brown","7":"896.0","8":"masculine","9":"NA","10":"Yoda's species","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"39"},{"1":"Palpatine","2":"170","3":"75.0","4":"grey","5":"pale","6":"yellow","7":"82.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"26"},{"1":"Boba Fett","2":"183","3":"78.2","4":"black","5":"fair","6":"brown","7":"31.5","8":"masculine","9":"Kamino","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Slave 1","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"23"},{"1":"IG-88","2":"200","3":"140.0","4":"none","5":"metal","6":"red","7":"15.0","8":"masculine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"35"},{"1":"Bossk","2":"190","3":"113.0","4":"none","5":"green","6":"red","7":"53.0","8":"masculine","9":"Trandosha","10":"Trandoshan","11":"male","12":"reptile","13":"sentient","14":"NA","15":"arid","16":"0.62 standard","17":"mountains, seas, grasslands, deserts","18":"4.200e+07","19":"31"},{"1":"Lando Calrissian","2":"177","3":"79.0","4":"black","5":"dark","6":"brown","7":"31.0","8":"masculine","9":"Socorro","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"arid","16":"1 standard","17":"deserts, mountains","18":"3.000e+08","19":"25"},{"1":"Lobot","2":"175","3":"79.0","4":"none","5":"light","6":"blue","7":"37.0","8":"masculine","9":"Bespin","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1.5 (surface), 1 standard (Cloud City)","17":"gas giant","18":"6.000e+06","19":"26"},{"1":"Ackbar","2":"180","3":"83.0","4":"none","5":"brown mottle","6":"orange","7":"41.0","8":"masculine","9":"Mon Cala","10":"Mon Calamari","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, reefs, islands","18":"2.700e+10","19":"26"},{"1":"Mon Mothma","2":"150","3":"NA","4":"auburn","5":"fair","6":"blue","7":"48.0","8":"feminine","9":"Chandrila","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests","18":"1.200e+09","19":"NA"},{"1":"Arvel Crynyd","2":"NA","3":"NA","4":"brown","5":"fair","6":"brown","7":"NA","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"A-wing","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Wicket Systri Warrick","2":"88","3":"20.0","4":"brown","5":"brown","6":"brown","7":"8.0","8":"masculine","9":"Endor","10":"Ewok","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.85 standard","17":"forests, mountains, lakes","18":"3.000e+07","19":"26"},{"1":"Nien Nunb","2":"160","3":"68.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Sullust","10":"Sullustan","11":"male","12":"mammal","13":"sentient","14":"Millennium Falcon","15":"superheated","16":"1","17":"mountains, volcanoes, rocky deserts","18":"1.850e+10","19":"27"},{"1":"Qui-Gon Jinn","2":"193","3":"89.0","4":"brown","5":"fair","6":"blue","7":"92.0","8":"masculine","9":"NA","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Tribubble bongo","15":"NA","16":"NA","17":"NA","18":"NA","19":"24"},{"1":"Nute Gunray","2":"191","3":"90.0","4":"none","5":"mottled green","6":"red","7":"NA","8":"masculine","9":"Cato Neimoidia","10":"Neimodian","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, moist","16":"1 standard","17":"mountains, fields, forests, rock arches","18":"1.000e+07","19":"25"},{"1":"Finis Valorum","2":"170","3":"NA","4":"blond","5":"fair","6":"blue","7":"91.0","8":"masculine","9":"Coruscant","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"NA"},{"1":"Padmé Amidala","2":"185","3":"45.0","4":"brown","5":"light","6":"brown","7":"46.0","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"Naboo fighter, H-type Nubian yacht, Naboo star skiff","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"13"},{"1":"Jar Jar Binks","2":"196","3":"66.0","4":"none","5":"orange","6":"orange","7":"52.0","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"17"},{"1":"Roos Tarpals","2":"224","3":"82.0","4":"none","5":"grey","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"16"},{"1":"Rugor Nass","2":"206","3":"NA","4":"none","5":"green","6":"orange","7":"NA","8":"masculine","9":"Naboo","10":"Gungan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Ric Olié","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo Royal Starship","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Watto","2":"137","3":"NA","4":"black","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Toydaria","10":"Toydarian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"swamps, lakes","18":"1.100e+07","19":"NA"},{"1":"Sebulba","2":"112","3":"40.0","4":"none","5":"grey, red","6":"orange","7":"NA","8":"masculine","9":"Malastare","10":"Dug","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid, temperate, tropical","16":"1.56","17":"swamps, deserts, jungles, mountains","18":"2.000e+09","19":"32"},{"1":"Quarsh Panaka","2":"183","3":"NA","4":"black","5":"dark","6":"brown","7":"62.0","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Shmi Skywalker","2":"163","3":"NA","4":"black","5":"fair","6":"brown","7":"72.0","8":"feminine","9":"Tatooine","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"NA"},{"1":"Darth Maul","2":"175","3":"80.0","4":"none","5":"red","6":"yellow","7":"54.0","8":"masculine","9":"Dathomir","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"Scimitar, Sith speeder","15":"temperate","16":"0.9","17":"forests, deserts, savannas","18":"5.200e+03","19":"26"},{"1":"Bib Fortuna","2":"180","3":"NA","4":"none","5":"pale","6":"pink","7":"NA","8":"masculine","9":"Ryloth","10":"Twi'lek","11":"male","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09","19":"NA"},{"1":"Ayla Secura","2":"178","3":"55.0","4":"none","5":"blue","6":"hazel","7":"48.0","8":"feminine","9":"Ryloth","10":"Twi'lek","11":"female","12":"mammals","13":"sentient","14":"NA","15":"temperate, arid, subartic","16":"1","17":"mountains, valleys, deserts, tundra","18":"1.500e+09","19":"17"},{"1":"Ratts Tyerel","2":"79","3":"15.0","4":"none","5":"grey, blue","6":"NA","7":"NA","8":"masculine","9":"Aleen Minor","10":"Aleena","11":"male","12":"reptile","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"24"},{"1":"Dud Bolt","2":"94","3":"45.0","4":"none","5":"blue, grey","6":"yellow","7":"NA","8":"masculine","9":"Vulpter","10":"Vulptereen","11":"male","12":"NA","13":"sentient","14":"NA","15":"temperate, artic","16":"1","17":"urban, barren","18":"4.210e+08","19":"51"},{"1":"Gasgano","2":"122","3":"NA","4":"none","5":"white, blue","6":"black","7":"NA","8":"masculine","9":"Troiken","10":"Xexto","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"desert, tundra, rainforests, mountains","18":"NA","19":"NA"},{"1":"Ben Quadinaros","2":"163","3":"65.0","4":"none","5":"grey, green, yellow","6":"orange","7":"NA","8":"masculine","9":"Tund","10":"Toong","11":"male","12":"NA","13":"sentient","14":"NA","15":"NA","16":"NA","17":"barren, ash","18":"0.000e+00","19":"24"},{"1":"Mace Windu","2":"188","3":"84.0","4":"none","5":"dark","6":"brown","7":"72.0","8":"masculine","9":"Haruun Kal","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"0.98","17":"toxic cloudsea, plateaus, volcanoes","18":"7.053e+05","19":"24"},{"1":"Ki-Adi-Mundi","2":"198","3":"82.0","4":"white","5":"pale","6":"yellow","7":"92.0","8":"masculine","9":"Cerea","10":"Cerean","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"verdant","18":"4.500e+08","19":"21"},{"1":"Kit Fisto","2":"196","3":"87.0","4":"none","5":"green","6":"black","7":"NA","8":"masculine","9":"Glee Anselm","10":"Nautolan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"tropical, temperate","16":"1","17":"lakes, islands, swamps, seas","18":"5.000e+08","19":"23"},{"1":"Eeth Koth","2":"171","3":"NA","4":"black","5":"brown","6":"brown","7":"NA","8":"masculine","9":"Iridonia","10":"Zabrak","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"rocky canyons, acid pools","18":"NA","19":"NA"},{"1":"Adi Gallia","2":"184","3":"50.0","4":"none","5":"dark","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Tholothian","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"15"},{"1":"Saesee Tiin","2":"188","3":"NA","4":"none","5":"pale","6":"orange","7":"NA","8":"masculine","9":"Iktotch","10":"Iktotchi","11":"male","12":"NA","13":"sentient","14":"NA","15":"arid, rocky, windy","16":"1","17":"rocky","18":"NA","19":"NA"},{"1":"Yarael Poof","2":"264","3":"NA","4":"none","5":"white","6":"yellow","7":"NA","8":"masculine","9":"Quermia","10":"Quermian","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Plo Koon","2":"188","3":"80.0","4":"none","5":"orange","6":"black","7":"22.0","8":"masculine","9":"Dorin","10":"Kel Dor","11":"male","12":"NA","13":"sentient","14":"Jedi starfighter","15":"temperate","16":"1","17":"NA","18":"NA","19":"23"},{"1":"Mas Amedda","2":"196","3":"NA","4":"none","5":"blue","6":"blue","7":"NA","8":"masculine","9":"Champala","10":"Chagrian","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1","17":"oceans, rainforests, plateaus","18":"3.500e+09","19":"NA"},{"1":"Gregar Typho","2":"185","3":"85.0","4":"black","5":"dark","6":"brown","7":"NA","8":"masculine","9":"Naboo","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Naboo fighter","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"25"},{"1":"Cordé","2":"157","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Cliegg Lars","2":"183","3":"NA","4":"brown","5":"fair","6":"blue","7":"82.0","8":"masculine","9":"Tatooine","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"arid","16":"1 standard","17":"desert","18":"2.000e+05","19":"NA"},{"1":"Poggle the Lesser","2":"183","3":"80.0","4":"none","5":"green","6":"yellow","7":"NA","8":"masculine","9":"Geonosis","10":"Geonosian","11":"male","12":"insectoid","13":"sentient","14":"NA","15":"temperate, arid","16":"0.9 standard","17":"rock, desert, mountain, barren","18":"1.000e+11","19":"24"},{"1":"Luminara Unduli","2":"170","3":"56.2","4":"black","5":"yellow","6":"blue","7":"58.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA","19":"19"},{"1":"Barriss Offee","2":"166","3":"50.0","4":"black","5":"yellow","6":"blue","7":"40.0","8":"feminine","9":"Mirial","10":"Mirialan","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"deserts","18":"NA","19":"18"},{"1":"Dormé","2":"165","3":"NA","4":"brown","5":"light","6":"brown","7":"NA","8":"feminine","9":"Naboo","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grassy hills, swamps, forests, mountains","18":"4.500e+09","19":"NA"},{"1":"Dooku","2":"193","3":"80.0","4":"white","5":"fair","6":"brown","7":"102.0","8":"masculine","9":"Serenno","10":"Human","11":"male","12":"mammal","13":"sentient","14":"Flitknot speeder","15":"NA","16":"NA","17":"rainforests, rivers, mountains","18":"NA","19":"21"},{"1":"Bail Prestor Organa","2":"191","3":"NA","4":"black","5":"tan","6":"brown","7":"67.0","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"NA"},{"1":"Jango Fett","2":"183","3":"79.0","4":"black","5":"tan","6":"brown","7":"66.0","8":"masculine","9":"Concord Dawn","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"jungles, forests, deserts","18":"NA","19":"24"},{"1":"Zam Wesell","2":"168","3":"55.0","4":"blonde","5":"fair, green, yellow","6":"yellow","7":"NA","8":"feminine","9":"Zolan","10":"Clawdite","11":"female","12":"reptilian","13":"sentient","14":"Koro-2 Exodrive airspeeder","15":"NA","16":"NA","17":"NA","18":"NA","19":"19"},{"1":"Dexter Jettster","2":"198","3":"102.0","4":"none","5":"brown","6":"yellow","7":"NA","8":"masculine","9":"Ojom","10":"Besalisk","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"frigid","16":"NA","17":"oceans, glaciers","18":"5.000e+08","19":"26"},{"1":"Lama Su","2":"229","3":"88.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Kamino","10":"Kaminoan","11":"male","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"17"},{"1":"Taun We","2":"213","3":"NA","4":"none","5":"grey","6":"black","7":"NA","8":"feminine","9":"Kamino","10":"Kaminoan","11":"female","12":"amphibian","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"ocean","18":"1.000e+09","19":"NA"},{"1":"Jocasta Nu","2":"167","3":"NA","4":"white","5":"fair","6":"blue","7":"NA","8":"feminine","9":"Coruscant","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"cityscape, mountains","18":"1.000e+12","19":"NA"},{"1":"R4-P17","2":"96","3":"NA","4":"none","5":"silver, red","6":"red, blue","7":"NA","8":"feminine","9":"NA","10":"Droid","11":"none","12":"artificial","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"NA"},{"1":"Wat Tambor","2":"193","3":"48.0","4":"none","5":"green, grey","6":"NA","7":"NA","8":"masculine","9":"Skako","10":"Skakoan","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"urban, vines","18":"5.000e+11","19":"13"},{"1":"San Hill","2":"191","3":"NA","4":"none","5":"grey","6":"gold","7":"NA","8":"masculine","9":"Muunilinst","10":"Muun","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"plains, forests, hills, mountains","18":"5.000e+09","19":"NA"},{"1":"Shaak Ti","2":"178","3":"57.0","4":"none","5":"red, blue, white","6":"black","7":"NA","8":"feminine","9":"Shili","10":"Togruta","11":"female","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1","17":"cities, savannahs, seas, plains","18":"NA","19":"18"},{"1":"Grievous","2":"216","3":"159.0","4":"none","5":"brown, white","6":"green, yellow","7":"NA","8":"masculine","9":"Kalee","10":"Kaleesh","11":"male","12":"reptile","13":"sentient","14":"Belbullab-22 starfighter, Tsmeu-6 personal wheel bike","15":"arid, temperate, tropical","16":"1","17":"rainforests, cliffs, canyons, seas","18":"4.000e+09","19":"34"},{"1":"Tarfful","2":"234","3":"136.0","4":"brown","5":"brown","6":"blue","7":"NA","8":"masculine","9":"Kashyyyk","10":"Wookie","11":"male","12":"mammal","13":"sentient","14":"NA","15":"tropical","16":"1 standard","17":"jungle, forests, lakes, rivers","18":"4.500e+07","19":"25"},{"1":"Raymus Antilles","2":"188","3":"79.0","4":"brown","5":"light","6":"brown","7":"NA","8":"masculine","9":"Alderaan","10":"Human","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate","16":"1 standard","17":"grasslands, mountains","18":"2.000e+09","19":"22"},{"1":"Sly Moore","2":"178","3":"48.0","4":"none","5":"pale","6":"white","7":"NA","8":"feminine","9":"Umbara","10":"Human","11":"female","12":"mammal","13":"sentient","14":"NA","15":"NA","16":"NA","17":"NA","18":"NA","19":"15"},{"1":"Tion Medon","2":"206","3":"80.0","4":"none","5":"grey","6":"black","7":"NA","8":"masculine","9":"Utapau","10":"Pau'an","11":"male","12":"mammal","13":"sentient","14":"NA","15":"temperate, arid, windy","16":"1 standard","17":"scrublands, savanna, canyons, sinkholes","18":"9.500e+07","19":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   &lt;/script&gt;
 &lt;/div&gt;
 
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
-# See the `mutate()` exercises for more examples!
-
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
-# Write clearer code with the pipe `%&gt;%`
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# The pipe (`%&gt;%`) 
-
-### The pipe comes from the `magrittr` package: 
-
-https://magrittr.tidyverse.org/
-
---
-
-### The pipe makes our code easier to read (and write) 
-
-### Create pipes easily with keyboard shortcuts
-
---
-
-.leftcol[.center[
-
-
-***Mac***
-
-#### `Cmd` + `Shift` + `M`
-
-]]
-
-
---
-
-.rightcol[.center[
-
-***Windows***
-
-#### `Crtl` + `Shift` + `M`
-
-]]
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# How the pipe (`%&gt;%`) works 
-
---
-
-### Without the pipe, we have to constantly assign the output to new object:
-
---
-
-&lt;img src="img/pipe-00.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
-
---
-
-### Or use nested functions:
-
---
-
-&lt;img src="img/pipe-01.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
- 
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# How the pipe (`%&gt;%`) works
-
-### The pipe allows us to pass the output from functions left-to-right
-
---
-
-&lt;img src="img/pipe-03.png" width="48%" height="48%" style="display: block; margin: auto;" /&gt;
-
-.center[
-
-***`%&gt;%` can be read as "then"***
-
-]
 
 
 ---
@@ -856,14 +1146,14 @@ background-size: 6%
 
 ### Review the code below and think about what each object contains:
 
-1. Filter `original_starwars` to only brown-haired characters over 100 cm tall  
+1. Filter `big_starwars` to only brown-haired characters over 100 cm tall  
 2. Create a `bmi` column using:  `mass / ((height / 100) ^ 2)`    
 3. Select `name`, `bmi`, and `homeworld`   
 4. Arrange the data by `bmi`, descending  
 
 
 ```r
-object_01 &lt;- filter(original_starwars, 
+object_01 &lt;- filter(big_starwars, 
                     hair_color == "brown" &amp; height &gt; 100) 
 object_02 &lt;- mutate(object_01, bmi = mass / ((height / 100) ^ 2))
 object_03 &lt;- select(object_02, name, bmi, homeworld)
@@ -879,9 +1169,9 @@ background-size: 6%
 
 # Creating pipelines of functions
 
-### Re-write these functions into a pipeline, ending with a single output (`new_original_starwars`)
+### Re-write these functions into a pipeline, ending with a single output (`new_big_starwars`)
 
-1. Filter `original_starwars` to only brown-haired characters over 100 cm tall  
+1. Filter `big_starwars` to only brown-haired characters over 100 cm tall  
 2. Create a `bmi` column using:  `mass / ((height / 100) ^ 2)`    
 3. Select `name`, `bmi`, and `homeworld`   
 4. Arrange the data by `bmi`, descending 
@@ -890,11 +1180,11 @@ background-size: 6%
 
 
 ```r
-original_starwars %&gt;% 
+big_starwars %&gt;% 
   filter(hair_color == "_____" &amp; height &gt; ___) %&gt;% 
   mutate(___ = mass / ((height / 100) ^ 2)) %&gt;% 
   select(____, bmi, _________) %&gt;% 
-  arrange(____(bmi)) -&gt; new_original_starwars
+  arrange(____(bmi)) -&gt; new_big_starwars
 ```
 
 ---
@@ -909,33 +1199,21 @@ The answer is below:
 
 
 ```r
-original_starwars %&gt;% 
+big_starwars %&gt;% 
   filter(hair_color == "brown" &amp; height &gt; 100) %&gt;% 
   mutate(bmi = mass / ((height / 100) ^ 2)) %&gt;% 
   select(name, bmi, homeworld) %&gt;% 
-  arrange(desc(bmi)) -&gt; new_original_starwars
-new_original_starwars
+  arrange(desc(bmi)) -&gt; new_big_starwars
+new_big_starwars
 ```
 
 --
 
 &lt;div data-pagedtable="false"&gt;
   &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bmi"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["homeworld"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Han Solo","2":"24.69136","3":"Corellia"},{"1":"Leia Organa","2":"21.77778","3":"Alderaan"},{"1":"Chewbacca","2":"21.54509","3":"Kashyyyk"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bmi"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["homeworld"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Jek Tono Porkins","2":"33.95062","3":"Bestine IV"},{"1":"Beru Whitesun lars","2":"27.54821","3":"Tatooine"},{"1":"Wedge Antilles","2":"26.64360","3":"Corellia"},{"1":"Tarfful","2":"24.83746","3":"Kashyyyk"},{"1":"Han Solo","2":"24.69136","3":"Corellia"},{"1":"Qui-Gon Jinn","2":"23.89326","3":"NA"},{"1":"Raymus Antilles","2":"22.35174","3":"Alderaan"},{"1":"Leia Organa","2":"21.77778","3":"Alderaan"},{"1":"Chewbacca","2":"21.54509","3":"Kashyyyk"},{"1":"Padmé Amidala","2":"13.14828","3":"Naboo"},{"1":"Ric Olié","2":"NA","3":"Naboo"},{"1":"Cordé","2":"NA","3":"Naboo"},{"1":"Cliegg Lars","2":"NA","3":"Tatooine"},{"1":"Dormé","2":"NA","3":"Naboo"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   &lt;/script&gt;
 &lt;/div&gt;
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
-
-# See the `pipe` exercises for more examples!
-
-
 
 ---
 class: left, top

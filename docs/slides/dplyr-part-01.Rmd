@@ -106,11 +106,11 @@ background-size: 6%
 
 # Objectives 
 
-## 1) Common data manipulation tasks
+## 1) the pipes `%>%` and `|>`
 
-## 2) `dplyr`'s verbs 
+## 2) Common data manipulation tasks
 
-## 3) the pipe `%>%` 
+## 3) `dplyr`'s verbs 
 
 ---
 class: left, top
@@ -211,7 +211,7 @@ background-image: url(img/dplyr.png)
 background-position: 90% 10%
 background-size: 6%
 
-# The `starwars` dataset  
+# The `big_starwars` dataset  
 
 ### These data come from the Star Wars API: 
 
@@ -222,29 +222,9 @@ knitr::include_graphics(path = "img/star-wars.jpeg")
 
 --
 
-#### Read more about the data here:
+`big_starwars` is similar to the `starwars` data in the `dplyr` package:
 
 https://dplyr.tidyverse.org/reference/starwars.html
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 95% 9%
-background-size: 6%
-
-# Load the `starwars` dataset
-
-### The `starwars` data comes from the `dplyr` package, so we can access it using the code below:
-
-```{r starwars-dplyr, eval=FALSE}
-install.packages("dplyr")
-library(dplyr)
-dplyr::starwars
-```
-
---
-
-### We'll use a smaller version of this dataset (`original_starwars`) to show `dplyr`'s common data manipluation verbs
 
 
 ---
@@ -253,15 +233,15 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-# Import `original_starwars` 
+# Import `big_starwars` 
 
 --
 
 #### Import the data using the url and `readr`
 
-```{r original_starwars}
+```{r big_starwars}
 library(readr)
-original_starwars <- read_csv("https://bit.ly/mini-strwrs")
+big_starwars <- read_csv("https://bit.ly/big-sw")
 ```
 
 --
@@ -277,6 +257,169 @@ knitr::include_graphics(path = "img/starwars-env.png")
 
 ]
 
+---
+class: inverse, center, middle
+background-image: url(img/pipe.png)
+background-position: 50% 15%
+background-size: 20%
+
+<br><br><br><br><br><br>
+
+# Writing code with pipes 
+
+##  .orange[|>] and .blue[%>%]
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Background on pipes
+
+***.purple[What is a 'pipe'?]***
+
+--
+
+> A pipe is an operator for making code "*easier to read or to express*" and "*'sweeter' for human use*" (which is why it's also known as ['*syntactic sugar*')](https://en.wikipedia.org/wiki/Syntactic_sugar)
+
+> The original pipe in R (.blue[%>%]) comes from [the `magrittr` package](https://magrittr.tidyverse.org/), R released a 'native' pipe ( .orange[|>] ) as of version 4.1
+
+--
+
+***.purple[What do pipes do?]***
+
+--
+
+> Pipes combine ["*a set of processes chained together ... so that the output text of each process ... is passed directly as input to the next one*"](https://en.wikipedia.org/wiki/Pipeline_(Unix)
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Background on pipes
+
+***.purple[How can I use them?]***
+
+--
+
+> Create pipes easily with keyboard shortcuts
+
+--
+
+.leftcol[.center[
+
+
+### ***Mac***
+
+### `Cmd` + `Shift` + `M` = .blue[%>%] or .orange[|>]
+
+]]
+
+
+--
+
+.rightcol[.center[
+
+### ***Windows***
+
+### `Crtl` + `Shift` + `M` = .blue[%>%] or .orange[|>]
+
+]]
+
+---
+class: left, top
+background-image: url(img/pipe.png)
+background-position: 93% 10%
+background-size: 6%
+
+# Pipe settings 
+
+.leftcol40[
+
+<br><br><br>
+
+Set which pipe to use in **Tools** > **Global Options** > **Code**
+
+]
+
+--
+
+.rightcol60[
+
+```{r use-native-pipe-png, echo=FALSE, out.height='70%', out.width='70%', fig.align='center'}
+knitr::include_graphics("img/use-native-pipe.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 10%
+background-size: 6%
+
+# How pipes work 
+
+--
+
+#### *Without the pipe, we have to constantly assign the output to new object:*
+
+--
+
+```{r pipe-00, fig.align='center', out.height='70%', out.width='70%', echo=FALSE}
+# copy_slide_images("pipe-00.png")
+knitr::include_graphics(path = "img/pipe-00.png")
+```
+
+--
+
+#### *Or use nested functions:*
+
+--
+
+```{r pipe-01, fig.align='center', out.height='90%', out.width='90%', echo=FALSE}
+# copy_slide_images("pipe-01.png")
+knitr::include_graphics(path = "img/pipe-01.png")
+```
+ 
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 10%
+background-size: 6%
+
+# How pipes work
+
+#### *Pipes allow us to pass inputs/outputs from functions left-to-right*
+
+--
+
+```{r pipe-03, fig.align='center', out.height='48%', out.width='48%', echo=FALSE}
+# copy_slide_images("pipe-03.png")
+knitr::include_graphics(path = "img/pipe-03.png")
+```
+
+.center[
+
+***`%>%` can be read as "then"***
+
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(img/dplyr.png)
+background-position: 50% 15%
+background-size: 20%
+
+<br><br><br><br><br>
+
+# `dplyr` 
 
 
 ---
@@ -308,9 +451,9 @@ background-size: 25%
 
 <br><br><br><br><br><br><br><br>
 
-# Viewing the data = `glimpse()`
+# Viewing .red[all] the data = `glimpse()`
 
-### *We need to view the data we're manipulating to see if the changes are correct*
+
 
 
 ---
@@ -319,17 +462,19 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-# View = `glimpse()`
+# View with `glimpse()`
 
-#### Take a look at the entire dataset using `dplyr::glimpse()`
+### `glimpse()` transposes the data and prints as much of it to the screen as possible
 
 --
 
-```{r original_starwars-glimpse}
-glimpse(original_starwars)
+.code50[
+
+```{r big_starwars-glimpse}
+glimpse(big_starwars)
 ```
 
-#### `glimpse()` transposes the data and prints as much of it to the screen as possible
+]
 
 ---
 class: left, top
@@ -337,19 +482,23 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-## View the data in the ***Console***
+# View in the ***Console***
 
-*Enter the name of the dataset to print it to the Console*
+If you view the dataset in the Console, you'll see a plain-text `tibble`
 
-```{r console-original_starwars, eval=FALSE}
-original_starwars
+```{r show-console-big_starwars, eval=FALSE}
+big_starwars
 ```
 
 --
 
-```{r paged_table_original_starwars, echo=FALSE}
-rmarkdown::paged_table(original_starwars)
+.code50[
+
+```{r console_big_starwars, echo=FALSE}
+big_starwars
 ```
+
+]
 
 
 ---
@@ -358,16 +507,33 @@ background-image: url(img/dplyr.png)
 background-position: 93% 7%
 background-size: 7%
 
-## View the data in the *Data Viewer*
+# View in ***R Markdown ***
 
-#### View the `original_starwars` dataset using RStudio's data editor
+If you're using R Markdown, you'll see a `paged_table()`
 
-```{r starwars-dataviewer, fig.align='center', out.height='50%', out.width='50%', echo=FALSE}
-# copy_slide_images("starwars-dataviewer.png")
+--
+
+```{r paged_table_big_starwars, echo=FALSE, fig.align='center', out.width='75%', out.height='75%'}
+knitr::include_graphics(path = "img/rmd-paged-table.png")
+```
+
+
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+# View in ***Data Viewer***
+
+View the `big_starwars` dataset using RStudio's data editor
+
+--
+
+```{r starwars-dataviewer, fig.align='center', out.height='55%', out.width='55%', echo=FALSE}
 knitr::include_graphics(path = "img/starwars-dataviewer.png")
 ```
-
-
 
 ---
 class: inverse, center, middle
@@ -377,7 +543,7 @@ background-size: 25%
 
 <br><br><br><br><br><br>
 
-# Choosing columns = `select()`
+# **Selecting** columns = `select()`
 
 ---
 class: left, top
@@ -385,21 +551,31 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()`
+## **Select** columns with `select()`
 
 #### `select()` allows us to pick specific columns out of a dataset
 
+.code60[
+
 ```{r select-no-show-01, eval=FALSE}
-select(original_starwars, name, homeworld, species)
+select(.data = big_starwars, 
+                name, homeworld, species)
 ```
+
+]
 
 --
 
+.code60[
+
 ```{r select-01, echo=FALSE}
-rmarkdown::paged_table(
-select(.data = original_starwars, name, homeworld, species)
-)
+select(.data = big_starwars, 
+  name, homeworld, species)
 ```
+
+]
+
+
 
 ---
 class: left, top
@@ -407,20 +583,29 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()`
+## **Select** columns with `select()`
 
 #### We can use negation (`-`) to remove columns
 
+.code60[
+
 ```{r select-no-show-02, eval=FALSE}
-select(original_starwars, -c(mass, height, hair_color))
+select(.data = big_starwars, 
+                  -c(mass, height, hair_color))
 ```
+
+]
 
 --
 
+.code60[
+
 ```{r select-02, echo=FALSE}
-rmarkdown::paged_table(
-select(original_starwars, -c(mass, height, hair_color)))
+select(.data = big_starwars, 
+                  -c(mass, height, hair_color))
 ```
+
+]
 
 ---
 class: left, top
@@ -432,6 +617,8 @@ background-size: 6%
 
 #### `select()` comes with 'helpers' to make chosing columns easier (and reduces typing!)
 
+.small[
+
 Helper                | Outputs
 :-------------------  | :--------------------------------------
 `starts_with()`       | choose columns starting with...
@@ -440,6 +627,11 @@ Helper                | Outputs
 `matches()`           | choose columns matching regex...
 `one_of()`            | choose columns from a set of names...
 `num_range()`         | choose columns from a numerical index...
+`where()`             | choose columns where the function returns `TRUE`
+
+]
+
+
 
 
 ---
@@ -448,20 +640,89 @@ background-image: url(img/dplyr.png)
 background-position: 95% 15%
 background-size: 6%
 
-## Choose columns with `select()` 
+## **Select** columns with `select()` 
 
-### Select columns using `matches()` 
+### Select columns using `starts_with()` 
 
-```{r matches-not-run, eval=FALSE}
-select(original_starwars, name, matches("_"))
+.code60[
+
+```{r starts_with-not-run, eval=FALSE}
+select(.data = big_starwars, 
+                    name, starts_with("h"))
 ```
+
+]
 
 --
 
-```{r matches, echo=FALSE}
-rmarkdown::paged_table(
-select(original_starwars, name, matches("_")))
+.code60[
+
+```{r starts_with, echo=FALSE}
+select(.data = big_starwars, 
+                    name, starts_with("h"))
 ```
+
+]
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 15%
+background-size: 6%
+
+## **Select** columns with `select()` 
+
+### Select columns using `matches()` 
+
+.code60[
+
+```{r matches-not-run, eval=FALSE}
+select(.data = big_starwars, 
+                    name, matches("_"))
+```
+
+]
+
+--
+
+.code60[
+
+```{r matches, echo=FALSE}
+select(.data = big_starwars, 
+                    name, matches("_"))
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 15%
+background-size: 6%
+
+## **Select** columns with `select()` 
+
+### Select columns using `where()` 
+
+.code60[
+
+```{r where-not-run, eval=FALSE}
+select(.data = big_starwars, 
+                    name, where(is.character))
+```
+
+]
+
+--
+
+.code60[
+
+```{r where, echo=FALSE}
+select(.data = big_starwars, 
+                    name, where(is.character))
+```
+
+]
 
 
 ---
@@ -495,15 +756,20 @@ background-size: 7%
 
 ### `filter()` lets us pull out rows based on logical conditions
 
+.code60[
+
 ```{r filter-01-no-show, eval=FALSE}
-filter(original_starwars, species == "Human")
+filter(.data = big_starwars, 
+                    species == "Human")
 ```
+
+]
 
 --
 
 ```{r filter-01, echo=FALSE}
-rmarkdown::paged_table(
-filter(original_starwars, species == "Human"))
+filter(.data = big_starwars, 
+                    species == "Human")
 ```
 
 ---
@@ -516,6 +782,8 @@ background-size: 6%
 
 #### `filter()` logical conditions include: 
 
+.small[
+
 Logical Test        | Outputs
 :--------------:    | :--------------------------:
 `<`                 | Less than
@@ -527,6 +795,10 @@ Logical Test        | Outputs
 `%in%`              | Group membership
 `is.na()`           | is NA (missing)
 `!is.na()`          | is not NA (non-missing)
+
+]
+
+
 
 
 ---
@@ -542,16 +814,15 @@ background-size: 6%
 *this gets the same results...*
 
 ```{r filter-02-no-how, eval=FALSE}
-filter(original_starwars, 
+filter(.data = big_starwars, 
           species == "Human" & !is.na(hair_color))
 ```
 
 --
 
 ```{r filter-02, echo=FALSE}
-rmarkdown::paged_table(
-filter(original_starwars, 
-          species == "Human" & !is.na(hair_color)))
+filter(.data = big_starwars, 
+          species == "Human" & !is.na(hair_color))
 ```
 
 
@@ -569,16 +840,15 @@ background-size: 6%
 *...as this*
 
 ```{r filter-03-no-show, eval=FALSE}
-filter(original_starwars, 
+filter(.data = big_starwars, 
           species == "Human" , !is.na(hair_color))
 ```
 
 --
 
 ```{r filter-03,  echo=FALSE}
-rmarkdown::paged_table(
-filter(original_starwars, 
-       species == "Human" , !is.na(hair_color)))
+filter(.data = big_starwars, 
+       species == "Human" , !is.na(hair_color))
 ```
 
 
@@ -590,33 +860,22 @@ background-size: 6%
 
 # Choose rows with `filter()` 
 
-#### Remember that *any* logical condition works for `filter()`ing, so we can borrow functions from other packages to help us (like `stringr::str_detect()`)
+Remember that **.red[any logical condition works]** with `filter()`, so we can borrow functions from other packages to help us (like `stringr::str_detect()`)]
 
 --
 
 ```{r filter-04-no-show, eval=FALSE}
-filter(original_starwars, 
+filter(big_starwars, 
+        # look for names containing a number
        str_detect(string = name, pattern = "[:digit:]"))
 ```
 
 --
 
 ```{r filter-04, echo=FALSE}
-rmarkdown::paged_table(
-filter(original_starwars, 
-        str_detect(string = name, pattern = "[:digit:]")))
+filter(big_starwars, 
+        str_detect(string = name, pattern = "[:digit:]"))
 ```
-
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-<br><br><br><br><br><br><br>
-
-# See the `filter()` exercises for more examples!
 
 ---
 class: inverse, center, middle
@@ -640,14 +899,14 @@ background-size: 6%
 ### `arrange()` sorts the contents of a dataset (ascending or descending)
 
 ```{r arrange-01-no-run, eval=FALSE}
-arrange(original_starwars, height)
+arrange(big_starwars, height)
 ```
 
 --
 
 ```{r arrange-01, echo=FALSE}
 rmarkdown::paged_table(
-arrange(original_starwars, height))
+arrange(big_starwars, height))
 ```
 
 ---
@@ -661,25 +920,15 @@ background-size: 6%
 ### `arrange()`'s default is to sort ascending--include `desc()` to sort descending
 
 ```{r arrange-02-no-show, eval=FALSE}
-arrange(original_starwars, desc(height))
+arrange(big_starwars, desc(height))
 ```
 
 --
 
 ```{r arrange-02, echo=FALSE}
 rmarkdown::paged_table(
-arrange(original_starwars, desc(height)))
+arrange(big_starwars, desc(height)))
 ```
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-<br><br><br><br><br><br><br>
-
-# See the `arrange()` exercises for more examples!
 
 
 ---
@@ -701,7 +950,7 @@ background-size: 6%
 # Create columns with `mutate()`
 
 ```{r mutate-01-no-run, eval=FALSE}
-mutate(original_starwars, 
+mutate(big_starwars, 
             # create new bmi variable
             bmi = mass / ((height / 100) ^ 2))
 ```
@@ -710,7 +959,7 @@ mutate(original_starwars,
 
 ```{r mutate-01, echo=FALSE}
 rmarkdown::paged_table(
-mutate(original_starwars, 
+mutate(big_starwars, 
             bmi = mass / ((height / 100)  ^ 2)))
 ```
 
@@ -724,7 +973,7 @@ background-size: 6%
 # Change existing columns with `mutate()` 
 
 ```{r mutate-02-no-run, eval=FALSE}
-mutate(original_starwars, 
+mutate(big_starwars, 
             # create bmi
             bmi = mass / ((height / 100) ^ 2),
             # change bmi
@@ -735,127 +984,13 @@ mutate(original_starwars,
 
 ```{r mutate-02, echo=FALSE}
 rmarkdown::paged_table(
-mutate(original_starwars, 
+mutate(big_starwars, 
             # create bmi
             bmi = mass / ((height / 100) ^ 2),
             # change bmi
             bmi = round(bmi, digits = 0)))
 ```
 
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-<br><br><br><br><br><br>
-
-# See the `mutate()` exercises for more examples!
-
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-<br><br><br><br><br><br>
-
-# Write clearer code with the pipe `%>%`
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# The pipe (`%>%`) 
-
-### The pipe comes from the `magrittr` package: 
-
-https://magrittr.tidyverse.org/
-
---
-
-### The pipe makes our code easier to read (and write) 
-
-### Create pipes easily with keyboard shortcuts
-
---
-
-.leftcol[.center[
-
-
-***Mac***
-
-#### `Cmd` + `Shift` + `M`
-
-]]
-
-
---
-
-.rightcol[.center[
-
-***Windows***
-
-#### `Crtl` + `Shift` + `M`
-
-]]
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# How the pipe (`%>%`) works 
-
---
-
-### Without the pipe, we have to constantly assign the output to new object:
-
---
-
-```{r pipe-00, fig.align='center', out.height='70%', out.width='70%', echo=FALSE}
-# copy_slide_images("pipe-00.png")
-knitr::include_graphics(path = "img/pipe-00.png")
-```
-
---
-
-### Or use nested functions:
-
---
-
-```{r pipe-01, fig.align='center', out.height='90%', out.width='90%', echo=FALSE}
-# copy_slide_images("pipe-01.png")
-knitr::include_graphics(path = "img/pipe-01.png")
-```
- 
-
----
-class: left, top
-background-image: url(img/dplyr.png)
-background-position: 93% 10%
-background-size: 6%
-
-# How the pipe (`%>%`) works
-
-### The pipe allows us to pass the output from functions left-to-right
-
---
-
-```{r pipe-03, fig.align='center', out.height='48%', out.width='48%', echo=FALSE}
-# copy_slide_images("pipe-03.png")
-knitr::include_graphics(path = "img/pipe-03.png")
-```
-
-.center[
-
-***`%>%` can be read as "then"***
-
-]
 
 
 ---
@@ -868,13 +1003,13 @@ background-size: 6%
 
 ### Review the code below and think about what each object contains:
 
-1. Filter `original_starwars` to only brown-haired characters over 100 cm tall  
+1. Filter `big_starwars` to only brown-haired characters over 100 cm tall  
 2. Create a `bmi` column using:  `mass / ((height / 100) ^ 2)`    
 3. Select `name`, `bmi`, and `homeworld`   
 4. Arrange the data by `bmi`, descending  
 
 ```{r separate-objects-no-run, eval=FALSE}
-object_01 <- filter(original_starwars, 
+object_01 <- filter(big_starwars, 
                     hair_color == "brown" & height > 100) 
 object_02 <- mutate(object_01, bmi = mass / ((height / 100) ^ 2))
 object_03 <- select(object_02, name, bmi, homeworld)
@@ -890,9 +1025,9 @@ background-size: 6%
 
 # Creating pipelines of functions
 
-### Re-write these functions into a pipeline, ending with a single output (`new_original_starwars`)
+### Re-write these functions into a pipeline, ending with a single output (`new_big_starwars`)
 
-1. Filter `original_starwars` to only brown-haired characters over 100 cm tall  
+1. Filter `big_starwars` to only brown-haired characters over 100 cm tall  
 2. Create a `bmi` column using:  `mass / ((height / 100) ^ 2)`    
 3. Select `name`, `bmi`, and `homeworld`   
 4. Arrange the data by `bmi`, descending 
@@ -900,11 +1035,11 @@ background-size: 6%
 --
 
 ```{r pipi-00-no-run, eval=FALSE}
-original_starwars %>% 
+big_starwars %>% 
   filter(hair_color == "_____" & height > ___) %>% 
   mutate(___ = mass / ((height / 100) ^ 2)) %>% 
   select(____, bmi, _________) %>% 
-  arrange(____(bmi)) -> new_original_starwars
+  arrange(____(bmi)) -> new_big_starwars
 ```
 
 ---
@@ -918,35 +1053,23 @@ background-size: 6%
 The answer is below:
 
 ```{r pipe-01-no-run, eval=FALSE}
-original_starwars %>% 
+big_starwars %>% 
   filter(hair_color == "brown" & height > 100) %>% 
   mutate(bmi = mass / ((height / 100) ^ 2)) %>% 
   select(name, bmi, homeworld) %>% 
-  arrange(desc(bmi)) -> new_original_starwars
-new_original_starwars
+  arrange(desc(bmi)) -> new_big_starwars
+new_big_starwars
 ```
 
 --
 
 ```{r pipe-01-table, echo=FALSE}
-rmarkdown::paged_table(original_starwars %>% 
+rmarkdown::paged_table(big_starwars %>% 
   filter(hair_color == "brown" & height > 100) %>% 
   mutate(bmi = mass / ((height / 100) ^ 2)) %>% 
   select(name, bmi, homeworld) %>% 
   arrange(desc(bmi)))
 ```
-
----
-class: inverse, center, middle
-background-image: url(img/dplyr.png)
-background-position: 50% 15%
-background-size: 20%
-
-<br><br><br><br><br><br>
-
-# See the `pipe` exercises for more examples!
-
-
 
 ---
 class: left, top
