@@ -12,7 +12,7 @@
 <meta name="author" content />
 
 
-<title>Week 5: ggplot2 part 1</title>
+<title>Introduction to Data Manipulation</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -362,187 +362,312 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">Week 5: ggplot2 part 1</h1>
+<h1 class="title toc-ignore">Introduction to Data Manipulation</h1>
 <h4 class="author"><Your Name></h4>
 
 </div>
 
 
-<p>In this assignment, we’re going to follow the steps in the first set
-of exercises for ggplot2. You can review the slides for this section <a href="https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1">here</a>,</p>
-<p>In all of the exercises below, the code chunks have been set to
-<code>eval=FALSE</code>. In order to get credit for this assignment,
-you’ll have to set each of them to <code>eval=TRUE</code> (or delete the
-<code>eval</code> argument).</p>
-<p>When you’ve reached the end of this document, click on the “Knit”
-icon in R Studio and review the output.</p>
-<p><strong>Edit only <Your Name> above and below this line.</strong></p>
-<hr />
-<div id="project-setup" class="section level1">
-<h1>Project setup</h1>
-<p>Follow the instructions for setting up your project with
-<code>goodenuffR</code> on the <a href="https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html">course
-website.</a></p>
-</div>
-<div id="load-the-packages" class="section level1">
-<h1>Load the packages</h1>
-<p>The main packages we’re going to use are <code>dplyr</code>,
-<code>tidyr</code>, and <code>ggplot2</code>. These are all part of the
-<code>tidyverse</code>, so we’ll import this package below:</p>
-<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;janitor&quot;, &quot;ggridges&quot;))
-library(tidyverse)
-library(janitor)
-library(ggridges)</code></pre>
-</div>
-<div id="import" class="section level1">
-<h1>Import</h1>
-<p>Import the data below</p>
-<pre class="r"><code>AppleMobRaw &lt;- readr::read_csv(&quot;https://bit.ly/3ALws1X&quot;)</code></pre>
-<p>Place the <code>AppleMobRaw</code> dataset in the code below to view
-the <code>head()</code> and <code>tail()</code></p>
-<pre class="r"><code>head(_____)</code></pre>
-<pre class="r"><code>tail(_____)</code></pre>
-<div id="tidy-the-datset" class="section level2">
-<h2>Tidy the datset</h2>
-<p>The code chunk below restructures the data into a long (tidy)
-format.</p>
-<pre class="r"><code>TidyApple &lt;- AppleMobRaw %&gt;% 
-  tidyr::pivot_longer(cols = -c(geo_type:country), 
-                      names_to = &quot;date&quot;, values_to = &quot;dir_request&quot;) %&gt;% 
-    # remove missing country and missing sub-region data
-  dplyr::filter(!is.na(country) &amp; !is.na(`sub-region`)) %&gt;% 
-  # format date
-  mutate(date = lubridate::ymd(date)) %&gt;% 
-  # change name of transportation types
-  rename(trans_type = transportation_type) %&gt;% 
-  # clean names 
-  janitor::clean_names() </code></pre>
-</div>
-<div id="counting" class="section level2">
-<h2>Counting</h2>
-<p>Use <code>dplyr::count</code> to count <code>trans_type</code> (sort
-the results)</p>
-<pre class="r"><code>TidyApple %&gt;% 
-  dplyr::count(_______, sort = _____)</code></pre>
-</div>
-</div>
-<div id="visualizing-distributions" class="section level1">
-<h1>Visualizing Distributions</h1>
-<p>It’s always a good idea to view each variable (or column) in a
-dataset independently before visualization their relationships. Single
-variable visualizations show us the ‘distribution’ of a variables
-values.</p>
-<div id="histograms" class="section level2">
-<h2>Histograms</h2>
-<p>Start by creating the labels for the graph.</p>
-<pre class="r"><code>lab_hist &lt;- labs(x = &quot;Apple directions requests&quot;,
-                 y = &quot;Count&quot;,
-     title = &quot;Distribution of Direction Requests&quot;,
-     subtitle = &quot;source: https://covid19.apple.com/mobility&quot;)</code></pre>
-<p>Create a histogram of direction requests using
-<code>dir_request</code></p>
-<pre class="r"><code>TidyApple %&gt;% ggplot() + 
-  geom_histogram(aes(x = ____________)) + 
-  lab_hist</code></pre>
-</div>
-<div id="adjusting-y-axes" class="section level2">
-<h2>Adjusting Y Axes</h2>
-<p>Add the <code>scales::comma</code> value to the
-<code>scale_y_continuous()</code> function.</p>
-<pre class="r"><code>library(scales)
-TidyApple %&gt;% ggplot() + 
-  geom_histogram(aes(x = dir_request)) + 
-  scale_y_continuous(labels = __________) +
-  lab_hist</code></pre>
-</div>
-<div id="histogram-shape" class="section level2">
-<h2>Histogram Shape</h2>
-<p>Set <code>bins</code> to <code>15</code>.</p>
-<pre class="r"><code>TidyApple %&gt;% ggplot() + 
-  geom_histogram(aes(x = dir_request), bins = __) + 
-  scale_y_continuous(labels = scales::comma) +
-  lab_hist</code></pre>
-<p>Set <code>bins</code> to <code>45</code> and assign it to
-<code>gg_hist45</code>.</p>
-<pre class="r"><code>TidyApple %&gt;% ggplot() + 
-  geom_histogram(aes(x = dir_request), bins = __) + 
-  scale_y_continuous(labels = scales::comma) +
-  lab_hist -&gt; _____________</code></pre>
-</div>
-<div id="density-plots" class="section level2">
-<h2>Density Plots</h2>
-<p>Create labels for the distribution of the directions request, filled
-by the levels of transportation type.</p>
-<pre class="r"><code>lab_density &lt;- labs(x = &quot;Apple directions requests&quot;,
-                    fill = &quot;Transit Type&quot;,
-     title = &quot;Distribution of Direction Requests vs. Transportation Type&quot;,
-     subtitle = &quot;source: https://covid19.apple.com/mobility&quot;)</code></pre>
-<p>Create a density plot of direction requests colored by the type of
-transportation.</p>
-<pre class="r"><code>TidyApple %&gt;% 
-  ggplot() +
-  geom_density(aes(x = __________, fill = __________)) + 
-  lab_density</code></pre>
-<p>Adjust the overlapping densities by setting <code>alpha</code> to
-<code>1/3</code>. Assign this plot to <code>gg_density</code>.</p>
-<pre class="r"><code>TidyApple %&gt;% 
-  ggplot() +
-  geom_density(aes(x = dir_request, fill = trans_type), 
-               alpha = __________) + 
-  
-  lab_density -&gt; __________</code></pre>
-</div>
-<div id="ridgeline-plots" class="section level2 tabset">
-<h2 class="tabset">Ridgeline Plots</h2>
-<p>Another option is a ridgeline plot (from the <code>ggridges</code>
-package). These display multiple densities.</p>
-<pre class="r"><code>lab_ridges &lt;- labs(
-     title = &quot;Direction Requests by Transportation Type&quot;,
-     subtitle = &quot;source: https://covid19.apple.com/mobility&quot;,
-     fill = &quot;Transit type&quot;,
-     x = &quot;Apple directions requests&quot;,
-     y = &quot;Transportation Types&quot;)</code></pre>
-<p>Set the <code>fill</code> argument to Transportation Types and the
-<code>alpha</code> to 1/5.</p>
-<pre class="r"><code>TidyApple %&gt;%  
-  ggplot() + 
-  geom_density_ridges(aes(x = dir_request, 
-                          y = trans_type, 
-                          fill = __________), 
-                      alpha = _/_) + 
-  lab_ridges</code></pre>
-</div>
-<div id="violin-plots" class="section level2">
-<h2>Violin Plots</h2>
-<p>Another alternative to the density plot is the violin plot.</p>
+<p>In this assignment, we’re going to cover how to use the
+<code>dplyr</code> package to manipulate data using the five primary
+verbs: glimpse, select, filter, arrange, mutate.</p>
+<p>To get credit for this assignment, you’ll need to</p>
+<ol style="list-style-type: decimal">
+<li>create a hw folder using the <code>goodenuffR</code> package:<br />
+</li>
+</ol>
 <ul>
-<li>assign <code>&quot;Apple directions requests&quot;</code> to the
-<code>x</code> axis</li>
-<li>assign <code>&quot;Transit Type&quot;</code> to the <code>y</code> axis</li>
+<li><code>goodenuffR::goodenuff_project(project_name = &quot;data-manipulation&quot;,</code>
+<code>folder_path = &quot;path/to/course/folder&quot;)</code><br />
+</li>
+<li><code>goodenuffR::goodenuff_files()</code><br />
+</li>
 </ul>
-<pre class="r"><code>lab_violin &lt;- labs(x = _________________________,
-                    y = _________________________,
-                   fill = &quot;Transit Type&quot;,
-     title = &quot;Distribution of Direction Requests vs. Transportation Type&quot;,
-     subtitle = &quot;source: https://covid19.apple.com/mobility&quot;)</code></pre>
-<p>Add a <code>geom_violin()</code> to the code below:</p>
-<pre class="r"><code>TidyApple %&gt;% 
-  ggplot() +
-  ____________(aes(y = dir_request, x = trans_type, 
-                  fill = trans_type)) + 
-  lab_violin</code></pre>
-<p>The great thing about <code>ggplot2</code>s layered syntax, is that
-we can add <code>geoms</code> with similar aesthetics to the same graph!
-For example, we can see how <code>geom_violin</code>s and
-<code>geom_boxplot</code>s are related by adding a
-<code>geom_boxplot()</code> layer to the graph above.</p>
-<pre class="r"><code>TidyApple %&gt;% 
-  ggplot() +
-  geom_violin(aes(y = dir_request, x = trans_type, 
-                  fill = trans_type), alpha = 1/5) + 
-  ___________(aes(y = dir_request, x = trans_type, 
-                   color = trans_type)) + 
-  lab_violin</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>successfully install the <code>dplyr</code> package,<br />
+</li>
+<li>Alter the code below and set the code chunks to
+<code>eval=TRUE</code></li>
+</ol>
+<p>Save this R Markdown file and name it with the following
+conventions:</p>
+<p><code>YYYY-MM-DD-LASTNAME-wk8-intro-to-data-manipulation.Rmd</code></p>
+<p><em>Replace the date (<code>YYYY-MM-DD</code>) and enter your last
+name (<code>LASTNAME</code>).</em></p>
+<p><strong>Edit only <code>&lt;Your Name&gt;</code> above and below this
+line.</strong></p>
+<hr />
+<div id="objectives" class="section level1">
+<h1>Objectives</h1>
+<p>This lesson outlines some common data manipulation tasks with
+<code>dplyr</code>:</p>
+<ol style="list-style-type: decimal">
+<li><code>select()</code> for columns<br />
+</li>
+<li><code>filter()</code> for rows<br />
+</li>
+<li><code>arrange()</code> for sorting<br />
+</li>
+<li><code>mutate()</code> for creating new columns</li>
+</ol>
+</div>
+<div id="materials" class="section level1">
+<h1>Materials</h1>
+<p>View the slides on the <a href="https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html">course
+website.</a></p>
+<p>Read more about <code>dplyr</code> <a href="https://dplyr.tidyverse.org/index.html">here</a> on the tidyverse
+website, or in the <a href="https://r4ds.had.co.nz/transform.html">Data
+Transformation</a> chapter of R for Data Science.</p>
+</div>
+<div id="load-packages" class="section level1">
+<h1>Load packages</h1>
+<p><code>dplyr</code> is part of the core <code>tidyverse</code>
+packages, so we install and load this meta-package below.</p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)
+library(tidyverse)</code></pre>
+</div>
+<div id="import-data" class="section level1">
+<h1>Import data</h1>
+<p>We’ll cover two methods for importing data into RStudio.</p>
+<ol style="list-style-type: decimal">
+<li>importing data from a package<br />
+</li>
+<li>Importing data using <code>params</code> in the YAML header</li>
+</ol>
+<p>We have the path to the <code>big_starwars</code> data stored in our
+<code>params</code>, but we will also go over how to load a smaller
+version of this dataset from <code>dplyr::starwars</code>.</p>
+<div id="importing-data-from-a-package" class="section level2">
+<h2>Importing data from a package</h2>
+<p>Below we import the <code>starwars</code> dataset from the
+<code>dplyr</code> package. This is similar to the way we’d access a
+function from a package (<code>dplyr::starwars</code>).</p>
+<pre class="r"><code>pkg_starwars &lt;- dplyr::starwars
+glimpse(pkg_starwars)</code></pre>
+</div>
+<div id="importing-data-using-params" class="section level2">
+<h2>Importing data using <code>params</code></h2>
+<p>We have the <code>params</code> list from our YAML header, which we
+can also use to import the data.</p>
+<pre class="yaml"><code>params: 
+  data_file: !r file.path(&quot;https://bit.ly/big-sw&quot;)</code></pre>
+<pre class="r"><code>big_starwars &lt;- readr::read_csv(params$data_file)
+glimpse(big_starwars)</code></pre>
+<p>Check to see which columns are different using <code>names()</code>
+and <code>setdiff()</code>:</p>
+<pre class="r"><code>setdiff(x = names(big_starwars), 
+        y = names(pkg_starwars))</code></pre>
+<p>These are the columns in <code>big_starwars</code> that aren’t in
+<code>pkg_starwars</code>.</p>
+</div>
+</div>
+<div id="the-pipe" class="section level1">
+<h1>The pipe</h1>
+<p>Clearly written code makes it easier for machines <em>and</em> humans
+to read. The pipe (<code>%&gt;%</code>) from <code>magrittr</code>
+package allows us to chain together multiple operations into functional
+‘pipelines’.</p>
+<div id="function-pipelines" class="section level2 tabset">
+<h2 class="tabset">Function pipelines</h2>
+<p>The pipe (<code>%&gt;%</code>) takes an object that comes before it,
+and it drops the object into the function that comes after it.</p>
+<div id="exercise" class="section level3">
+<h3>exercise</h3>
+<p>Rewrite the code below to use the pipe</p>
+<pre class="r"><code>select(filter(
+          big_starwars, mass &lt; ___), 
+              ____, hair_color, _______, homeworld)</code></pre>
+</div>
+<div id="solution" class="section level3">
+<h3>solution</h3>
+<p>This actually wouldn’t matter what order it was in–both would return
+the same result.</p>
+<pre class="r"><code>big_starwars %&gt;% 
+  filter(mass &lt; 100) %&gt;% 
+  select(name, hair_color, species, homeworld)</code></pre>
+</div>
+<div id="exercise-1" class="section level3">
+<h3>exercise</h3>
+<p>Perform the following operations <em>without</em> using the pipe.</p>
+<ol style="list-style-type: decimal">
+<li>create object <code>x</code> with three values, (<code>3</code>,
+<code>7</code>, <code>12</code>)<br />
+</li>
+<li>get the <code>mean()</code> of <code>x</code>, and store it in
+<code>mean_x</code><br />
+</li>
+<li>take the squared root of <code>mean_x</code></li>
+</ol>
+<pre class="r"><code># 1) 
+_ &lt;- c(_, _, __)
+# 2) 
+mean_x &lt;- ____(x)
+# 3 
+sqrt(______)</code></pre>
+</div>
+<div id="soluton" class="section level3">
+<h3>soluton</h3>
+<p>This returns a vector, not a <code>tibble</code>.</p>
+<pre class="r"><code># 1) 
+x &lt;- c(3, 7, 12)
+# 2) 
+mean_x &lt;- mean(x)
+# 3 
+sqrt(mean_x)</code></pre>
+</div>
+<div id="exercise-2" class="section level3">
+<h3>exercise</h3>
+<p>Perform the following operations <em>with</em> the pipe.</p>
+<ol style="list-style-type: decimal">
+<li>create object <code>x</code> with three values, (<code>3</code>,
+<code>7</code>, <code>12</code>)<br />
+</li>
+<li>get the <code>mean()</code> of <code>x</code>, and store it in
+<code>mean_x</code><br />
+</li>
+<li>take the squared root of <code>mean_x</code></li>
+</ol>
+<pre class="r"><code>c(_, _, __) %&gt;% 
+  ____() %&gt;% 
+  ____()</code></pre>
+</div>
+<div id="solution-1" class="section level3">
+<h3>solution</h3>
+<p>Note that we can create a pipeline without even creating an
+object.</p>
+<pre class="r"><code>c(3, 7, 12) %&gt;% 
+  mean() %&gt;% 
+  sqrt()</code></pre>
+</div>
+</div>
+</div>
+<div id="dplyr-verbs" class="section level1">
+<h1><code>dplyr</code> verbs</h1>
+<p>This section covers four common <code>dplyr</code> verbs for data
+manipulation:</p>
+<ul>
+<li><code>select</code>: works on
+<strong>columns</strong>/<strong>variables</strong></li>
+<li><code>filter</code>: works on
+<strong>rows</strong>/<strong>observations</strong><br />
+</li>
+<li><code>arrange</code>: sorts values (either ascending or descending
+(with <code>desc()</code>))</li>
+<li><code>mutate</code>: creates new columns/variables (or changes
+format/type/class of existing variables)</li>
+</ul>
+</div>
+<div id="selecting-columns" class="section level1">
+<h1>Selecting columns</h1>
+<p>We’ll start with some exercises that demonstrate how to pick a subset
+of columns from your dataset using the <code>select()</code> function
+(and helpers!).</p>
+<p>The general form of <code>select()</code> is below:</p>
+<pre class="r"><code>select(.data = , ... = )</code></pre>
+<div id="selecting-columns-1" class="section level2 tabset">
+<h2 class="tabset">Selecting columns</h2>
+<p>Alter the code below to select just the <code>name</code> and
+<code>homeoworld</code> column:</p>
+<pre class="r"><code>select(big_starwars, name, species, homeworld)</code></pre>
+<div id="solution-2" class="section level3">
+<h3>solution</h3>
+<pre class="r"><code>select(big_starwars, name, homeworld)</code></pre>
+</div>
+<div id="exercise-3" class="section level3">
+<h3>exercise</h3>
+<p>Select only the columns starting with the letter <code>h</code>.</p>
+<pre class="r"><code>select(big_starwars, starts_with(&quot;_&quot;))</code></pre>
+</div>
+<div id="solution-3" class="section level3">
+<h3>solution</h3>
+<pre class="r"><code>select(big_starwars, starts_with(&quot;h&quot;))</code></pre>
+</div>
+</div>
+<div id="filtering-rows" class="section level2 tabset">
+<h2 class="tabset">Filtering rows</h2>
+<p>These are some additional exercises for <code>filter()</code>ing
+data.</p>
+<div id="exercise-4" class="section level3">
+<h3>exercise</h3>
+<p>Change the code below so <code>big_starwars</code> only includes the
+droids.</p>
+<pre class="r"><code>filter(big_starwars, species == &quot;____&quot;)</code></pre>
+</div>
+<div id="solution-4" class="section level3">
+<h3>solution</h3>
+<pre class="r"><code>filter(big_starwars, species == &quot;Droid&quot;)</code></pre>
+</div>
+<div id="exercise-5" class="section level3">
+<h3>exercise</h3>
+<p>Change the code below so <code>big_starwars</code> only includes data
+from the <code>homeworld</code>s of <code>Tatooine</code> and
+<code>Alderaan</code></p>
+<pre class="r"><code>filter(big_starwars, 
+       homeworld %in% c(&quot;________&quot;, &quot;________&quot;))</code></pre>
+</div>
+<div id="solution-5" class="section level3">
+<h3>solution</h3>
+<pre class="r"><code>filter(big_starwars, 
+       homeworld %in% c(&quot;Tatooine&quot;, &quot;Alderaan&quot;))</code></pre>
+</div>
+</div>
+<div id="arranging-data" class="section level2 tabset">
+<h2 class="tabset">Arranging data</h2>
+<p><code>arrange()</code> sorts variables on their content, numeric or
+character.</p>
+<div id="exercise-6" class="section level3">
+<h3>exercise</h3>
+<p>Sort <code>big_starwars</code> according to the
+<code>hair_color</code>.</p>
+<pre class="r"><code>arrange(big_starwars, &quot;____ _____&quot;)</code></pre>
+</div>
+<div id="solution-6" class="section level3">
+<h3>solution</h3>
+<p>Note that the missing values are sorted to the bottom.</p>
+<pre class="r"><code>arrange(big_starwars, hair_color)</code></pre>
+</div>
+<div id="exercise-7" class="section level3">
+<h3>exercise</h3>
+<p>Sort <code>big_starwars</code> by <code>height</code> and
+<code>mass</code>, descending.</p>
+<pre class="r"><code>arrange(big_starwars, desc(______, ____))</code></pre>
+</div>
+<div id="solution-7" class="section level3">
+<h3>solution</h3>
+<p>Including two variables is helpful if some of the values ‘tie’.</p>
+<pre class="r"><code>arrange(big_starwars, desc(height, mass))</code></pre>
+</div>
+</div>
+<div id="mutate-columns" class="section level2 tabset">
+<h2 class="tabset">Mutate columns</h2>
+<p><code>mutate()</code> can create new columns, or change existing
+columns.</p>
+<div id="exercise-8" class="section level3">
+<h3>exercise</h3>
+<p>Alter the code below to create a <code>bmi</code> column for
+<code>starwars</code> characters in <code>big_starwars</code>.</p>
+<pre class="r"><code>mutate(big_starwars, 
+       bmi = ____ / ((______ / 100) ^ 2))</code></pre>
+</div>
+<div id="solution-8" class="section level3">
+<h3>solution</h3>
+<p>Note the use of parentheses here.</p>
+<pre class="r"><code>mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2))</code></pre>
+</div>
+<div id="exercise-9" class="section level3">
+<h3>exercise</h3>
+<p>Round the new <code>bmi</code> variable to 1 digit.</p>
+<pre class="r"><code>mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2),
+       bmi = _____(___, digits = _))</code></pre>
+</div>
+<div id="solution-9" class="section level3">
+<h3>solution</h3>
+<pre class="r"><code>mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2),
+       bmi = round(bmi, digits = 1))</code></pre>
+</div>
 </div>
 </div>
 

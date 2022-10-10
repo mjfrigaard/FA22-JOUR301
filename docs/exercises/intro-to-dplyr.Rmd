@@ -11,16 +11,17 @@ output:
 always_allow_html: true
 
 params: 
-  data_file: !r dplyr::starwars
+  data_file: !r file.path("https://bit.ly/big-sw")
 ---
 
 ```{r , echo = FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, 
                       comment = "#>", 
-                      error = TRUE)
+                      error = TRUE,
+                      eval = TRUE)
 library(tidyverse)
 library(skimr)
-original_starwars <- read_csv("https://bit.ly/3qgjqSC")
+big_starwars <- read_csv("https://bit.ly/big-sw")
 ```
 
 
@@ -55,9 +56,9 @@ We'll cover two methods for importing data into RStudio.
 1. importing data from a package    
 2. Importing data using `params` in the YAML header  
 
-We have the path to the `starwars` data stored in our `params`, but we will also go over how to build this dataset from `dplyr::starwars`. 
+We have the path to the `big_starwars` data stored in our `params`, but we will also go over how to load a smaller version of this dataset from `dplyr::starwars`. 
 
-## Importing data from the `dplyr` package
+## Importing data from a package
 
 Below we import the `starwars` dataset from the `dplyr` package. This is similar to the way we'd access a function from a package (`dplyr::starwars`).
 
@@ -72,20 +73,22 @@ We have the `params` list from our YAML header, which we can also use to import 
 
 ```{.yaml}
 params: 
-  data_file: !r dplyr::starwars
+  data_file: !r file.path("https://bit.ly/big-sw")
 ```
 
 ```{r import-params}
-params_starwars <- params$data_file
-glimpse(params_starwars)
+big_starwars <- readr::read_csv(params$data_file)
+glimpse(big_starwars)
 ```
 
-Check to see if these two are identical: 
+Check to see which columns are different using `names()` and `setdiff()`: 
 
 ```{r identical-starwars}
-identical(x = pkg_starwars, y = params_starwars)
+setdiff(x = names(big_starwars), 
+        y = names(pkg_starwars))
 ```
 
+These are the columns in `big_starwars` that aren't in `pkg_starwars`. 
 
 # `dplyr` verbs 
 
@@ -96,7 +99,7 @@ This section covers four common `dplyr` verbs for data manipulation:
 - `arrange`: sorts values (either ascending or descending (with `desc()`))
 - `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
 
-## Selecting columns 
+# Selecting columns 
 
 We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
 
@@ -107,19 +110,19 @@ select(.data = , ... = )
 ```
 
 
-## Select exercise 1
+## Selecting columns 
 
 Alter the code below to select just the `name` and `homeoworld` column:
 
-```{r select-ex-01, eval=FALSE}
-select(original_starwars, name, species, homeworld)
+```{r select-ex-01, eval=TRUE}
+select(big_starwars, name, species, homeworld)
 ```
 
 
 ### solution
 
 ```{r select-sol-01}
-select(original_starwars, name, homeworld)
+select(big_starwars, name, homeworld)
 ```
 
 
@@ -128,14 +131,14 @@ select(original_starwars, name, homeworld)
 Select only the columns starting with the letter `h`. 
 
 ```{r select-ex-02, eval=FALSE}
-select(original_starwars, starts_with("_"))
+select(big_starwars, starts_with("_"))
 ```
 
 
 ### solution 
 
 ```{r select-sol-02}
-select(original_starwars, starts_with("h"))
+select(big_starwars, starts_with("h"))
 ```
 
 ## Filtering rows {.tabset}
@@ -144,32 +147,32 @@ These are some additional exercises for `filter()`ing data.
 
 ### exercise 
 
-Change the code below so `original_starwars` only includes the droids. 
+Change the code below so `big_starwars` only includes the droids. 
 
 ```{r filter-ex-01, eval=FALSE}
-filter(original_starwars, species == "____")
+filter(big_starwars, species == "____")
 ```
 
 
 ### solution 
 
 ```{r filter-sol-01}
-filter(original_starwars, species == "Droid")
+filter(big_starwars, species == "Droid")
 ```
 
 ### exercise 
 
-Change the code below so `original_starwars` only includes data from the `homeworld`s of `Tatooine` and `Alderaan`
+Change the code below so `big_starwars` only includes data from the `homeworld`s of `Tatooine` and `Alderaan`
 
 ```{r filter-ex-02, eval=FALSE}
-filter(original_starwars, 
+filter(big_starwars, 
        homeworld %in% c("________", "________"))
 ```
 
 ### solution 
 
 ```{r filter-sol-02}
-filter(original_starwars, 
+filter(big_starwars, 
        homeworld %in% c("Tatooine", "Alderaan"))
 ```
 
@@ -180,10 +183,10 @@ filter(original_starwars,
 
 ### exercise  
 
-Sort `original_starwars` according to the `hair_color`. 
+Sort `big_starwars` according to the `hair_color`. 
 
 ```{r arrange-ex-01, eval=FALSE}
-arrange(original_starwars, "____ _____")
+arrange(big_starwars, "____ _____")
 ```
 
 
@@ -192,15 +195,15 @@ arrange(original_starwars, "____ _____")
 Note that the missing values are sorted to the bottom. 
 
 ```{r arrange-sol-01}
-arrange(original_starwars, hair_color)
+arrange(big_starwars, hair_color)
 ```
 
 
 ### exercise 
 
-Sort `original_starwars` by `height` and `mass`, descending. 
+Sort `big_starwars` by `height` and `mass`, descending. 
 ```{r arrange-ex-02, eval=FALSE}
-arrange(original_starwars, desc(______, ____))
+arrange(big_starwars, desc(______, ____))
 ```
 
 ### solution 
@@ -208,7 +211,7 @@ arrange(original_starwars, desc(______, ____))
 Including two variables is helpful if some of the values 'tie'. 
 
 ```{r arrange-sol-02}
-arrange(original_starwars, desc(height, mass))
+arrange(big_starwars, desc(height, mass))
 ```
 
 ## Mutate columns {.tabset}
@@ -217,10 +220,10 @@ arrange(original_starwars, desc(height, mass))
 
 ### exercise 
 
-Alter the code below to create a `bmi` column for `starwars` characters in `original_starwars`.
+Alter the code below to create a `bmi` column for `starwars` characters in `big_starwars`.
 
 ```{r mutate-ex-01, eval=FALSE}
-mutate(original_starwars, 
+mutate(big_starwars, 
        bmi = ____ / ((______ / 100) ^ 2))
 ```
 
@@ -229,7 +232,7 @@ mutate(original_starwars,
 Note the use of parentheses here. 
 
 ```{r mutate-sol-01}
-mutate(original_starwars, 
+mutate(big_starwars, 
        bmi = mass / ((height / 100) ^ 2))
 ```
 
@@ -238,7 +241,7 @@ mutate(original_starwars,
 Round the new `bmi` variable to 1 digit. 
 
 ```{r mutate-ex-02, eval=FALSE}
-mutate(original_starwars, 
+mutate(big_starwars, 
        bmi = mass / ((height / 100) ^ 2),
        bmi = _____(___, digits = _))
 ```
@@ -246,7 +249,7 @@ mutate(original_starwars,
 ### solution 
 
 ```{r mutate-sol-02}
-mutate(original_starwars, 
+mutate(big_starwars, 
        bmi = mass / ((height / 100) ^ 2),
        bmi = round(bmi, digits = 1))
 ```
@@ -265,7 +268,7 @@ Rewrite the code below to use the pipe
 
 ```{r pipe-ex-01, eval=FALSE}
 select(filter(
-          original_starwars, mass < ___), 
+          big_starwars, mass < ___), 
               ____, hair_color, _______, homeworld)
 ```
 
@@ -274,7 +277,7 @@ select(filter(
 This actually wouldn't matter what order it was in--both would return the same result. 
 
 ```{r pipe-sol-01}
-original_starwars %>% 
+big_starwars %>% 
   filter(mass < 100) %>% 
   select(name, hair_color, species, homeworld)
 ```

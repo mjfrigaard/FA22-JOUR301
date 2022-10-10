@@ -1,15 +1,14 @@
 ---
+#############################################################
+#                                                           #
+#   Click on "Knit" in RStudio to render this worksheet.    #
+#                                                           #
+#############################################################
 title: "Introduction to Data Manipulation"
 description: |
   "*introduction to wrangling data*"
-output:
-  distill::distill_article:
-    toc: true
-    toc_float: yes
-    toc_depth: 2
-
-always_allow_html: true
-
+author: "<Your Name>"
+output: html_document
 params: 
   data_file: !r file.path("https://bit.ly/big-sw")
 ---
@@ -18,12 +17,30 @@ params:
 knitr::opts_chunk$set(collapse = TRUE, 
                       comment = "#>", 
                       error = TRUE,
-                      eval = TRUE)
+                      eval = FALSE)
 library(tidyverse)
-library(skimr)
-big_starwars <- read_csv("https://bit.ly/big-sw")
 ```
 
+In this assignment, we're going to cover how to use the `dplyr` package to manipulate data using the five primary verbs: glimpse, select, filter, arrange, mutate. 
+
+To get credit for this assignment, you'll need to 
+
+1) create a hw folder using the `goodenuffR` package:   
+  - `goodenuffR::goodenuff_project(project_name = "data-manipulation", `
+     `folder_path = "path/to/course/folder")`   
+  - `goodenuffR::goodenuff_files()`   
+2) successfully install the `dplyr` package,   
+3) Alter the code below and set the code chunks to `eval=TRUE`   
+
+Save this R Markdown file and name it with the following conventions: 
+
+`YYYY-MM-DD-LASTNAME-wk8-intro-to-data-manipulation.Rmd`
+
+*Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
+
+**Edit only `<Your Name>` above and below this line.**
+
+---------------------------------------------
 
 # Objectives 
 
@@ -89,170 +106,6 @@ setdiff(x = names(big_starwars),
 ```
 
 These are the columns in `big_starwars` that aren't in `pkg_starwars`. 
-
-# `dplyr` verbs 
-
-This section covers four common `dplyr` verbs for data manipulation: 
-
-- `select`: works on **columns**/**variables**
-- `filter`: works on **rows**/**observations**  
-- `arrange`: sorts values (either ascending or descending (with `desc()`))
-- `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
-
-# Selecting columns 
-
-We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
-
-The general form of `select()` is below: 
-
-```{r select-args, eval=FALSE}
-select(.data = , ... = )
-```
-
-
-## Selecting columns 
-
-Alter the code below to select just the `name` and `homeoworld` column:
-
-```{r select-ex-01, eval=TRUE}
-select(big_starwars, name, species, homeworld)
-```
-
-
-### solution
-
-```{r select-sol-01}
-select(big_starwars, name, homeworld)
-```
-
-
-### exercise 
-
-Select only the columns starting with the letter `h`. 
-
-```{r select-ex-02, eval=FALSE}
-select(big_starwars, starts_with("_"))
-```
-
-
-### solution 
-
-```{r select-sol-02}
-select(big_starwars, starts_with("h"))
-```
-
-## Filtering rows {.tabset}
-
-These are some additional exercises for `filter()`ing data. 
-
-### exercise 
-
-Change the code below so `big_starwars` only includes the droids. 
-
-```{r filter-ex-01, eval=FALSE}
-filter(big_starwars, species == "____")
-```
-
-
-### solution 
-
-```{r filter-sol-01}
-filter(big_starwars, species == "Droid")
-```
-
-### exercise 
-
-Change the code below so `big_starwars` only includes data from the `homeworld`s of `Tatooine` and `Alderaan`
-
-```{r filter-ex-02, eval=FALSE}
-filter(big_starwars, 
-       homeworld %in% c("________", "________"))
-```
-
-### solution 
-
-```{r filter-sol-02}
-filter(big_starwars, 
-       homeworld %in% c("Tatooine", "Alderaan"))
-```
-
-
-## Arranging data {.tabset}
-
-`arrange()` sorts variables on their content, numeric or character. 
-
-### exercise  
-
-Sort `big_starwars` according to the `hair_color`. 
-
-```{r arrange-ex-01, eval=FALSE}
-arrange(big_starwars, "____ _____")
-```
-
-
-### solution  
-
-Note that the missing values are sorted to the bottom. 
-
-```{r arrange-sol-01}
-arrange(big_starwars, hair_color)
-```
-
-
-### exercise 
-
-Sort `big_starwars` by `height` and `mass`, descending. 
-```{r arrange-ex-02, eval=FALSE}
-arrange(big_starwars, desc(______, ____))
-```
-
-### solution 
-
-Including two variables is helpful if some of the values 'tie'. 
-
-```{r arrange-sol-02}
-arrange(big_starwars, desc(height, mass))
-```
-
-## Mutate columns {.tabset}
-
-`mutate()` can create new columns, or change existing columns.  
-
-### exercise 
-
-Alter the code below to create a `bmi` column for `starwars` characters in `big_starwars`.
-
-```{r mutate-ex-01, eval=FALSE}
-mutate(big_starwars, 
-       bmi = ____ / ((______ / 100) ^ 2))
-```
-
-### solution 
-
-Note the use of parentheses here. 
-
-```{r mutate-sol-01}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2))
-```
-
-### exercise 
-
-Round the new `bmi` variable to 1 digit. 
-
-```{r mutate-ex-02, eval=FALSE}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2),
-       bmi = _____(___, digits = _))
-```
-
-### solution 
-
-```{r mutate-sol-02}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2),
-       bmi = round(bmi, digits = 1))
-```
 
 # The pipe 
 
@@ -337,3 +190,169 @@ c(3, 7, 12) %>%
   mean() %>% 
   sqrt()
 ```
+
+
+# `dplyr` verbs 
+
+This section covers four common `dplyr` verbs for data manipulation: 
+
+- `select`: works on **columns**/**variables**
+- `filter`: works on **rows**/**observations**  
+- `arrange`: sorts values (either ascending or descending (with `desc()`))
+- `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
+
+# Selecting columns 
+
+We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
+
+The general form of `select()` is below: 
+
+```{r select-args, eval=FALSE}
+select(.data = , ... = )
+```
+
+
+## Selecting columns {.tabset}
+
+Alter the code below to select just the `name` and `homeoworld` column:
+
+```{r select-ex-01, eval=FALSE}
+select(big_starwars, name, species, homeworld)
+```
+
+
+### solution
+
+```{r select-sol-01, eval=FALSE}
+select(big_starwars, name, homeworld)
+```
+
+
+### exercise 
+
+Select only the columns starting with the letter `h`. 
+
+```{r select-ex-02, eval=FALSE}
+select(big_starwars, starts_with("_"))
+```
+
+
+### solution 
+
+```{r select-sol-02, eval=FALSE}
+select(big_starwars, starts_with("h"))
+```
+
+## Filtering rows {.tabset}
+
+These are some additional exercises for `filter()`ing data. 
+
+### exercise 
+
+Change the code below so `big_starwars` only includes the droids. 
+
+```{r filter-ex-01, eval=FALSE}
+filter(big_starwars, species == "____")
+```
+
+
+### solution 
+
+```{r filter-sol-01, eval=FALSE}
+filter(big_starwars, species == "Droid")
+```
+
+### exercise 
+
+Change the code below so `big_starwars` only includes data from the `homeworld`s of `Tatooine` and `Alderaan`
+
+```{r filter-ex-02, eval=FALSE}
+filter(big_starwars, 
+       homeworld %in% c("________", "________"))
+```
+
+### solution 
+
+```{r filter-sol-02, eval=FALSE}
+filter(big_starwars, 
+       homeworld %in% c("Tatooine", "Alderaan"))
+```
+
+
+## Arranging data {.tabset}
+
+`arrange()` sorts variables on their content, numeric or character. 
+
+### exercise  
+
+Sort `big_starwars` according to the `hair_color`. 
+
+```{r arrange-ex-01, eval=FALSE}
+arrange(big_starwars, "____ _____")
+```
+
+
+### solution  
+
+Note that the missing values are sorted to the bottom. 
+
+```{r arrange-sol-01, eval=FALSE}
+arrange(big_starwars, hair_color)
+```
+
+
+### exercise 
+
+Sort `big_starwars` by `height` and `mass`, descending. 
+```{r arrange-ex-02, eval=FALSE}
+arrange(big_starwars, desc(______, ____))
+```
+
+### solution 
+
+Including two variables is helpful if some of the values 'tie'. 
+
+```{r arrange-sol-02, eval=FALSE}
+arrange(big_starwars, desc(height, mass))
+```
+
+## Mutate columns {.tabset}
+
+`mutate()` can create new columns, or change existing columns.  
+
+### exercise 
+
+Alter the code below to create a `bmi` column for `starwars` characters in `big_starwars`.
+
+```{r mutate-ex-01, eval=FALSE}
+mutate(big_starwars, 
+       bmi = ____ / ((______ / 100) ^ 2))
+```
+
+### solution 
+
+Note the use of parentheses here. 
+
+```{r mutate-sol-01, eval=FALSE}
+mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2))
+```
+
+### exercise 
+
+Round the new `bmi` variable to 1 digit. 
+
+```{r mutate-ex-02, eval=FALSE}
+mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2),
+       bmi = _____(___, digits = _))
+```
+
+### solution 
+
+```{r mutate-sol-02, eval=FALSE}
+mutate(big_starwars, 
+       bmi = mass / ((height / 100) ^ 2),
+       bmi = round(bmi, digits = 1))
+```
+

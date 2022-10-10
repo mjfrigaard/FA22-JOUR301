@@ -9,11 +9,11 @@
   <meta name="generator" content="distill" />
 
   <style type="text/css">
-
-body {
-visibility: hidden;
-}
-</style>
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
 
  <!--radix_placeholder_import_source-->
  <!--/radix_placeholder_import_source-->
@@ -35,55 +35,55 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-{ counter-reset: source-line 0; }
+  { counter-reset: source-line 0; }
 pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
+  { position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-color: #aaaaaa;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-{ color: #00769e; background-color: #f1f3f5; }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span { color: #00769e; } 
-code span.al { color: #ad0000; } 
-code span.an { color: #5e5e5e; } 
-code span.at { color: #657422; } 
-code span.bn { color: #ad0000; } 
-code span.bu { } 
-code span.cf { color: #00769e; } 
-code span.ch { color: #20794d; } 
-code span.cn { color: #8f5902; } 
-code span.co { color: #5e5e5e; } 
-code span.cv { color: #5e5e5e; font-style: italic; } 
-code span.do { color: #5e5e5e; font-style: italic; } 
-code span.dt { color: #ad0000; } 
-code span.dv { color: #ad0000; } 
-code span.er { color: #ad0000; } 
-code span.ex { } 
-code span.fl { color: #ad0000; } 
-code span.fu { color: #4758ab; } 
-code span.im { } 
-code span.in { color: #5e5e5e; } 
-code span.kw { color: #00769e; } 
-code span.op { color: #5e5e5e; } 
-code span.ot { color: #00769e; } 
-code span.pp { color: #ad0000; } 
-code span.sc { color: #5e5e5e; } 
-code span.ss { color: #20794d; } 
-code span.st { color: #20794d; } 
-code span.va { color: #111111; } 
-code span.vs { color: #20794d; } 
-code span.wa { color: #5e5e5e; font-style: italic; } 
+code span { color: #00769e; } /* Normal */
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #657422; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #00769e; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #00769e; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #00769e; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
 
@@ -94,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; }
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-10-03" />
-  <meta property="article:created" itemprop="dateCreated" content="2022-10-03" />
+  <meta property="article:published" itemprop="datePublished" content="2022-10-10" />
+  <meta property="article:created" itemprop="dateCreated" content="2022-10-10" />
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Introduction to Data Manipulation" />
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; }
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","always_allow_html","params","date"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Data Manipulation"]},{"type":"character","attributes":{},"value":["\"*introduction to wrangling data*\"\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"logical","attributes":{},"value":[true]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["data_file"]}},"value":[{"type":"character","attributes":{},"value":["dplyr::starwars"]}]},{"type":"character","attributes":{},"value":["10-03-2022"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","always_allow_html","params","date"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Data Manipulation"]},{"type":"character","attributes":{},"value":["\"*introduction to wrangling data*\"\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"logical","attributes":{},"value":[true]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["data_file"]}},"value":[{"type":"character","attributes":{},"value":["file.path(\"https://bit.ly/big-sw\")"]}]},{"type":"character","attributes":{},"value":["10-10-2022"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -124,745 +124,916 @@ code span.wa { color: #5e5e5e; font-style: italic; }
   <!--radix_placeholder_distill-->
 
   <style type="text/css">
-body {
-background-color: white;
-}
-.pandoc-table {
-width: 100%;
-}
-.pandoc-table>caption {
-margin-bottom: 10px;
-}
-.pandoc-table th:not([align]) {
-text-align: left;
-}
-.pagedtable-footer {
-font-size: 15px;
-}
-d-byline .byline {
-grid-template-columns: 2fr 2fr;
-}
-d-byline .byline h3 {
-margin-block-start: 1.5em;
-}
-d-byline .byline .authors-affiliations h3 {
-margin-block-start: 0.5em;
-}
-.authors-affiliations .orcid-id {
-width: 16px;
-height:16px;
-margin-left: 4px;
-margin-right: 4px;
-vertical-align: middle;
-padding-bottom: 2px;
-}
-d-title .dt-tags {
-margin-top: 1em;
-grid-column: text;
-}
-.dt-tags .dt-tag {
-text-decoration: none;
-display: inline-block;
-color: rgba(0,0,0,0.6);
-padding: 0em 0.4em;
-margin-right: 0.5em;
-margin-bottom: 0.4em;
-font-size: 70%;
-border: 1px solid rgba(0,0,0,0.2);
-border-radius: 3px;
-text-transform: uppercase;
-font-weight: 500;
-}
-d-article table.gt_table td,
-d-article table.gt_table th {
-border-bottom: none;
-font-size: 100%;
-}
-.html-widget {
-margin-bottom: 2.0em;
-}
-.l-screen-inset {
-padding-right: 16px;
-}
-.l-screen .caption {
-margin-left: 10px;
-}
-.shaded {
-background: rgb(247, 247, 247);
-padding-top: 20px;
-padding-bottom: 20px;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-.shaded .html-widget {
-margin-bottom: 0;
-border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.shaded .shaded-content {
-background: white;
-}
-.text-output {
-margin-top: 0;
-line-height: 1.5em;
-}
-.hidden {
-display: none !important;
-}
-d-article {
-padding-top: 2.5rem;
-padding-bottom: 30px;
-}
-d-appendix {
-padding-top: 30px;
-}
-d-article>p>img {
-width: 100%;
-}
-d-article h2 {
-margin: 1rem 0 1.5rem 0;
-}
-d-article h3 {
-margin-top: 1.5rem;
-}
-d-article iframe {
-border: 1px solid rgba(0, 0, 0, 0.1);
-margin-bottom: 2.0em;
-width: 100%;
-}
 
-d-article div.sourceCode code,
-d-article pre code {
-font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-}
-d-article pre,
-d-article div.sourceCode,
-d-article div.sourceCode pre {
-overflow: auto;
-}
-d-article div.sourceCode {
-background-color: white;
-}
-d-article div.sourceCode pre {
-padding-left: 10px;
-font-size: 12px;
-border-left: 2px solid rgba(0,0,0,0.1);
-}
-d-article pre {
-font-size: 12px;
-color: black;
-background: none;
-margin-top: 0;
-text-align: left;
-white-space: pre;
-word-spacing: normal;
-word-break: normal;
-word-wrap: normal;
-line-height: 1.5;
--moz-tab-size: 4;
--o-tab-size: 4;
-tab-size: 4;
--webkit-hyphens: none;
--moz-hyphens: none;
--ms-hyphens: none;
-hyphens: none;
-}
-d-article pre a {
-border-bottom: none;
-}
-d-article pre a:hover {
-border-bottom: none;
-text-decoration: underline;
-}
-d-article details {
-grid-column: text;
-margin-bottom: 0.8em;
-}
-@media(min-width: 768px) {
-d-article pre,
-d-article div.sourceCode,
-d-article div.sourceCode pre {
-overflow: visible !important;
-}
-d-article div.sourceCode pre {
-padding-left: 18px;
-font-size: 14px;
-}
-d-article pre {
-font-size: 14px;
-}
-}
-figure img.external {
-background: white;
-border: 1px solid rgba(0, 0, 0, 0.1);
-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
-padding: 18px;
-box-sizing: border-box;
-}
+  body {
+    background-color: white;
+  }
 
-.d-contents {
-grid-column: text;
-color: rgba(0,0,0,0.8);
-font-size: 0.9em;
-padding-bottom: 1em;
-margin-bottom: 1em;
-padding-bottom: 0.5em;
-margin-bottom: 1em;
-padding-left: 0.25em;
-justify-self: start;
-}
-@media(min-width: 1000px) {
-.d-contents.d-contents-float {
-height: 0;
-grid-column-start: 1;
-grid-column-end: 4;
-justify-self: center;
-padding-right: 3em;
-padding-left: 2em;
-}
-}
-.d-contents nav h3 {
-font-size: 18px;
-margin-top: 0;
-margin-bottom: 1em;
-}
-.d-contents li {
-list-style-type: none
-}
-.d-contents nav > ul {
-padding-left: 0;
-}
-.d-contents ul {
-padding-left: 1em
-}
-.d-contents nav ul li {
-margin-top: 0.6em;
-margin-bottom: 0.2em;
-}
-.d-contents nav a {
-font-size: 13px;
-border-bottom: none;
-text-decoration: none
-color: rgba(0, 0, 0, 0.8);
-}
-.d-contents nav a:hover {
-text-decoration: underline solid rgba(0, 0, 0, 0.6)
-}
-.d-contents nav > ul > li > a {
-font-weight: 600;
-}
-.d-contents nav > ul > li > ul {
-font-weight: inherit;
-}
-.d-contents nav > ul > li > ul > li {
-margin-top: 0.2em;
-}
-.d-contents nav ul {
-margin-top: 0;
-margin-bottom: 0.25em;
-}
-.d-article-with-toc h2:nth-child(2) {
-margin-top: 0;
-}
+  .pandoc-table {
+    width: 100%;
+  }
 
-.figure {
-position: relative;
-margin-bottom: 2.5em;
-margin-top: 1.5em;
-}
-.figure .caption {
-color: rgba(0, 0, 0, 0.6);
-font-size: 12px;
-line-height: 1.5em;
-}
-.figure img.external {
-background: white;
-border: 1px solid rgba(0, 0, 0, 0.1);
-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
-padding: 18px;
-box-sizing: border-box;
-}
-.figure .caption a {
-color: rgba(0, 0, 0, 0.6);
-}
-.figure .caption b,
-.figure .caption strong, {
-font-weight: 600;
-color: rgba(0, 0, 0, 1.0);
-}
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
 
-d-article .citation {
-color: inherit;
-cursor: inherit;
-}
-div.hanging-indent{
-margin-left: 1em; text-indent: -1em;
-}
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
 
-.tippy-box[data-theme~=light-border] {
-background-color: rgba(250, 250, 250, 0.95);
-}
-.tippy-content > p {
-margin-bottom: 0;
-padding: 2px;
-}
+  .pagedtable-footer {
+    font-size: 15px;
+  }
 
-@media(min-width: 1000px) {
-.base-grid,
-distill-header,
-d-title,
-d-abstract,
-d-article,
-d-appendix,
-distill-appendix,
-d-byline,
-d-footnote-list,
-d-citation-list,
-distill-footer {
-grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
-grid-column-gap: 16px;
-}
-.grid {
-grid-column-gap: 16px;
-}
-d-article {
-font-size: 1.06rem;
-line-height: 1.7em;
-}
-figure .caption, .figure .caption, figure figcaption {
-font-size: 13px;
-}
-}
-@media(min-width: 1180px) {
-.base-grid,
-distill-header,
-d-title,
-d-abstract,
-d-article,
-d-appendix,
-distill-appendix,
-d-byline,
-d-footnote-list,
-d-citation-list,
-distill-footer {
-grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
-grid-column-gap: 32px;
-}
-.grid {
-grid-column-gap: 32px;
-}
-}
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
 
-d-appendix .citation-appendix,
-.d-appendix .citation-appendix {
-font-size: 11px;
-line-height: 15px;
-border-left: 1px solid rgba(0, 0, 0, 0.1);
-padding-left: 18px;
-border: 1px solid rgba(0,0,0,0.1);
-background: rgba(0, 0, 0, 0.02);
-padding: 10px 18px;
-border-radius: 3px;
-color: rgba(150, 150, 150, 1);
-overflow: hidden;
-margin-top: -12px;
-white-space: pre-wrap;
-word-wrap: break-word;
-}
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
 
-d-appendix {
-contain: layout style;
-font-size: 0.8em;
-line-height: 1.7em;
-margin-top: 60px;
-margin-bottom: 0;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-color: rgba(0,0,0,0.5);
-padding-top: 60px;
-padding-bottom: 48px;
-}
-d-appendix h3 {
-grid-column: page-start / text-start;
-font-size: 15px;
-font-weight: 500;
-margin-top: 1em;
-margin-bottom: 0;
-color: rgba(0,0,0,0.65);
-}
-d-appendix h3 + * {
-margin-top: 1em;
-}
-d-appendix ol {
-padding: 0 0 0 15px;
-}
-@media (min-width: 768px) {
-d-appendix ol {
-padding: 0 0 0 30px;
-margin-left: -30px;
-}
-}
-d-appendix li {
-margin-bottom: 1em;
-}
-d-appendix a {
-color: rgba(0, 0, 0, 0.6);
-}
-d-appendix > * {
-grid-column: text;
-}
-d-appendix > d-footnote-list,
-d-appendix > d-citation-list,
-d-appendix > distill-appendix {
-grid-column: screen;
-}
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
 
-d-footnote-list {
-contain: layout style;
-}
-d-footnote-list > * {
-grid-column: text;
-}
-d-footnote-list a.footnote-backlink {
-color: rgba(0,0,0,0.3);
-padding-left: 0.5em;
-}
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
 
-.anchorjs-link {
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
 
-text-decoration: none;
-border-bottom: none;
-}
-*:hover > .anchorjs-link {
-margin-left: -1.125em !important;
-text-decoration: none;
-border-bottom: none;
-}
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
 
-.social_footer {
-margin-top: 30px;
-margin-bottom: 0;
-color: rgba(0,0,0,0.67);
-}
-.disqus-comments {
-margin-right: 30px;
-}
-.disqus-comment-count {
-border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-cursor: pointer;
-}
-#disqus_thread {
-margin-top: 30px;
-}
-.article-sharing a {
-border-bottom: none;
-margin-right: 8px;
-}
-.article-sharing a:hover {
-border-bottom: none;
-}
-.sidebar-section.subscribe {
-font-size: 12px;
-line-height: 1.6em;
-}
-.subscribe p {
-margin-bottom: 0.5em;
-}
-.article-footer .subscribe {
-font-size: 15px;
-margin-top: 45px;
-}
-.sidebar-section.custom {
-font-size: 12px;
-line-height: 1.6em;
-}
-.custom p {
-margin-bottom: 0.5em;
-}
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+    font-size: 100%;
+  }
 
-.layout-listing d-title, .layout-listing .d-title {
-display: none;
-}
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
 
-.posts-with-sidebar {
-padding-left: 45px;
-padding-right: 45px;
-}
-.posts-list .description h2,
-.posts-list .description p {
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-}
-.posts-list .description h2 {
-font-weight: 700;
-border-bottom: none;
-padding-bottom: 0;
-}
-.posts-list h2.post-tag {
-border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-padding-bottom: 12px;
-}
-.posts-list {
-margin-top: 60px;
-margin-bottom: 24px;
-}
-.posts-list .post-preview {
-text-decoration: none;
-overflow: hidden;
-display: block;
-border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-padding: 24px 0;
-}
-.post-preview-last {
-border-bottom: none !important;
-}
-.posts-list .posts-list-caption {
-grid-column: screen;
-font-weight: 400;
-}
-.posts-list .post-preview h2 {
-margin: 0 0 6px 0;
-line-height: 1.2em;
-font-style: normal;
-font-size: 24px;
-}
-.posts-list .post-preview p {
-margin: 0 0 12px 0;
-line-height: 1.4em;
-font-size: 16px;
-}
-.posts-list .post-preview .thumbnail {
-box-sizing: border-box;
-margin-bottom: 24px;
-position: relative;
-max-width: 500px;
-}
-.posts-list .post-preview img {
-width: 100%;
-display: block;
-}
-.posts-list .metadata {
-font-size: 12px;
-line-height: 1.4em;
-margin-bottom: 18px;
-}
-.posts-list .metadata > * {
-display: inline-block;
-}
-.posts-list .metadata .publishedDate {
-margin-right: 2em;
-}
-.posts-list .metadata .dt-authors {
-display: block;
-margin-top: 0.3em;
-margin-right: 2em;
-}
-.posts-list .dt-tags {
-display: block;
-line-height: 1em;
-}
-.posts-list .dt-tags .dt-tag {
-display: inline-block;
-color: rgba(0,0,0,0.6);
-padding: 0.3em 0.4em;
-margin-right: 0.2em;
-margin-bottom: 0.4em;
-font-size: 60%;
-border: 1px solid rgba(0,0,0,0.2);
-border-radius: 3px;
-text-transform: uppercase;
-font-weight: 500;
-}
-.posts-list img {
-opacity: 1;
-}
-.posts-list img[data-src] {
-opacity: 0;
-}
-.posts-more {
-clear: both;
-}
-.posts-sidebar {
-font-size: 16px;
-}
-.posts-sidebar h3 {
-font-size: 16px;
-margin-top: 0;
-margin-bottom: 0.5em;
-font-weight: 400;
-text-transform: uppercase;
-}
-.sidebar-section {
-margin-bottom: 30px;
-}
-.categories ul {
-list-style-type: none;
-margin: 0;
-padding: 0;
-}
-.categories li {
-color: rgba(0, 0, 0, 0.8);
-margin-bottom: 0;
-}
-.categories li>a {
-border-bottom: none;
-}
-.categories li>a:hover {
-border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-}
-.categories .active {
-font-weight: 600;
-}
-.categories .category-count {
-color: rgba(0, 0, 0, 0.4);
-}
-@media(min-width: 768px) {
-.posts-list .post-preview h2 {
-font-size: 26px;
-}
-.posts-list .post-preview .thumbnail {
-float: right;
-width: 30%;
-margin-bottom: 0;
-}
-.posts-list .post-preview .description {
-float: left;
-width: 45%;
-}
-.posts-list .post-preview .metadata {
-float: left;
-width: 20%;
-margin-top: 8px;
-}
-.posts-list .post-preview p {
-margin: 0 0 12px 0;
-line-height: 1.5em;
-font-size: 16px;
-}
-.posts-with-sidebar .posts-list {
-float: left;
-width: 75%;
-}
-.posts-with-sidebar .posts-sidebar {
-float: right;
-width: 20%;
-margin-top: 60px;
-padding-top: 24px;
-padding-bottom: 24px;
-}
-}
+  .l-screen-inset {
+    padding-right: 16px;
+  }
 
-.downlevel {
-line-height: 1.6em;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-margin: 0;
-}
-.downlevel .d-title {
-padding-top: 6rem;
-padding-bottom: 1.5rem;
-}
-.downlevel .d-title h1 {
-font-size: 50px;
-font-weight: 700;
-line-height: 1.1em;
-margin: 0 0 0.5rem;
-}
-.downlevel .d-title p {
-font-weight: 300;
-font-size: 1.2rem;
-line-height: 1.55em;
-margin-top: 0;
-}
-.downlevel .d-byline {
-padding-top: 0.8em;
-padding-bottom: 0.8em;
-font-size: 0.8rem;
-line-height: 1.8em;
-}
-.downlevel .section-separator {
-border: none;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-.downlevel .d-article {
-font-size: 1.06rem;
-line-height: 1.7em;
-padding-top: 1rem;
-padding-bottom: 2rem;
-}
-.downlevel .d-appendix {
-padding-left: 0;
-padding-right: 0;
-max-width: none;
-font-size: 0.8em;
-line-height: 1.7em;
-margin-bottom: 0;
-color: rgba(0,0,0,0.5);
-padding-top: 40px;
-padding-bottom: 48px;
-}
-.downlevel .footnotes ol {
-padding-left: 13px;
-}
-.downlevel .base-grid,
-.downlevel .distill-header,
-.downlevel .d-title,
-.downlevel .d-abstract,
-.downlevel .d-article,
-.downlevel .d-appendix,
-.downlevel .distill-appendix,
-.downlevel .d-byline,
-.downlevel .d-footnote-list,
-.downlevel .d-citation-list,
-.downlevel .distill-footer,
-.downlevel .appendix-bottom,
-.downlevel .posts-container {
-padding-left: 40px;
-padding-right: 40px;
-}
-@media(min-width: 768px) {
-.downlevel .base-grid,
-.downlevel .distill-header,
-.downlevel .d-title,
-.downlevel .d-abstract,
-.downlevel .d-article,
-.downlevel .d-appendix,
-.downlevel .distill-appendix,
-.downlevel .d-byline,
-.downlevel .d-footnote-list,
-.downlevel .d-citation-list,
-.downlevel .distill-footer,
-.downlevel .appendix-bottom,
-.downlevel .posts-container {
-padding-left: 150px;
-padding-right: 150px;
-max-width: 900px;
-}
-}
-.downlevel pre code {
-display: block;
-border-left: 2px solid rgba(0, 0, 0, .1);
-padding: 0 0 0 20px;
-font-size: 14px;
-}
-.downlevel code, .downlevel pre {
-color: black;
-background: none;
-font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-text-align: left;
-white-space: pre;
-word-spacing: normal;
-word-break: normal;
-word-wrap: normal;
-line-height: 1.5;
--moz-tab-size: 4;
--o-tab-size: 4;
-tab-size: 4;
--webkit-hyphens: none;
--moz-hyphens: none;
--ms-hyphens: none;
-hyphens: none;
-}
-.downlevel .posts-list .post-preview {
-color: inherit;
-}
-</style>
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
 
   <script type="application/javascript">
 
@@ -2339,7 +2510,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Introduction to Data Manipulation","description":"\"*introduction to wrangling data*\"","authors":[],"publishedDate":"2022-10-03T00:00:00.000-07:00"}
+{"title":"Introduction to Data Manipulation","description":"\"*introduction to wrangling data*\"","authors":[],"publishedDate":"2022-10-10T00:00:00.000-07:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2366,13 +2537,13 @@ distill-header .nav a {
 <li><a href="#load-packages" id="toc-load-packages">Load packages</a></li>
 <li><a href="#import-data" id="toc-import-data">Import data</a>
 <ul>
-<li><a href="#importing-data-from-the-dplyr-package" id="toc-importing-data-from-the-dplyr-package">Importing data from the <code>dplyr</code> package</a></li>
+<li><a href="#importing-data-from-a-package" id="toc-importing-data-from-a-package">Importing data from a package</a></li>
 <li><a href="#importing-data-using-params" id="toc-importing-data-using-params">Importing data using <code>params</code></a></li>
 </ul></li>
-<li><a href="#dplyr-verbs" id="toc-dplyr-verbs"><code>dplyr</code> verbs</a>
+<li><a href="#dplyr-verbs" id="toc-dplyr-verbs"><code>dplyr</code> verbs</a></li>
+<li><a href="#selecting-columns" id="toc-selecting-columns">Selecting columns</a>
 <ul>
-<li><a href="#selecting-columns" id="toc-selecting-columns">Selecting columns</a></li>
-<li><a href="#select-exercise-1" id="toc-select-exercise-1">Select exercise 1</a></li>
+<li><a href="#selecting-columns-1" id="toc-selecting-columns-1">Selecting columns</a></li>
 <li><a href="#filtering-rows" id="toc-filtering-rows">Filtering rows</a></li>
 <li><a href="#arranging-data" id="toc-arranging-data">Arranging data</a></li>
 <li><a href="#mutate-columns" id="toc-mutate-columns">Mutate columns</a></li>
@@ -2413,8 +2584,8 @@ distill-header .nav a {
 </li>
 <li>Importing data using <code>params</code> in the YAML header</li>
 </ol>
-<p>We have the path to the <code>starwars</code> data stored in our <code>params</code>, but we will also go over how to build this dataset from <code>dplyr::starwars</code>.</p>
-<h2 id="importing-data-from-the-dplyr-package">Importing data from the <code>dplyr</code> package</h2>
+<p>We have the path to the <code>big_starwars</code> data stored in our <code>params</code>, but we will also go over how to load a smaller version of this dataset from <code>dplyr::starwars</code>.</p>
+<h2 id="importing-data-from-a-package">Importing data from a package</h2>
 <p>Below we import the <code>starwars</code> dataset from the <code>dplyr</code> package. This is similar to the way we’d access a function from a package (<code>dplyr::starwars</code>).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2441,36 +2612,43 @@ distill-header .nav a {
 <h2 id="importing-data-using-params">Importing data using <code>params</code></h2>
 <p>We have the <code>params</code> list from our YAML header, which we can also use to import the data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_file</span><span class="kw">:</span><span class="at"> !r dplyr::starwars</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_file</span><span class="kw">:</span><span class="at"> !r file.path(&quot;https://bit.ly/big-sw&quot;)</span></span></code></pre></div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">params_starwars</span> <span class="op">&lt;-</span> <span class="va">params</span><span class="op">$</span><span class="va">data_file</span></span>
-<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">params_starwars</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">params</span><span class="op">$</span><span class="va">data_file</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">big_starwars</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; Rows: 87
-#&gt; Columns: 14
-#&gt; $ name       &lt;chr&gt; &quot;Luke Skywalker&quot;, &quot;C-3PO&quot;, &quot;R2-D2&quot;, &quot;Darth Vader&quot;…
-#&gt; $ height     &lt;int&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 1…
-#&gt; $ mass       &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0,…
-#&gt; $ hair_color &lt;chr&gt; &quot;blond&quot;, NA, NA, &quot;none&quot;, &quot;brown&quot;, &quot;brown, grey&quot;, …
-#&gt; $ skin_color &lt;chr&gt; &quot;fair&quot;, &quot;gold&quot;, &quot;white, blue&quot;, &quot;white&quot;, &quot;light&quot;, …
-#&gt; $ eye_color  &lt;chr&gt; &quot;blue&quot;, &quot;yellow&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;brown&quot;, &quot;blue…
-#&gt; $ birth_year &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24…
-#&gt; $ sex        &lt;chr&gt; &quot;male&quot;, &quot;none&quot;, &quot;none&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;,…
-#&gt; $ gender     &lt;chr&gt; &quot;masculine&quot;, &quot;masculine&quot;, &quot;masculine&quot;, &quot;masculine…
-#&gt; $ homeworld  &lt;chr&gt; &quot;Tatooine&quot;, &quot;Tatooine&quot;, &quot;Naboo&quot;, &quot;Tatooine&quot;, &quot;Ald…
-#&gt; $ species    &lt;chr&gt; &quot;Human&quot;, &quot;Droid&quot;, &quot;Droid&quot;, &quot;Human&quot;, &quot;Human&quot;, &quot;Hum…
-#&gt; $ films      &lt;list&gt; &lt;&quot;The Empire Strikes Back&quot;, &quot;Revenge of the Sith…
-#&gt; $ vehicles   &lt;list&gt; &lt;&quot;Snowspeeder&quot;, &quot;Imperial Speeder Bike&quot;&gt;, &lt;&gt;, &lt;&gt;…
-#&gt; $ starships  &lt;list&gt; &lt;&quot;X-wing&quot;, &quot;Imperial shuttle&quot;&gt;, &lt;&gt;, &lt;&gt;, &quot;TIE Adv…</code></pre>
+<pre><code>#&gt; Rows: 82
+#&gt; Columns: 18
+#&gt; $ name          &lt;chr&gt; &quot;Luke Skywalker&quot;, &quot;C-3PO&quot;, &quot;R2-D2&quot;, &quot;Darth Vad…
+#&gt; $ height        &lt;dbl&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182…
+#&gt; $ mass          &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32…
+#&gt; $ hair_color    &lt;chr&gt; &quot;blond&quot;, NA, NA, &quot;none&quot;, &quot;brown&quot;, &quot;brown, grey…
+#&gt; $ skin_color    &lt;chr&gt; &quot;fair&quot;, &quot;gold&quot;, &quot;white, blue&quot;, &quot;white&quot;, &quot;light…
+#&gt; $ eye_color     &lt;chr&gt; &quot;blue&quot;, &quot;yellow&quot;, &quot;red&quot;, &quot;yellow&quot;, &quot;brown&quot;, &quot;b…
+#&gt; $ birth_year    &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA,…
+#&gt; $ gender        &lt;chr&gt; &quot;masculine&quot;, &quot;masculine&quot;, &quot;masculine&quot;, &quot;mascul…
+#&gt; $ homeworld     &lt;chr&gt; &quot;Tatooine&quot;, &quot;Tatooine&quot;, &quot;Naboo&quot;, &quot;Tatooine&quot;, &quot;…
+#&gt; $ species       &lt;chr&gt; &quot;Human&quot;, &quot;Droid&quot;, &quot;Droid&quot;, &quot;Human&quot;, &quot;Human&quot;, &quot;…
+#&gt; $ sex           &lt;chr&gt; &quot;male&quot;, &quot;none&quot;, &quot;none&quot;, &quot;male&quot;, &quot;female&quot;, &quot;mal…
+#&gt; $ species_class &lt;chr&gt; &quot;mammal&quot;, &quot;artificial&quot;, &quot;artificial&quot;, &quot;mammal&quot;…
+#&gt; $ species_desig &lt;chr&gt; &quot;sentient&quot;, &quot;sentient&quot;, &quot;sentient&quot;, &quot;sentient&quot;…
+#&gt; $ vehicle       &lt;chr&gt; &quot;X-wing, Imperial shuttle, Snowspeeder, Imperi…
+#&gt; $ hw_climate    &lt;chr&gt; &quot;arid&quot;, &quot;arid&quot;, &quot;temperate&quot;, &quot;arid&quot;, &quot;temperat…
+#&gt; $ hw_gravity    &lt;chr&gt; &quot;1 standard&quot;, &quot;1 standard&quot;, &quot;1 standard&quot;, &quot;1 s…
+#&gt; $ hw_terrain    &lt;chr&gt; &quot;desert&quot;, &quot;desert&quot;, &quot;grassy hills, swamps, for…
+#&gt; $ hw_pop        &lt;dbl&gt; 2.0e+05, 2.0e+05, 4.5e+09, 2.0e+05, 2.0e+09, 2…</code></pre>
 </div>
-<p>Check to see if these two are identical:</p>
+<p>Check to see which columns are different using <code>names()</code> and <code>setdiff()</code>:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pkg_starwars</span>, y <span class="op">=</span> <span class="va">params_starwars</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">setdiff</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">big_starwars</span><span class="op">)</span>, </span>
+<span>        y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pkg_starwars</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; [1] TRUE</code></pre>
+<pre><code>#&gt; [1] &quot;species_class&quot; &quot;species_desig&quot; &quot;vehicle&quot;       &quot;hw_climate&quot;   
+#&gt; [5] &quot;hw_gravity&quot;    &quot;hw_terrain&quot;    &quot;hw_pop&quot;</code></pre>
 </div>
+<p>These are the columns in <code>big_starwars</code> that aren’t in <code>pkg_starwars</code>.</p>
 <h1 id="dplyr-verbs"><code>dplyr</code> verbs</h1>
 <p>This section covers four common <code>dplyr</code> verbs for data manipulation:</p>
 <ul>
@@ -2480,7 +2658,7 @@ distill-header .nav a {
 <li><code>arrange</code>: sorts values (either ascending or descending (with <code>desc()</code>))</li>
 <li><code>mutate</code>: creates new columns/variables (or changes format/type/class of existing variables)</li>
 </ul>
-<h2 id="selecting-columns">Selecting columns</h2>
+<h1 id="selecting-columns">Selecting columns</h1>
 <p>We’ll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the <code>select()</code> function (and helpers!).</p>
 <p>The general form of <code>select()</code> is below:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2488,126 +2666,182 @@ distill-header .nav a {
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>.data <span class="op">=</span> , ... <span class="op">=</span> <span class="op">)</span></span></code></pre>
 </div>
 </div>
-<h2 id="select-exercise-1">Select exercise 1</h2>
+<h2 id="selecting-columns-1">Selecting columns</h2>
 <p>Alter the code below to select just the <code>name</code> and <code>homeoworld</code> column:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="va">name</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">name</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
 </div>
+<pre><code>#&gt; # A tibble: 82 × 3
+#&gt;    name               species homeworld
+#&gt;    &lt;chr&gt;              &lt;chr&gt;   &lt;chr&gt;    
+#&gt;  1 Luke Skywalker     Human   Tatooine 
+#&gt;  2 C-3PO              Droid   Tatooine 
+#&gt;  3 R2-D2              Droid   Naboo    
+#&gt;  4 Darth Vader        Human   Tatooine 
+#&gt;  5 Leia Organa        Human   Alderaan 
+#&gt;  6 Owen Lars          Human   Tatooine 
+#&gt;  7 Beru Whitesun lars Human   Tatooine 
+#&gt;  8 R5-D4              Droid   Tatooine 
+#&gt;  9 Biggs Darklighter  Human   Tatooine 
+#&gt; 10 Obi-Wan Kenobi     Human   Stewjon  
+#&gt; # … with 72 more rows</code></pre>
 </div>
 <h3 id="solution">solution</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="va">name</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">name</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 6 × 2
-#&gt;   name           homeworld
-#&gt;   &lt;chr&gt;          &lt;chr&gt;    
-#&gt; 1 Luke Skywalker Tatooine 
-#&gt; 2 C-3PO          Tatooine 
-#&gt; 3 R2-D2          Naboo    
-#&gt; 4 Leia Organa    Alderaan 
-#&gt; 5 Chewbacca      Kashyyyk 
-#&gt; 6 Han Solo       Corellia</code></pre>
+<pre><code>#&gt; # A tibble: 82 × 2
+#&gt;    name               homeworld
+#&gt;    &lt;chr&gt;              &lt;chr&gt;    
+#&gt;  1 Luke Skywalker     Tatooine 
+#&gt;  2 C-3PO              Tatooine 
+#&gt;  3 R2-D2              Naboo    
+#&gt;  4 Darth Vader        Tatooine 
+#&gt;  5 Leia Organa        Alderaan 
+#&gt;  6 Owen Lars          Tatooine 
+#&gt;  7 Beru Whitesun lars Tatooine 
+#&gt;  8 R5-D4              Tatooine 
+#&gt;  9 Biggs Darklighter  Tatooine 
+#&gt; 10 Obi-Wan Kenobi     Stewjon  
+#&gt; # … with 72 more rows</code></pre>
 </div>
 <h3 id="exercise">exercise</h3>
 <p>Select only the columns starting with the letter <code>h</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;_&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;_&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <h3 id="solution-1">solution</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;h&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;h&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 6 × 3
-#&gt;   height hair_color homeworld
-#&gt;    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;    
-#&gt; 1    172 blond      Tatooine 
-#&gt; 2    167 &lt;NA&gt;       Tatooine 
-#&gt; 3     96 &lt;NA&gt;       Naboo    
-#&gt; 4    150 brown      Alderaan 
-#&gt; 5    228 brown      Kashyyyk 
-#&gt; 6    180 brown      Corellia</code></pre>
+<pre><code>#&gt; # A tibble: 82 × 7
+#&gt;    height hair_color    homeworld hw_climate hw_gravity hw_te…¹ hw_pop
+#&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;
+#&gt;  1    172 blond         Tatooine  arid       1 standard desert   2  e5
+#&gt;  2    167 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
+#&gt;  3     96 &lt;NA&gt;          Naboo     temperate  1 standard grassy…  4.5e9
+#&gt;  4    202 none          Tatooine  arid       1 standard desert   2  e5
+#&gt;  5    150 brown         Alderaan  temperate  1 standard grassl…  2  e9
+#&gt;  6    178 brown, grey   Tatooine  arid       1 standard desert   2  e5
+#&gt;  7    165 brown         Tatooine  arid       1 standard desert   2  e5
+#&gt;  8     97 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
+#&gt;  9    183 black         Tatooine  arid       1 standard desert   2  e5
+#&gt; 10    182 auburn, white Stewjon   temperate  1 standard grass   NA    
+#&gt; # … with 72 more rows, and abbreviated variable name ¹​hw_terrain</code></pre>
 </div>
 <h2 class="tabset" id="filtering-rows">Filtering rows</h2>
 <p>These are some additional exercises for <code>filter()</code>ing data.</p>
 <h3 id="exercise-1">exercise</h3>
-<p>Change the code below so <code>original_starwars</code> only includes the droids.</p>
+<p>Change the code below so <code>big_starwars</code> only includes the droids.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;____&quot;</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;____&quot;</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <h3 id="solution-2">solution</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 2 × 6
-#&gt;   name  height  mass hair_color species homeworld
-#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;    
-#&gt; 1 C-3PO    167    75 &lt;NA&gt;       Droid   Tatooine 
-#&gt; 2 R2-D2     96    32 &lt;NA&gt;       Droid   Naboo</code></pre>
+<pre><code>#&gt; # A tibble: 5 × 18
+#&gt;   name   height  mass hair_co…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt; 1 C-3PO     167    75 &lt;NA&gt;      gold    yellow      112 mascu… Tatooi…
+#&gt; 2 R2-D2      96    32 &lt;NA&gt;      white,… red          33 mascu… Naboo  
+#&gt; 3 R5-D4      97    32 &lt;NA&gt;      white,… red          NA mascu… Tatooi…
+#&gt; 4 IG-88     200   140 none      metal   red          15 mascu… &lt;NA&gt;   
+#&gt; 5 R4-P17     96    NA none      silver… red, b…      NA femin… &lt;NA&gt;   
+#&gt; # … with 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 </div>
 <h3 id="exercise-2">exercise</h3>
-<p>Change the code below so <code>original_starwars</code> only includes data from the <code>homeworld</code>s of <code>Tatooine</code> and <code>Alderaan</code></p>
+<p>Change the code below so <code>big_starwars</code> only includes data from the <code>homeworld</code>s of <code>Tatooine</code> and <code>Alderaan</code></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">original_starwars</span>, </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
 <span>       <span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;________&quot;</span>, <span class="st">&quot;________&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <h3 id="solution-3">solution</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">original_starwars</span>, </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
 <span>       <span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Tatooine&quot;</span>, <span class="st">&quot;Alderaan&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 3 × 6
-#&gt;   name           height  mass hair_color species homeworld
-#&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;    
-#&gt; 1 Luke Skywalker    172    77 blond      Human   Tatooine 
-#&gt; 2 C-3PO             167    75 &lt;NA&gt;       Droid   Tatooine 
-#&gt; 3 Leia Organa       150    49 brown      Human   Alderaan</code></pre>
+<pre><code>#&gt; # A tibble: 13 × 18
+#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
+#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
+#&gt;  3 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
+#&gt;  4 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
+#&gt;  5 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
+#&gt;  6 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
+#&gt;  7 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
+#&gt;  8 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
+#&gt;  9 Anakin…    188    84 blond   fair    blue       41.9 mascu… Tatooi…
+#&gt; 10 Shmi S…    163    NA black   fair    brown      72   femin… Tatooi…
+#&gt; 11 Cliegg…    183    NA brown   fair    blue       82   mascu… Tatooi…
+#&gt; 12 Bail P…    191    NA black   tan     brown      67   mascu… Aldera…
+#&gt; 13 Raymus…    188    79 brown   light   brown      NA   mascu… Aldera…
+#&gt; # … with 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 </div>
 <h2 class="tabset" id="arranging-data">Arranging data</h2>
 <p><code>arrange()</code> sorts variables on their content, numeric or character.</p>
 <h3 id="exercise-3">exercise</h3>
-<p>Sort <code>original_starwars</code> according to the <code>hair_color</code>.</p>
+<p>Sort <code>big_starwars</code> according to the <code>hair_color</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="st">&quot;____ _____&quot;</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="st">&quot;____ _____&quot;</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <h3 id="solution-4">solution</h3>
 <p>Note that the missing values are sorted to the bottom.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="va">hair_color</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">hair_color</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 6 × 6
-#&gt;   name           height  mass hair_color species homeworld
-#&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;    
-#&gt; 1 Luke Skywalker    172    77 blond      Human   Tatooine 
-#&gt; 2 Leia Organa       150    49 brown      Human   Alderaan 
-#&gt; 3 Chewbacca         228   112 brown      Wookiee Kashyyyk 
-#&gt; 4 Han Solo          180    80 brown      Human   Corellia 
-#&gt; 5 C-3PO             167    75 &lt;NA&gt;       Droid   Tatooine 
-#&gt; 6 R2-D2              96    32 &lt;NA&gt;       Droid   Naboo</code></pre>
+<pre><code>#&gt; # A tibble: 82 × 18
+#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt;  1 Mon Mo…    150  NA   auburn  fair    blue       48   femin… Chandr…
+#&gt;  2 Wilhuf…    180  NA   auburn… fair    blue       64   mascu… Eriadu 
+#&gt;  3 Obi-Wa…    182  77   auburn… fair    blue-g…    57   mascu… Stewjon
+#&gt;  4 Biggs …    183  84   black   light   brown      24   mascu… Tatooi…
+#&gt;  5 Boba F…    183  78.2 black   fair    brown      31.5 mascu… Kamino 
+#&gt;  6 Lando …    177  79   black   dark    brown      31   mascu… Socorro
+#&gt;  7 Watto      137  NA   black   blue, … yellow     NA   mascu… Toydar…
+#&gt;  8 Quarsh…    183  NA   black   dark    brown      62   mascu… Naboo  
+#&gt;  9 Shmi S…    163  NA   black   fair    brown      72   femin… Tatooi…
+#&gt; 10 Eeth K…    171  NA   black   brown   brown      NA   mascu… Iridon…
+#&gt; # … with 72 more rows, 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 </div>
 <h3 id="exercise-4">exercise</h3>
-Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>, descending.
+Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, descending.
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(original_starwars, <span class="fu">desc</span>(______, ____))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(big_starwars, <span class="fu">desc</span>(______, ____))</span></code></pre></div>
 </div>
 <h3 id="solution-5">solution</h3>
 <p>Including two variables is helpful if some of the values ‘tie’.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">original_starwars</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">height</span>, <span class="va">mass</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">height</span>, <span class="va">mass</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <pre><code>#&gt; Error in `arrange()`:
 #&gt; ! `desc()` must be called with exactly one argument.</code></pre>
@@ -2615,51 +2849,69 @@ Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>
 <h2 class="tabset" id="mutate-columns">Mutate columns</h2>
 <p><code>mutate()</code> can create new columns, or change existing columns.</p>
 <h3 id="exercise-5">exercise</h3>
-<p>Alter the code below to create a <code>bmi</code> column for <code>starwars</code> characters in <code>original_starwars</code>.</p>
+<p>Alter the code below to create a <code>bmi</code> column for <code>starwars</code> characters in <code>big_starwars</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(original_starwars, </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> ____ <span class="sc">/</span> ((______ <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(big_starwars, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> ____ <span class="sc">/</span> ((______ <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>))</span></code></pre></div>
 </div>
 <h3 id="solution-6">solution</h3>
 <p>Note the use of parentheses here.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">original_starwars</span>, </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
 <span>       bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 6 × 7
-#&gt;   name           height  mass hair_color species homeworld   bmi
-#&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;
-#&gt; 1 Luke Skywalker    172    77 blond      Human   Tatooine   26.0
-#&gt; 2 C-3PO             167    75 &lt;NA&gt;       Droid   Tatooine   26.9
-#&gt; 3 R2-D2              96    32 &lt;NA&gt;       Droid   Naboo      34.7
-#&gt; 4 Leia Organa       150    49 brown      Human   Alderaan   21.8
-#&gt; 5 Chewbacca         228   112 brown      Wookiee Kashyyyk   21.5
-#&gt; 6 Han Solo          180    80 brown      Human   Corellia   24.7</code></pre>
+<pre><code>#&gt; # A tibble: 82 × 19
+#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
+#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
+#&gt;  3 R2-D2       96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo  
+#&gt;  4 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
+#&gt;  5 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
+#&gt;  6 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
+#&gt;  7 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
+#&gt;  8 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
+#&gt;  9 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
+#&gt; 10 Obi-Wa…    182    77 auburn… fair    blue-g…    57   mascu… Stewjon
+#&gt; # … with 72 more rows, 10 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, bmi &lt;dbl&gt;, and abbreviated variable names
+#&gt; #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 </div>
 <h3 id="exercise-6">exercise</h3>
 <p>Round the new <code>bmi</code> variable to 1 digit.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(original_starwars, </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> mass <span class="sc">/</span> ((height <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> <span class="fu">_____</span>(___, <span class="at">digits =</span> _))</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(big_starwars, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> mass <span class="sc">/</span> ((height <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> <span class="fu">_____</span>(___, <span class="at">digits =</span> _))</span></code></pre></div>
 </div>
 <h3 id="solution-7">solution</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">original_starwars</span>, </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
 <span>       bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>       bmi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">bmi</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 6 × 7
-#&gt;   name           height  mass hair_color species homeworld   bmi
-#&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;
-#&gt; 1 Luke Skywalker    172    77 blond      Human   Tatooine   26  
-#&gt; 2 C-3PO             167    75 &lt;NA&gt;       Droid   Tatooine   26.9
-#&gt; 3 R2-D2              96    32 &lt;NA&gt;       Droid   Naboo      34.7
-#&gt; 4 Leia Organa       150    49 brown      Human   Alderaan   21.8
-#&gt; 5 Chewbacca         228   112 brown      Wookiee Kashyyyk   21.5
-#&gt; 6 Han Solo          180    80 brown      Human   Corellia   24.7</code></pre>
+<pre><code>#&gt; # A tibble: 82 × 19
+#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
+#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
+#&gt;  3 R2-D2       96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo  
+#&gt;  4 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
+#&gt;  5 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
+#&gt;  6 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
+#&gt;  7 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
+#&gt;  8 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
+#&gt;  9 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
+#&gt; 10 Obi-Wa…    182    77 auburn… fair    blue-g…    57   mascu… Stewjon
+#&gt; # … with 72 more rows, 10 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, bmi &lt;dbl&gt;, and abbreviated variable names
+#&gt; #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 </div>
 <h1 id="the-pipe">The pipe</h1>
 <p>Clearly written code makes it easier for machines <em>and</em> humans to read. The pipe (<code>%&gt;%</code>) from <code>magrittr</code> package allows us to chain together multiple operations into functional ‘pipelines’.</p>
@@ -2668,26 +2920,32 @@ Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>
 <h3 id="exercise-7">exercise</h3>
 <p>Rewrite the code below to use the pipe</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="fu">filter</span>(</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>          original_starwars, mass <span class="sc">&lt;</span> ___), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>              ____, hair_color, _______, homeworld)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="fu">filter</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>          big_starwars, mass <span class="sc">&lt;</span> ___), </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              ____, hair_color, _______, homeworld)</span></code></pre></div>
 </div>
 <h3 id="solution-8">solution</h3>
 <p>This actually wouldn’t matter what order it was in–both would return the same result.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">original_starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mass</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">hair_color</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 5 × 4
-#&gt;   name           hair_color species homeworld
-#&gt;   &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;    
-#&gt; 1 Luke Skywalker blond      Human   Tatooine 
-#&gt; 2 C-3PO          &lt;NA&gt;       Droid   Tatooine 
-#&gt; 3 R2-D2          &lt;NA&gt;       Droid   Naboo    
-#&gt; 4 Leia Organa    brown      Human   Alderaan 
-#&gt; 5 Han Solo       brown      Human   Corellia</code></pre>
+<pre><code>#&gt; # A tibble: 49 × 4
+#&gt;    name               hair_color    species homeworld
+#&gt;    &lt;chr&gt;              &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;    
+#&gt;  1 Luke Skywalker     blond         Human   Tatooine 
+#&gt;  2 C-3PO              &lt;NA&gt;          Droid   Tatooine 
+#&gt;  3 R2-D2              &lt;NA&gt;          Droid   Naboo    
+#&gt;  4 Leia Organa        brown         Human   Alderaan 
+#&gt;  5 Beru Whitesun lars brown         Human   Tatooine 
+#&gt;  6 R5-D4              &lt;NA&gt;          Droid   Tatooine 
+#&gt;  7 Biggs Darklighter  black         Human   Tatooine 
+#&gt;  8 Obi-Wan Kenobi     auburn, white Human   Stewjon  
+#&gt;  9 Anakin Skywalker   blond         Human   Tatooine 
+#&gt; 10 Han Solo           brown         Human   Corellia 
+#&gt; # … with 39 more rows</code></pre>
 </div>
 <h3 id="exercise-8">exercise</h3>
 <p>Perform the following operations <em>without</em> using the pipe.</p>
@@ -2699,12 +2957,12 @@ Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>
 <li>take the squared root of <code>mean_x</code></li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>_ <span class="ot">&lt;-</span> <span class="fu">c</span>(_, _, __)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) </span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">____</span>(x)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 </span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(______)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>_ <span class="ot">&lt;-</span> <span class="fu">c</span>(_, _, __)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) </span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">____</span>(x)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(______)</span></code></pre></div>
 </div>
 <h3 id="soluton">soluton</h3>
 <p>This returns a vector, not a <code>tibble</code>.</p>
@@ -2729,9 +2987,9 @@ Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>
 <li>take the squared root of <code>mean_x</code></li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(_, _, __) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(_, _, __) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>()</span></code></pre></div>
 </div>
 <h3 id="solution-9">solution</h3>
 <p>Note that we can create a pipeline without even creating an object.</p>
@@ -2743,7 +3001,7 @@ Sort <code>original_starwars</code> by <code>height</code> and <code>mass</code>
 </div>
 <pre><code>#&gt; [1] 2.708013</code></pre>
 </div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
