@@ -135,9 +135,9 @@ background-size: 6%
 
 # Resources 
 
-## Link to slides 
+## [Link to slides](https://mjfrigaard.github.io/FA22%20-JOUR301/slides/ggp2-part-01.html#1) 
 
-## Link to exercises 
+## [Link to exercises](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-ggplot2.html) 
 
 
 ---

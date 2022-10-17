@@ -1,0 +1,1081 @@
+---
+title: "Data Visualization with `ggplot2` (part 2a)"
+subtitle: "Visualizing Variable Distributions with `ggplot2`"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Visualization (part 2a)",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Visualization (part 2)",
+    url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://mjfrigaard.github.io/CSUC-JOUR301-FA22/</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` slides part 1
+
+.leftcol[
+
+#### 1. Introduction to the grammar  
+
+#### 2. "*..a sentence ... [is a] a linear ordering of phrases which conveys a gnarly network of ideas*"      
+
+#### 3. *.red["ggplot2 is a language of layers, organized linearly"]*    
+
+]
+
+.rightcol[
+
+#### 4. Graphs are initialized with `ggplot()`   
+
+#### 5. Variables are mapped to aesthetics   
+
+#### 6. Geoms are linked to statistics  
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` exercises part 1
+
+--
+
+.leftcol[
+
+#### 1. Counting things   
+  - `dplyr:count()`      
+
+#### 2. Histograms    
+  - `geom_histogram()`   
+  
+#### 3. Density plots    
+  - `geom_density()`    
+
+]
+
+--
+
+.rightcol[
+
+#### 4. Ridgeline plots   
+  - `ggridges::geom_ridgeline()`   
+
+#### 5. Violin plots    
+  - `geom_violin()`    
+
+]
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# COVID and Transportation Habits 
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 8% 94%
+background-size: 6%
+
+## Example: How has COVID changed our modes of transportation?
+
+### What kind of measurements would these be?
+
+*how are people traveling (walk, drive, etc.)*
+
+--
+
+### What would these data look like?
+
+*what would the .blue[columns] and .blue[rows] look like?*
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Apple Mobility Data
+
+## Fortunately, these data exist!
+
+Apple released mobility data: 
+
+https://covid19.apple.com/mobility
+
+Import these data below:
+
+```{r import-AppleMobRaw}
+AppleMobRaw <- readr::read_csv("https://bit.ly/36tTVpe")
+```
+
+*Use `Raw` as a prefix or suffix for data in it's most 'raw' state*
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Raw Apple Mobility Data
+
+```{r AppleMobRaw-View, eval=FALSE}
+AppleMobRaw %>% View("Apple")
+```
+
+.border[
+
+```{r apple-mob-view, echo=FALSE, fig.align='center', out.width='75%', out.height='75%'}
+knitr::include_graphics(path = "img/apple-mob-view.png")
+```
+
+]
+
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Wrangling Apple Mobility Data 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Wrangling Apple Mobility Data
+
+--
+
+<br>
+
+### What variables do we have? 
+
+--
+
+### How are these variables formatted? 
+
+--
+
+### How do we need to change them? 
+
+--
+
+#### *...with a focus on answering our question*
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## View Apple Mobility Data (head)
+
+```{r AppleMobRaw-head, eval=FALSE}
+AppleMobRaw %>% head()
+```
+
+```{r AppleMobRaw-head-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% head())
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## View Apple Mobility Data (tail)
+
+```{r AppleMobRaw-tail, eval=FALSE}
+AppleMobRaw %>% tail()
+```
+
+```{r AppleMobRaw-tail-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% tail())
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Tidying Apple Mobility Data 
+
+Tidy dates and mobility into `date` and `dir_request` ('relative usage of directions')
+
+```{r tidying-no-show, eval=FALSE}
+AppleMobRaw %>% tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+    head(5)
+```
+
+```{r tidying-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% 
+  tidyr::pivot_longer(
+    cols = -c(geo_type:country), 
+    names_to = "date", 
+    values_to = "dir_request") %>% head(5))
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Manipulate Apple Mobility Data
+
+Remove missing values in `country` and `sub-region` and `clean_names()`
+
+```{r wrangle-no-show, eval=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() %>% View("TidyApple")
+```
+
+```{r wrangle-show, echo=FALSE, eval=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() %>% View("TidyApple")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create a '`TidyApple`' Mobility Dataset!
+
+.leftcol40[
+
+Assign the output from `pivot_longer()`, `filter()`, and `clean_names()` to `TidyApple`
+
+.code60[
+
+```{r wrangle-assign-show, eval=FALSE}
+TidyApple <- AppleMobRaw %>% 
+  tidyr::pivot_longer(
+      cols = -c(geo_type:country), 
+        names_to = "date", 
+        values_to = "dir_request") %>% 
+        # remove missing country data
+        dplyr::filter(!is.na(country) & 
+            !is.na(`sub-region`)) %>% 
+        # clean names
+        janitor::clean_names()
+TidyApple
+```
+
+]
+
+]
+
+
+.rightcol60[
+
+```{r apple-tidy-view.png, echo=FALSE, fig.align='center', out.width='80%', out.height='80%'}
+knitr::include_graphics(path = "img/apple-tidy-view.png")
+# copy_slide_images("apple-tidy-view.png")
+```
+
+]
+
+```{r wrangle-assign-no-show, echo=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() -> TidyApple
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# `TidyApple`: Format Variables
+
+### + `date` needs to be formatted as a `date`
+
+### + rename `transportation_type` to `trans_type`
+
+```{r format-date}
+TidyApple <- TidyApple %>% 
+  mutate(date = lubridate::ymd(date)) %>% 
+  rename(trans_type = transportation_type)
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `TidyApple`: Check Formatted Variables
+
+Re-check `TidyApple` data.
+
+```{r recheck-glimpse-TidyApple}
+glimpse(TidyApple)
+```
+
+Now we can see `trans_type` and `date` are formatted correctly
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `TidyApple`: Counting
+
+> “*data science is mostly counting things*” - `tabyl` vignette
+
+.leftcol[
+
+Count the `trans_type` variable with `dplyr::count()`
+
+```{r count-code, eval=FALSE}
+TidyApple %>% 
+    count(trans_type)
+```
+
+.small[
+
+```{r paged-count-code, echo=FALSE}
+rmarkdown::paged_table(TidyApple %>% count(trans_type))
+```
+
+]]
+
+.rightcol[
+
+*Add the `sort = TRUE` argument to arrange the counts descending*
+
+```{r count-sort, eval=FALSE}
+TidyApple %>% 
+  count(trans_type, sort = TRUE)
+```
+
+.small[
+
+```{r paged-count-sort-code, echo=FALSE}
+rmarkdown::paged_table(TidyApple %>% 
+                           count(trans_type, sort = TRUE))
+```
+
+]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Visualizing Variable Distributions
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## What kinds of question(s) do graphs like these answer?
+
+### What does the distribution of direction requests look like?
+
+What is the distribution of `dir_request`? We will explore this with a histogram.
+
+### Labels!!
+
+```{r lab_hist}
+lab_hist <- labs(x = "Apple directions requests",
+                 y = "Count",
+     title = "Distribution of Direction Requests",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Histogram = single variable distributions
+
+.leftcol45[
+
+Create a histogram of `dir_request` with the code below:
+
+.code70[
+
+```{r dir_request-geom-hist-code, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + #<<
+  lab_hist
+```
+
+]]
+
+--
+
+.rightcol55[
+
+.border[
+
+```{r dir_request-geom-hist-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + #<<
+  lab_hist
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Histograms: Changing the Y Axis
+
+.leftcol45[
+
+Fix the `y` axis numbers with help from the [`scales` package](https://scales.r-lib.org/)
+
+.code70[
+
+```{r geom-hist-scales-code, eval=FALSE}
+library(scales)
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + 
+  scale_y_continuous( #<<
+      labels = scales::comma) + #<<
+  lab_hist
+```
+
+]]
+
+--
+
+.rightcol55[
+
+.border[
+
+```{r geom-hist-scales-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+library(scales)
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request)) + 
+  scale_y_continuous( #<<
+      labels = scales::comma) + #<<
+  lab_hist
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Changing Histogram Shape
+
+.leftcol45[
+
+Adjust the shape of the histogram with the `bins` argument
+
+.code70[
+
+```{r geom_histogram-bins-15-code, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), 
+                 bins = 15) + #<<
+  scale_y_continuous(
+      labels = scales::comma) +
+  lab_hist
+```
+
+]]
+
+--
+
+.rightcol55[.border[
+
+```{r geom_histogram-bins-15-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), 
+                 bins = 15) + #<<
+  scale_y_continuous(
+      labels = scales::comma) +
+  lab_hist
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Changing Histogram Shape
+
+.leftcol45[
+
+Adjust the shape of the histogram with the `bins` argument
+
+.code70[
+
+```{r bins-45-code, eval=FALSE}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), 
+                 bins = 45) + #<<
+  scale_y_continuous(
+      labels = scales::comma) +
+  lab_hist
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+```{r bins-45-no-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% ggplot() + 
+  geom_histogram(aes(x = dir_request), bins = 45) + 
+  scale_y_continuous(labels = scales::comma) +
+  lab_hist
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 8% 95%
+background-size: 6%
+
+# Visualizing variable distributions across groups
+
+## What questions do these graphs answer?
+
+--
+
+*How does the distribution of `dir_request` across `trans_type`?*
+
+--
+
+## We can view this with a density plot, violin plot, or ridgeline plot
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Density Plots
+
+### CREATE LABELS FIRST!! 
+
+We need a new set of labels 
+
+```{r labs_density}
+lab_density <- labs(x = "Apple directions requests",
+                    y = "Density",
+     title = "Direction Requests vs. Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Density Plots
+
+.leftcol45[
+
+Visualize the distribution of `dir_request` across `trans_type` with a `geom_density()`
+
+.code70[
+
+```{r dir_request-density-code, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, 
+                   fill = trans_type)) + #<<
+  lab_density
+```
+
+
+]]
+
+--
+
+.rightcol55[
+
+.border[
+
+```{r dir_request-density-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, 
+                   fill = trans_type)) + #<<
+  lab_density
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Density Plots (`alpha`)
+
+.leftcol45[
+
+Adjust the `alpha` so we can see the overlap
+
+.code70[
+
+```{r dir_request-density-alpha-code, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, 
+                   fill = trans_type), 
+               alpha = 1/3) + #<<
+  lab_density
+```
+
+]]
+
+--
+
+.rightcol55[.border[
+
+```{r dir_request-density-alpha-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_density(aes(x = dir_request, 
+                   fill = trans_type), 
+               alpha = 1/3) + 
+  lab_density
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Violin Plots 
+
+Violin plots are alternatives to box-plots. 
+
+```{r lab_violin}
+lab_violin <- labs(y = "Apple directions requests",
+                   x = "Transportation Types",
+     title = "Direction Requests by Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Violin Plots 
+
+.leftcol45[
+
+Violin plots allow us to add a categorical variable to the `x` axis. 
+
+.code70[
+
+```{r geom_violin-code, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, #<<
+                  x = trans_type, #<<
+                  fill = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+--
+
+
+.rightcol55[
+.border[
+
+```{r geom_violin-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, x = trans_type, #<<
+                  fill = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Violin Plots: *confused?*
+
+.leftcol45[
+
+Add a boxplot layer!
+
+.code70[
+
+```{r geom_violin-boxplot-alpha-code, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, 
+              x = trans_type, 
+              fill = trans_type), 
+              alpha = 1/5) + 
+  geom_boxplot(aes(y = dir_request, #<<
+               x = trans_type, #<<
+               color = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+<br>
+
+```{r geom_violin-boxplot-alpha-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, x = trans_type, 
+                  fill = trans_type), alpha = 1/5) + 
+  geom_boxplot(aes(y = dir_request, x = trans_type, #<<
+                   color = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Violin Plots *and* Boxpots
+
+.leftcol45[
+
+We map the same variables to the `x` and `y`, but swap `fill` for `color` in the `geom_boxplot()`.
+
+.code70[
+
+```{r geom_violin-geom_boxplot-run-code, eval=FALSE}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, 
+              x = trans_type, 
+              fill = trans_type), 
+              alpha = 1/5) + 
+  geom_boxplot(aes(y = dir_request, #<<
+               x = trans_type, #<<
+               color = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+<br>
+
+```{r geom_violin-geom_boxplot-run-show, echo=FALSE, out.height='100%', out.width='100%', fig.align='center'}
+TidyApple %>% 
+  ggplot() +
+  geom_violin(aes(y = dir_request, 
+              x = trans_type, 
+              fill = trans_type), 
+              alpha = 1/5) + 
+  geom_boxplot(aes(y = dir_request, #<<
+               x = trans_type, #<<
+               color = trans_type)) + #<<
+  lab_violin
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Rideline Plots 
+
+Another option is a ridgeline plot (from the `ggridges` package). These display multiple densities. 
+
+#### Labs first! 
+
+```{r lab_ridges}
+lab_ridges <- labs(x = "Apple directions requests",
+                   y = "Transportation Types",
+     title = "Direction Requests by Transportation Type",
+     subtitle = "source: https://covid19.apple.com/mobility")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Rideline Plots 
+
+.leftcol45[
+
+The `geom_density_ridges()` function works just like the `geom_density()`, except we can supply a `y` variable. 
+
+.code70[
+
+```{r ggridges-code, eval=FALSE}
+library(ggridges)
+TidyApple %>%  
+  ggplot() + 
+  geom_density_ridges( #<<
+      aes(x = dir_request, 
+          y = trans_type, 
+          fill = trans_type)) + 
+  lab_ridges
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+<br>
+
+```{r ggridges-show, echo=FALSE, out.height='100%', out.width='100%'}
+library(ggridges)
+TidyApple %>%  
+  ggplot() + 
+  geom_density_ridges(aes(x = dir_request, 
+                          y = trans_type, 
+                          fill = trans_type)) + 
+  lab_ridges
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Rideline Plots 
+
+.leftcol45[
+
+We can adjust the `alpha` on these just like the density plots.
+
+.code70[
+
+```{r geom_density_ridges-plot-code, eval=FALSE}
+library(ggridges)
+TidyApple %>%  
+  ggplot() + 
+  geom_density_ridges(
+      aes(x = dir_request, 
+          y = trans_type, 
+          fill = trans_type), 
+      alpha = 1/5) + #<<
+  lab_ridges
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+<br>
+
+```{r geom_density_ridges-plot-show, echo=FALSE, out.height='100%', out.width='100%'}
+library(ggridges)
+TidyApple %>%  
+  ggplot() + 
+  geom_density_ridges(aes(x = dir_request, 
+                          y = trans_type, 
+                          fill = trans_type), 
+                      alpha = 1/5) + 
+  lab_ridges
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# More Resources
+
+### [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
+
+### [ggplot2 extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/)
+
+### [R Graphics Cookbook](https://r-graphics.org/)

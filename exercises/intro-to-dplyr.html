@@ -94,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2022-10-10" />
-  <meta property="article:created" itemprop="dateCreated" content="2022-10-10" />
+  <meta property="article:published" itemprop="datePublished" content="2022-10-14" />
+  <meta property="article:created" itemprop="dateCreated" content="2022-10-14" />
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Introduction to Data Manipulation" />
@@ -112,7 +112,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","always_allow_html","params","date"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Data Manipulation"]},{"type":"character","attributes":{},"value":["\"*introduction to wrangling data*\"\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"logical","attributes":{},"value":[true]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["data_file"]}},"value":[{"type":"character","attributes":{},"value":["file.path(\"https://bit.ly/big-sw\")"]}]},{"type":"character","attributes":{},"value":["10-10-2022"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","always_allow_html","params","date"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Data Manipulation"]},{"type":"character","attributes":{},"value":["\"*introduction to wrangling data*\"\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]}]}]},{"type":"logical","attributes":{},"value":[true]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["data_file"]}},"value":[{"type":"character","attributes":{},"value":["file.path(\"https://bit.ly/big-sw\")"]}]},{"type":"character","attributes":{},"value":["10-14-2022"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2510,7 +2510,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Introduction to Data Manipulation","description":"\"*introduction to wrangling data*\"","authors":[],"publishedDate":"2022-10-10T00:00:00.000-07:00"}
+{"title":"Introduction to Data Manipulation","description":"\"*introduction to wrangling data*\"","authors":[],"publishedDate":"2022-10-14T00:00:00.000-07:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2535,23 +2535,19 @@ distill-header .nav a {
 <li><a href="#objectives" id="toc-objectives">Objectives</a></li>
 <li><a href="#materials" id="toc-materials">Materials</a></li>
 <li><a href="#load-packages" id="toc-load-packages">Load packages</a></li>
+<li><a href="#namespacing" id="toc-namespacing">Namespacing</a></li>
 <li><a href="#import-data" id="toc-import-data">Import data</a>
 <ul>
 <li><a href="#importing-data-from-a-package" id="toc-importing-data-from-a-package">Importing data from a package</a></li>
 <li><a href="#importing-data-using-params" id="toc-importing-data-using-params">Importing data using <code>params</code></a></li>
 </ul></li>
 <li><a href="#dplyr-verbs" id="toc-dplyr-verbs"><code>dplyr</code> verbs</a></li>
-<li><a href="#selecting-columns" id="toc-selecting-columns">Selecting columns</a>
-<ul>
-<li><a href="#selecting-columns-1" id="toc-selecting-columns-1">Selecting columns</a></li>
+<li><a href="#pipes" id="toc-pipes">Pipes</a></li>
+<li><a href="#selecting-columns" id="toc-selecting-columns">Selecting columns</a></li>
 <li><a href="#filtering-rows" id="toc-filtering-rows">Filtering rows</a></li>
 <li><a href="#arranging-data" id="toc-arranging-data">Arranging data</a></li>
-<li><a href="#mutate-columns" id="toc-mutate-columns">Mutate columns</a></li>
-</ul></li>
-<li><a href="#the-pipe" id="toc-the-pipe">The pipe</a>
-<ul>
-<li><a href="#function-pipelines" id="toc-function-pipelines">Function pipelines</a></li>
-</ul></li>
+<li><a href="#mutating-columns" id="toc-mutating-columns">Mutating columns</a></li>
+<li><a href="#what-weve-covered" id="toc-what-weve-covered">What we’ve covered</a></li>
 </ul>
 </nav>
 </div>
@@ -2577,6 +2573,13 @@ distill-header .nav a {
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre>
 </div>
 </div>
+<h1 id="namespacing">Namespacing</h1>
+<p>Namespacing is what we’re doing when we using the <code>pkg::fun()</code> syntax. We do this because sometimes two different packages will use the same name for a function (after all, there are only so many names!).</p>
+<p>This is why we see the following message when we load the <code>tidyverse</code> package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>── Conflicts ───────────────────────────────────── tidyverse_conflicts</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>✖ dplyr<span class="sc">::</span><span class="fu">filter</span>() masks stats<span class="sc">::</span><span class="fu">filter</span>()</span></code></pre></div>
+<p>If we want to use the <code>filter()</code> function from the <code>stats</code> package, we’d need to use <code>stats::filter()</code>.</p>
+<p>If we use the <code>package::function()</code> syntax, we don’t need to load the package with <code>library(package)</code> (as long as we’ve previously installed it with (<code>install.packages(&quot;package&quot;)</code>)).</p>
 <h1 id="import-data">Import data</h1>
 <p>We’ll cover two methods for importing data into RStudio.</p>
 <ol type="1">
@@ -2611,8 +2614,8 @@ distill-header .nav a {
 </div>
 <h2 id="importing-data-using-params">Importing data using <code>params</code></h2>
 <p>We have the <code>params</code> list from our YAML header, which we can also use to import the data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_file</span><span class="kw">:</span><span class="at"> !r file.path(&quot;https://bit.ly/big-sw&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">params</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_file</span><span class="kw">:</span><span class="at"> !r file.path(&quot;https://bit.ly/big-sw&quot;)</span></span></code></pre></div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">params</span><span class="op">$</span><span class="va">data_file</span><span class="op">)</span></span>
@@ -2637,7 +2640,7 @@ distill-header .nav a {
 #&gt; $ hw_climate    &lt;chr&gt; &quot;arid&quot;, &quot;arid&quot;, &quot;temperate&quot;, &quot;arid&quot;, &quot;temperat…
 #&gt; $ hw_gravity    &lt;chr&gt; &quot;1 standard&quot;, &quot;1 standard&quot;, &quot;1 standard&quot;, &quot;1 s…
 #&gt; $ hw_terrain    &lt;chr&gt; &quot;desert&quot;, &quot;desert&quot;, &quot;grassy hills, swamps, for…
-#&gt; $ hw_pop        &lt;dbl&gt; 2.0e+05, 2.0e+05, 4.5e+09, 2.0e+05, 2.0e+09, 2…</code></pre>
+#&gt; $ hw_pop        &lt;dbl&gt; 200000, 200000, 4500000000, 200000, 2000000000…</code></pre>
 </div>
 <p>Check to see which columns are different using <code>names()</code> and <code>setdiff()</code>:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2650,7 +2653,7 @@ distill-header .nav a {
 </div>
 <p>These are the columns in <code>big_starwars</code> that aren’t in <code>pkg_starwars</code>.</p>
 <h1 id="dplyr-verbs"><code>dplyr</code> verbs</h1>
-<p>This section covers four common <code>dplyr</code> verbs for data manipulation:</p>
+<p>These exercises cover four common <code>dplyr</code> verbs for data manipulation:</p>
 <ul>
 <li><code>select</code>: works on <strong>columns</strong>/<strong>variables</strong></li>
 <li><code>filter</code>: works on <strong>rows</strong>/<strong>observations</strong><br />
@@ -2658,279 +2661,31 @@ distill-header .nav a {
 <li><code>arrange</code>: sorts values (either ascending or descending (with <code>desc()</code>))</li>
 <li><code>mutate</code>: creates new columns/variables (or changes format/type/class of existing variables)</li>
 </ul>
-<h1 id="selecting-columns">Selecting columns</h1>
-<p>We’ll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the <code>select()</code> function (and helpers!).</p>
-<p>The general form of <code>select()</code> is below:</p>
+<p>We’ll also be introducing some additional <code>tidyselect</code> functions and filtering tips and tricks.</p>
+<h1 id="pipes">Pipes</h1>
+<p>Clearly written code makes it easier for machines <em>and</em> humans to read. The pipes (<code>|&gt;</code> or <code>%&gt;%</code> from <a href="https://magrittr.tidyverse.org/">the <code>magrittr</code> package</a>) allows us to chain together multiple operations into functional ‘pipelines’.</p>
+<p>The exercises below use the native pipe (<code>|&gt;</code>), but either pipe is acceptable (<code>%&gt;%</code>). Recall the pipes convert our code from:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>.data <span class="op">=</span> , ... <span class="op">=</span> <span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">OUTPUT_01</span> <span class="op">&lt;-</span> <span class="fu">function_01</span><span class="op">(</span><span class="va">OBJECT_01</span><span class="op">)</span></span>
+<span><span class="va">OUTPUT_02</span> <span class="op">&lt;-</span> <span class="fu">function_02</span><span class="op">(</span><span class="va">OUTPUT_01</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<h2 id="selecting-columns-1">Selecting columns</h2>
-<p>Alter the code below to select just the <code>name</code> and <code>homeoworld</code> column:</p>
+<p>To something easier to read:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">name</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 3
-#&gt;    name               species homeworld
-#&gt;    &lt;chr&gt;              &lt;chr&gt;   &lt;chr&gt;    
-#&gt;  1 Luke Skywalker     Human   Tatooine 
-#&gt;  2 C-3PO              Droid   Tatooine 
-#&gt;  3 R2-D2              Droid   Naboo    
-#&gt;  4 Darth Vader        Human   Tatooine 
-#&gt;  5 Leia Organa        Human   Alderaan 
-#&gt;  6 Owen Lars          Human   Tatooine 
-#&gt;  7 Beru Whitesun lars Human   Tatooine 
-#&gt;  8 R5-D4              Droid   Tatooine 
-#&gt;  9 Biggs Darklighter  Human   Tatooine 
-#&gt; 10 Obi-Wan Kenobi     Human   Stewjon  
-#&gt; # … with 72 more rows</code></pre>
-</div>
-<h3 id="solution">solution</h3>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">name</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 2
-#&gt;    name               homeworld
-#&gt;    &lt;chr&gt;              &lt;chr&gt;    
-#&gt;  1 Luke Skywalker     Tatooine 
-#&gt;  2 C-3PO              Tatooine 
-#&gt;  3 R2-D2              Naboo    
-#&gt;  4 Darth Vader        Tatooine 
-#&gt;  5 Leia Organa        Alderaan 
-#&gt;  6 Owen Lars          Tatooine 
-#&gt;  7 Beru Whitesun lars Tatooine 
-#&gt;  8 R5-D4              Tatooine 
-#&gt;  9 Biggs Darklighter  Tatooine 
-#&gt; 10 Obi-Wan Kenobi     Stewjon  
-#&gt; # … with 72 more rows</code></pre>
-</div>
-<h3 id="exercise">exercise</h3>
-<p>Select only the columns starting with the letter <code>h</code>.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;_&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">OBJECT_01</span> <span class="op">|&gt;</span>  </span>
+<span>  <span class="fu">function_01</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">function_02</span><span class="op">(</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">OUTPUT_02</span></span></code></pre>
 </div>
 </div>
-<h3 id="solution-1">solution</h3>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;h&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 7
-#&gt;    height hair_color    homeworld hw_climate hw_gravity hw_te…¹ hw_pop
-#&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;
-#&gt;  1    172 blond         Tatooine  arid       1 standard desert   2  e5
-#&gt;  2    167 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
-#&gt;  3     96 &lt;NA&gt;          Naboo     temperate  1 standard grassy…  4.5e9
-#&gt;  4    202 none          Tatooine  arid       1 standard desert   2  e5
-#&gt;  5    150 brown         Alderaan  temperate  1 standard grassl…  2  e9
-#&gt;  6    178 brown, grey   Tatooine  arid       1 standard desert   2  e5
-#&gt;  7    165 brown         Tatooine  arid       1 standard desert   2  e5
-#&gt;  8     97 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
-#&gt;  9    183 black         Tatooine  arid       1 standard desert   2  e5
-#&gt; 10    182 auburn, white Stewjon   temperate  1 standard grass   NA    
-#&gt; # … with 72 more rows, and abbreviated variable name ¹​hw_terrain</code></pre>
-</div>
-<h2 class="tabset" id="filtering-rows">Filtering rows</h2>
-<p>These are some additional exercises for <code>filter()</code>ing data.</p>
-<h3 id="exercise-1">exercise</h3>
-<p>Change the code below so <code>big_starwars</code> only includes the droids.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;____&quot;</span><span class="op">)</span></span></code></pre>
-</div>
-</div>
-<h3 id="solution-2">solution</h3>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 5 × 18
-#&gt;   name   height  mass hair_co…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
-#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt; 1 C-3PO     167    75 &lt;NA&gt;      gold    yellow      112 mascu… Tatooi…
-#&gt; 2 R2-D2      96    32 &lt;NA&gt;      white,… red          33 mascu… Naboo  
-#&gt; 3 R5-D4      97    32 &lt;NA&gt;      white,… red          NA mascu… Tatooi…
-#&gt; 4 IG-88     200   140 none      metal   red          15 mascu… &lt;NA&gt;   
-#&gt; 5 R4-P17     96    NA none      silver… red, b…      NA femin… &lt;NA&gt;   
-#&gt; # … with 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
-#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
-#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
-#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
-#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
-</div>
-<h3 id="exercise-2">exercise</h3>
-<p>Change the code below so <code>big_starwars</code> only includes data from the <code>homeworld</code>s of <code>Tatooine</code> and <code>Alderaan</code></p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
-<span>       <span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;________&quot;</span>, <span class="st">&quot;________&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-</div>
-<h3 id="solution-3">solution</h3>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
-<span>       <span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Tatooine&quot;</span>, <span class="st">&quot;Alderaan&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 13 × 18
-#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
-#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
-#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
-#&gt;  3 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
-#&gt;  4 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
-#&gt;  5 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
-#&gt;  6 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
-#&gt;  7 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
-#&gt;  8 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
-#&gt;  9 Anakin…    188    84 blond   fair    blue       41.9 mascu… Tatooi…
-#&gt; 10 Shmi S…    163    NA black   fair    brown      72   femin… Tatooi…
-#&gt; 11 Cliegg…    183    NA brown   fair    blue       82   mascu… Tatooi…
-#&gt; 12 Bail P…    191    NA black   tan     brown      67   mascu… Aldera…
-#&gt; 13 Raymus…    188    79 brown   light   brown      NA   mascu… Aldera…
-#&gt; # … with 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
-#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
-#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
-#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
-#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
-</div>
-<h2 class="tabset" id="arranging-data">Arranging data</h2>
-<p><code>arrange()</code> sorts variables on their content, numeric or character.</p>
-<h3 id="exercise-3">exercise</h3>
-<p>Sort <code>big_starwars</code> according to the <code>hair_color</code>.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="st">&quot;____ _____&quot;</span><span class="op">)</span></span></code></pre>
-</div>
-</div>
-<h3 id="solution-4">solution</h3>
-<p>Note that the missing values are sorted to the bottom.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="va">hair_color</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 18
-#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
-#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt;  1 Mon Mo…    150  NA   auburn  fair    blue       48   femin… Chandr…
-#&gt;  2 Wilhuf…    180  NA   auburn… fair    blue       64   mascu… Eriadu 
-#&gt;  3 Obi-Wa…    182  77   auburn… fair    blue-g…    57   mascu… Stewjon
-#&gt;  4 Biggs …    183  84   black   light   brown      24   mascu… Tatooi…
-#&gt;  5 Boba F…    183  78.2 black   fair    brown      31.5 mascu… Kamino 
-#&gt;  6 Lando …    177  79   black   dark    brown      31   mascu… Socorro
-#&gt;  7 Watto      137  NA   black   blue, … yellow     NA   mascu… Toydar…
-#&gt;  8 Quarsh…    183  NA   black   dark    brown      62   mascu… Naboo  
-#&gt;  9 Shmi S…    163  NA   black   fair    brown      72   femin… Tatooi…
-#&gt; 10 Eeth K…    171  NA   black   brown   brown      NA   mascu… Iridon…
-#&gt; # … with 72 more rows, 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
-#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
-#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
-#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
-#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
-</div>
-<h3 id="exercise-4">exercise</h3>
-Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, descending.
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(big_starwars, <span class="fu">desc</span>(______, ____))</span></code></pre></div>
-</div>
-<h3 id="solution-5">solution</h3>
-<p>Including two variables is helpful if some of the values ‘tie’.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">big_starwars</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">height</span>, <span class="va">mass</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; Error in `arrange()`:
-#&gt; ! `desc()` must be called with exactly one argument.</code></pre>
-</div>
-<h2 class="tabset" id="mutate-columns">Mutate columns</h2>
-<p><code>mutate()</code> can create new columns, or change existing columns.</p>
-<h3 id="exercise-5">exercise</h3>
-<p>Alter the code below to create a <code>bmi</code> column for <code>starwars</code> characters in <code>big_starwars</code>.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(big_starwars, </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> ____ <span class="sc">/</span> ((______ <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>))</span></code></pre></div>
-</div>
-<h3 id="solution-6">solution</h3>
-<p>Note the use of parentheses here.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
-<span>       bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 19
-#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
-#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
-#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
-#&gt;  3 R2-D2       96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo  
-#&gt;  4 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
-#&gt;  5 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
-#&gt;  6 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
-#&gt;  7 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
-#&gt;  8 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
-#&gt;  9 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
-#&gt; 10 Obi-Wa…    182    77 auburn… fair    blue-g…    57   mascu… Stewjon
-#&gt; # … with 72 more rows, 10 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
-#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
-#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
-#&gt; #   hw_pop &lt;dbl&gt;, bmi &lt;dbl&gt;, and abbreviated variable names
-#&gt; #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
-</div>
-<h3 id="exercise-6">exercise</h3>
-<p>Round the new <code>bmi</code> variable to 1 digit.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(big_starwars, </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> mass <span class="sc">/</span> ((height <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">bmi =</span> <span class="fu">_____</span>(___, <span class="at">digits =</span> _))</span></code></pre></div>
-</div>
-<h3 id="solution-7">solution</h3>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">big_starwars</span>, </span>
-<span>       bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>       bmi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">bmi</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<pre><code>#&gt; # A tibble: 82 × 19
-#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
-#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
-#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
-#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
-#&gt;  3 R2-D2       96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo  
-#&gt;  4 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
-#&gt;  5 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
-#&gt;  6 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
-#&gt;  7 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
-#&gt;  8 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
-#&gt;  9 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
-#&gt; 10 Obi-Wa…    182    77 auburn… fair    blue-g…    57   mascu… Stewjon
-#&gt; # … with 72 more rows, 10 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
-#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
-#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
-#&gt; #   hw_pop &lt;dbl&gt;, bmi &lt;dbl&gt;, and abbreviated variable names
-#&gt; #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
-</div>
-<h1 id="the-pipe">The pipe</h1>
-<p>Clearly written code makes it easier for machines <em>and</em> humans to read. The pipe (<code>%&gt;%</code>) from <code>magrittr</code> package allows us to chain together multiple operations into functional ‘pipelines’.</p>
-<h2 class="tabset" id="function-pipelines">Function pipelines</h2>
 <p>The pipe (<code>%&gt;%</code>) takes an object that comes before it, and it drops the object into the function that comes after it.</p>
-<h3 id="exercise-7">exercise</h3>
-<p>Rewrite the code below to use the pipe</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="fu">filter</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>          big_starwars, mass <span class="sc">&lt;</span> ___), </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              ____, hair_color, _______, homeworld)</span></code></pre></div>
-</div>
-<h3 id="solution-8">solution</h3>
-<p>This actually wouldn’t matter what order it was in–both would return the same result.</p>
+<p>In the example below, it actually wouldn’t matter what order the functions are in–both would return the same result.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mass</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">hair_color</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mass</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">hair_color</span>, <span class="va">species</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
 </div>
 <pre><code>#&gt; # A tibble: 49 × 4
 #&gt;    name               hair_color    species homeworld
@@ -2947,8 +2702,7 @@ Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, des
 #&gt; 10 Han Solo           brown         Human   Corellia 
 #&gt; # … with 39 more rows</code></pre>
 </div>
-<h3 id="exercise-8">exercise</h3>
-<p>Perform the following operations <em>without</em> using the pipe.</p>
+<p>Consider the following operations <em>without</em> using the pipe.</p>
 <ol type="1">
 <li>create object <code>x</code> with three values, (<code>3</code>, <code>7</code>, <code>12</code>)<br />
 </li>
@@ -2956,16 +2710,6 @@ Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, des
 </li>
 <li>take the squared root of <code>mean_x</code></li>
 </ol>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) </span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>_ <span class="ot">&lt;-</span> <span class="fu">c</span>(_, _, __)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) </span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">____</span>(x)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 </span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(______)</span></code></pre></div>
-</div>
-<h3 id="soluton">soluton</h3>
-<p>This returns a vector, not a <code>tibble</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1) </span></span>
@@ -2977,8 +2721,8 @@ Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, des
 </div>
 <pre><code>#&gt; [1] 2.708013</code></pre>
 </div>
-<h3 id="exercise-9">exercise</h3>
-<p>Perform the following operations <em>with</em> the pipe.</p>
+<p>This returns a vector, not a <code>tibble</code>.</p>
+<p>Now let’s re-write this code <em>with</em> the pipe.</p>
 <ol type="1">
 <li>create object <code>x</code> with three values, (<code>3</code>, <code>7</code>, <code>12</code>)<br />
 </li>
@@ -2987,21 +2731,400 @@ Sort <code>big_starwars</code> by <code>height</code> and <code>mass</code>, des
 <li>take the squared root of <code>mean_x</code></li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(_, _, __) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">____</span>()</span></code></pre></div>
-</div>
-<h3 id="solution-9">solution</h3>
-<p>Note that we can create a pipeline without even creating an object.</p>
-<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">12</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <pre><code>#&gt; [1] 2.708013</code></pre>
 </div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Note that we can create a pipeline without even creating an object.</p>
+<h1 id="selecting-columns">Selecting columns</h1>
+<p>We’ll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the <code>select()</code> function (and helpers!).</p>
+<p>The general form of <code>select()</code> is below:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>.data <span class="op">=</span> , ... <span class="op">=</span> <span class="op">)</span></span></code></pre>
+</div>
+</div>
+<p>The code below selects the <code>name</code> and <code>homeoworld</code> columns:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 82 × 2
+#&gt;    name               homeworld
+#&gt;    &lt;chr&gt;              &lt;chr&gt;    
+#&gt;  1 Luke Skywalker     Tatooine 
+#&gt;  2 C-3PO              Tatooine 
+#&gt;  3 R2-D2              Naboo    
+#&gt;  4 Darth Vader        Tatooine 
+#&gt;  5 Leia Organa        Alderaan 
+#&gt;  6 Owen Lars          Tatooine 
+#&gt;  7 Beru Whitesun lars Tatooine 
+#&gt;  8 R5-D4              Tatooine 
+#&gt;  9 Biggs Darklighter  Tatooine 
+#&gt; 10 Obi-Wan Kenobi     Stewjon  
+#&gt; # … with 72 more rows</code></pre>
+</div>
+<p>The code below selects only the columns starting with the letter <code>h</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;h&quot;</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 82 × 7
+#&gt;    height hair_color    homeworld hw_climate hw_gravity hw_te…¹ hw_pop
+#&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;
+#&gt;  1    172 blond         Tatooine  arid       1 standard desert   2  e5
+#&gt;  2    167 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
+#&gt;  3     96 &lt;NA&gt;          Naboo     temperate  1 standard grassy…  4.5e9
+#&gt;  4    202 none          Tatooine  arid       1 standard desert   2  e5
+#&gt;  5    150 brown         Alderaan  temperate  1 standard grassl…  2  e9
+#&gt;  6    178 brown, grey   Tatooine  arid       1 standard desert   2  e5
+#&gt;  7    165 brown         Tatooine  arid       1 standard desert   2  e5
+#&gt;  8     97 &lt;NA&gt;          Tatooine  arid       1 standard desert   2  e5
+#&gt;  9    183 black         Tatooine  arid       1 standard desert   2  e5
+#&gt; 10    182 auburn, white Stewjon   temperate  1 standard grass   NA    
+#&gt; # … with 72 more rows, and abbreviated variable name ¹​hw_terrain</code></pre>
+</div>
+<p>The code select <em>only</em> numeric columns starting with the letter <code>h</code></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">&quot;h&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 82 × 2
+#&gt;    height     hw_pop
+#&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+#&gt;  1    172     200000
+#&gt;  2    167     200000
+#&gt;  3     96 4500000000
+#&gt;  4    202     200000
+#&gt;  5    150 2000000000
+#&gt;  6    178     200000
+#&gt;  7    165     200000
+#&gt;  8     97     200000
+#&gt;  9    183     200000
+#&gt; 10    182         NA
+#&gt; # … with 72 more rows</code></pre>
+</div>
+<h1 id="filtering-rows">Filtering rows</h1>
+<p>Below are exercises for <code>dplyr::filter()</code>ing data. We’re going to combine these with some of the <code>dplyr::select()</code> methods we covered above and in the slides. Recall that all filtering must be logical (i.e. evaluate the either <code>TRUE</code> or <code>FALSE</code>).</p>
+<p>The code below only returns the droids in <code>big_starwars</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span> </span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 5 × 18
+#&gt;   name   height  mass hair_co…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt; 1 C-3PO     167    75 &lt;NA&gt;      gold    yellow      112 mascu… Tatooi…
+#&gt; 2 R2-D2      96    32 &lt;NA&gt;      white,… red          33 mascu… Naboo  
+#&gt; 3 R5-D4      97    32 &lt;NA&gt;      white,… red          NA mascu… Tatooi…
+#&gt; 4 IG-88     200   140 none      metal   red          15 mascu… &lt;NA&gt;   
+#&gt; 5 R4-P17     96    NA none      silver… red, b…      NA femin… &lt;NA&gt;   
+#&gt; # … with 9 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, and abbreviated variable names ¹​hair_color,
+#&gt; #   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+<p>It’s hard to tell if the code above is working because we’re still seeing all the columns in <code>big_starwars</code>. Reduce the output by adding <code>dplyr::select()</code> to the pipeline.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 5 × 1
+#&gt;   species
+#&gt;   &lt;chr&gt;  
+#&gt; 1 Droid  
+#&gt; 2 Droid  
+#&gt; 3 Droid  
+#&gt; 4 Droid  
+#&gt; 5 Droid</code></pre>
+</div>
+<p>The code below only returns data from the <code>homeworld</code>s of <code>Tatooine</code> and <code>Alderaan</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Tatooine&quot;</span>, <span class="st">&quot;Alderaan&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 13 × 1
+#&gt;    homeworld
+#&gt;    &lt;chr&gt;    
+#&gt;  1 Tatooine 
+#&gt;  2 Tatooine 
+#&gt;  3 Tatooine 
+#&gt;  4 Alderaan 
+#&gt;  5 Tatooine 
+#&gt;  6 Tatooine 
+#&gt;  7 Tatooine 
+#&gt;  8 Tatooine 
+#&gt;  9 Tatooine 
+#&gt; 10 Tatooine 
+#&gt; 11 Tatooine 
+#&gt; 12 Alderaan 
+#&gt; 13 Alderaan</code></pre>
+</div>
+<p>I don’t want to try and count each row to verify if it’s <strong>only</strong> returning the two <code>homeworld</code>s of interest, so we can use <code>dplyr::count()</code> to verify the returned categories.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">homeworld</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Tatooine&quot;</span>, <span class="st">&quot;Alderaan&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 2 × 2
+#&gt;   homeworld     n
+#&gt;   &lt;chr&gt;     &lt;int&gt;
+#&gt; 1 Alderaan      3
+#&gt; 2 Tatooine     10</code></pre>
+</div>
+<p>The code below only returns data from <code>big_starwars</code> where <code>species</code> is <code>Gungan</code>, <code>Hutt</code>, or <code>Wookie</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Gungan&quot;</span>, <span class="st">&quot;Hutt&quot;</span>, <span class="st">&quot;Wookie&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 6 × 1
+#&gt;   species
+#&gt;   &lt;chr&gt;  
+#&gt; 1 Wookie 
+#&gt; 2 Hutt   
+#&gt; 3 Gungan 
+#&gt; 4 Gungan 
+#&gt; 5 Gungan 
+#&gt; 6 Wookie</code></pre>
+</div>
+<p>We can use <code>dplyr::count()</code> with multiple variables to get the specific number of rows for combinations of values.</p>
+<p>For example, the code below gives us the count of the three categories of <code>species</code> above by their <code>species_class</code> and <code>homeworld</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Gungan&quot;</span>, <span class="st">&quot;Hutt&quot;</span>, <span class="st">&quot;Wookie&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">species_class</span>, <span class="va">homeworld</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 3 × 3
+#&gt;   species_class homeworld     n
+#&gt;   &lt;chr&gt;         &lt;chr&gt;     &lt;int&gt;
+#&gt; 1 amphibian     Naboo         3
+#&gt; 2 gastropod     Nal Hutta     1
+#&gt; 3 mammal        Kashyyyk      2</code></pre>
+</div>
+<p>We can include <code>sort = TRUE</code> to arrange the <code>n</code> column descending:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Gungan&quot;</span>, <span class="st">&quot;Hutt&quot;</span>, <span class="st">&quot;Wookie&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">species_class</span>, <span class="va">homeworld</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 3 × 3
+#&gt;   species_class homeworld     n
+#&gt;   &lt;chr&gt;         &lt;chr&gt;     &lt;int&gt;
+#&gt; 1 amphibian     Naboo         3
+#&gt; 2 mammal        Kashyyyk      2
+#&gt; 3 gastropod     Nal Hutta     1</code></pre>
+</div>
+<p>It’s important to note that <code>dplyr::count()</code> returns the variable’s distinct counts for each level or value, so it’s less helpful if you’re using it with a numeric variable (or a variable with unique values per row).</p>
+<p>For example, the code below returns data where <code>mass</code> is greater than <code>180</code> and <code>species</code> does not include <code>&quot;Droid&quot;</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mass</span> <span class="op">&gt;</span> <span class="fl">100</span> <span class="op">&amp;</span> <span class="va">species</span> <span class="op">!=</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mass</span>, <span class="va">species</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 9 × 2
+#&gt;    mass species   
+#&gt;   &lt;dbl&gt; &lt;chr&gt;     
+#&gt; 1   136 Human     
+#&gt; 2   120 Human     
+#&gt; 3   112 Wookie    
+#&gt; 4  1358 Hutt      
+#&gt; 5   110 Human     
+#&gt; 6   113 Trandoshan
+#&gt; 7   102 Besalisk  
+#&gt; 8   159 Kaleesh   
+#&gt; 9   136 Wookie</code></pre>
+</div>
+<p>If we swap <code>select()</code> for <code>count()</code>, we get an additional <code>n</code> column (but all equal <code>1</code>), so it adds no new information.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mass</span> <span class="op">&gt;</span> <span class="fl">100</span> <span class="op">&amp;</span> <span class="va">species</span> <span class="op">!=</span> <span class="st">&quot;Droid&quot;</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">mass</span>, <span class="va">species</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 9 × 3
+#&gt;    mass species        n
+#&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+#&gt; 1   102 Besalisk       1
+#&gt; 2   110 Human          1
+#&gt; 3   112 Wookie         1
+#&gt; 4   113 Trandoshan     1
+#&gt; 5   120 Human          1
+#&gt; 6   136 Human          1
+#&gt; 7   136 Wookie         1
+#&gt; 8   159 Kaleesh        1
+#&gt; 9  1358 Hutt           1</code></pre>
+</div>
+<h1 id="arranging-data">Arranging data</h1>
+<p><code>dplyr::arrange()</code> sorts variables on their content, numeric or character.</p>
+<p>The code below sorts <code>big_starwars</code> according to the <code>hair_color</code> and views to top (<code>head(10)</code>) and bottom (<code>tail(10)</code>) ten rows of the result:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 10 × 1
+#&gt;    hair_color   
+#&gt;    &lt;chr&gt;        
+#&gt;  1 auburn       
+#&gt;  2 auburn, grey 
+#&gt;  3 auburn, white
+#&gt;  4 black        
+#&gt;  5 black        
+#&gt;  6 black        
+#&gt;  7 black        
+#&gt;  8 black        
+#&gt;  9 black        
+#&gt; 10 black</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 10 × 1
+#&gt;    hair_color
+#&gt;    &lt;chr&gt;     
+#&gt;  1 none      
+#&gt;  2 white     
+#&gt;  3 white     
+#&gt;  4 white     
+#&gt;  5 white     
+#&gt;  6 &lt;NA&gt;      
+#&gt;  7 &lt;NA&gt;      
+#&gt;  8 &lt;NA&gt;      
+#&gt;  9 &lt;NA&gt;      
+#&gt; 10 &lt;NA&gt;</code></pre>
+</div>
+<p>Note that the missing values are sorted to the bottom of the returned column.</p>
+<p>The code below filters the <code>big_starwars</code> data to only rows where the <code>species_class</code> is <code>amphibian</code> and <code>artificial</code>, then sorts the results by <code>species_class</code> and <code>mass</code>, descending:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species_class</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;amphibian&quot;</span>, <span class="st">&quot;artificial&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">species_class</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">mass</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">species_class</span>, <span class="va">mass</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 14 × 2
+#&gt;    species_class  mass
+#&gt;    &lt;chr&gt;         &lt;dbl&gt;
+#&gt;  1 amphibian       102
+#&gt;  2 amphibian        88
+#&gt;  3 amphibian        87
+#&gt;  4 amphibian        83
+#&gt;  5 amphibian        82
+#&gt;  6 amphibian        66
+#&gt;  7 amphibian        NA
+#&gt;  8 amphibian        NA
+#&gt;  9 amphibian        NA
+#&gt; 10 artificial      140
+#&gt; 11 artificial       75
+#&gt; 12 artificial       32
+#&gt; 13 artificial       32
+#&gt; 14 artificial       NA</code></pre>
+</div>
+<p>This is handy when you want to view the output sorted by multiple levels of a categorical variable.</p>
+<h1 id="mutating-columns">Mutating columns</h1>
+<p><code>mutate()</code> can create new columns, or change existing columns.</p>
+<p>The code below creates a new <code>bmi</code> column in <code>big_starwars</code> using <code>mass</code> and <code>height</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 82 × 19
+#&gt;    name    height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ gender homew…⁵
+#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  
+#&gt;  1 Luke S…    172    77 blond   fair    blue       19   mascu… Tatooi…
+#&gt;  2 C-3PO      167    75 &lt;NA&gt;    gold    yellow    112   mascu… Tatooi…
+#&gt;  3 R2-D2       96    32 &lt;NA&gt;    white,… red        33   mascu… Naboo  
+#&gt;  4 Darth …    202   136 none    white   yellow     41.9 mascu… Tatooi…
+#&gt;  5 Leia O…    150    49 brown   light   brown      19   femin… Aldera…
+#&gt;  6 Owen L…    178   120 brown,… light   blue       52   mascu… Tatooi…
+#&gt;  7 Beru W…    165    75 brown   light   blue       47   femin… Tatooi…
+#&gt;  8 R5-D4       97    32 &lt;NA&gt;    white,… red        NA   mascu… Tatooi…
+#&gt;  9 Biggs …    183    84 black   light   brown      24   mascu… Tatooi…
+#&gt; 10 Obi-Wa…    182    77 auburn… fair    blue-g…    57   mascu… Stewjon
+#&gt; # … with 72 more rows, 10 more variables: species &lt;chr&gt;, sex &lt;chr&gt;,
+#&gt; #   species_class &lt;chr&gt;, species_desig &lt;chr&gt;, vehicle &lt;chr&gt;,
+#&gt; #   hw_climate &lt;chr&gt;, hw_gravity &lt;chr&gt;, hw_terrain &lt;chr&gt;,
+#&gt; #   hw_pop &lt;dbl&gt;, bmi &lt;dbl&gt;, and abbreviated variable names
+#&gt; #   ¹​hair_color, ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+</div>
+<p>Note the use of parentheses here.</p>
+<p>When we’re creating new variables with <code>dplyr::mutate()</code>, the new variable gets pushed to the end of the dataset. We can view this column by dropping the <code>last_col()</code> function inside <code>select()</code></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">last_col</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 82 × 1
+#&gt;      bmi
+#&gt;    &lt;dbl&gt;
+#&gt;  1  26.0
+#&gt;  2  26.9
+#&gt;  3  34.7
+#&gt;  4  33.3
+#&gt;  5  21.8
+#&gt;  6  37.9
+#&gt;  7  27.5
+#&gt;  8  34.0
+#&gt;  9  25.1
+#&gt; 10  23.2
+#&gt; # … with 72 more rows</code></pre>
+</div>
+<p>The code below creates a new <code>bmi25_ind</code> variable that splits the new <code>bmi</code> variable into above or below <code>25</code>, then filters the results to <code>Hutt</code> and <code>Wookie</code>, then counts and sorts the results:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">big_starwars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bmi <span class="op">=</span> <span class="va">mass</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">height</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    bmi25_ind <span class="op">=</span> <span class="va">bmi</span> <span class="op">&gt;</span> <span class="fl">25</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;Hutt&quot;</span>, <span class="st">&quot;Wookie&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">species_class</span>, <span class="va">bmi25_ind</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 2 × 3
+#&gt;   species_class bmi25_ind     n
+#&gt;   &lt;chr&gt;         &lt;lgl&gt;     &lt;int&gt;
+#&gt; 1 mammal        FALSE         2
+#&gt; 2 gastropod     TRUE          1</code></pre>
+</div>
+<h1 id="what-weve-covered">What we’ve covered</h1>
+<ol type="1">
+<li>Pipes: (<code>|&gt;</code> and <code>%&gt;%&gt;</code>)<br />
+</li>
+<li>Selecting columns with <code>select()</code> and <a href="https://tidyselect.r-lib.org/index.html">select helpers</a><br />
+</li>
+<li>Filtering rows and <code>count()</code>ing the results<br />
+</li>
+<li>Arranging (sorting) data based on their values<br />
+</li>
+<li>Creating new columns with <code>mutate()</code><br />
+</li>
+</ol>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

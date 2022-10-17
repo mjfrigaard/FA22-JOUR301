@@ -1,0 +1,49 @@
+---
+title: "Line-graph re-create challenge"
+subtitle: "From 538 artile, '[Did Americans Support Removing Trump From Office?](https://projects.fivethirtyeight.com/impeachment-polls/)'"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute:
+    highlight: kate
+    downcute_theme: "chaos"
+    self_contained: true
+    
+---
+
+```{r setup, include=FALSE}
+library(fs)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(tidytuesdayR)
+library(zipcodeR)
+library(tigris)
+library(readr)
+library(stringr)
+library(lubridate)
+library(patchwork)
+library(grid)
+## Global options
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 7.5,
+  fig.height = 5,
+  fig.retina = 2
+  )
+fs::dir_create("data")
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/line-graphs')
+```
+
+# The Article
+
+These data come from ["Did Americans Support Removing Trump From Office?"](https://projects.fivethirtyeight.com/impeachment-polls/)
+

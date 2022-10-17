@@ -1,0 +1,1698 @@
+---
+title: "Data Visualization with `ggplot2` (part 2b)"
+subtitle: "Intermediate graphing techniques with `ggplot2`"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Visualization (part 2b)",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Visualization (part 2)",
+    url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://mjfrigaard.github.io/CSUC-JOUR301-FA22/</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# `ggplot2` = a grammar for data visualization
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Load the packages 
+
+<br><br><br><br>
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+```{r pckgs, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Outline
+
+.leftcol[
+
+###  Recap `ggplot2`
+
+###  Graphing preliminaries
+
+  - *Data Wrangling*
+  - *Tidying*
+
+### Variable Distributions
+
+  - *Histograms, density plots, violin plots*
+
+### Line Graphs
+
+]
+
+.rightcol[
+
+### Adding Text
+
+  - *Annotations, labeling values* 
+
+### Reference Lines 
+
+### Advanced Faceting 
+
+  - *facet_wrap(), facet_wrap_paginate(), facet_geo()* 
+
+]
+
+
+---
+class: left, top
+
+# Resources 
+
+## [Link to slides]() 
+
+
+## [Link to exercises]() 
+
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Recap of `ggplot2` 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2`
+
+## In the previous lesson, we covered: 
+
+> 1) The grammar of graphics
+
+> + `ggplot2` is a language of *layers*, organized linearly 
+
+--
+
+> + `ggplot2`'s layers give us a "*linear ordering of phrases*" 
+
+--
+
+>   + which allows us to build an infinite number of graphs 
+
+--
+
+>   + "*which convey a gnarly network of ideas.*" 
+
+--
+
+> + "**Infinitely extensible**"
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+## In the previous lesson, we covered:
+
+> 2) Identifying graph aesthetics 
+
+--
+
+> *position (`x` and `y`), size, color, shape, etc.*
+
+--
+
+.border[
+
+```{r graph-elements, echo=FALSE, fig.align='center', out.width='67%', out.height='70%'}
+knitr::include_graphics(path = "img/graph-elements.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+## In the previous lesson, we covered:
+
+
+> 3) Recognizing and using `geoms`
+
+--
+
+> - Scatter plot = `geom_point()`
+
+--
+
+> - Box plot = `geom_boxplot()`
+
+--
+
+> - Line graph = `geom_line()`  
+
+--
+
+> - Bar graph = `geom_histogram()`, `geom_bar()`, `geom_col()`
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+> 4) Labels and factes (exercises)
+
+--
+
+> - **Build labels first!** 
+
+--
+
+> - Facet for subplots of levels in a grouping variable
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Before we start...  
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Things to consider (1)
+
+--
+
+### Recognize the needs of your audience 
+
+#### *level of data literacy, subject matter expertise, etc.*
+
+--
+
+### Check and communicate data quality with stakeholders  
+
+#### *let them know the good and the bad news*
+
+--
+
+### Identify the correct data visualization (based on the data)
+
+#### *single variable, bivariate, and multivariate graphs*
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Things to consider (2)
+
+<br>
+
+### Incorporate feedback from stakeholders/audience into graphs  
+
+#### *ask them to be part of the process*  
+
+--
+
+### Design visualizations with the appropriate detail and annotations
+
+####  *inform (and do not mislead) the audience*
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Getting started 
+
+#### 1) Clearly define the question or problem
+
+- Start with a general goal, broad question, or novel problem
+
+- Move towards specific tasks 
+
+--
+
+#### 2) Matching the measurements to metrics 
+
+- *'Measurements'* are what we care about  
+
+- *'Metrics'* are the available data
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 8% 94%
+background-size: 6%
+
+## Example: How has COVID changed our modes of transportation?
+
+### What kind of measurements would these be?
+
+*how are people traveling (walk, drive, etc.)*
+
+--
+
+### What would these data look like?
+
+*what would the .blue[columns] and .blue[rows] look like?*
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Apple Mobility Data
+
+## Fortunately, these data exist!
+
+Apple released mobility data: 
+
+https://covid19.apple.com/mobility
+
+Import these data below:
+
+```{r import-AppleMobRaw}
+AppleMobRaw <- readr::read_csv("https://bit.ly/36tTVpe")
+```
+
+*Use `Raw` as a prefix or suffix for data in it's most 'raw' state*
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Raw Apple Mobility Data
+
+```{r AppleMobRaw-View, eval=FALSE}
+AppleMobRaw %>% View("Apple")
+```
+
+.border[
+
+```{r apple-mob-view, echo=FALSE, fig.align='center', out.width='75%', out.height='75%'}
+knitr::include_graphics(path = "img/apple-mob-view.png")
+```
+
+]
+
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Wrangling Apple Mobility Data 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Wrangling Apple Mobility Data
+
+--
+
+<br>
+
+### What variables do we have? 
+
+--
+
+### How are these variables formatted? 
+
+--
+
+### How do we need to change them? 
+
+--
+
+#### *...with a focus on answering our question*
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## View Apple Mobility Data (head)
+
+```{r AppleMobRaw-head, eval=FALSE}
+AppleMobRaw %>% head()
+```
+
+```{r AppleMobRaw-head-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% head())
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## View Apple Mobility Data (tail)
+
+```{r AppleMobRaw-tail, eval=FALSE}
+AppleMobRaw %>% tail()
+```
+
+```{r AppleMobRaw-tail-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% tail())
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Tidying Apple Mobility Data 
+
+Tidy dates and mobility into `date` and `dir_request` ('relative usage of directions')
+
+```{r tidying-no-show, eval=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(
+    cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+    head(5)
+```
+
+.small[
+
+```{r tidying-show, echo=FALSE}
+rmarkdown::paged_table(AppleMobRaw %>% 
+  tidyr::pivot_longer(
+    cols = -c(geo_type:country), 
+    names_to = "date", 
+    values_to = "dir_request") %>% head(5))
+```
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Manipulate Apple Mobility Data
+
+Remove missing values in `country` and `sub-region` and `clean_names()`
+
+```{r wrangle-no-show, eval=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() %>% View("TidyApple")
+```
+
+```{r wrangle-show, echo=FALSE, eval=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() %>% View("TidyApple")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create a '`TidyApple`' Mobility Dataset!
+
+.leftcol40[
+
+Assign the output from `pivot_longer()`, `filter()`, and `clean_names()` to `TidyApple`
+
+.code60[
+
+```{r wrangle-assign-show, eval=FALSE}
+TidyApple <- AppleMobRaw %>% 
+  tidyr::pivot_longer(
+      cols = -c(geo_type:country), 
+        names_to = "date", 
+        values_to = "dir_request") %>% 
+        # remove missing country data
+        dplyr::filter(!is.na(country) & 
+            !is.na(`sub-region`)) %>% 
+        # clean names
+        janitor::clean_names()
+TidyApple
+```
+
+]
+
+]
+
+
+.rightcol60[
+
+```{r apple-tidy-view.png, echo=FALSE, fig.align='center', out.width='80%', out.height='80%'}
+knitr::include_graphics(path = "img/apple-tidy-view.png")
+# copy_slide_images("apple-tidy-view.png")
+```
+
+]
+
+```{r wrangle-assign-no-show, echo=FALSE}
+AppleMobRaw %>% 
+  tidyr::pivot_longer(cols = -c(geo_type:country), 
+    names_to = "date", values_to = "dir_request") %>% 
+  # remove missing country data
+  dplyr::filter(!is.na(country) & !is.na(`sub-region`)) %>% 
+  # clean names
+  janitor::clean_names() -> TidyApple
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# `TidyApple`: Format Variables
+
+### + `date` needs to be formatted as a `date`
+
+### + rename `transportation_type` to `trans_type`
+
+```{r format-date}
+TidyApple <- TidyApple %>% 
+  mutate(date = lubridate::ymd(date)) %>% 
+  rename(trans_type = transportation_type)
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `TidyApple`: Check Formatted Variables
+
+Re-check `TidyApple` data.
+
+```{r recheck-glimpse-TidyApple}
+glimpse(TidyApple)
+```
+
+Now we can see `trans_type` and `date` are formatted correctly
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `TidyApple`: Counting
+
+> “*data science is mostly counting things*” - `tabyl` vignette
+
+.leftcol[
+
+Count the `trans_type` variable with `dplyr::count()`
+
+```{r count-code, eval=FALSE}
+TidyApple %>% 
+    count(trans_type)
+```
+
+.small[
+
+```{r paged-count-code, echo=FALSE}
+rmarkdown::paged_table(TidyApple %>% count(trans_type))
+```
+
+]]
+
+.rightcol[
+
+*Add the `sort = TRUE` argument to arrange the counts descending*
+
+```{r count-sort, eval=FALSE}
+TidyApple %>% 
+  count(trans_type, sort = TRUE)
+```
+
+.small[
+
+```{r paged-count-sort-code, echo=FALSE}
+rmarkdown::paged_table(TidyApple %>% 
+                           count(trans_type, sort = TRUE))
+```
+
+]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Line Graphs
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Narrowing date ranges
+
+Filter the data to only us cities between `2020-02-01` and `2020-08-01`. Use `skimr::skim()` to make sure it works!
+
+--
+
+```{r filter-us-cities, eval=FALSE}
+TidyApple %>% 
+  # us cities
+  filter(geo_type == "city" &
+         country == "United States", 
+         # feb - aug
+         date >= lubridate::as_date("2020-02-01") & 
+         date <= lubridate::as_date("2020-08-01")) %>% 
+         # check work!
+         skimr::skim(date)
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Check with `skimr` output
+
+These are helpful if we're checking a filter on a numerical certain condition (`min`, `max`, `mean`, etc.)
+
+```{r skimr-output-png, echo=FALSE, out.height='80%', out.width='80%', fig.align='center'}
+knitr::include_graphics(path = "img/skimr-output.png")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Narrow to US Cities (Feb-Jul) 
+
+Create `USCitiesFebJul` data by filtering to US cities between Feb 1, 2020 and July 31, 2020.
+
+```{r USCitiesFebJul}
+TidyApple %>% 
+  filter(geo_type == "city" &
+         country == "United States", 
+         date >= lubridate::as_date("2020-02-01") & 
+         date <= lubridate::as_date("2020-08-01")) -> USCitiesFebJul
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Line Graph: Labels (1)
+
+Ideally, our labels update whenever the data changes. 
+
+.code80[
+
+```{r paste0}
+paste0(min(USCitiesFebJul$date), 
+       " through ", 
+       max(USCitiesFebJul$date)) 
+```
+
+]
+
+We can do this by using `paste0()` in our `subtitle`:
+
+.code80[
+
+```{r subtitle, eval=FALSE}
+ subtitle = 
+    paste0(min(USCitiesFebJul$date), # first date
+          " through ", # plain text
+          max(USCitiesFebJul$date)),  # last date
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Line Graph: Labels (2)
+
+We can then supply the `subtitle` to `labs`
+
+```{r lab_line_graph}
+labs(x = "Date",
+     y = "Direction Requests",
+     title = "Direction Requests Over Time (US Cities Only)",
+     subtitle = paste0(min(USCitiesFebJul$date), #<<
+                       " through ", #<<
+                       max(USCitiesFebJul$date)), #<<
+     caption = "source: https://covid19.apple.com/mobility", 
+     color = "Transit Type") -> lab_line_graph
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Line Graph: Labels (3)
+
+.leftcol45[
+
+We will add `group` and `color` aesthetics to our graph of `dir_request` over time (`date`). 
+
+.code70[
+
+```{r apply-lab_line_graph-code, eval=FALSE}
+USCitiesFebJul %>% 
+  ggplot() +
+  geom_line(aes(x = date, 
+                y = dir_request, 
+            group = trans_type, 
+            color = trans_type)) + 
+    lab_line_graph
+```
+
+]]
+
+--
+
+.rightcol55[
+.border[
+
+```{r apply-lab_line_graph-show, echo=FALSE, out.height='100%', out.width='100%', fig.align='center'}
+USCitiesFebJul %>% 
+  ggplot() +
+  geom_line(aes(x = date, 
+                y = dir_request, 
+                   group = trans_type, 
+                   color = trans_type)) + 
+    lab_line_graph
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Line Graphs: Overlapping Lines
+
+Consider our previous line graph--the lines overlap a bit.
+
+.border[
+
+```{r apply-lab_line_graph-show-2, echo=FALSE, out.height='70%', out.width='70%', fig.align='center'}
+USCitiesFebJul %>% 
+  ggplot() +
+  geom_line(aes(x = date, 
+                y = dir_request, 
+                   group = trans_type, 
+                   color = trans_type)) + 
+    lab_line_graph
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Line Graph: Line Size 
+
+.leftcol45[
+
+We can minimize the size of the line with the `size` aesthetic.
+
+.code70[
+
+
+```{r geom_line-smaller-size-code, eval=FALSE}
+USCitiesFebJul %>% 
+  ggplot() +
+  geom_line(aes(x = date, 
+                y = dir_request, 
+             group = trans_type, 
+             color = trans_type), 
+    # make these slightly smaller
+            size = 0.20) + 
+  lab_line_graph
+```
+
+]]
+
+--
+
+.rightcol55[
+
+This makes the trends easier to see.
+
+.border[
+
+```{r geom_line-smaller-size-show, echo=FALSE, out.height='100%', out.width='100%', fig.align='center'}
+USCitiesFebJul %>% 
+  ggplot() +
+  geom_line(aes(x = date, 
+                y = dir_request, 
+             group = trans_type, 
+             color = trans_type), 
+    # make these slightly smaller
+            size = 0.20) + 
+  lab_line_graph
+```
+
+]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Adding Text
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Labeling Missing Data 
+
+There is a gap in the direct request data (this is [documented in the data source](https://covid19.apple.com/mobility)). 
+
+--
+
+> *"Data for May 11-12 is not available and will appear as blank columns in the data set."*
+
+--
+
+.border[
+
+```{r missing-geom_line-smaller-size-1-show, echo=FALSE, out.height='52%', out.width='52%', fig.align='center'}
+USCitiesFebJul %>% ggplot() +
+  geom_line(aes(x = date, y = dir_request, 
+             group = trans_type, color = trans_type), 
+    # make these slightly smaller
+            size = 0.20) + lab_line_graph
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create Annotate Data
+
+These data are `filter`ed to US cities between March 1, 2020 to June 30, 2020.
+
+```{r create-USCitiesMarJun-code, eval=TRUE}
+USCitiesMarJun <-  TidyApple %>% 
+  filter(geo_type == "city" & country == "United States", 
+         date >= lubridate::as_date("2020-03-01") & 
+         date <= lubridate::as_date("2020-07-01"))
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create Annotate Data
+
+<br>
+
+```{r USCitiesMarJun, eval=FALSE}
+USCitiesMarJun
+```
+
+.small[
+
+```{r create-USCitiesMarJun-show, echo=FALSE}
+rmarkdown::paged_table(USCitiesMarJun)
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `annotate`: Build Labels 
+
+Build our labels first!
+
+```{r lab_annotation}
+lab_annotation <- labs(x = "Date",
+     y = "Direction Requests",
+     title = "Spring Direction Requests (Mar-Jun) in US Cities",
+     subtitle = paste0(min(USCitiesMarJun$date), #<<
+                       " through ", 
+                       max(USCitiesMarJun$date)), #<<
+     caption = "source: https://covid19.apple.com/mobility", 
+     color = "Transit Type")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `annotate`: Build Line Graph 
+
+Build a line graph layer (`gg_line_annotate`)
+
+```{r gg_line_annotate}
+gg_line_annotate <- USCitiesMarJun %>% 
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request, 
+             group = trans_type, color = trans_type), 
+             size = 0.20)
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `annotate`: build coordinate system
+
+Add a coordinate system layer (`gg_coord_system`)
+
+```{r gg_coord_system}
+gg_coord_system <- coord_cartesian(
+ xlim = c(min(USCitiesMarJun$date), 
+          max(USCitiesMarJun$date)), 
+ ylim = c(min(USCitiesMarJun$dir_request, na.rm = TRUE), 
+          max(USCitiesMarJun$dir_request, na.rm = TRUE)))
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `annotate`: build line segment 
+
+Build vertical line segment (`gg_line_segment`)
+
+```{r gg_line_segment}
+gg_line_segment <- annotate(geom = "segment", 
+        size = 1, 
+        color = "firebrick3",
+        x = lubridate::as_date("2020-05-11"), 
+        xend = lubridate::as_date("2020-05-11"), 
+        y = 270, 
+        yend = 100)
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### `annotate`: Build Text Annotatation 
+
+Build text annotation (`gg_text_annotation`)
+
+```{r gg_text_annotation}
+gg_text_annotation <- annotate(geom = "text",
+       color = "red", 
+       hjust = 0.5, 
+       size = 6,
+       x = lubridate::as_date("2020-05-07"), 
+       y = 300, 
+       label = "Data not available") 
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+### `annotate`: Combine Layers
+
+
+.leftcol45[
+
+Now we can use the `ggplot2` syntax to combine these layers...
+
+.code70[
+
+```{r build-annotation-graph, eval=FALSE}
+gg_line_annotate + # line graph
+  gg_coord_system + # coordinate system 
+  gg_line_segment + # line annotation
+  gg_text_annotation + # text annotation 
+  lab_annotation # labels
+```
+
+]]
+
+--
+
+.rightcol55[
+
+.border[
+
+<br>
+
+```{r build-annotation-graph-code, echo=FALSE}
+USCitiesMarJun %>% 
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request, 
+             group = trans_type, color = trans_type), 
+             size = 0.20) + 
+    coord_cartesian(
+     xlim = c(min(USCitiesMarJun$date), 
+          max(USCitiesMarJun$date)), 
+    ylim = c(min(USCitiesMarJun$dir_request, na.rm = TRUE), 
+          max(USCitiesMarJun$dir_request, na.rm = TRUE))) + 
+    annotate(geom = "segment", 
+        size = 1, 
+        color = "firebrick3",
+        x = lubridate::as_date("2020-05-11"), 
+        xend = lubridate::as_date("2020-05-11"), 
+        y = 270, 
+        yend = 100) + 
+    annotate(geom = "text",
+       color = "red", 
+       hjust = 0.5, 
+       size = 6,
+       x = lubridate::as_date("2020-05-07"), 
+       y = 300, 
+       label = "Data not available") + 
+    labs(x = "Date",
+     y = "Direction Requests",
+     title = "Spring Direction Requests (Mar-Jun) in US Cities",
+     subtitle = paste0(min(USCitiesMarJun$date), #<<
+                       " through ", 
+                       max(USCitiesMarJun$date)), #<<
+     caption = "source: https://covid19.apple.com/mobility", 
+     color = "Transit Type")
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Labeling Values (Review)
+
+In the previous slides, we learned about labeling values with `ggrepel`.
+
+.border[
+
+```{r aes-sol-11-1, echo=FALSE, fig.align='center', out.height='45%', out.width='45%'}
+knitr::include_graphics(path = "img/aes-sol-11-1.png")
+```
+
+]
+
+Now we're going to extend this to plotting text and values on our graphs!
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Highlighting Large US Cities 
+
+Filter `TidyApple` to the 5 largest US cities (by [population](https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population)).
+
+```{r TopUSCities-no-show}
+TopUSCities <- TidyApple %>% 
+  filter(country == "United States" & 
+           region %in% c("New York City","Los Angeles", 
+                         "Chicago", "Houston", "Phoenix")) 
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### View `TopUSCities`
+
+<br>
+
+```{r view-TopUSCities, eval=FALSE}
+TopUSCities
+```
+
+.small[
+
+```{r TopUSCities-show, echo=FALSE}
+TopUSCities <- TidyApple %>% 
+  filter(country == "United States" & 
+           region %in% c("New York City","Los Angeles", 
+                         "Chicago", "Houston", "Phoenix"))
+rmarkdown::paged_table(TopUSCities)
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Highlighting Peak Driving
+
+Create a dataset with only the maximum direction request values for `"driving"` per `region`. 
+
+```{r MaxUSCitiesDriving, eval=FALSE}
+MaxUSCitiesDriving <- TopUSCities %>% 
+  filter(trans_type == "driving") %>% 
+  group_by(region) %>% 
+  slice_max(dir_request) %>% 
+  ungroup()
+MaxUSCitiesDriving
+```
+
+.small[
+
+```{r MaxUSCitiesDriving-no-show, echo=FALSE}
+TopUSCities %>% 
+  filter(trans_type == "driving") %>% 
+  group_by(region) %>% 
+  slice_max(dir_request) %>% 
+  ungroup() -> MaxUSCitiesDriving
+rmarkdown::paged_table(MaxUSCitiesDriving)
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create graph labels 
+
+<br>
+
+We know we want to see the max direction requests labeled, so we will update the labels for the graph.
+
+```{r lab_line_max_drivers}
+lab_line_max_drivers <- labs(
+ x = "Date",
+ y = "Direction Requests",
+ title = "Peak Driving Direction Requests in Largest US Cities",
+ subtitle = paste0(min(TopUSCities$date), 
+                   " through ", 
+                   max(TopUSCities$date)),
+ caption = "source: https://covid19.apple.com/mobility", 
+ color = "Transit Type")
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create Value Labels 
+
+.leftcol[
+
+We will also use `paste0()` here to create a variable for the labels that combines the city and date. 
+
+```{r max_driving_labels-sol-01}
+MaxUSCitiesDriving <- MaxUSCitiesDriving %>% 
+  mutate(max_driving_labels = paste0(region, ", ", date))
+```
+
+]
+
+.rightcol[
+
+Take a look at the labels we've created 
+
+```{r view-max_driving_labels, eval=FALSE}
+MaxUSCitiesDriving %>% 
+  select(max_driving_labels)
+```
+
+.medium[
+
+```{r max_driving_labels-show, echo=FALSE}
+rmarkdown::paged_table(
+MaxUSCitiesDriving %>% 
+  select(max_driving_labels))
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Create Line Layer + Label Layer
+
+.leftcol45[
+
+.small[
+
+Now we combine the `geom_line()` layer, the `geom_label_repel()` layer, and the `lab_line_max_drivers`. 
+
+]
+
+.code50[
+
+```{r geom_label_repel-plot-with-labels-code, eval=FALSE}
+library(ggrepel)
+TopUSCities %>% 
+    ggplot() + 
+    geom_line(aes(
+            x = date, 
+            y = dir_request, 
+        group = trans_type, 
+        color = trans_type), 
+  # make these slightly smaller again...
+         size = 0.15) + 
+    geom_label_repel(
+        data = MaxUSCitiesDriving,
+        aes(x = date, 
+            y = dir_request, 
+        label = max_driving_labels), 
+  # set color and size...
+        color = "red", 
+         size = 3) + 
+  lab_line_max_drivers
+```
+
+]]
+
+.rightcol55[.border[
+
+```{r geom_label_repel-plot-with-labels-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+library(ggrepel)
+TopUSCities %>% 
+    ggplot() + 
+    geom_line(aes(x = date, y = dir_request, 
+                  group = trans_type, 
+                  color = trans_type), 
+                  # make these slightly smaller again...
+                  size = 0.15) + 
+    geom_label_repel(data = MaxUSCitiesDriving,
+              aes(x = date, y = dir_request, 
+                  label = max_driving_labels), 
+                  # set color and size...
+                  color = "red", 
+                  size = 3) + 
+  lab_line_max_drivers
+```
+
+
+]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Adding Reference Lines
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Reference Line Data 
+
+```{r ref-line-TopUSCities-no-run, eval=FALSE}
+TopUSCities
+```
+
+```{r ref-line-TopUSCities-no-run-show, echo=FALSE}
+rmarkdown::paged_table(TopUSCities)
+```
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Reference Line Labels 
+
+```{r lab_ref_lines}
+labs(x = "Date", 
+ y  = "Direction Requests", 
+ title = "Trends of Relative Activity in Selected US Cities",
+ subtitle = "New York, Los Angeles, Chicago, Houston, Phoenix",
+ color = "Type") -> lab_ref_lines
+```
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Horizontal Reference Lines
+
+
+
+.leftcol45[
+
+.small[
+
+Add the `geom_hline()` for a horizontal reference line (at `100`)
+
+
+]
+
+.code50[
+
+```{r reference-lines-geom_hline-code, eval=FALSE}
+TopUSCities %>% 
+  ggplot(aes(x = date, 
+             y = dir_request, 
+             group = trans_type, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  lab_ref_lines
+```
+
+]]
+
+.rightcol55[.border[
+
+```{r reference-lines-geom_hline-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TopUSCities %>% 
+  ggplot(aes(x = date, 
+             y = dir_request, 
+             group = trans_type, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  lab_ref_lines
+```
+
+]]
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Advanced Facetting 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Faceting basics 
+
+.leftcol45[
+
+.small[
+
+Facets create subplots across levels of a categorical variable.
+
+]
+
+.code50[
+
+```{r facet_wrap-region-code, eval=FALSE}
+TopUSCities %>% 
+  ggplot(aes(x = date, y = dir_request, 
+             group = trans_type, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  facet_wrap(~ region,  ncol = 2) + #<<
+  lab_ref_lines
+```
+
+]]
+
+--
+
+.rightcol55[.border[
+
+```{r facet_wrap-region-show, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TopUSCities %>% 
+  ggplot(aes(x = date, y = dir_request, 
+             group = trans_type, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  facet_wrap(~ region,  ncol = 2) + 
+  lab_ref_lines
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Multiple Variable Facets 
+
+.leftcol45[
+
+.small[
+
+Add the `ncol = 5` to specify the number of columns (or rows with `nrow = `)
+
+]
+
+.code50[
+
+```{r facet_wrap-2vars-1, eval=FALSE}
+TopUSCities %>% 
+  ggplot(aes(x = date, 
+             y = dir_request, 
+             group = region, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  facet_wrap(region ~ trans_type, #<<
+             ncol = 5) + #<<
+  lab_ref_lines
+```
+
+]]
+
+
+--
+
+.rightcol55[.border[
+
+<br>
+
+```{r facet_wrap-2vars-2, echo=FALSE, fig.align='center', out.height='100%', out.width='100%'}
+TopUSCities %>% 
+  ggplot(aes(x = date, y = dir_request, 
+             group = region, 
+             color = trans_type)) + 
+  geom_line(size = 0.1) + 
+  geom_hline(yintercept = 100, 
+             size = 0.2, 
+             color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 5) + 
+  lab_ref_lines
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Advanced Faceting (`facet_wrap_paginate`)
+
+.leftcol35[
+.medium[
+
+Check out the exercises for more advanced faceting with `facet_wrap_paginate()` from the [`ggforce` package](https://ggforce.data-imaginist.com/). 
+
+]]
+
+--
+
+.rightcol65[
+
+.border[
+
+```{r facet_wrap_paginate-sol-1, echo=FALSE, fig.align='center', out.height='75%', out.width='75%'}
+knitr::include_graphics(path = "img/facet_wrap_paginate-sol-1.png")
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+### Advanced Faceting (`facet_geo`)
+
+.leftcol35[
+.medium[
+
+Check out the exercises for more advanced faceting with `facet_geo()` from the `geofacet` package. 
+
+]]
+
+--
+
+
+.rightcol65[
+.border[
+
+```{r facet_geo-sol-1-png, echo=FALSE, fig.align='center', out.height='75%', out.width='75%'}
+knitr::include_graphics(path = "img/facet_geo-sol-1.png")
+```
+
+]]
+
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# More Resources
+
+### [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
+
+### [ggplot2 extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/)
+
+### [R Graphics Cookbook](https://r-graphics.org/)
+
+
+
+```{r chrome_print, echo=FALSE, results='hide', eval=FALSE}
+html_slides <- list.files(".", pattern = ".html")
+pdf_slides <- str_replace(html_slides, 
+  pattern = ".html", 
+  replacement = ".pdf")
+pdf_slides <- paste0("pdfs/", pdf_slides)
+print_files <- tibble("pdfs" = pdf_slides,
+  "htmls" = html_slides)
+
+# print_files$htmls[10]
+# print_files$pdfs[10]
+
+pagedown::chrome_print(input = print_files$htmls[10], output = print_files$pdfs[10], timeout = 120)
+```

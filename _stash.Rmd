@@ -1,0 +1,148 @@
+
+<!--
+
+
+It's hard to tell if the code above is working because we're still seeing all the columns in `big_starwars`. Reduce the output by adding `dplyr::select()` to the pipeline. 
+
+```{r filter-sol-01a}
+big_starwars |> 
+  dplyr::filter(species == "Droid") |> 
+  dplyr::select(species)
+```
+
+
+The code below `big_starwars` only returns data from the `homeworld`s of `Tatooine` and `Alderaan`:
+
+```{r filter-sol-02}
+big_starwars |> 
+  dplyr::filter(homeworld %in% c("Tatooine", "Alderaan")) |>
+  dplyr::select(homeworld)
+```
+
+I don't want to try and count each row to verify if it's **only** returning the two `homeworld`s of interest, so we can use `dplyr::count()` to verify the returned categories.
+
+```{r filter-sol-02a}
+big_starwars |>
+  dplyr::filter(homeworld %in% c("Tatooine", "Alderaan")) |>
+  dplyr::count(homeworld)
+```
+
+The code below only returns data from `big_starwars` where `species` is `Gungan`, `Hutt`, or `Wookie`:
+
+```{r filter-sol-03}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  select(species)
+```
+
+We can use `dplyr::count()` with multiple variables to get the specific number of rows for combinations of values. 
+
+For example, the code below gives us the count of the three categories of `species` above by their `species_class` and `homeworld`:
+
+```{r filter-sol-03a}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(species_class, homeworld)
+```
+
+We can include `sort = TRUE` to arrange the `n` column descending: 
+
+```{r filter-sol-03b}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(species_class, homeworld, sort = TRUE)
+```
+
+It's important to note that `dplyr::count()` returns the variable's distinct counts for each level or value, so it's less helpful if you're using it with a numeric variable (or a variable with unique values per row). 
+
+For example, the code below returns data where `mass` is greater than `180` and `species` does not include `"Droid"`.   
+
+```{r filter-sol-04}
+big_starwars |> 
+  dplyr::filter(mass > 100 & species != "Droid") |> 
+  select(mass, species)
+```
+
+
+If we swap `select()` for `count()`, we get an additional `n` column (but all equal `1`), so it adds no new information. 
+
+```{r filter-sol-04a}
+big_starwars |> 
+  dplyr::filter(mass > 100 & species != "Droid") |> 
+  count(mass, species)
+```
+
+
+# Arranging data 
+
+`dplyr::arrange()` sorts variables on their content, numeric or character. 
+
+The code below sorts `big_starwars` according to the `hair_color` and views to top (`head(10)`) and bottom (`tail(10)`) ten rows of the result:
+
+```{r arrange-sol-01a}
+big_starwars |> 
+  dplyr::arrange(hair_color) |> 
+  select(hair_color) |> 
+  head(10)
+```
+
+```{r arrange-sol-01b}
+big_starwars |> 
+  dplyr::arrange(hair_color) |> 
+  select(hair_color) |> 
+  tail(10)
+```
+
+Note that the missing values are sorted to the bottom of the returned column.
+
+The code below filters the `big_starwars` data to only rows where the `species_class` is `amphibian` and `artificial`, then sorts the results by `species_class` and `mass`, descending:
+
+```{r arrange-sol-02}
+big_starwars |> 
+  dplyr::filter(species_class %in% c("amphibian", "artificial")) |>
+  dplyr::arrange(species_class, desc(mass)) |> 
+  select(species_class, mass)
+```
+
+This is handy when you want to view the output sorted by multiple levels of a categorical variable. 
+
+# Mutating columns 
+
+`mutate()` can create new columns, or change existing columns.  
+
+The code below creates a new `bmi` column in `big_starwars` using `mass` and `height`:
+
+```{r mutate-sol-01}
+big_starwars |>
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2))
+```
+
+Note the use of parentheses here. 
+
+When we're creating new variables with `dplyr::mutate()`, the new variable gets pushed to the end of the dataset. We can view this column by dropping the `last_col()` function inside `select()`
+
+```{r mutate-sol-01a}
+big_starwars |> 
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2)) |>
+  dplyr::select(last_col())
+```
+
+
+
+The code below creates a new `bmi25_ind` variable that splits the new `bmi` variable into above or below `25`, then filters the results to `Hutt` and `Wookie`, then counts and sorts the results: 
+
+```{r mutate-sol-02}
+big_starwars |>
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2),
+    bmi25_ind = bmi > 25) |>
+  dplyr::filter(species %in% c("Hutt", "Wookie")) |>
+  dplyr::count(species_class, bmi25_ind, sort = TRUE)
+```
+
+# What we've covered 
+
+1. Pipes:  (`|>`  and `%>%>`)     
+2. Selecting columns with `select()` and [select helpers](https://tidyselect.r-lib.org/index.html)  
+3. Filtering rows and `count()`ing the results   
+4. Arranging (sorting) data based on their values   
+5. Creating new columns with `mutate()`   

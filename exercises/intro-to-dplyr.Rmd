@@ -14,11 +14,12 @@ params:
   data_file: !r file.path("https://bit.ly/big-sw")
 ---
 
-```{r , echo = FALSE, include=FALSE}
+```{r setup, echo = FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, 
                       comment = "#>", 
                       error = TRUE,
                       eval = TRUE)
+options(scipen = 100000000)
 library(tidyverse)
 library(skimr)
 big_starwars <- read_csv("https://bit.ly/big-sw")
@@ -48,6 +49,21 @@ Read more about `dplyr` [here](https://dplyr.tidyverse.org/index.html) on the ti
 install.packages("tidyverse")
 library(tidyverse)
 ```
+
+# Namespacing 
+
+Namespacing is what we're doing when we using the `pkg::fun()` syntax. We do this because sometimes two different packages will use the same name for a function (after all, there are only so many names!).
+
+This is why we see the following message when we load the `tidyverse` package:
+
+```r
+── Conflicts ───────────────────────────────────── tidyverse_conflicts
+✖ dplyr::filter() masks stats::filter()
+```
+
+If we want to use the `filter()` function from the `stats` package, we'd need to use `stats::filter()`. 
+
+If we use the `package::function()` syntax, we don't need to load the package with `library(package)` (as long as we've previously installed it with (`install.packages("package")`)).
 
 # Import data
 
@@ -92,217 +108,49 @@ These are the columns in `big_starwars` that aren't in `pkg_starwars`.
 
 # `dplyr` verbs 
 
-This section covers four common `dplyr` verbs for data manipulation: 
+These exercises cover four common `dplyr` verbs for data manipulation: 
 
 - `select`: works on **columns**/**variables**
 - `filter`: works on **rows**/**observations**  
 - `arrange`: sorts values (either ascending or descending (with `desc()`))
 - `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
 
-# Selecting columns 
+We'll also be introducing some additional `tidyselect` functions and filtering tips and tricks. 
 
-We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
+# Pipes
 
-The general form of `select()` is below: 
+Clearly written code makes it easier for machines *and* humans to read. The pipes (`|>` or `%>%` from [the `magrittr` package](https://magrittr.tidyverse.org/))  allows us to chain together multiple operations into functional 'pipelines'. 
 
-```{r select-args, eval=FALSE}
-select(.data = , ... = )
+The exercises below use the native pipe (`|>`), but either pipe is acceptable (`%>%`). Recall the pipes convert our code from: 
+
+```{r eval=FALSE}
+OUTPUT_01 <- function_01(OBJECT_01)
+OUTPUT_02 <- function_02(OUTPUT_01)
 ```
 
+To something easier to read:
 
-## Selecting columns 
-
-Alter the code below to select just the `name` and `homeoworld` column:
-
-```{r select-ex-01, eval=TRUE}
-select(big_starwars, name, species, homeworld)
+```{r eval=FALSE}
+OBJECT_01 |>  
+  function_01() |> 
+  function_02() -> OUTPUT_02
 ```
-
-
-### solution
-
-```{r select-sol-01}
-select(big_starwars, name, homeworld)
-```
-
-
-### exercise 
-
-Select only the columns starting with the letter `h`. 
-
-```{r select-ex-02, eval=FALSE}
-select(big_starwars, starts_with("_"))
-```
-
-
-### solution 
-
-```{r select-sol-02}
-select(big_starwars, starts_with("h"))
-```
-
-## Filtering rows {.tabset}
-
-These are some additional exercises for `filter()`ing data. 
-
-### exercise 
-
-Change the code below so `big_starwars` only includes the droids. 
-
-```{r filter-ex-01, eval=FALSE}
-filter(big_starwars, species == "____")
-```
-
-
-### solution 
-
-```{r filter-sol-01}
-filter(big_starwars, species == "Droid")
-```
-
-### exercise 
-
-Change the code below so `big_starwars` only includes data from the `homeworld`s of `Tatooine` and `Alderaan`
-
-```{r filter-ex-02, eval=FALSE}
-filter(big_starwars, 
-       homeworld %in% c("________", "________"))
-```
-
-### solution 
-
-```{r filter-sol-02}
-filter(big_starwars, 
-       homeworld %in% c("Tatooine", "Alderaan"))
-```
-
-
-## Arranging data {.tabset}
-
-`arrange()` sorts variables on their content, numeric or character. 
-
-### exercise  
-
-Sort `big_starwars` according to the `hair_color`. 
-
-```{r arrange-ex-01, eval=FALSE}
-arrange(big_starwars, "____ _____")
-```
-
-
-### solution  
-
-Note that the missing values are sorted to the bottom. 
-
-```{r arrange-sol-01}
-arrange(big_starwars, hair_color)
-```
-
-
-### exercise 
-
-Sort `big_starwars` by `height` and `mass`, descending. 
-```{r arrange-ex-02, eval=FALSE}
-arrange(big_starwars, desc(______, ____))
-```
-
-### solution 
-
-Including two variables is helpful if some of the values 'tie'. 
-
-```{r arrange-sol-02}
-arrange(big_starwars, desc(height, mass))
-```
-
-## Mutate columns {.tabset}
-
-`mutate()` can create new columns, or change existing columns.  
-
-### exercise 
-
-Alter the code below to create a `bmi` column for `starwars` characters in `big_starwars`.
-
-```{r mutate-ex-01, eval=FALSE}
-mutate(big_starwars, 
-       bmi = ____ / ((______ / 100) ^ 2))
-```
-
-### solution 
-
-Note the use of parentheses here. 
-
-```{r mutate-sol-01}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2))
-```
-
-### exercise 
-
-Round the new `bmi` variable to 1 digit. 
-
-```{r mutate-ex-02, eval=FALSE}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2),
-       bmi = _____(___, digits = _))
-```
-
-### solution 
-
-```{r mutate-sol-02}
-mutate(big_starwars, 
-       bmi = mass / ((height / 100) ^ 2),
-       bmi = round(bmi, digits = 1))
-```
-
-# The pipe 
-
-Clearly written code makes it easier for machines *and* humans to read. The pipe (`%>%`) from `magrittr` package allows us to chain together multiple operations into functional 'pipelines'. 
-
-## Function pipelines {.tabset}
 
 The pipe (`%>%`) takes an object that comes before it, and it drops the object into the function that comes after it.
 
-### exercise 
-
-Rewrite the code below to use the pipe 
-
-```{r pipe-ex-01, eval=FALSE}
-select(filter(
-          big_starwars, mass < ___), 
-              ____, hair_color, _______, homeworld)
-```
-
-### solution
-
-This actually wouldn't matter what order it was in--both would return the same result. 
+In the example below, it actually wouldn't matter what order the functions are in--both would return the same result. 
 
 ```{r pipe-sol-01}
-big_starwars %>% 
-  filter(mass < 100) %>% 
-  select(name, hair_color, species, homeworld)
+big_starwars |> 
+  dplyr::filter(mass < 100) |>  
+  dplyr::select(name, hair_color, species, homeworld)
 ```
 
-
-### exercise 
-
-Perform the following operations *without* using the pipe. 
+Consider the following operations *without* using the pipe. 
 
 1. create object `x` with three values, (`3`, `7`, `12`)    
 2. get the `mean()` of `x`, and store it in `mean_x`   
 3. take the squared root of `mean_x`  
-
-```{r pipe-ex-02, eval=FALSE}
-# 1) 
-_ <- c(_, _, __)
-# 2) 
-mean_x <- ____(x)
-# 3 
-sqrt(______)
-```
-
-### soluton 
-
-This returns a vector, not a `tibble`.
 
 ```{r pipe-sol-02}
 # 1) 
@@ -313,27 +161,208 @@ mean_x <- mean(x)
 sqrt(mean_x)
 ```
 
-### exercise 
+This returns a vector, not a `tibble`.
 
-Perform the following operations *with* the pipe. 
+Now let's re-write this code *with* the pipe. 
 
 1. create object `x` with three values, (`3`, `7`, `12`)    
 2. get the `mean()` of `x`, and store it in `mean_x`   
 3. take the squared root of `mean_x`
 
-```{r pipe-ex-03, eval=FALSE}
-c(_, _, __) %>% 
-  ____() %>% 
-  ____()
-```
-
-
-### solution 
-
-Note that we can create a pipeline without even creating an object. 
-
 ```{r pipe-sol-03}
-c(3, 7, 12) %>% 
-  mean() %>% 
+c(3, 7, 12) |> 
+  mean() |> 
   sqrt()
 ```
+
+Note that we can create a pipeline without even creating an object.
+
+# Selecting columns 
+
+We'll start with some exercises that demonstrate how to pick a subset of columns from your dataset using the `select()` function (and helpers!).
+
+The general form of `select()` is below: 
+
+```{r select-args, eval=FALSE}
+dplyr::select(.data = , ... = )
+```
+
+The code below selects the `name` and `homeoworld` columns:
+
+```{r select-sol-01}
+big_starwars |> 
+  dplyr::select(name, homeworld)
+```
+
+The code below selects only the columns starting with the letter `h`. 
+
+```{r select-sol-02}
+big_starwars |> 
+  dplyr::select(starts_with("h"))
+```
+
+The code select *only* numeric columns starting with the letter `h`
+
+```{r select-sol-03}
+big_starwars |> 
+  dplyr::select(starts_with("h")) |> 
+  dplyr::select(where(is.numeric))
+```
+
+
+# Filtering rows 
+
+Below are exercises for `dplyr::filter()`ing data. We're going to combine these with some of the `dplyr::select()` methods we covered above and in the slides. Recall that all filtering must be logical (i.e. evaluate the either `TRUE` or `FALSE`).
+
+The code below only returns the droids in `big_starwars`:
+
+```{r filter-sol-01}
+big_starwars |> 
+  dplyr::filter(species == "Droid") 
+```
+
+
+It's hard to tell if the code above is working because we're still seeing all the columns in `big_starwars`. Reduce the output by adding `dplyr::select()` to the pipeline. 
+
+```{r filter-sol-01a}
+big_starwars |> 
+  dplyr::filter(species == "Droid") |> 
+  dplyr::select(species)
+```
+
+
+The code below only returns data from the `homeworld`s of `Tatooine` and `Alderaan`:
+
+```{r filter-sol-02}
+big_starwars |> 
+  dplyr::filter(homeworld %in% c("Tatooine", "Alderaan")) |>
+  dplyr::select(homeworld)
+```
+
+I don't want to try and count each row to verify if it's **only** returning the two `homeworld`s of interest, so we can use `dplyr::count()` to verify the returned categories.
+
+```{r filter-sol-02a}
+big_starwars |>
+  dplyr::filter(homeworld %in% c("Tatooine", "Alderaan")) |>
+  dplyr::count(homeworld)
+```
+
+The code below only returns data from `big_starwars` where `species` is `Gungan`, `Hutt`, or `Wookie`:
+
+```{r filter-sol-03}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  select(species)
+```
+
+We can use `dplyr::count()` with multiple variables to get the specific number of rows for combinations of values. 
+
+For example, the code below gives us the count of the three categories of `species` above by their `species_class` and `homeworld`:
+
+```{r filter-sol-03a}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(species_class, homeworld)
+```
+
+We can include `sort = TRUE` to arrange the `n` column descending: 
+
+```{r filter-sol-03b}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(species_class, homeworld, sort = TRUE)
+```
+
+It's important to note that `dplyr::count()` returns the variable's distinct counts for each level or value, so it's less helpful if you're using it with a numeric variable (or a variable with unique values per row). 
+
+For example, the code below returns data where `mass` is greater than `180` and `species` does not include `"Droid"`.   
+
+```{r filter-sol-04}
+big_starwars |> 
+  dplyr::filter(mass > 100 & species != "Droid") |> 
+  select(mass, species)
+```
+
+
+If we swap `select()` for `count()`, we get an additional `n` column (but all equal `1`), so it adds no new information. 
+
+```{r filter-sol-04a}
+big_starwars |> 
+  dplyr::filter(mass > 100 & species != "Droid") |> 
+  count(mass, species)
+```
+
+
+# Arranging data 
+
+`dplyr::arrange()` sorts variables on their content, numeric or character. 
+
+The code below sorts `big_starwars` according to the `hair_color` and views to top (`head(10)`) and bottom (`tail(10)`) ten rows of the result:
+
+```{r arrange-sol-01a}
+big_starwars |> 
+  dplyr::arrange(hair_color) |> 
+  select(hair_color) |> 
+  head(10)
+```
+
+```{r arrange-sol-01b}
+big_starwars |> 
+  dplyr::arrange(hair_color) |> 
+  select(hair_color) |> 
+  tail(10)
+```
+
+Note that the missing values are sorted to the bottom of the returned column.
+
+The code below filters the `big_starwars` data to only rows where the `species_class` is `amphibian` and `artificial`, then sorts the results by `species_class` and `mass`, descending:
+
+```{r arrange-sol-02}
+big_starwars |> 
+  dplyr::filter(species_class %in% c("amphibian", "artificial")) |>
+  dplyr::arrange(species_class, desc(mass)) |> 
+  select(species_class, mass)
+```
+
+This is handy when you want to view the output sorted by multiple levels of a categorical variable. 
+
+# Mutating columns 
+
+`mutate()` can create new columns, or change existing columns.  
+
+The code below creates a new `bmi` column in `big_starwars` using `mass` and `height`:
+
+```{r mutate-sol-01}
+big_starwars |>
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2))
+```
+
+Note the use of parentheses here. 
+
+When we're creating new variables with `dplyr::mutate()`, the new variable gets pushed to the end of the dataset. We can view this column by dropping the `last_col()` function inside `select()`
+
+```{r mutate-sol-01a}
+big_starwars |> 
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2)) |>
+  dplyr::select(last_col())
+```
+
+
+
+The code below creates a new `bmi25_ind` variable that splits the new `bmi` variable into above or below `25`, then filters the results to `Hutt` and `Wookie`, then counts and sorts the results: 
+
+```{r mutate-sol-02}
+big_starwars |>
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2),
+    bmi25_ind = bmi > 25) |>
+  dplyr::filter(species %in% c("Hutt", "Wookie")) |>
+  dplyr::count(species_class, bmi25_ind, sort = TRUE)
+```
+
+# What we've covered 
+
+1. Pipes:  (`|>`  and `%>%>`)     
+2. Selecting columns with `select()` and [select helpers](https://tidyselect.r-lib.org/index.html)  
+3. Filtering rows and `count()`ing the results   
+4. Arranging (sorting) data based on their values   
+5. Creating new columns with `mutate()`   

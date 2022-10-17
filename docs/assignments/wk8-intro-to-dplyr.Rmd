@@ -1,0 +1,377 @@
+---
+title: "Week 8: Intro to `dplyr`"
+author: "<Your Name>"
+output: 
+  html_document: 
+    toc: yes
+    toc_depth: 5
+    toc_float: true
+    theme: darkly
+    df_print: tibble
+    
+params: 
+  data_file: !r file.path("https://bit.ly/big-sw")
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ipcwswitch)
+library(skimr)
+library(listviewer)
+options(repos = "https://cloud.r-project.org")
+knitr::opts_chunk$set(warning = TRUE, 
+                      message = TRUE,
+                      error = TRUE)
+options(scipen = 100000000)
+```
+
+
+<!-- ------------ INSTRUCTIONS ------- (DON'T edit below) ----------  
+
+For this assignment, you will get a broad overview of what `dplyr` can do. You can review the slides for this section [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html#1),
+
+***Exercises:***
++ All of the exercises below have the code chunks set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument). 
+
++ Notice that the `setup` chunk has error set to `TRUE`, so if a code chunk doesn't render and look like the example in the exercises, read the error and try to de-bug (this is a huge part of coding). 
+
+***Knit, and knit often:***
+
++ Every time you change an `eval` argument, click on the "Knit" icon in R Studio and review the output. This will prevent errors from building up (and you get to see your handy work!)
+
+**Project setup:**
+
+Follow the instructions on using `goodenuffR` on the course website [here](https://mjfrigaard.github.io/FA22-JOUR301/#using-goodenuffr-for-homework-assignments) or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
+
+Save this R Markdown file and name it with the following conventions: 
+
+`YYYY-MM-DD-LASTNAME-wk8-intro-to-dplyr.Rmd`
+
+*Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
+
+Place this file in the top-level folder of the project: 
+
+***INSTRUCTIONS (edit below this line)***
+
+----- END INSTRUCTIONS ----- (DO edit below this line) ------- -->
+
+## Objectives 
+
+This assignment outlines some common data manipulation tasks with `dplyr`: 
+
+1. `select()` for columns  
+2. `filter()` for rows   
+3. `arrange()` for sorting   
+4. `mutate()` for creating new columns  
+
+## Materials 
+
+View the slides on the [course website.](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html) 
+
+Read more about `dplyr` [here](https://dplyr.tidyverse.org/index.html) on the tidyverse website, or in the [Data Transformation](https://r4ds.had.co.nz/transform.html) chapter of R for Data Science. 
+
+## Load packages 
+
+`dplyr` is part of the core `tidyverse` packages, so we install and load this meta-package below. 
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Namespacing 
+
+Namespacing is what we're doing when we using the `pkg::fun()` syntax. We do this because sometimes two different packages will use the same name for a function (after all, there are only so many words!).
+
+This is why we see the following message when we load the `tidyverse` package:
+
+```r
+── Conflicts ─────────────tidyverse_conflicts
+✖ dplyr::filter() masks stats::filter()
+```
+
+If we want to use the `filter()` function from the `stats` package, we'd need to use `stats::filter()`. 
+
+If we use the `package::function()` syntax, we don't need to load the package with `library(package)` (as long as we've previously installed it with (`install.packages("package")`)).
+
+## Import data {.tabset}
+
+We'll cover two methods for importing data into RStudio. 
+
+1. importing data from a package    
+2. Importing data using `params` in the YAML header  
+
+We have the path to the `big_starwars` data stored in our `params`, but we will also go over how to load a smaller version of this dataset from `dplyr::starwars`. 
+
+### Importing data from a package
+
+Below we import the `starwars` dataset from the `dplyr` package. This is similar to the way we'd access a function from a package (`dplyr::starwars`).
+
+```{r import-pkg_starwars, eval=FALSE}
+pkg_starwars <- dplyr::starwars
+glimpse(pkg_starwars)
+```
+
+### Importing data using `params`
+
+We have the `params` list from our YAML header, which we can also use to import the data. 
+
+```{.yaml}
+params: 
+  data_file: !r file.path("https://bit.ly/big-sw")
+```
+
+```{r import-params, eval=FALSE}
+big_starwars <- readr::read_csv(params$data_file)
+glimpse(big_starwars)
+```
+
+Check to see which columns are different using `names()` and `setdiff()`: 
+
+```{r identical-starwars, eval=FALSE}
+setdiff(x = names(____), # place big_starwars in the x argument 
+        y = names(pkg_starwars))
+```
+
+These are the columns in `big_starwars` that aren't in `pkg_starwars`. 
+
+## `dplyr` verbs 
+
+These exercises cover four common `dplyr` verbs for data manipulation: 
+
+- `select`: works on **columns**/**variables**
+- `filter`: works on **rows**/**observations**  
+- `arrange`: sorts values (either ascending or descending (with `desc()`))
+- `mutate`: creates new columns/variables (or changes format/type/class of existing variables)
+
+We'll also be introducing some additional `tidyselect` functions and filtering tips and tricks. 
+
+## Pipes {.tabset}
+
+### Pipe exercise #1 
+
+Place the pipes in the code chunk below to get the code to work:
+
+```{r pipe-ex-01, eval=FALSE}
+big_starwars __
+  dplyr::filter(mass < 100) __ 
+  dplyr::select(name, hair_color, species, homeworld)
+```
+
+### Pipe exercise #2
+
+Complete the following operations using the pipe:
+
+1. create object `x` with three values, (`3`, `7`, `12`)    
+2. get the `mean()` of `x`, and store it in `mean_x`   
+3. take the squared root of `mean_x`  
+
+```{r pipe-ex-02, eval=FALSE}
+c(3, 7, 12) __
+  mean() __
+  sqrt()
+```
+
+## Selecting columns {.tabset}
+
+### Select exercise #1
+
+Fix the code below to select the `name` and `homeoworld` columns:
+
+```{r select-ex-01, eval=FALSE}
+big_starwars |> 
+  dplyr::select(____, ____)
+```
+
+### Select exercise #2
+
+Fix the code below to select only the columns starting with the letter `h`. 
+
+```{r select-ex-02, eval=FALSE}
+big_starwars |> 
+  dplyr::select(starts_with("____"))
+```
+
+### Select exercise #3
+
+Fix the code below to select *only* numeric columns starting with the letter `h` and the format is numeric.
+
+```{r select-ex-03, eval=FALSE}
+big_starwars |> 
+  dplyr::select(starts_with("____")) |> 
+  dplyr::select(where(is.____)
+```
+
+
+## Filtering rows {.tabset}
+
+### Filtering exercise #1 
+
+Fix the code below to only return the Droid in `big_starwars`:
+
+```{r filter-ex-01, eval=FALSE}
+big_starwars |> 
+  dplyr::filter(species == "Droid") 
+```
+
+### Filtering exercise #2
+
+Fix the code below to reduce the output by adding `dplyr::select()` to the pipeline. 
+
+```{r filter-ex-01a, eval=FALSE}
+big_starwars |> 
+  dplyr::filter(species == "Droid") |> 
+  ____(species)
+```
+
+### Filtering exercise #3
+
+Fix the code below to only return data from the `homeworld`s of `Tatooine` and `Alderaan`:
+
+```{r filter-ex-02, eval=FALSE}
+big_starwars |> 
+  dplyr::filter(homeworld %in% c("____", "____")) |>
+  dplyr::select(homeworld)
+```
+
+### Filtering exercise #4
+
+Use `dplyr::count()` to verify the returned categories
+
+```{r filter-ex-02a, eval=FALSE}
+big_starwars |>
+  dplyr::filter(homeworld %in% c("Tatooine", "Alderaan")) |>
+  ____(homeworld)
+```
+
+### Filtering exercise #5
+
+Fix the code below to only return data from `big_starwars` where `species` is `Gungan`, `Hutt`, or `Wookie`:
+
+```{r filter-ex-03, eval=FALSE}
+big_starwars |>
+  dplyr::filter(species %in% c("____", "____", "____")) |>
+  select(species)
+```
+
+### Filtering exercise #6
+
+Fix the code below to return the count of the three categories of `species` above by their `species_class` and `homeworld`:
+
+```{r filter-ex-03a, eval=FALSE}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(____, ____)
+```
+
+### Filtering exercise #7
+
+Include `sort = TRUE` to arrange the `n` column descending: 
+
+```{r filter-ex-03b, eval=FALSE}
+big_starwars |>
+  dplyr::filter(species %in% c("Gungan", "Hutt", "Wookie")) |>
+  dplyr::count(species_class, homeworld, ____ = ____)
+```
+
+### Filtering exercise #8
+
+Fix the code below to return the data where `mass` is greater than `180` and `species` does not include `"Droid"`.   
+
+```{r filter-ex-04, eval=FALSE}
+big_starwars |> 
+  dplyr::filter(mass > ___ & species != "_____") |> 
+  select(mass, species)
+```
+
+
+### Filtering exercise #9
+
+Repeat code above, but swap `select()` for `count()`
+
+```{r filter-ex-04a, eval=FALSE}
+big_starwars |> 
+  dplyr::filter(mass > ___ & species != "_____") |> 
+  _____(mass, species)
+```
+
+## Arranging data {.tabset}
+
+### Arranging exercise #1
+
+Fix the code below to sort `big_starwars` according to the `hair_color` and view to top (`head(10)`) ten rows of the result 
+
+```{r arrange-ex-01a, eval=FALSE}
+big_starwars |> 
+  dplyr::arrange(____) |> 
+  select(hair_color) |> 
+  ____(10)
+```
+
+### Arranging exercise #2
+
+Fix the code below to sort `big_starwars` according to the `hair_color` and view the bottom (`tail(10)`) ten rows of the result:
+
+```{r arrange-ex-01b, eval=FALSE}
+big_starwars |> 
+  dplyr::arrange(____) |> 
+  select(hair_color) |> 
+  ____(10)
+```
+
+Note that the missing values are sorted to the bottom of the returned column.
+
+### Arranging exercise #3
+
+Fix the code below to filter the `big_starwars` data to only rows where the `species_class` is `amphibian` and `artificial`, then sort the results by `species_class` and `mass`, descending:
+
+```{r arrange-ex-02, eval=FALSE}
+big_starwars |> 
+  dplyr::____(species_class %in% c("____", "____")) |>
+  dplyr::arrange(____, desc(____)) |> 
+  select(species_class, mass)
+```
+
+## Mutating columns {.tabset}
+
+### Mutatating exercise #1
+
+Fix the code below to create a new `bmi` column in `big_starwars` using `mass` and `height`:
+
+```{r mutate-ex-01, eval=FALSE}
+big_starwars |>
+  dplyr::mutate(___ = mass / ((______ / 100) ^ 2))
+```
+
+### Mutatating exercise #2
+
+View the new `bmi` column by placing the `last_col()` function inside `select()`
+
+```{r mutate-ex-01a, eval=FALSE}
+big_starwars |> 
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2)) |>
+  dplyr::select(________())
+```
+
+
+### Mutatating exercise #3
+
+- Fix the code below to create a new `bmi25_ind` variable that splits `bmi` into above or below `25`   
+- Filter the results to `species` of `Hutt` and `Wookie`   
+- Count and arrange the results  
+
+```{r mutate-ex-02, eval=FALSE}
+big_starwars |>
+  dplyr::mutate(bmi = mass / ((height / 100) ^ 2),
+    bmi25_ind = ___ > __) |>
+  dplyr::filter(species %in% c("____", "______")) |>
+  dplyr::_____(species_class, bmi25_ind, ____ = TRUE)
+```
+
+## Recap
+
+1. Pipes:  (`|>`  and `%>%>`)     
+2. Selecting columns with `select()` and [select helpers](https://tidyselect.r-lib.org/index.html)  
+3. Filtering rows and `count()`ing the results   
+4. Arranging (sorting) data based on their values   
+5. Creating new columns with `mutate()` 

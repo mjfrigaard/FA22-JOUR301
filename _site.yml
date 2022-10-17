@@ -19,37 +19,39 @@ navbar:
       menu:
         - text: "(Setup) the goodenuffR package"
           href: slides/intro-to-goodenuffR.html
-        - text: "Class 1: Intro to Data Journalism (files, data, and software)"
+        - text: "Intro to Data Journalism (files, data, and software)"
           href: slides/intro-to-course.html
-        - text: "Class 2: The RStudio IDE & goodenuffR package"
+        - text: "The RStudio IDE & goodenuffR package"
           href: slides/rstudio-ide-intro.html
-        - text: "Class 3: R Markdown"
+        - text: "R Markdown"
           href: slides/intro-to-rmarkdown.html
-        - text: "Class 4: Introduction to R"
+        - text: "Introduction to R"
           href: slides/intro-r-prog.html
-        - text: "Class 5: Data Visualization with ggplot2 part 1"
+        - text: "Data Visualization with ggplot2 part 1"
           href: slides/ggp2-part-01.html
-        - text: "Class 6: Data manipulation with dplyr part 1"
+        - text: "Data manipulation with dplyr part 1"
           href: slides/dplyr-part-01.html
-        - text: "Class 7: Data Visualization with ggplot2 part 2 (under construction)"
+        - text: "Data Visualization with ggplot2 part 2 (a)"
+          href: slides/ggp2-part-02a.html
+        - text: "Data Visualization with ggplot2 part 2 (b)"
+          href: slides/ggp2-part-02b.html
+        - text: "Data manipulation with dplyr part 2 (under construction)"
           href: 
-        - text: "Class 8: Data manipulation with dplyr part 2 (under construction)"
+        - text: "Data Visualization with ggplot2 part 3 (under construction)"
           href: 
-        - text: "Class 9: Data Visualization with ggplot2 part 3 (under construction)"
+        - text: "Buidling maps in R (under construction)"
           href: 
-        - text: "Class 10: Buidling maps in R"
+        - text: "Case study: Twitter data (under construction)"
           href: 
-        - text: "Class 11: Case study: Twitter data"
+        - text: "Case study: Scraping data from the web (under construction)"
           href: 
-        - text: "Class 12: Case study: Scraping data from the web"
+        - text: "Case study: Image files & iteration (under construction)"
           href: 
-        - text: "Class 13: Case study: Image files & iteration (under construction)"
+        - text: "Collaborating with Git & GitHub (under construction)"
           href: 
-        - text: "Class 14: Collaborating with Git & GitHub (under construction)"
+        - text: "Building websites with R Markdown (under construction)"
           href: 
-        - text: "Class 15: Building websites with R Markdown (under construction)"
-          href: 
-        - text: "Class 16: Finals"
+        - text: "Finals"
           href: 
 
     - text: "Tutorials"
@@ -69,24 +71,26 @@ navbar:
           
     - text: "Exercises"
       menu:
-        - text: "Installing R & RStudio (exercises)"
+        - text: "0) Installing R & RStudio (exercises)"
           href: exercises/install-r-rstudio.html
-        - text: "goodenuffR (exercises)"
+        - text: "1) goodenuffR (exercises)"
           href: exercises/goodenuffR.html
-        - text: "R markdown in practice (exercises)"
+        - text: "2) R markdown in practice (exercises)"
           href: exercises/rmarkdown-in-practice.html
-        - text: "ggplot2 intro (exercises)"
+        - text: "3) ggplot2 intro (exercises)"
           href: exercises/intro-to-ggplot2.html
-        - text: "dplyr intro (exercises)"
+        - text: "4) dplyr intro (exercises)"
           href: exercises/intro-to-dplyr.html
           
     - text: "Assignments"
       menu:
-        - text: "Intro to goodenuffR (assignment)"
+        - text: "1) Intro to goodenuffR (assignment)"
           href: assignments/wk2-intro-to-goodenuffR.Rmd
-        - text: "R markdown in practice (assignment)"
+        - text: "2) R markdown in practice (assignment)"
           href: assignments/wk3-rmarkdown-in-practice.Rmd
-        - text: "ggplot2 part 1 (assignment)"
+        - text: "3) ggplot2 part 1 (assignment)"
           href: assignments/wk5-ggp2-assignment-01.Rmd
+        - text: "4) dplyr part 1 (assignment)"
+          href: assignments/wk8-intro-to-dplyr.Rmd
       
 output: distill::distill_article
