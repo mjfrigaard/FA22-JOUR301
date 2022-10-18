@@ -1,0 +1,585 @@
+---
+title: "Data Visualization with ggplot2 (part 3)"
+comment: "*advanced facetting and small multiples*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 60)
+```
+
+# Outline
+
+1. Import Apple Mobility Data 
+2. Facets  
+3. Complete themes  
+4. Adjusting colors   
+5. `geofacet`  
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+# Import `TidyApple` data 
+
+We're going to import the data from the previous exercises.  
+
+```{r import-TidyApple-TopUSCities, message=FALSE, warning=FALSE}
+TidyApple <- vroom::vroom("https://bit.ly/3IiwcJs", delim = ",")
+TopUSCities <- vroom::vroom("https://bit.ly/3d1zEd0", delim = ",")
+```
+
+
+# Advanced Facets
+
+In the previous lesson, we introduced the `facet_wrap()` function for viewing the relationship between two variables across the levels of a categorical variable. In the next section, we're going to show how faceting can be used to explore 'small multiples' in a dataset with variation across multiple levels.
+
+## `facet_wrap()` {.tabset}
+
+Now that we have a graph we can use to compare the `8` cities, we will use `facet_wrap` to create a subplot for each level of `region`.
+
+### exercise
+
+Fill in the `facet_wrap()` (note the use of the `~`) function with `region` and set the `ncol` to `2`.
+
+```{r facet_wrap-ex, eval=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(~ _______,  ncol = _) +
+  lab_top_cities
+```
+
+### solution
+
+```{r lab_top_cities-sol}
+lab_top_cities <- labs(x = "Date", y  = "Direction Requests",
+     title = "Trends of Relative Activity in Selected US Cities",
+     subtitle = "NY, LA, CH, HOU, PHA, PHL, SATX, SD",
+     color = "Type")
+```
+
+```{r facet_wrap-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>% 
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(~ region,  ncol = 2) +
+  lab_top_cities
+```
+
+### exercise
+
+Now map *both* `region` and `trans_type` to `facet_wrap()` and set the `ncol` to `6`.
+
+```{r facet_wrap-2-ex, eval=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(_______ ~ _______, ncol = _) +
+  lab_top_cities
+```
+
+
+### solution
+
+```{r facet_wrap-2-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 6) +
+  lab_top_cities
+```
+
+
+## Complete Themes  {.tabset}
+
+`ggplot2` comes with a few default theme settings. Read more about them [here](https://ggplot2.tidyverse.org/reference/ggtheme.html). These themes come with arguments to adjust the `font_size` and `font_family` on our plot.
+
+```{r theme_minimal-settings, eval=FALSE}
+theme_minimal(
+  base_size = 11,
+  base_family = "",
+  base_line_size = base_size/22,
+  base_rect_size = base_size/22
+)
+```
+
+
+### exercise
+
+We'll use the `theme_minimal()` function to reduce the number of `elements` on our graph (don't add any arguments).
+
+```{r theme_minimal-ex, eval=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 6) +
+  ______________() +
+  lab_top_cities
+```
+
+### solution
+
+```{r theme_minimal-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 6) +
+  theme_minimal() +
+  lab_top_cities
+```
+
+
+## Theme elements {.tabset}
+
+Themes (accessible with the `theme` function) give up the ability to customize various `element_()` settings, which affect the 'look' of our graph.
+
+### exercise
+
+We will start by moving the `legend.position` to `"top"` so it's not crowding the `x` axis on our graph.
+
+```{r theme-ex, eval=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 6) +
+  theme_minimal() +
+  theme(___________ = _____) +
+  lab_top_cities
+```
+
+### solution
+
+```{r theme-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = region,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  facet_wrap(region ~ trans_type, ncol = 6) +
+  theme_minimal() +
+  theme(legend.position = "top") +
+  lab_top_cities
+```
+
+Notice we pass the `theme()` layer after the `theme_minimal()` layer (if we ordered these the other way around, `theme_minimal()` would overwrite any custom settings we made in `theme()`).
+
+## Small Multiples  {.tabset}
+
+What if we wanted to facet more than 8 cities? Fortunately, we have a the [`ggforce`](https://ggforce.data-imaginist.com) and  [`geofacet`](https://hafen.github.io/geofacet/index.html) packages for doing just that!
+
+```{r packages-multiple-facets, message=FALSE, warning=FALSE}
+library(sf)
+library(geofacet)
+library(ggforce)
+library(jcolors)
+```
+
+**Building the Graph Data**
+
+1. We will start by filtering the `TidyApple` to only the 50 US states (we've removed three US territories) and storing these data in `TidyAppleUS`.
+
+2. Next we limit the date range to the beginning of the shelter in place (from February 1, 2020 to May 1, 2020). These data get stored in `TidyAppleUST1`.
+
+3. We then create a dataset with only `"transit"` direction requests, and we count these by state (`sub_region`), arrange the data descending with `sort = TRUE`, and take the top 25 rows (`Top25TransitStates`).
+
+Finally, we filter `TidyAppleUST1` using the 25 states in `Top25TransitStates` to create our graphing dataset, `Top25TransitUSAllT1`.
+
+```{r TidyAppleUST1-skimr, message=FALSE, warning=FALSE}
+# create only US states (TidyAppleUS)
+TidyApple %>%
+  filter(country == "United States" &
+         !sub_region %in% c("Guam", "Puerto Rico",
+                            "Virgin Islands")) -> TidyAppleUS
+# create shelter in place time 1 (TidyAppleUST1)
+TidyAppleUS %>%
+  filter(date >= as_date("2020-02-01") &
+           date <= as_date("2020-05-01")) -> TidyAppleUST1
+
+# create top 25 states (Top25TransitStates)
+Top25TransitStates <- TidyAppleUST1 %>%
+  filter(trans_type == "transit") %>%
+  count(sub_region, trans_type, sort = TRUE) %>%
+  head(25)
+
+# filter T1 to states with the most transit requests (Top25TransitUSAllT1)
+TidyAppleUST1 %>%
+  filter(sub_region %in%
+           unique(Top25TransitStates$sub_region)) -> Top25TransitUSAllT1
+
+Top25TransitUSAllT1 %>% skimr::skim()
+```
+
+### exercise
+
+- set `title` to `"States With Highest Transit Direction Requests"`
+
+- set `subtitle` to `"Top 25 states based on number of total transit requests"`
+
+```{r lab_facet_wrap_paginate-ex, eval=FALSE}
+lab_facet_wrap_paginate <- labs(
+       x = "Date", y = "Direction Requests",
+       title = _____________________________________,
+       subtitle = _____________________________________)
+```
+
+### solution
+
+```{r lab_facet_wrap_paginate}
+lab_facet_wrap_paginate <- labs(
+       x = "Date", y = "Direction Requests",
+       title = "States With Highest Transit Direction Requests",
+       subtitle = "Top 25 states based on number of total transit requests")
+```
+
+### exercise
+
+
+Inside `ggforce::facet_wrap_paginate()`:
+
+- map `sub_region` as the variable to facet using the `~`
+
+- map `5` to `ncol`
+
+- map `"free_y"` to `scales`
+
+Inside `theme()`
+
+- map `element_blank()` to `panel.border` and `panel.background`
+
+- map `element_text(size = 6)` to `axis.text.x` and `axis.text.y`
+
+- map `element_text(colour = 'black')` to `strip.text`
+
+- map `element_rect(fill = "gray93")` to `strip.background`
+
+- map `"top"` to `legend.position`
+
+
+```{r facet_wrap_paginate-ex, eval=FALSE}
+Top25TransitUSAllT1 %>%
+  # global settings
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  # lines
+  geom_hline(yintercept = 100, size = 0.3, color = "black") +
+  geom_line(size = 0.2) +
+  # faceting
+  ggforce::facet_wrap_paginate(~ __________,
+                               ncol = _,
+                               scales = _______) +
+  # theme settings
+  theme(__________ = __________(),
+        __________ = __________(),
+
+        __________ = __________(size = _),
+        __________ = __________(size = _),
+
+        __________ = __________(colour = __________),
+
+        __________ = __________(fill = __________),
+
+        __________ = __________) +
+  # labels
+  lab_facet_wrap_paginate
+```
+
+### solution
+
+```{r facet_wrap_paginate-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+Top25TransitUSAllT1 %>%
+  # global settings
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  # lines
+  geom_hline(yintercept = 100, size = 0.3, color = "black") +
+  geom_line(size = 0.2) +
+  # faceting
+  ggforce::facet_wrap_paginate(~ sub_region,
+                               ncol = 5,
+                               scales = "free_y") +
+  # theme settings
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6),
+        strip.text = element_text(colour = 'black'),
+        strip.background = element_rect(fill = "gray93"),
+        legend.position = "top") +
+  # labels
+  lab_facet_wrap_paginate
+```
+
+## Adjusting Colors {.tabset}
+
+Changing the colors on graphs gives us the ability to further customize their look. We can set these manually, or use one of the many complete color palettes from a user-written package. Below we'll use the [`jcolors` package](https://jaredhuling.org/jcolors/index.html) to highlight the `transit` direction requests from the previous graph.
+
+### exercise
+
+- add `scale_color_jcolors()` and play with the `palette` argument to make the graph look like the `solution`.
+
+```{r scale_color_jcolors-ex, eval=FALSE}
+Top25TransitUSAllT1 %>%
+  # global settings
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  # lines
+  geom_hline(yintercept = 100, size = 0.3, color = "black") +
+  geom_line(size = 0.2) +
+  # faceting
+  ggforce::facet_wrap_paginate(~ sub_region,
+                               ncol = 5,
+                               scales = "free_y") +
+  # theme settings
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6),
+        strip.text = element_text(colour = 'black'),
+        strip.background = element_rect(fill = "gray93"),
+        legend.position = "top") +
+  # adjust colors
+  __________________________(palette = ____) +
+
+  lab_facet_wrap_paginate
+```
+
+### solution
+
+```{r scale_color_jcolors-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+Top25TransitUSAllT1 %>%
+  # global settings
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  # lines
+  geom_hline(yintercept = 100, size = 0.3, color = "black") +
+  geom_line(size = 0.2) +
+  # faceting
+  ggforce::facet_wrap_paginate(~ sub_region,
+                               ncol = 5,
+                               scales = "free_y") +
+  # theme settings
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6),
+        strip.text = element_text(colour = 'black'),
+        strip.background = element_rect(fill = "gray93"),
+        legend.position = "top") +
+
+  scale_color_jcolors(palette = "pal3") +
+
+  lab_facet_wrap_paginate
+```
+
+## Extra: `geofacet` {.tabset}
+
+We're now going to look at all 50 states using the `facet_geo()` function from the `geofacet` package. To make this graph easier to interpret, we're going to focus only on walking mobility data, and adjust the `dir_request` value to absolute change from baseline (set to `100` on `2020-01-13`).
+
+### Adjusted Walking Data
+
+Create the `USWalkingAdj` data by filtering the `trans_type` to `"walking"` and creating two new variables: `above_below` (a logical indicator for values being above or below the baseline value of `100`), and `dir_request_adj` (the adjusted direction request value).
+
+### exercise
+
+Fill in the correct variables in the wrangling steps below:
+
+```{r USWalkingAdj-ex, eval=FALSE}
+USWalkingAdj <- TidyAppleUS %>%
+  filter(trans_type == _________) %>%
+  mutate(above_below = _________ < 100,
+         dir_request_adj = _________ - 100)
+
+USWalkingAdj %>%
+  skimr::skim()
+```
+
+### solution
+
+```{r USWalkingAdj-sol}
+USWalkingAdj <- TidyAppleUS %>%
+  filter(trans_type == "walking") %>%
+  mutate(above_below = dir_request < 100,
+         dir_request_adj = dir_request - 100)
+
+USWalkingAdj %>%
+  skimr::skim()
+```
+
+### exercise
+
+Assign the following to the labels:
+
+- set `"US Trends in Mobility Data for Walking (Adjusted)"` to `title`
+
+- set `"https://covid19.apple.com/mobility"` to `caption`
+
+```{r , lab_facet_geo-ex, eval=FALSE}
+lab_facet_geo <- labs(x = "Date",
+                      y = "Direction Requests (Walking)",
+       title = ____________________________________________,
+       subtitle = paste0("Original data uses 100 as baseline for usage at ",
+                         min(USWalkingAdj$date)),
+       caption = ____________________________________________,
+       fill = "Below Baseline")
+```
+
+### solution
+
+```{r lab_facet_geo-sol}
+lab_facet_geo <- labs(x = "Date",
+                      y = "Direction Requests (Walking)",
+       title = "US Trends in Mobility Data for Walking (Adjusted)",
+       subtitle = paste0("Original data uses 100 as baseline for usage at ",
+                         min(USWalkingAdj$date)),
+       caption = "https://covid19.apple.com/mobility",
+       fill = "Below Baseline")
+```
+
+### exercise
+
+- set the colors in `color_bl_or` as `c("#8470FF", "#7FFFD4")`
+
+- set `yintercept` to `0` in `geom_hline()`
+
+- set the `values` in `scale_fill_manual()` to `color_bl_or`
+
+- map `sub_region` to `facet_geo` using `~`
+
+Inside `theme()`
+
+- set the `panel.border` and `panel.background` to `element_blank()`
+- set the `axis.text.x` and `axis.text.y` to `element_text(size = 6)`
+- set the `strip.text.x` to `element_text(size = 7)`
+- set `strip.text` to `element_text(colour = 'white')`
+- set `strip.background` to `element_rect(fill = "black")`
+- set `legend.position` to `"bottom"`
+
+```{r facet_geo-ex, eval=FALSE}
+# set colors
+color_bl_or <- c(____________, ____________)
+
+USWalkingAdj %>%
+  ggplot(aes(x = date, y = dir_request_adj,
+             group = sub_region, fill = above_below)) +
+
+  geom_col() +
+
+  geom_hline(yintercept = _, color = "gray7") +
+
+  scale_fill_manual(values = ____________) +
+
+  facet_geo(~ sub_region) +
+
+  theme_bw() +
+
+  theme(______________ = ______________(),
+        ______________ = ______________(),
+
+        ______________ = ______________(size = _),
+        ______________ = ______________(size = _),
+        ______________ = ______________(size = _),
+
+        ______________ = ______________(colour = ______________),
+        ______________ = ______________(fill = ______________),
+
+        ______________ = ______________) +
+
+  lab_facet_geo
+```
+
+### solution
+
+```{r facet_geo-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+# set colors
+color_bl_or <- c("#8470FF", "#7FFFD4")
+
+USWalkingAdj %>%
+  ggplot(aes(x = date, y = dir_request_adj,
+             group = sub_region, fill = above_below)) +
+
+  geom_col() +
+
+  geom_hline(yintercept = 0,
+             color = "gray7") +
+
+  scale_fill_manual(values = color_bl_or) +
+
+  facet_geo(~ sub_region) +
+
+  theme_bw() +
+
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 6),
+        strip.text.x = element_text(size = 7),
+        strip.text = element_text(colour = 'white'),
+        strip.background = element_rect(fill = "black"),
+        legend.position = "bottom") +
+
+  lab_facet_geo
+```
+
+# Wrap Up
+
+**Original Question:** *How has COVID changed our modes of transportation?*
+
+1. Which graphs do you feel are best at answering this question? Why?
+
+2. What other information (tables, annotations, etc.) would you include with the graphs?
+
+

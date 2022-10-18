@@ -1,0 +1,64 @@
+---
+title: "EDA project data"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+# chunk options ----
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      eval = TRUE,
+                      echo = FALSE,
+                      tidy = FALSE,
+                      fig.height = 7,
+                      fig.width = 9,
+                      fig.path = "img/")
+# base options ----
+base::options(
+  tibble.print_max = 78,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+```
+
+This project contains documentation and examples of your first exploratory data analysis (EDA) project. 
+
+RStudio Cloud:
+
+https://rstudio.cloud/spaces/163474/project/3145900
+
+## Datasets 
+
+The asssigned datasets are in the `data/raw/` folder:
+
+```{r data}
+fs::dir_tree("data")
+```
+
+
+## Project requirements 
+
+The project requirements are in the .pdf
+
+```{r pdf}
+fs::dir_tree(".", regexp = ".pdf")
+```
+
+## Project Template 
+
+Use this template (optional).
+
+```{r template.Rmd}
+fs::dir_tree(".", regexp = "template.Rmd")
+```
+
+## Project example 
+
+There is also a project example:
+
+```{r example.html}
+fs::dir_tree(".", regexp = "example.html")
+```

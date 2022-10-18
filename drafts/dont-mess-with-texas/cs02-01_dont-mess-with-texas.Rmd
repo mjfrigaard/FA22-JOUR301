@@ -1,0 +1,427 @@
+---
+title: "Case Study (Part 1)"
+comment: "Don't Mess with Texas Part 1: scrape HTML tables"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+library(rtweet)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 300)
+```
+
+
+
+## Texas death row executed offenders website
+
+Texas Department of Criminal Justice keeps records of every inmate they execute. We're going to scrape the data found [here](http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html).
+
+```{r packages, message=FALSE, warning=FALSE}
+library(rvest)     
+library(jsonlite)  
+library(tidyverse) 
+library(tidyquant) 
+library(xopen)     
+library(knitr)     
+library(xml2)
+```
+
+
+## Scraping the data from HTML websites 
+
+Load the `xml2` package and define the url with the data (here it's `webpage_url`).
+
+```{r webpage}
+webpage_url <- "http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html"
+webpage <- xml2::read_html(webpage_url)
+```
+
+### Exract HTML tables
+
+Use the `rvest::html_table()` to find the table in the `webpage` object. This is at position `[[1]]`.
+
+The `dplyr::glimpse(78)` function is helpful here. 
+
+```{r glimpse_table}
+ExOffndrsRaw <- rvest::html_table(webpage)[[1]] 
+# check the data.frame
+ExOffndrsRaw %>% dplyr::glimpse(78)
+```
+
+### Fix the column names
+
+We can see the `Link` column is repeated, which is going to be a problem when we put these data into their own  `tibble` because R doesn't like to repeat the column names inside a `data.frame`. We'll address the column names with `base::colnames()`
+
+```{r colnames}
+base::colnames(x = rvest::html_table(webpage)[[1]])
+```
+
+We will use the `tibble::as_tibble()` function, but add the `.name_repair = "unique"` argument. The `.name_repair` argument has other options (`"check_unique"`, `"unique"`, `"universal"` and `"minimal"`), and you can read the help files using `?as_tibble`. 
+
+In this case, `"unique"` will work just fine. 
+
+```{r ExecutedOffenders, message=FALSE, echo=TRUE, error=TRUE}
+ExecutedOffenders <- rvest::html_table(webpage)[[1]] %>% 
+  # repair the repeated columns
+  tibble::as_tibble(.name_repair = "unique") %>% 
+  # get unique names
+  janitor::clean_names(case = "snake") %>% 
+  # lower, snake case
+  dplyr::rename(offender_info = link_2, 
+                # rename these 
+                last_statement = link_3)
+ExecutedOffenders %>% glimpse(78)
+```
+
+### Export raw data 
+
+Create a folder for these data:
+
+```{r export-raw}
+# create raw folder
+fs::dir_create("../data/wk10-dont-mess-with-texas/")
+fs::dir_tree("../data", recurse = FALSE, regexp = "dont")
+```
+
+Create an exported data file (with the path): 
+
+```{r executed_raw_file}
+# create export path
+executed_raw_file <- paste0("../data/wk10-dont-mess-with-texas/", noquote(lubridate::today()), "-ExecutedOffenders.csv")
+executed_raw_file
+```
+
+
+```{r export-ExecutedOffenders}
+# export
+write_csv(x = ExecutedOffenders, file = executed_raw_file)
+# verify
+fs::dir_tree("../data/wk10-dont-mess-with-texas/", regexp = "ExecutedOffenders.csv")
+```
+
+
+## Identify the links with selector gadget 
+
+Download the [selector gadget app](https://selectorgadget.com/) for your browser. 
+
+### Using the selector gadget
+
+You can identify the various elements in a webpage using the selector gadget. Read [this tutorial](https://rvest.tidyverse.org/articles/articles/selectorgadget.html) to see how it works. 
+
+```{r selector_gadget, out.width='70%', echo=FALSE}
+include_graphics("../img/selector_gadget.png")
+```
+
+In order to get the `nodes` from the table, we need to send `webpage` through a few passes of `rvest` functions (`html_nodes` and `html_attr`) with various `css` tags to get the correct URL paths. This took a few tries and some trial and error, but eventually I was able to figure out the the correct combinations to get the `Links` to the pages.
+
+```{r Links}
+Links <- webpage %>% 
+  # this get the links in the overflow table 
+  # row
+  rvest::html_nodes(".overflow tr") %>% 
+  # the links
+  rvest::html_nodes("a") %>% 
+  # the header ref
+  rvest::html_attr("href")
+# check Links
+Links %>% utils::head(20)
+```
+
+Now `Links` contain:
+
+1) A `dr_info/` path (which makes the entire path `"http://www.tdcj.state.tx.us/death_row/dr_info/"`). 
+
+2) Every offender has two links--one with their full name, the other with a `last` string attached to the back of their full name. 
+
+Something tells me if I check the `base::length()` of `Links` with the `base::nrow()`s in `ExOffndrs`...there will be twice as many links as rows in executed offenders. 
+
+```{r length_vs_nrow}
+length(Links)
+nrow(ExecutedOffenders)
+```
+
+Good--this is what I want. That means each row in `ExecutedOffenders` has two links associated with their name.
+
+### Create `last_links` statements
+
+The `stringr` package can help me wrangle this long vector into the `last_pattern` logical vector, which I then use to subset the `Links`.
+
+```{r last_pattern}
+last_pattern <- stringr::str_detect(
+                            string = Links, 
+                            pattern = "last")
+utils::head(Links[last_pattern])
+```
+
+Check to see that `Links[last_pattern]` is same length as the number of rows in `ExecutedOffenders`...
+
+```{r identical_last_pattern_ExOffndrs}
+base::identical(x = base::length(
+                        Links[last_pattern]), 
+                y = base::nrow(
+                                  ExecutedOffenders))
+```
+
+Great--subset the `Links` for the `last_pattern`, then give this vector a name (`last_links`). 
+
+```{r last_links}
+last_links <- Links[last_pattern]
+last_links %>% utils::head(10)
+```
+
+If I check the length of items in `last_links`, I can see there are an identical number of rows in the data frame. 
+
+```{r check_lengths}
+base::identical(x = base::length(last_links),
+                y = base::nrow(ExecutedOffenders))
+```
+
+### Assign the `last_url` column to `ExecutedOffenders`
+
+This means I can easily assign these as a new column in `ExecutedOffenders`.
+
+```{r add_last_links}
+ExecutedOffenders %>% glimpse()
+```
+
+Not done yet--I need to add the beginning of the web address:
+
+`https://www.tdcj.texas.gov/death_row/`
+
+```{r mutate_last_url}
+# test 
+ExecutedOffenders %>% 
+  dplyr::mutate(
+    last_url = 
+        paste0("https://www.tdcj.texas.gov/death_row/", 
+                                  last_links)) %>% 
+  dplyr::pull(last_url) %>% 
+  utils::head(10)
+# assign
+ExecutedOffenders <- ExecutedOffenders %>% 
+  dplyr::mutate(
+    last_url = 
+        paste0("https://www.tdcj.texas.gov/death_row/", 
+                                  last_links))
+```
+
+Now we will tidy these up into nice, clean `LastUrl` tibble.
+
+```{r tidy-last-links, echo=FALSE}
+LastUrl <- last_links %>% 
+  
+  tibble::as_tibble(.name_repair = 
+                          "unique") %>% 
+  
+  tidyr::gather(key = "key",
+                value = "value") %>% 
+  
+  dplyr::select(name_last_url = value) %>% 
+  
+  dplyr::mutate(name_last_url = 
+        paste0("https://www.tdcj.texas.gov/death_row/", 
+                                  last_links))
+
+LastUrl$name_last_url %>% 
+  utils::head() %>% 
+  base::writeLines()
+```
+
+Test one of the URLs out in the browser. 
+
+```{r open-death-row-html, eval=FALSE}
+xopen("https://www.tdcj.texas.gov/death_row/dr_info/swearingenlarrylast.html")
+```
+
+## Create the info pattern 
+
+Now I want the offender information links (so I omit the links with `last` in the pattern).
+
+```{r info_pattern}
+info_pattern <- !stringr::str_detect(
+                            string = Links, 
+                            pattern = "last")
+Links[info_pattern] %>% 
+  utils::head() %>% 
+  base::writeLines()
+```
+
+### Verify length and rows
+
+Check the `base::length()` to see if it's identical to the number of rows in `ExecutedOffenders`.
+
+```{r identical_info_pattern_ExOffndrs}
+base::identical(x = base::length(Links[info_pattern]), 
+                y = base::nrow(ExecutedOffenders))
+```
+
+Great!
+
+Check the `length()` of `info_links`
+
+```{r info_links}
+info_links <- Links[info_pattern]
+base::identical(x = base::length(info_links),
+                y = base::nrow(ExecutedOffenders))
+```
+
+These are also identical. Repeat the URL process from above on the `info_url`
+
+### Create `info_url` column
+
+Now we combine this with the `https://www.tdcj.texas.gov/death_row/` URL.
+
+```{r create-info_url-death_row}
+ExecutedOffenders %>% 
+  dplyr::mutate(
+    info_url = 
+        paste0("https://www.tdcj.texas.gov/death_row/", 
+                                  info_links)) %>% 
+  dplyr::pull(last_url) %>% 
+  utils::head(10)
+# assign
+ExecutedOffenders <- ExecutedOffenders %>% 
+  dplyr::mutate(
+    info_url = 
+        paste0("http://www.tdcj.state.tx.us/death_row/", 
+                                  info_links))
+```
+
+These are complete URLs--assign this to `ExecutedOffenders` data frame. Put the `InfoLinks` into a tidy data frame. 
+
+```{r info_links-no-eval}
+info_links <- Links[info_pattern]
+
+InfoLinks <- info_links %>% 
+  # turn into a tibble
+  tibble::as_tibble(.name_repair = "unique") %>% 
+  # tidy
+  tidyr::gather(key = "key",
+                value = "value") %>% 
+  # rename the value
+  dplyr::select(dr_info_url = value) %>% 
+  # create the new url with death row root
+  dplyr::mutate(
+    dr_info_url = paste0("http://www.tdcj.state.tx.us/death_row/", info_links))
+
+InfoLinks %>% dplyr::glimpse(78)
+```
+
+### Check in browser 
+
+Test a few of these out in the browser:
+
+```{r xopen-test, eval=FALSE}
+xopen("http://www.tdcj.state.tx.us/death_row/dr_info/brookscharlie.html")
+```
+
+Now we assign these links to the `ExecutedOffenders` data frame. But first make sure they match up.
+
+```{r check_names_in_ExOffndrs}
+ExecutedOffenders %>% 
+  dplyr::select(last_name, 
+                first_name) %>%
+  utils::head(10)
+```
+
+```{r check_last_names_in_ExOffndrs}
+ExecutedOffenders %>% 
+  dplyr::select(last_name, 
+                first_name) %>%
+  utils::tail(10)
+```
+
+### Bind columns
+
+Combine the `ExecutedOffenders`, `LastUrl` and `InfoLinks`. 
+
+```{r bind_cols_ExOffndrsComplete}
+# Use `dplyr::bind_cols()` to attach these columns to `ExecutedOffenders` and 
+# rename to`ExOffndrsComplete`
+ExecutedOffenders <- ExecutedOffenders %>% 
+  # add the info_url
+  dplyr::bind_cols(LastUrl) %>%
+  # add the
+  dplyr::bind_cols(InfoLinks) %>%
+  # move the names to the front
+  dplyr::select(dplyr::ends_with("name"),
+                # all else
+                dplyr::everything())
+ExecutedOffenders %>% dplyr::glimpse(78)
+```
+
+
+## Create indicator for .html vs .jpgs 
+
+Create a binary variable to identify if this is a `.jpg` or `.html` path and name the new data frame `ExOffndrsComplete`.
+
+### Use `case_when()` to create `jpg_html`
+
+```{r jpg_html}
+ExOffndrsComplete <- ExecutedOffenders %>% 
+  dplyr::mutate(jpg_html = 
+        dplyr::case_when(
+          str_detect(string = info_url, pattern = ".jpg") ~ "jpg", 
+          str_detect(string = info_url, pattern = ".html") ~ "html")) 
+ExOffndrsComplete %>% dplyr::count(jpg_html)
+```
+
+### Check with `sample_n()`
+
+Use `dplyr::sample_n` to check a few examples of this new variable.
+
+```{r check_jpg_html}
+ExOffndrsComplete %>% 
+  dplyr::sample_n(size = 10) %>% 
+  dplyr::select(info_url, 
+                jpg_html) %>% 
+  dplyr::count(jpg_html)
+```
+
+## Export the data with a date stamp 
+
+We now have a data frame we can export into a dated folder. 
+
+```{r export-all}
+# create data folder
+export_path <- "../data/wk10-dont-mess-with-texas/processed/"
+fs::dir_create(export_path)
+# create today
+tahday <- as.character(lubridate::today())
+tahday_path <- paste0(export_path, tahday, "/")
+tahday_path
+# create new data folder
+fs::dir_create(tahday_path)
+# create data path
+tahday_data_path <- paste0(tahday_path, "ExOffndrsComplete.csv")
+# export these data
+vroom::vroom_write(x = ExOffndrsComplete, file = tahday_data_path, delim = ",")
+fs::dir_tree(tahday_path, regexpr = "-ExOffndrsComplete.csv")
+```
+
+

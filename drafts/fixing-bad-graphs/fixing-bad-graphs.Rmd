@@ -1,0 +1,355 @@
+---
+title: "Fixing bad graphs"
+description: |
+  "From Medium artile, '[Mistakes, we’ve drawn a few'](https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368)'"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 4
+
+always_allow_html: true
+    
+---
+
+
+```{r setup, include=FALSE}
+library(fs)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(tidytuesdayR)
+library(zipcodeR)
+library(tigris)
+library(readr)
+library(stringr)
+library(lubridate)
+library(patchwork)
+library(grid)
+## Global options
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 7.5,
+  fig.height = 5,
+  fig.retina = 2
+  )
+fs::dir_create("data")
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/fixing-bad-graphs/')
+```
+
+## Install packages 
+
+Put the code from `00-inst.R` below:
+
+```{r 00-inst, message=FALSE, warning=FALSE}
+# install.packages(c("tidyverse", "janitor", "skimr", "fs", "ggthemes"))
+library(tidyverse)
+library(janitor)
+library(skimr)
+library(fs)
+library(ggthemes)
+```
+
+## Import data 
+
+Put the code from `01.import.R` below: 
+
+```{r 01-import}
+# create data folder
+fs::dir_create("data/")
+# create 'data/raw/' folder
+fs::dir_create("data/raw/")
+
+# data urls
+balance_url <- "https://bit.ly/3hRzrKS"
+brexit_url <- "https://bit.ly/3s2wqMx"
+corbyn_url <- "https://bit.ly/35mgYRB"
+pensions_url <- "https://bit.ly/2MNAvEp"
+
+# data destination file paths
+balance_destfile <- "data/raw/Balance.csv"
+brexit_destfile <- "data/raw/Brexit.csv"
+corbyn_destfile <- "data/raw/Corbyn.csv"
+pensions_destfile <- "data/raw/Pensions.csv"
+
+# download the files using the url and destfile
+download.file(url = balance_url, destfile = balance_destfile)
+download.file(url = brexit_url, destfile = brexit_destfile)
+download.file(url = corbyn_url, destfile = corbyn_destfile)
+download.file(url = pensions_url, destfile = pensions_destfile)
+
+# import data
+Balance <- readr::read_csv(balance_destfile)
+Brexit <- readr::read_csv(brexit_destfile)
+Corbyn <- readr::read_csv(corbyn_destfile)
+Pensions <- readr::read_csv(pensions_destfile)
+```
+
+## Plot a histogram of average facebook likes with `qplot()`
+
+Use the `Corbyn` dataset to view the `avg_facebook_likes` variable.
+
+```{r avg_facebook_likes}
+Corbyn %>%
+  ggplot2::qplot(x = avg_facebook_likes, data = .)
+```
+
+## Plot a box-plot of `pop_65_percent`
+
+Use `qplot()` to graph the `pop_65_percent` variable from the `Pensions` dataset: 
+
+```{r pop_65_percent}
+Pensions %>%
+  # the variable
+  ggplot2::qplot(
+    x = pop_65_percent,
+    y = " ",
+    data = .,
+    geom = "boxplot"
+  )
+```
+
+## Create a box-plot of `value` and `country` 
+
+Use the Pensions dataset to plot `value` (on the x) and `country` (on the `y`)
+
+```{r value-country}
+Balance %>%
+  ggplot2::qplot(
+    x = value,
+    y = country,
+    data = .,
+    geom = "boxplot"
+  )
+```
+
+## Wrangle `date` variable in Brexit 
+
+Format the `date` variable in the `Brexit` dataset with `lubridate::dmy()`
+
+```{r lubridate-date}
+Brexit <- Brexit %>% mutate(date = lubridate::dmy(date))
+glimpse(Brexit)
+```
+
+
+## Create a scatter-plot of `date` and `percent_responding_right`
+
+Use the `Brexit` dataset to plot date (on the x) and `percent_responding_right` (on the `y`)
+
+```{r date-percent_responding_right}
+Brexit %>%
+  qplot(
+    x = date,
+    y = percent_responding_right, data = .
+  )
+```
+
+## Build plots layer-by-layer with `ggplot()`
+
+Run the code below to see how `tidyr::pivot_longer()` works.
+
+```{r}
+Brexit
+```
+
+
+```{r pivot_longer}
+Brexit %>%
+  tidyr::pivot_longer(
+    cols = -date,
+    names_to = "poll",
+    values_to = "percent"
+  )
+```
+
+Now pass the pivoted data to `qplot()` and view the result. 
+
+```{r pivot_longer-qplot}
+Brexit %>%
+  pivot_longer(
+    cols = -date,
+    names_to = "poll",
+    values_to = "percent"
+  ) %>%
+  ggplot2::qplot(
+    x = date,
+    y = percent,
+    group = poll,
+    data = .,
+    geom = "line",
+    color = poll
+  )
+```
+
+
+Wrangle the `Brexit` data below: 
+
+Assign the `tidyr::pivot_longer()` output to `TidyBrexit`
+
+```{r TidyBrexit}
+TidyBrexit <- Brexit %>%
+  pivot_longer(-date,
+    names_to = "poll",
+    values_to = "percent"
+  )
+head(TidyBrexit)
+```
+
+## Map variables to aesthetics 
+
+Use the `TidyBrexit` `data.frame` to build the `ggp_brexit` plot object layer. 
+
+```{r ggp_brexit}
+ggp_brexit <- TidyBrexit %>%
+  ggplot(mapping = aes(x = date, y = percent, group = poll))
+ggp_brexit
+```
+
+## Add the geom
+
+Add the `ggplot2::geom_smooth()` to `ggp_brexit`
+
+```{r geom_smooth}
+ggp_brexit + 
+  ggplot2::geom_smooth()
+```
+
+## Add the color aethetic to `poll`
+
+```{r color-poll}
+ggp_brexit + 
+  ggplot2::geom_smooth(aes(color = poll))
+```
+
+Add the `se = FALSE` and `show.legend = FALSE` and create the `ggp_brexit_smooth` object. 
+
+```{r ggp_brexit_smooth}
+ggp_brexit_smooth <- ggp_brexit +
+  geom_smooth(aes(color = poll), 
+    se = FALSE, show.legend = FALSE)
+ggp_brexit_smooth
+```
+
+## Add the points with `ggplot2::geom_point()`
+
+Add the points with `ggplot2::geom_smooth()`, but include the `show.legend = FALSE` and `alpha = 1/3`
+
+```{r geom_point}
+ggp_brexit_smooth +
+  geom_point(aes(color = poll), 
+    show.legend = FALSE, alpha = 1 / 3)
+```
+
+## Set the aesthetics globally 
+
+Rebuild the plot with the `TidyBrexit` dataset, mapping `date`, `percent`, and `poll` globally. 
+
++ add the `ggplot2::geom_smooth()` layer with the `se = FALSE` and `show.legend = FALSE`   
+
++ add the `ggplot2::geom_point()` layer with `alpha = 1/3` and `show.legend = FALSE`   
+
+```{r ggp_brexit_global}
+ggp_brexit_global <- TidyBrexit %>%
+  ggplot(mapping = aes(x = date, y = percent, group = poll)) +
+  geom_smooth(aes(color = poll), se = FALSE, show.legend = FALSE) +
+  geom_point(aes(color = poll), alpha = 1 / 3, show.legend = FALSE)
+ggp_brexit_global
+```
+
+
+## Add colors 
+
+Add the colors `cornflowerblue` and `firebrick3` to the `ggp_brexit_global` layer and create a new layer called `ggp_brexit_global_colors`. 
+
+```{r ggp_brexit_global_colors}
+ggp_brexit_global_colors <- ggp_brexit_global +
+  scale_color_manual(values = c("cornflowerblue", "firebrick3"))
+ggp_brexit_global_colors
+```
+
+## Add text 
+
+Use the `ggplot2::geom_text()` layer to add the text to the `ggp_brexit_global_colors` layer, and name the new plot `ggp_brexit_global_colors_text`
+
+
+```{r ggp_brexit_global_colors_text}
+ggp_brexit_global_colors_text <- ggp_brexit_global_colors +
+  annotate(geom = "text",
+    label = "Wrong", 
+    color = "firebrick3",
+    x = as.Date("2018-01-01"), 
+    y = 45.5
+  ) +
+  annotate(geom = "text",
+    label = "Right", 
+    color = "cornflowerblue",
+    x = as.Date("2018-01-01"),
+    y = 42.5
+  )
+ggp_brexit_global_colors_text
+```
+
+## Move the `y` axis 
+
+Move the y axis to the right side of the graph with `ggplot2::scale_y_continuous()`
+
+```{r ggp_brexit_global_colors_text_scale_y}
+ggp_brexit_global_colors_text_scale_y <- ggp_brexit_global_colors_text +
+  ggplot2::scale_y_continuous(position = "right")
+ggp_brexit_global_colors_text_scale_y
+```
+
+## Add labels 
+
+Use the `ggplot2::labs()` function to create the labels layer. 
+
+```{r labs_eco}
+labs_eco <- ggplot2::labs(
+  title = "Bremorse",
+  subtitle = "'In hindsight, do you think Britain was right or wrong to vote to leave the EU?'",
+  caption = "Source: NatCen Social Research",
+  x = " ",
+  y = "Percent (%)"
+)
+```
+
+Add the labels layer to `ggp_brexit_global_colors_text_scale_y` and create a new plot titled, `ggp_brexit_labs`. 
+
+```{r ggp_brexit_labs}
+ggp_brexit_labs <- ggp_brexit_global_colors_text_scale_y + labs_eco
+ggp_brexit_labs
+```
+
+
+## Add theme 
+
+```{r install-ggthemes}
+# install.packages("ggthemes")
+library(ggthemes)
+```
+
+Add the `ggthemes::theme_economist_white()` layer and set the following arguments: 
+
+- `gray_bg = FALSE`  
+- `base_size = 12`  
+- `base_family = "Verdana"`  
+
+```{r theme_economist_white}
+ggp_brexit_labs +
+  ggthemes::theme_economist_white(
+    gray_bg = FALSE,
+    base_size = 12,
+    base_family = "Verdana"
+  )
+```

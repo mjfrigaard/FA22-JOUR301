@@ -1,0 +1,188 @@
+---
+title: "Exploratory Data Analysis (EDA) - project template"
+author: "Your Name"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    code_folding: show
+    theme: journal
+    df_print: paged
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+# chunk options ----
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      eval = FALSE,
+                      tidy = FALSE,
+                      fig.path = "img/")
+# base options ----
+base::options(
+  tibble.print_max = 78,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+```
+
+# Intro 
+
+This R Markdown document template for your exploratory data analysis project. You've selected (or you've been assigned) a dataset, and you're going to use this template to import, wrangle, visualize and communicate the contents of your data. 
+
+The code chunks in this template have been set to `eval=FALSE`. To get them to run, you will need to set them to `eval=TRUE`. 
+
+# Background 
+
+You should have your project set up using the [goodenuffR package](https://github.com/mjfrigaard/goodenuffR). If you haven't, install this package using the code below: 
+
+```{r goodenuffR}
+install.packages("devtools")# for install_github()
+library(devtools) # load devtools
+devtools::install_github("mjfrigaard/goodenuffR") # install goodenuffR
+library(goodenuffR) # load goodenuffR
+```
+
+Recall you can use the `goodenuffR` functions to create specific files in your project: 
+
+```{r goodenuffR-funs}
+goodenuffR::goodenuff_code() # create code/ folder and files
+goodenuffR::goodenuff_data() # create data/ folder and data/raw folder
+goodenuffR::goodenuff_doc() # create documentation files
+goodenuffR::goodenuff_results() # create results folder 
+goodenuffR::goodenuff_collab() # create CITATION, requirements, etc.
+```
+
+Let's get started! 
+
+# Packages 
+
+The packages below have been covered in the course slides and exercises. You're not required to know all the details of every package (we can look that up), but you *do* need to know how to install a package. 
+
+```{r packages, message=FALSE, warning=FALSE, eval=TRUE}
+library(tidyverse) # for dplyr, tidyr, ggplot2 and others
+library(janitor) # for names 
+library(skimr) # basic data summaries
+```
+
+
+# Import 
+
+Use the code chunk below to import your data into RStudio. You can replace `Your Raw Data` with your *actual* dataset name, 
+
+```{r import-data, eval=FALSE}
+# this will import data in a .csv file, other options include readxl and 
+# googlesheets4, and vroom
+# Your Raw Data <- readr::read_csv(file = "______________")
+```
+
+# Dimensions and structure 
+
+We will start by asking some general questions about the dataset structure and shape. 
+
+## How many columns?
+
+Get the number of columns:
+
+```{r ncol, eval=FALSE}
+# ncol(Your Raw Data)
+```
+
+```{r length, eval=FALSE}
+# length(Your Raw Data)
+```
+
+## How many rows? 
+
+Get the number of rows:
+
+```{r nrow, eval=FALSE}
+# nrow(Your Raw Data)
+```
+
+```{r dim, eval=FALSE}
+# dim(Your Raw Data)
+```
+
+## Variable names? 
+
+What are the names of the variables/columns in your dataset?
+
+```{r names, eval=FALSE}
+# names(Your Raw Data)
+```
+
+```{r colnames, eval=FALSE}
+# colnames(Your Raw Data)
+```
+
+
+## Variable formats?
+
+How is each column formatted?
+
+```{r str, eval=FALSE}
+# str(Your Raw Data)
+```
+
+```{r glimpse, eval=FALSE}
+# glimpse(Your Raw Data)
+```
+
+## Export raw data
+
+Now that we know our data imported correctly, we can export an example of these data to the `data/raw/` folder. 
+
+```{r out_path, eval=FALSE}
+fs::dir_create("data/raw/")
+# out_path <- paste0("data/raw/", noquote(lubridate::today()), "-Your Raw Data.csv")
+# write_csv(x = Your Raw Data, file = out_path)
+# verify
+fs::dir_tree("data/raw/")
+```
+
+# Wrangle
+
+Standardize column names, make sure they're meaningful, and check the contents of each variable.
+
+## Column names 
+
+Use `janitor::clean_names()` to make column names easier to read and program with. 
+
+```{r clean_names, eval=FALSE}
+# Your Data <- janitor::clean_names(Your Raw Data)
+# glimpse(Your Data)
+```
+
+Change the name of `Your Raw Data` to `Your Data` because you've altered the contents of the raw data.
+
+## Summary statistics
+
+Calculate the summary statistics with the `skimr::skim()` function.  
+
+```{r skim-PeopleMap, eval=FALSE}
+# skimr::skim(Your Data)
+```
+
+## Visualizations
+
+Built *at least two visualizations* of the columns in your dataset. 
+
+## Single variable graphs
+
+View the distribution (or 'shape') of a variable, you can use histograms (`geom_histogram()`), density plots (`geom_density()`), frequency polygons (`geom_freqpoly()`), or box-plots `geom_boxplot()`.
+
+## Multiple variable graphs
+
+View multiple variables with box-plots, ridgeline plots (from the `ggridges` package), or faceting (`facet_wrap()`).
+
+# Data dictionary 
+
+To complete this project, knit your `.html` report and complete a data dictionary for the dataset, This should contain information on each variable and their contents. 
+
+For examples, see the example for the `palmerpenguins::penguins` data.

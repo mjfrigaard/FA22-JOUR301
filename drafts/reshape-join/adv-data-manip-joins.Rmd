@@ -1,0 +1,581 @@
+---
+title: "Advanced Data Transformation and Manipulation"
+comment: "*dealing with complex data structures*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+# chunk options ----
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      tidy = FALSE,
+                      fig.path = "img/")
+# base options ----
+base::options(
+  tibble.print_max = 25,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+```
+
+# Objectives 
+
+This document outlines some advanced data reshaping tasks with `tidyr`. Read more about `dplyr` [here](https://dplyr.tidyverse.org/index.html) and [`tidyr`](https://tidyr.tidyverse.org/) on the tidyverse website, or in the [Data Transformation](https://r4ds.had.co.nz/transform.html) chapter of R for Data Science. 
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+## Load packages 
+
+`tidyr` is part of the core `tidyverse` packages, so we install and load this meta-package below. 
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+# Generating Sequences 
+
+## `seq()` {.tabset}
+
+We can use the `lubridate::ymd_hm()` function and `seq()` to create a sequence of dates or datetimes. 
+
+### exercise 
+
+Create a sequence of datetimes from midnight on `"2020-05-01"` until midnight on `"2020-05-02"`, separated by `"hour"`. 
+
+Use `head()` to look at the first and last three values in `may_hours`.
+
+```{r may_hours-ex, eval=FALSE}
+may_hours <- seq(lubridate::ymd_hm("__________ 0:00"), 
+    lubridate::ymd_hm("__________ 0:00"), 
+    by = "____")
+head(may_hours, _)
+head(may_hours, _)
+```
+
+### solution
+
+See below:
+
+```{r may_hours-sol}
+may_hours <- seq(lubridate::ymd_hm("2020-05-01 0:00"), 
+    lubridate::ymd_hm("2020-05-02 0:00"), 
+    by = "hour")
+head(may_hours, 3)
+head(may_hours, 3)
+```
+
+## `tidyr::full_seq()` {.tabset}
+
+The `tidyr::full_seq()` works similar to `seq()`--it takes a vector (`x`), finds the `min` and `max` value, then generates the 'full sequence' of values, spaced out by the `period` argument.
+
+Consider the vector `c(1, 3, 8, 10, 15)`.
+
+```{r example-full_seq}
+tidyr::full_seq(x = c(1, 3, 8, 10, 15), period = 1)
+```
+
+### exercise
+
+Create a vector of two June dates: 
+
+1. 8am on June 1, 2020.  
+2. 5pm on June 1, 2020.
+
+```{r jun_dates-ex, eval=FALSE}
+jun_dates <- c(lubridate::ymd_hm("2020-__-__ __:__"), 
+               lubridate::ymd_hm("2020-__-__ __:__"))
+jun_dates
+```
+
+### solution
+
+See below:
+
+```{r jun_dates}
+jun_dates <- c(lubridate::ymd_hm("2020-06-01 08:00"), 
+               lubridate::ymd_hm("2020-06-01 17:00"))
+jun_dates
+```
+
+### exercise 
+
+Create a full sequence of June datetimes, starting at 8am June 1, 2020 and ending at 5pm June 1, 2020. Each value should be 15 min apart. 
+
+```{r 15-min-ex, eval=FALSE}
+head(
+  full_seq(x = ________, 
+           period = ___)
+)
+```
+
+### solution
+
+15 min x 60 seconds = 900 seconds. 
+
+```{r 15-min-sol}
+head(
+  full_seq(x = jun_dates, 
+           period = 900)
+)
+```
+
+
+# Identify Missing Values 
+
+We're going to use `expand_grid()` and `anti_join()` to find the missing values in the `VisitNAData` data frame. 
+
+```{r load-VisitNAData, message=FALSE, warning=FALSE}
+VisitNAData <- readr::read_csv(file = "https://bit.ly/36tnN55")
+VisitNAData
+```
+
+
+## Creating List of Unique Values {.tabset}
+
+Create a list of possible visit types (`"Consult"`, `"Lab"`, `"Clinic"`, `"Pharmacy"`) and store it in `visits`.
+
+### exercise
+
+```{r visits-ex, eval=FALSE}
+______ <- c("______", "___", "_______", "__________")
+```
+
+### solution
+
+See below:
+
+```{r visits-sol}
+visits <- c("Consult", "Lab", "Clinic", "Pharmacy")
+```
+
+## Expanding Data {.tabset}
+
+Create a data frame with all possible combinations of `may_hours` and `visits`. Name the columns `date` and `visit_type`.
+
+### exercise 
+
+```{r FullDateVisit-ex, eval=FALSE}
+FullDateVisit <- expand_grid(
+  date = _______,
+  visit_type = ________)
+head(FullDateVisit)
+```
+
+### solution 
+
+See below:
+
+```{r FullDateVisit-sol}
+FullDateVisit <- expand_grid(
+  date = may_hours,
+  visit_type = visits)
+head(FullDateVisit)
+```
+
+## Anti-join {.tabset}
+
+Check how many missing `visit_type`s there are with `dplyr::count()`
+
+```{r VisitNAData-sol}
+VisitNAData %>% 
+  count(visit_type)
+```
+
+### exercise 
+
+Join the `FullDateVisit` to `VisitNAData` with an anti-join, using `date` and `visit_type` as the id. 
+
+```{r anti_join-ex, eval=FALSE}
+anti_join(x = FullDateVisit, 
+          y = ___________,
+          by = c("date", "visit_type"))
+```
+
+### solution
+
+These are the eight values that are missing from the `count()` output.
+
+```{r anti_join-sol}
+anti_join(x = FullDateVisit, 
+          y = VisitNAData,
+          by = c("date", "visit_type"))
+```
+
+# Complete Missing Values 
+
+Let's return to our lab data from the previous exercises. Assume we have an data frame with an incomplete list of lab counts. 
+
+```{r LabCounts-sol}
+LabCounts <- tibble::tribble(
+  ~lab, ~lab_count,
+  "Albumin", 10L,
+  "Potassium, Whole Blood", 8L,
+  "% Hemoglobin A1c", 29L)
+LabCounts
+```
+
+## Complete {.tabset}
+
+One lab is missing from this list (`eGFR`), so we will make a vector with the known labs that are supposed to be the `LabCounts` data frame. 
+
+### exercise 
+
+```{r labs_list-ex, eval=FALSE}
+labs_list <- c("Albumin", "Potassium, Whole Blood", 
+               "% Hemoglobin A1c", "____")
+labs_list
+```
+
+### solution
+
+Now we have all five labs in `labs_list`.
+
+```{r labs_list-sol}
+labs_list <- c("Albumin", "Potassium, Whole Blood", 
+               "% Hemoglobin A1c", "eGFR")
+labs_list
+```
+
+### exercise 
+
+Use `complete()` to fill in the missing `lab_count` for `eGFR`.
+
+```{r complete-ex, eval=FALSE}
+LabCounts %>%
+  complete(
+    lab = ________,
+    fill = list(lab_count = __))
+```
+
+### solution
+
+See below:
+
+```{r complete-sol}
+LabCounts %>%
+  complete(
+    lab = labs_list,
+    fill = list(lab_count = NA))
+```
+
+### exercise 
+
+Use `complete()` again, but use `list()` to make the missing `lab_count` values `0`.
+
+```{r complete-2-ex, eval=FALSE}
+LabCounts %>%
+  complete(
+    lab = ________,
+    fill = list(lab_count = __))
+```
+
+### solution 
+
+Note the `L` behind the `0`.
+
+```{r complete-2-sol}
+LabCounts %>%
+  complete(
+    lab = labs_list,
+    fill = list(lab_count = 0L))
+```
+
+# Combine all three!
+
+We're going to combine the use of `pivot_longer()`, `complete()`, and `full_seq()`. 
+
+## `difftime` {.tabset}
+
+Assume we have a dataset (`Infected`) that contains information on 20 patients (`patient`), the date they became `infected_date`, and the date they infection cleared (`recovered_date`). 
+
+```{r Infected, message=FALSE, warning=FALSE}
+Infected <- read_csv("https://bit.ly/33zp4Fw")
+Infected
+```
+
+### exercise 
+
+What if we wanted to know the number of days between `infection_start` and `infection_end`? One way to do this is with `difftime()`. It takes two datetime values, and the units the differences should be in (`"days"`)
+
+Calculate the number of days between `infection_start` and `infection_end` in days.
+
+```{r difftime-ex, eval=FALSE}
+
+Infected %>% 
+  mutate(infected_days = difftime(time1 = _____________, 
+                                  time2 = _____________,
+                                  units = "days"))
+```
+
+### solution
+
+See below:
+
+```{r difftime-sol}
+Infected %>% 
+  mutate(infected_days = difftime(time1 = infection_end, 
+                                  time2 = infection_start,
+                                  units = "days"))
+```
+
+## `pivot_longer` {.tabset}
+
+The previous example gave us the total number of days for each patient's infection, but what if we wanted to calculate a running total of infected days for each patient? We would have to reshape the `Infected` dataset into a longer format. 
+
+
+
+### exercise 
+
+Pivot the two date columns in the `Infected` dataset, assign the names to `"infection_status"`, and the values to `"date".` 
+
+```{r pivot_longer-ex, eval=FALSE}
+Infected %>% 
+  pivot_longer(-patient, 
+  names_to = "_____________", 
+  values_to = "____")
+```
+
+### solution
+
+See below:
+
+```{r pivot_longer-sol}
+Infected %>% 
+  pivot_longer(-patient, 
+  names_to = "infection_status", 
+  values_to = "date")
+```
+
+## `complete` {.tabset}
+
+Now that we have `date` and `infection_status` in a long format, we can start calculating the number of days between `infection_start` and `infection_end`.
+
+
+### exercise
+
+Group the data by `patient`, then `complete()` the dataset: 
+
+- assign `patient` to `patient`  
+- set `date` using the `full_seq()` function to fill in the missing days between the `infection_start` and `infection_end` dates   
+- use the `fill` argument to replace the missing values in `infection_status` as `"infected"`.
+
+```{r complete-infection-date-ex, eval=FALSE}
+Infected %>% 
+  pivot_longer(-patient, 
+  names_to = "infection_status", 
+  values_to = "date") %>% 
+  group_by(_________) %>% 
+  complete(patient = _______, 
+           date = full_seq(____, period = 1),
+           fill = list(infection_status = "___________"))
+```
+
+### solution
+
+See below:
+
+```{r complete-infection-date-sol}
+Infected %>% 
+  pivot_longer(-patient, 
+  names_to = "infection_status", 
+  values_to = "date") %>% 
+  group_by(patient) %>% 
+  complete(patient = patient, 
+           date = full_seq(date, period = 1),
+           fill = list(infection_status = "infected")) -> InfectedLong
+InfectedLong
+```
+
+## `lag()` {.tabset}
+
+In order to calculate the running total of infected days, we're going to combine `difftime()`, `if_else()`, and `cumsum()`.
+
+### exercise 
+
+We're going to start by using `difftime()` and `lag()` to calculate the difference between `date` and `lag(x = date, n = 1)`. 
+
+Instead of using `"days"`, we're going to pass the output to `as.numeric()` so it's converted to a `double`.
+
+```{r difftime-2-ex, eval=FALSE}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = ____, 
+                                    time2 = lag(x = ____, 
+                                                n = 1))))
+```
+
+### soltution 
+
+See below:
+
+```{r difftime-2-sol}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))))
+```
+
+## `if_else()` {.tabset}
+
+### exercise 
+
+Create `day_diff` and use `dplyr::if_else()` to replace the `NA` in `day_diff0`. 
+
+`dplyr::if_else()` takes a logical condition, the desired result if it is `true`, and the desired result if it is `false`
+
+
+```{r if_else-ex, eval=FALSE}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+    # replace missing day_diff0 with 0, all else get day_diff0
+    day_diff = dplyr::if_else(condition = is.na(________), 
+                      true = _, 
+                      false = ________))
+```
+
+### solution
+
+See below:
+
+```{r if_else-sol}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+    day_diff = dplyr::if_else(condition = is.na(day_diff0), 
+                      true = 0, 
+                      false = day_diff0))
+```
+
+No we have `0`'s instead of `NA`s.
+
+## `cumsum()` {.tabset}
+
+### exercise 
+
+Finally we have a numerical variable we can add up to get the number of days infected at each day in `date`. Here we will use the `cumsum()` function (cumulative sum) to get the running total number of days infected per `patient` (recall the dataset is still grouped by `patient`).
+
+Create `total_inf_days` by getting the `cumsum()` of a numerically formatted `day_diff` column.
+
+```{r cumsum-ex, eval=FALSE}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+     day_diff = dplyr::if_else(condition = is.na(day_diff0), 
+                      true = 0, 
+                      false = day_diff0), 
+    
+     _____________ = cumsum(as.numeric(________)))
+```
+
+### solution
+
+See below
+
+```{r cumsum-sol}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+     day_diff = dplyr::if_else(condition = is.na(day_diff0), 
+                      true = 0, 
+                      false = day_diff0), 
+    
+   total_inf_days = cumsum(as.numeric(day_diff)))
+```
+
+
+## Clean Up {.tabset}
+
+These last few steps are for cleaning up our `InfectedLong` by removing the underscore (`_`) from `infection_status`, `ungrouping()` the data, and dropping the intermediate `day_diff0` and `day_diff` columns.
+
+### exercise
+
+- use `stringr::str_replace_all()` to remove the underscores by giving `infection_status` to the `string` argument, `"_"` to the `pattern` argument, and `" "` to the `replacement` argument  
+
+- `ungroup()` the data  
+
+- use `select()` to remove the 
+
+```{r ungroup-select-ex, eval=FALSE}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+     day_diff = dplyr::if_else(condition = is.na(day_diff0), 
+                      true = 0, 
+                      false = day_diff0), 
+    
+   total_inf_days = cumsum(as.numeric(day_diff)),
+   
+   infection_status = str_replace_all(string = __________________, 
+                                      pattern = ___, 
+                                      replacement = ___)) %>% 
+  ________() %>% 
+  select(-c(_________, _________))
+```
+
+### solution
+
+See below.
+
+```{r ungroup-select-sol}
+InfectedLong %>% 
+  mutate(
+    day_diff0 = as.numeric(difftime(time1 = date, 
+                                   time2 = lag(x = date, 
+                                               n = 1))),
+     day_diff = dplyr::if_else(condition = is.na(day_diff0), 
+                      true = 0, 
+                      false = day_diff0), 
+    
+   total_inf_days = cumsum(as.numeric(day_diff)),
+   
+   infection_status = str_replace_all(string = infection_status, 
+                                      pattern = "_", 
+                                      replacement = " ")) %>% 
+  ungroup() %>% 
+  # remove intermediate columns
+  select(-c(day_diff0, day_diff)) -> InfectedLong
+
+InfectedLong
+```
+
+### Plotting Counts
+
+Now we can count the number of times each `date` occurs and plot if over `date`.
+
+```{r plotting-counts}
+InfectedLong %>% 
+  count(date, name = "days_inf") %>% 
+  ggplot(aes(x = date, y = days_inf)) +
+  geom_line() + 
+  labs(x = "Date", y = "Days Infected", 
+       title = "Distribution of Infected Days Over Time")
+```
+

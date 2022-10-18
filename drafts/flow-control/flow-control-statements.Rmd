@@ -1,0 +1,199 @@
+---
+title: "Flow Control Statements"
+comment: "*change the flow of your code*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r, echo = FALSE}
+# don't name this setup!
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+View the exercises for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/lessons-exercises.html).
+
+# Flow Control Statements
+
+Flow control functions (`if`, `ifelse`, and `switch`) can be used to control data workflows. Below we'll cover R's common flow control statements: `if()`, `else()`, and `switch()`.
+
+## `if` {.tabset}
+
+The `if()` statement can be used to control exactly what operations are carried out in a given chunk of code.
+
+### `if()` and `cat()`
+
+Below is a straightforward `if()` statement that tests if a given condition is `TRUE`.
+
+```{r if-statement-example-1}
+if (TRUE) {
+  cat("The if() condition is true")
+}
+```
+
+What if we wanted to test if a certain vector value (`y`) was greater than `0`?
+
+```{r if-statement-example-2}
+x <- 2
+if (x > 0) {
+  cat("x value is greater than 0")
+}
+```
+
+### `if()` with `else()`
+
+Now what if we wanted to our code to do something when the if condition was *not* satisfied?
+
+Below we create `y` and set it equal to `5`, then we test to see if `x` is greater than `y`. If it isn't we print the second statement (and the value of `y`)
+
+```{r if-else-statement-example-1}
+y <- 5
+if (x > y) {
+  cat("x is greater than y")
+} else {
+  cat("y is greater than x, because y = ", y)
+}
+```
+
+We can extend the `if()` and `else()` conditions as far as we need.  Change the value of `y` to `3` and run two logical tests to see what prints.
+
+```{r if-else-statement-example-2}
+y <- 3
+if (x > y) {# FALSE
+  cat("x is greater than y")
+} else if (y > 4) {# FALSE
+  cat("y is greater than 4")
+} else {# TRUE
+  cat("If x is < y, and y is > 4, What is x + y? ", sum(x, y))
+}
+```
+
+When testing `if()`/`else()` statements, I like to use comments to document what I should expect from each condition.
+
+### vectorized `ifelse()`
+
+Recall that `TRUE` = `1` and `FALSE` = `0`.
+
+```{r test-true-false}
+sum(FALSE, FALSE)
+sum(TRUE, FALSE)
+sum(TRUE, TRUE)
+```
+
+We define a vector (`conditions_01`) with multiple values.
+
+```{r conditions_01}
+conditions_01 <- c(0, 1, NA, FALSE, TRUE)
+conditions_01
+```
+
+```{r ifelse-conditions_01}
+writeLines(
+  ifelse(test = conditions_01,
+    yes = "condition is met",
+    no = "condition is not met"
+  )
+)
+```
+
+The `ifelse()` condition is tested across *all* the values in `conditions_01` to returns the `yes` or `no` result.
+
+Had we simply used an `if()` and `else()` statement, we get a warning because it's only testing the first element in `conditions_01`.
+
+```{r if-else-condition-1-2}
+if (conditions_01) cat(" condition met ") else cat(" condition not met ")
+```
+
+This is because the actual condition being tested is `length(conditions_01) > 1`. We can see below this is `FALSE`, so the second result is returned.
+
+```{r if-else-condition-1-length}
+# recall frist element in conditions_01
+conditions_01[1]
+# check length
+length(conditions_01[1]) > 1
+```
+
+## `switch` {.tabset}
+
+We can use `switch()` in place of nested `if` `else` statements to select among several alternative results.
+
+```r
+switch(EXPR = , ... = )
+```
+
+The `EXPR` in `switch()` must evaluate to a number or a character vector of length `1`.
+
+### re-write nested `ifelse`
+
+Consider the nested if else statement below:
+
+```{r am_dad_char-am_dad_age}
+# define string value
+am_dad_char <- "Steven"
+am_dad_char
+if (am_dad_char == "Stan") {
+  am_dad_age <- 42
+} else if (am_dad_char == "Francine") {
+  am_dad_age <- 40
+} else if (am_dad_char == "Steven") {
+  am_dad_age <- 15
+} else if (am_dad_char == "Hayley") {
+  am_dad_age <- 19
+} else {
+  am_dad_age <- NA
+}
+# return age
+am_dad_age
+```
+
+We can re-write this as a `switch()` statement, with the `EXPR` as `am_dad_char`. The alternative results are listed with each character's `age` in `AmericanDad`
+
+```{r switch-am_dad_char}
+switch(EXPR = am_dad_char,
+  "Stan" = 42,
+  "Francine" = 40,
+  "Steven" = 15,
+  "Haley" = 19
+)
+```
+
+### `switch()` alternatives
+
+While the `EXPR` needs to be either a string or numeric value, the alternatives (`...`) can be multiple types. See the examples below:
+
+```{r switch-examples}
+# switch on a string?
+switch("string",
+  "string" = "text",
+  "logical" = TRUE,
+  "number" = 15)
+# switch on a logical?
+switch("logical",
+  "string" = "text",
+  "logical" = TRUE,
+  "number" = 15)
+# switch on a number?
+switch("number",
+  "string" = "text",
+  "logical" = TRUE,
+  "number" = 15)
+```
+
+

@@ -1,0 +1,664 @@
+---
+title: "Week 7 - Data Visualization with ggplot2 (solutions)"
+comment: "*2+ variables, advanced labeling, and facets/small multiples*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 60)
+```
+
+# Outline
+
+1. Import Apple Mobility Data
+2. Wrangle Apple Mobility Data
+3. Counting things
+4. Histograms
+5. Density plots
+6. Ridgeline plots
+7. Violin plots
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+View the exercises for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/lessons-exercises.html).
+
+# Import `TidyApple` data 
+
+We're going to import the data from the previous exercises.  
+
+```{r import-tidy-apple}
+TidyApple <- readr::read_csv("https://bit.ly/3deFcBy")
+```
+
+
+# Visualizing Trends
+
+We've seen the distribution of `dir_request`, and how it varies across `trans_type`.
+
+Now we'll look at how the relationship between these two variables varies over in a subset of US cities and across a specific `date` range.
+
+## Focus on US Cities {.tabset}
+
+We'll start by narrowing down the data by filtering to only US cities.
+
+Here we reduce the dataset to only cities in the US, and we check the `date` range with `skimr::skim()`. If this looks OK, we assign to `USCities`
+
+```{r us-cities-skim-sol}
+TidyApple %>%
+  filter(geo_type == "city" &
+              country == "United States") %>%
+                # use skimr to check date
+                skimr::skim(date)
+
+TidyApple %>%
+  filter(geo_type == "city" &
+         country == "United States") -> USCities
+```
+
+## Updating Labels {.tabset}
+
+We can see this date range is from `r min(USCities$date)` to `r max(USCities$date)`.
+
+```{r paste0-dates-sol}
+paste0(min(USCities$date),
+       " through ",
+       max(USCities$date))
+```
+
+
+We want to specify this in our labels object (`lab_line_update`), so we will use the `paste0()` function to have the labels update every time the data changes.
+
+```{r lab_line_update}
+labs(x = "Date",
+     y = "Direction Requests",
+     title = "Direction Requests Over Time (US Cities Only)",
+     subtitle = paste0(min(USCities$date),
+                       " through ",
+                       max(USCities$date)),
+     caption = "source: https://covid19.apple.com/mobility",
+     color = "Transit Type") -> lab_line_update
+```
+
+We're going to create a line graph of direction requests over time, colored by color.
+
+Pass the filtered data to the `geom_line()`, mapping the following variables to their relative aesthetics:
+
+- `date` to `x`
+- `dir_request` to `y`
+- `trans_type` to both `group` and `color`
+
+Include `lab_line_update` to see how the new labels look!
+
+Let's see what happens when we use `lab_line_update`.
+
+```{r geom-line-us-cities-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+USCities %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type)) +
+  lab_line_update
+```
+
+The dates updated to the min and max `date` in `USCities`.
+
+## Adjusting Line Size {.tabset}
+
+These lines in this graph are overlapping each other, so we will adjust the `size` to `0.20`.
+
+Change the size of the `geom_line()` (outside of `aes()`).
+
+See below:
+
+```{r us-cities-line-alpha-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+USCities %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type),
+            size = 0.20) +
+  lab_line_update
+```
+
+Now the trends are easier to see.
+
+## Setting Date Range {.tabset}
+
+We are going to only look at the trends between February and August of 2020, but we're going to use an alternative method to `filter` the data and create the labels.
+
+We will create two new objects (`start_date` and `end_date`), which we can use to narrow the dates using the `filter()` function (and anywhere else we need to use this date range).
+
+This method is better than passing the dates as a character (i.e. in quotes), because we would only have to change it in one place. However, the option above makes better use of R functional programming syntax.
+
+Pass the `start_date` and `end_date` to the `as_date()` functions, and take a look at the `date` variable with `skimr::skim()` and if it looks correct, assign it to `USCitiesFebJul`
+
+See below:
+
+```{r start_date-end_date-skimr-sol}
+# create date objects
+start_date <- "2020-02-01"
+end_date <- "2020-08-01"
+# check with skimr
+TidyApple %>%
+  filter(geo_type == "city" &
+              country == "United States",
+                date >= as_date(start_date) &
+                  date <= as_date(end_date)) -> USCitiesFebJul
+
+USCitiesFebJul %>%
+  skimr::skim(date)
+```
+
+Create the new labels (`lab_line_paste`) with the `paste0()` function by passing both `start_date` and `end_date`.
+
+```{r create-lab_line_paste-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+lab_line_paste <- labs(x = "Date",
+                 y = "Direction Requests",
+                 title = "Direction Requests Over Time (US Cities Only)",
+                 subtitle = paste0(start_date, " through ", end_date),
+                 caption = "source: https://covid19.apple.com/mobility",
+                 color = "Transit Type")
+
+USCitiesFebJul %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type),
+            # make these slightly larger...
+            size = 0.30) +
+  lab_line_paste
+```
+
+# Adding Text to Graphs
+
+We can see there is a gap in the direct request data (this is [documented in the data source](https://covid19.apple.com/mobility)).
+
+> *"Data for May 11-12 is not available and will appear as blank columns in the data set."*
+
+We should communicate this gap with our audience, and we might include a text annotation on the graph so our audience isn't distracted by the gap.
+
+In the previous lesson, we introduced the `ggrepel` package to show the points on this graph of top performing pharmaceutical companies.
+
+
+We're going to use labels to annotate and highlight US cities between March and June of 2020.
+
+## Annotations {.tabset}
+
+Being able to manually add text and annotations as layers to your graph makes it easier to communicate the nuances of your data to your audience. We are going to start by accounting for the missing data in `TidyApple`.
+
+Build a dataset from `TidyApple` that only has US cities, and ranges from March 1, 2020 to June 30, 2020.
+
+See below:
+
+```{r USCitiesMarJun-sol}
+USCitiesMarJun <-  TidyApple %>%
+  filter(geo_type == "city" &
+              country == "United States",
+                date >= as_date("2020-03-01") &
+                  date <= as_date("2020-07-01"))
+
+USCitiesMarJun %>% skimr::skim()
+```
+
+We're going to build labels using the `paste0()` function. Fill in the appropriate dataset for the `min()` and `max()` date.
+
+See below:
+
+```{r create-lab_annotatesol}
+lab_annotate <- labs(x = "Date",
+                 y = "Direction Requests",
+                 title = "Direction Requests Over Time (US Cities Only)",
+                 subtitle = paste0(min(USCitiesMarJun$date),
+                                   " through ",
+                                   max(USCitiesMarJun$date)),
+                 caption = "source: https://covid19.apple.com/mobility",
+                 color = "Transit Type")
+```
+
+The previous code for the graph has been added. We're going to add the following layers:
+
+Inside `coord_cartesian()`:
+
+- map `min(USCitiesMarJun$date)` and `max(USCitiesMarJun$date)` inside `c()` to `xlim`
+- map `min(USCitiesMarJun$dir_request, na.rm = TRUE)` and `max(USCitiesMarJun$dir_request, na.rm = TRUE)` inside `c()` to `ylim`
+
+Inside the `# horizontal` `annotate()`:
+
+- set `geom` to `"segment"`
+- map `0.5` to `size`
+- map `"firebrick3"` to `color`
+- map `lubridate::as_date("2020-05-10")` to `x`
+- map `lubridate::as_date("2020-05-13")` to `xend`
+- map `100` to `y` and `yend`
+
+Inside the `# big vertical` `annotate()`:
+
+- set `geom` to `"segment"`
+- map `1` to `size`
+- map `"firebrick3"` to `color`
+- map `lubridate::as_date("2020-05-11")` to `x`
+- map `lubridate::as_date("2020-05-11")` to `xend`
+- map `270` to `y` and `100` to `yend`
+
+Inside the `# text` `annotate()`:
+
+- set `geom` to `"text"`
+- map `8` to `size`
+- map `"red"` to `color`
+- map `0.5` to `hjust`
+- map `lubridate::as_date("2020-05-07")` to `x`
+- map `280` to `y`
+- map `"Data not available"` to `label`
+
+```{r coord_cartesian-annotate-text-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+# plot
+USCitiesMarJun %>%
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type),
+             # make these slightly larger...
+             size = 0.30) +
+   # coordinate system
+   coord_cartesian(xlim = c(min(USCitiesMarJun$date),
+                            max(USCitiesMarJun$date)),
+
+                   ylim = c(min(USCitiesMarJun$dir_request, na.rm = TRUE),
+                            max(USCitiesMarJun$dir_request, na.rm = TRUE))) +
+   # horizontal
+   annotate(geom = "segment",
+            size = 0.5,
+            color = "firebrick3",
+                  x = lubridate::as_date("2020-05-10"),
+                  xend = lubridate::as_date("2020-05-13"),
+                             y = 100,
+                             yend = 100) +
+    # big vertical
+    annotate(geom = "segment",
+            size = 1,
+            color = "firebrick3",
+            x = lubridate::as_date("2020-05-11"),
+            xend = lubridate::as_date("2020-05-11"),
+            y = 270, yend = 100) +
+
+    # text
+    annotate(geom = "text",
+               color = "red",
+               hjust = 0.5,
+               size = 8,
+               x = lubridate::as_date("2020-05-07"),
+               y = 280,
+               label = "Data not available") +
+
+    lab_annotate
+```
+
+Add a second and third vertical `segment` to create a fence or bracket for the dates with missing data.
+
+See below:
+
+```{r coord_cartesian-annotate-comp-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+# plot
+USCitiesMarJun %>%
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type),
+             # make these slightly larger...
+             size = 0.30) +
+   # coordinate system
+   coord_cartesian(xlim = c(min(USCitiesMarJun$date),
+                            max(USCitiesMarJun$date)),
+
+                   ylim = c(min(USCitiesMarJun$dir_request, na.rm = TRUE),
+                            max(USCitiesMarJun$dir_request, na.rm = TRUE))) +
+   # horizontal
+   annotate(geom = "segment",
+            size = 0.5,
+            color = "firebrick3",
+                  x = lubridate::as_date("2020-05-10"),
+                  xend = lubridate::as_date("2020-05-13"),
+                             y = 100,
+                             yend = 100) +
+    # big vertical
+    annotate(geom = "segment",
+            size = 1,
+            color = "firebrick3",
+            x = lubridate::as_date("2020-05-11"),
+            xend = lubridate::as_date("2020-05-11"),
+            y = 270, yend = 100) +
+    # text
+    annotate(geom = "text",
+               color = "red",
+               hjust = 0.5,
+               size = 8,
+               x = lubridate::as_date("2020-05-07"),
+               y = 280,
+               label = "Data not available") +
+   # second vertical
+   annotate(geom = "segment",
+            size = 0.5,
+            color = "firebrick3",
+            x = lubridate::as_date("2020-05-10"),
+            xend = lubridate::as_date("2020-05-10"),
+            y = 100, yend = 90) +
+    # third vertical
+     annotate(geom = "segment",
+            size = 0.5,
+            color = "firebrick3",
+            x = lubridate::as_date("2020-05-13"),
+            xend = lubridate::as_date("2020-05-13"),
+            y = 100, yend = 90) +
+
+   lab_annotate
+```
+
+## Plotting area {.tabset}
+
+Another option is to use `geom_rect()` to black out the missing data.
+
+```{r geom_rect-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+# plot
+USCitiesMarJun %>%
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request,
+             group = trans_type, color = trans_type),
+             # make these slightly larger...
+             size = 0.30) +
+   # coordinate system
+   coord_cartesian(xlim = c(min(USCitiesMarJun$date),
+                            max(USCitiesMarJun$date)),
+
+                   ylim = c(min(USCitiesMarJun$dir_request, na.rm = TRUE),
+                            max(USCitiesMarJun$dir_request, na.rm = TRUE))) +
+  geom_rect(xmin = lubridate::as_date("2020-05-10"),
+            xmax = lubridate::as_date("2020-05-12"),
+            ymin = -Inf,
+            ymax = Inf,
+            color = NA) +
+  geom_text(x = as.Date("2020-05-11"),
+            y = 100, label = "Data Not Available",
+            angle = 90, color = "white") +
+  lab_annotate
+```
+
+
+
+## Labeling Values {.tabset}
+
+**Max Driving Requests**
+
+The code below creates a subset of the data (`TopUSCities`). We will use this to add the labels.
+
+```{r TopUSCities}
+TopUSCities <- TidyApple %>%
+  filter(country == "United States" &
+           region %in% c("New York City", "Los Angeles",
+                         "Chicago", "Houston", "Phoenix"))
+TopUSCities
+```
+
+Create `MaxUSCitiesDriving` by filtering `trans_type`, grouping on the `region` variable, and using `dplyr::slice_max()` to get the top value in `dir_request`.
+
+See below:
+
+```{r TopUSCities-MaxUSCitiesDriving-sol-01}
+TopUSCities %>%
+  filter(trans_type == "driving") %>%
+  group_by(region) %>%
+  slice_max(dir_request) %>%
+  ungroup() -> MaxUSCitiesDriving
+MaxUSCitiesDriving
+```
+
+Create graph labels:
+
+- assign `"Peak Driving Direction Requests in Largest US Cities"` to `title`
+
+- assign `"Max Driving Direction Requests & Date"` to `subtitle`
+
+```{r lab_line_max_drivers-sol-01}
+lab_line_max_drivers <- labs(
+                 x = "Date",
+                 y = "Direction Requests",
+                 title = "Peak Driving Direction Requests in Largest US Cities",
+                 subtitle = paste0(min(TopUSCities$date),
+                                   " through ",
+                                   max(TopUSCities$date)),
+                 caption = "source: https://covid19.apple.com/mobility",
+                 color = "Transit Type")
+```
+
+Create `max_driving_labels` using `paste0()` with `region` and `date`.
+
+
+
+```{r max_driving_labels-sol-01}
+MaxUSCitiesDriving %>%
+  mutate(max_driving_labels = paste0(region, ", ", date)) -> MaxUSCitiesDriving
+MaxUSCitiesDriving %>%
+  select(max_driving_labels)
+```
+
+Create a line plot, assigning the following values in `geom_label_repel()`:
+
+- set the `data` argument to `MaxUSCitiesDriving`
+
+Inside the `aes()`:
+
+- map `label` to `max_driving_labels`
+
+Outside the `aes()`
+
+- map `color` to `"red"`
+- map `size` to `3`
+
+
+```{r label-plot-sol-01, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request,
+                  group = trans_type,
+                  color = trans_type),
+                  # make these slightly smaller again...
+                  size = 0.15) +
+    geom_label_repel(data = MaxUSCitiesDriving,
+              aes(x = date, y = dir_request,
+                  label = max_driving_labels),
+                  # set color and size...
+                  color = "red",
+                  size = 3) +
+  lab_line_max_drivers
+```
+
+## Labeling Values 2 {.tabset}
+
+**Min Walking Requests**
+
+We are going to repeat the process above, but use the minimum value for walking direction requests.
+
+- `filter()` the `trans_type` to `"walking"`
+- `group_by()` the `region`
+- use `slice_min()` to get the minimum value for `dir_request`
+- Assign to `MinUSCitiesWalking`
+
+```{r MinUSCitiesWalking-sol}
+TopUSCities %>%
+  filter(trans_type == "walking") %>%
+  group_by(region) %>%
+  slice_min(dir_request) %>%
+  ungroup() -> MinUSCitiesWalking
+MinUSCitiesWalking
+```
+
+- assign `"Lowest Walking Direction Requests in Largest US Cities"` to `title`
+
+```{r lab_line_min_walking-sol}
+lab_line_min_walking <- labs(
+               x = "Date",
+               y = "Direction Requests",
+               title = "Lowest Walking Direction Requests in Largest US Cities",
+               subtitle = paste0(min(TopUSCities$date),
+                                   " through ",
+                                 max(TopUSCities$date)),
+               caption = "source: https://covid19.apple.com/mobility",
+               color = "Transit Type")
+```
+
+Create `min_walking_labels` using `paste0()` with `region` and `date`
+
+```{r min_walking_labels-sol}
+MinUSCitiesWalking %>%
+  mutate(min_walking_labels = paste0(region, ", ", date)) -> MinUSCitiesWalking
+MinUSCitiesWalking
+```
+
+Create a line plot, assigning the following values in `geom_label_repel()`:
+
+- set `data` to `MinUSCitiesWalking`
+
+Inside `aes()`:
+
+- map `min_walking_labels` to `label`
+
+Outside `aes()`:
+
+- map `"blue"` to `color`
+- map `3` to `size`
+
+
+```{r label-plot-sol-02, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+    ggplot() +
+    geom_line(aes(x = date, y = dir_request,
+                  group = trans_type,
+                  color = trans_type),
+                  # make these slightly smaller again...
+                  size = 0.15) +
+    geom_label_repel(data = MinUSCitiesWalking,
+              aes(x = date, y = dir_request,
+                  label = min_walking_labels),
+                  # set color and size...
+                  color = "blue",
+                  size = 3) +
+  lab_line_min_walking
+```
+
+# Reference lines
+
+We're going to focus on the top 8 cites according to their [population](https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population) (the date of this writing is `2020-11-26`).
+
+## Top Cities  {.tabset}
+
+**Top Cities**
+
+We're going to introduce another `filter`ing method in this section to create the `TopUSCities` dataset.
+
+Store top eight cities in the `focus_on` vector and use it to filter the `TidyApple` dataset.
+
+
+```{r focus_on-sol}
+focus_on <- c("New York City", "Los Angeles",
+              "Chicago", "Houston",
+              "Phoenix", "Philadelphia",
+              "San Antonio", "San Diego")
+
+TopUSCities <- TidyApple %>%
+  filter(region %in% focus_on)
+
+TopUSCities %>% glimpse(60)
+```
+
+**Graph Labels**
+
+We're going to place `date` on the `x` axis, and `dir_request` on the `y`. The `tite` will reflect a general description of what we're expecting to see, and we'll list the cities in the `subtitle`. `color` will be used to give a better description than `trans_type`.
+
+Fill in names for the `x`, `y`, and `color`.
+
+```{r lab_top_cities-sol}
+lab_top_cities <- labs(x = "Date", y  = "Direction Requests",
+     title = "Trends of Relative Activity in Selected US Cities",
+     subtitle = "NY, LA, CH, HOU, PHA, PHL, SATX, SD",
+     color = "Type")
+```
+
+## Set Global `aes()` {.tabset}
+
+We're going to set the global graph aesthetics inside `ggplot(aes())` using our labels as a guide. This will serve as a base layer for us to add our reference line to!
+
+**Global `aes()`**
+
+- Map `trans_type` to `group` and `color`
+
+- Also add a `geom_line()` layer with the `size` set to `0.1` (not inside the `aes()`!)
+
+```{r TopUSCities-geom_line-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  lab_top_cities
+```
+
+## Reference Line Layer {.tabset}
+
+The documentation for the data tells us each `dir_request` has a baseline value of `100`. We're going to add this as a reference line on the graph using `ggplot2::geom_hline()`.
+
+The `geom_hline()` function takes `yintercept`, `size`, and `color` arguments.
+
+- use our baseline value of `100` as the `yintercept`
+- set the `size` to `0.2`
+- make the `color` of this line `"gray20"`
+
+
+```{r geom_hline-sol, fig.height=8, fig.width=10, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+TopUSCities %>%
+  ggplot(aes(x = date, y = dir_request,
+             group = trans_type,
+             color = trans_type)) +
+  geom_line(size = 0.1) +
+  geom_hline(yintercept = 100, size = 0.2, color = "gray20") +
+  lab_top_cities
+```
+
+Reference lines are helpful when we want to examine trends in relation to a particular value.
+
+```{r export-TopUSCities-USCities, echo=FALSE, include=FALSE}
+fs::dir_create("data")
+readr::write_csv(x = TopUSCities, 
+                 file = 
+                 paste0("data/", 
+                        base::noquote(lubridate::today()),
+                                        "-TopUSCities.csv"))
+
+readr::write_csv(x = USCities, 
+                 file = 
+                 paste0("data/", 
+                        base::noquote(lubridate::today()),
+                                        "-USCities.csv"))
+```
