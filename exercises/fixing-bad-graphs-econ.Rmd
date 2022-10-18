@@ -34,18 +34,23 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   dev = "ragg_png",
-  out.width = '85%',
   dpi = 320,
+  out.width = "80%",
+  fig.width = 6,
+  fig.asp = 0.618,
+  fig.retina = 2,
   fig.align = "center",
-  fig.width = 8.5,
-  fig.height = 6,
-  fig.retina = 2
+  fig.show = "hold"
   )
 ```
 
 ## Background
 
-We're going to re-create the graphs below from the Medium article, ['Mistakes, we’ve drawn a few'](https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368). The author of this article claims the mistake with this particular graph below:
+We're going to re-create the graphs below from the Medium article, ['Mistakes, we’ve drawn a few'](https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368). As the author describes, 
+
+> "*our crimes against data visualisation into three categories: charts that are (1) misleading, (2) confusing and (3) failing to make a point.*"
+
+The author categorizes the mistake with this particular graph as:
 
 > **Mistake: Choosing the wrong visualisation method**
 
@@ -53,7 +58,7 @@ We're going to re-create the graphs below from the Medium article, ['Mistakes, w
 knitr::include_graphics("img/brexit-remorse.png")
 ```
 
-Let's take a closer look at the original graph with some of her comments:
+Let's take a closer look at the original graph with some comments:
 
 > "*We published this polling chart in Espresso, our daily news app. It shows attitudes to the outcome of the EU referendum, plotted as a line chart. Looking at the data, it appears as if respondents had a rather erratic view of the referendum result — increasing and decreasing by a couple of percentage points from one week to the next.*"
 
@@ -375,6 +380,14 @@ This is pretty close to the Original (minus the realigned `y` axis, text labels,
 
 Now we'll create the 'Better' graph, and make some of our own 'improvements.'
 
+I've highlighted the areas we're going to change in green:
+
+```{r bremorse-original-annotated, echo=FALSE}
+knitr::include_graphics(path = "img/bremorse-original-annotated.png")
+```
+
+
+
 ### Map variables to aesthetics 
 
 Use `TidyBrexit` to build the `ggp_brexit` plot object layer with `date` on the `x`, `percent` on the `y`, and `group` assigned to `poll`:
@@ -390,10 +403,10 @@ ggp_brexit_global_layer
 Add the points with `ggplot2::geom_point()`, but include the `show.legend = FALSE`, `size = 2.5`, and `alpha = 1/3`. Save this as `ggp_brexit_point_layer`
 
 ```{r geom_point}
-ggp_brexit_point_layer <- ggp_brexit_global_layer +
-  geom_point(aes(color = poll), 
+ggp_brexit_point_layer <- geom_point(aes(color = poll), 
     show.legend = FALSE, size = 2.5, alpha = 1 / 3)
-ggp_brexit_point_layer
+ggp_brexit_global_layer + 
+  ggp_brexit_point_layer
 ```
 
 ### Add the lines with `geom_smooth()`
@@ -401,14 +414,16 @@ ggp_brexit_point_layer
 Add the `ggplot2::geom_smooth()` to `ggp_brexit_point_layer`
 
 ```{r geom_smooth}
-ggp_brexit_point_layer + 
+ggp_brexit_global_layer + 
+  ggp_brexit_point_layer + 
   ggplot2::geom_smooth()
 ```
 
 #### Add the `color` aethetic to `poll`
 
 ```{r color-poll}
-ggp_brexit_point_layer + 
+ggp_brexit_global_layer + 
+  ggp_brexit_point_layer + 
   ggplot2::geom_smooth(aes(color = poll))
 ```
 
@@ -418,10 +433,12 @@ ggp_brexit_point_layer +
 Add the `se = FALSE` to remove the gray area around the lines, and remove the legend with `show.legend = FALSE` and create the `ggp_brexit_smooth_layer` object. 
 
 ```{r ggp_brexit_smooth_layer}
-ggp_brexit_smooth_layer <- ggp_brexit_point_layer +
-  geom_smooth(aes(color = poll), 
-    se = FALSE, show.legend = FALSE)
-ggp_brexit_smooth_layer
+ggp_brexit_smooth_layer <- geom_smooth(aes(color = poll), 
+                                          se = FALSE, 
+                                          show.legend = FALSE)
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer + 
+  ggp_brexit_smooth_layer
 ```
 
 ### Add colors with `scale_color_manual()`
@@ -429,9 +446,12 @@ ggp_brexit_smooth_layer
 Add the colors `cornflowerblue` and `firebrick3` to the `ggp_brexit_smooth_layer` layer and create a new layer called `ggp_brexit_colors_layer`. 
 
 ```{r ggp_brexit_colors_layer}
-ggp_brexit_colors_layer <- ggp_brexit_smooth_layer +
-  scale_color_manual(values = c("cornflowerblue", "firebrick3"))
-ggp_brexit_colors_layer
+ggp_brexit_colors_layer <- scale_color_manual(
+                              values = c("cornflowerblue", "firebrick3"))
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer + 
+  ggp_brexit_colors_layer
 ```
 
 ### Add text 
@@ -439,22 +459,28 @@ ggp_brexit_colors_layer
 Use the `ggplot2::geom_text()` layer to add the text to the `ggp_brexit_colors_layer` layer, and name the new plot `ggp_brexit_annotate_text_layer`
 
 ```{r ggp_brexit_annotate_text_layer}
-ggp_brexit_annotate_text_layer <- ggp_brexit_colors_layer +
-  annotate(geom = "text",
-    label = "Wrong",
-    size = 6,
-    color = "firebrick3",
-    x = as.Date("2018-01-01"), 
-    y = 45.5
-  ) +
-  annotate(geom = "text",
-    label = "Right", 
-    size = 6,
-    color = "cornflowerblue",
-    x = as.Date("2018-01-01"),
-    y = 42
-  )
-ggp_brexit_annotate_text_layer
+ggp_brexit_annotate_wrong_layer <- annotate(
+  geom = "text",
+  label = "Wrong",
+  size = 6,
+  color = "firebrick3",
+  x = as.Date("2018-01-01"),
+  y = 46
+)
+ggp_brexit_annotate_right_layer <- annotate(
+  geom = "text",
+  label = "Right",
+  size = 6,
+  color = "cornflowerblue",
+  x = as.Date("2018-01-01"),
+  y = 42
+)
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer + 
+  ggp_brexit_annotate_wrong_layer + 
+  ggp_brexit_annotate_right_layer
 ```
 
 ### Move the `y` axis 
@@ -462,27 +488,38 @@ ggp_brexit_annotate_text_layer
 Move the y axis to the right side of the graph with `ggplot2::scale_y_continuous()`
 
 ```{r ggp_brexit_y_scale_layer}
-ggp_brexit_y_scale_layer <- ggp_brexit_annotate_text_layer +
-  ggplot2::scale_y_continuous(position = "right")
-ggp_brexit_y_scale_layer
+ggp_brexit_y_scale_layer <- ggplot2::scale_y_continuous(position = "right")
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_annotate_wrong_layer +
+  ggp_brexit_annotate_right_layer + 
+  ggp_brexit_y_scale_layer
 ```
 
 ### Add labels 
 
 Use the `ggplot2::labs()` function to create the labels layer. 
 
-```{r labs_eco}
-labs_eco <- labs(
+```{r labels}
+ggp_brexit_labs_layer <- labs(
   title = "Bremorse", 
   subtitle = "In hindsight, do you think Britain was right or wrong to leave the EU\n% responding", 
-  x = "", y = "")
+  x = "", y = "", caption = "Source: NatCen Social Research")
 ```
 
-Add the labels layer to `ggp_brexit_y_scale_layer` and create a new plot titled, `ggp_brexit_labs`. 
+Add the `ggp_brexit_labs_layer` layer our plot layers: 
 
-```{r ggp_brexit_labs}
-ggp_brexit_labs <- ggp_brexit_y_scale_layer + labs_eco
-ggp_brexit_labs
+```{r ggp_brexit_labs_layer}
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_annotate_wrong_layer +
+  ggp_brexit_annotate_right_layer + 
+  ggp_brexit_y_scale_layer + 
+  ggp_brexit_labs_layer
 ```
 
 
@@ -500,10 +537,127 @@ Add the `ggthemes::theme_economist_white()` layer and set the following argument
 - `base_family = "Verdana"`  
 
 ```{r theme_economist_white}
-ggp_brexit_labs +
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_annotate_wrong_layer +
+  ggp_brexit_annotate_right_layer + 
+  ggp_brexit_y_scale_layer + 
+  ggp_brexit_labs_layer +
   ggthemes::theme_economist_white(
     gray_bg = FALSE,
-    base_size = 12,
+    base_size = 11,
     base_family = "Verdana"
   )
 ```
+
+
+```{r bremorse-better, eval=TRUE, echo=FALSE, fig.align='center'}
+knitr::include_graphics("img/bremorse-better.png")
+```
+
+## What else can we improve? 
+
+How does it look? Can we make some improvements? How about the `x` axis and text labels? 
+
+### Improved `x` axis 
+
+The `x` axis is slightly cut off: 
+
+```{r bremorse-better-dates, eval=TRUE, echo=FALSE, fig.align='center'}
+knitr::include_graphics("img/bremorse-better-dates.png")
+```
+
+We can manually set this with `scale_x_date()`: 
+
+```{r scale_x_date}
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_annotate_wrong_layer +
+  ggp_brexit_annotate_right_layer + 
+  ggp_brexit_y_scale_layer + 
+  ggp_brexit_labs_layer + 
+  scale_x_date(
+    date_breaks = "6 months",
+    date_labels = "%Y %m")
+```
+
+We'll add this layer as `ggp_brexit_x_scale_layer` and check it with the `theme_economist_white()`
+
+```{r ggp_brexit_x_scale_layer}
+ggp_brexit_x_scale_layer <- scale_x_date(
+    date_breaks = "6 months",
+    date_labels = "%Y %m")
+
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_annotate_wrong_layer +
+  ggp_brexit_annotate_right_layer + 
+  ggp_brexit_y_scale_layer + 
+  ggp_brexit_labs_layer +
+  ggp_brexit_x_scale_layer + 
+  ggthemes::theme_economist_white(
+    gray_bg = FALSE,
+    base_size = 11,
+    base_family = "Verdana"
+  ) 
+```
+
+
+### Improved `text` labels 
+
+We can use the `ggrepel` package to improve the text labels. We'll need to build a label dataset first. 
+
+We can use `filter()`, `head()`, and `dput()` to get a small `data.frame` we can edit. 
+
+```{r dput-brexit_labels, eval=FALSE}
+TidyBrexit %>%
+  filter(date > as_date("2017-12-01")) %>%
+  head(2) %>% dput()
+```
+
+Now we build `brexit_labels` and replace `poll` with `label`. The values in the `brexit_labels` are determining the positions for the `'Right'` and `'Wrong'` labels:
+
+```{r brexit_labels}
+brexit_labels <- data.frame(
+  date = structure(c(17505, 17505), class = "Date"), 
+  poll = c("percent responding right", "percent responding wrong"),
+  label = c("Right", "Wrong"), 
+  percent = c(42.8, 45.5))
+gt::gt(data = brexit_labels)
+```
+
+Now we remove the `annotate()` layers and add the `geom_label_repel()` layer, using our `brexit_labels` in the `data` argument, and `label` in the `label` argument. 
+
+
+```{r geom_label_repel}
+library(ggrepel)
+ggp_brexit_global_layer +
+  ggp_brexit_point_layer +
+  ggp_brexit_smooth_layer +
+  ggp_brexit_colors_layer +
+  ggp_brexit_y_scale_layer +
+  ggp_brexit_labs_layer +
+  ggp_brexit_x_scale_layer +
+  ggrepel::geom_label_repel(
+    data = brexit_labels,
+    mapping = aes(
+      x = date,
+      y = percent,
+      color = poll,
+      label = label
+    ),
+    label.size = 0.2,
+    size = 4.5,
+    show.legend = FALSE
+  ) +
+  ggthemes::theme_economist_white(gray_bg = FALSE,
+    base_size = 11,
+    base_family = "Verdana") 
+```
+
