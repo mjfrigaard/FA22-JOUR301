@@ -125,16 +125,23 @@ emoji_find("flame") %>% str()
 emoji_find("sleep") %>% str()
 ```
 
-```{r detect-flame-sleep}
+### `stringr::str_detect()`
+
+```{r flame_emoji-sleep_emoji}
 tidy_may_mcg_emojis <- tidy_may_mcg_emojis %>% 
   mutate(
     flame_emoji = str_detect(emojis_used, "🔥"),
     sleep_emoji = str_detect(emojis_used, "😴")
-    ) 
-tidy_may_mcg_emojis %>% glimpse()
+    )
 ```
 
-### Create `hyped_bored`
+```{r}
+glimpse(tidy_may_mcg_emojis)
+```
+
+## Create `hyped_bored`
+
+Narrow these data two flame and sleep emojis:
 
 ```{r hyped_bored}
 hyped_bored <- tidy_may_mcg_emojis %>% 
@@ -143,6 +150,8 @@ glimpse(hyped_bored)
 ```
 
 ### Extract `all_flames` 
+
+Extract all the flames, unnest, and unite all the flames into a single column (`all_flames`)
 
 ```{r extract-all_flames}
 hyped_bored <- hyped_bored %>% 
@@ -162,10 +171,14 @@ hyped_bored <- hyped_bored %>%
 ```
 
 ```{r check-all_flames}
-select(hyped_bored, emojis_used, all_flames)
+hyped_bored %>% 
+  filter(flame_emoji == TRUE) %>% 
+  select(emojis_used, all_flames)
 ```
 
 ### Extract `all_sleeps` 
+
+Extract all the flames, unnest, and unite all the flames into a single column (`all_sleeps`)
 
 ```{r extract-all_sleeps}
 hyped_bored <- hyped_bored %>% 
@@ -185,39 +198,101 @@ hyped_bored <- hyped_bored %>%
 ```
 
 ```{r check-all_sleeps}
-select(hyped_bored, emojis_used, all_sleeps)
+hyped_bored %>% 
+  filter(sleep_emoji == TRUE) %>% 
+  select(emojis_used, all_sleeps)
+```
+
+### Count `all_flames`
+
+```{r flame_count}
+hyped_bored <- hyped_bored %>% 
+  mutate(
+    flame_count = emoji_count(all_flames)
+  )
+hyped_bored %>% 
+  filter(flame_emoji == TRUE) %>% 
+  select(all_flames, flame_count)
+```
+
+
+### Count `all_sleeps`
+
+```{r sleep_count}
+hyped_bored <- hyped_bored %>% 
+  mutate(
+    sleep_count = emoji_count(all_sleeps)
+  )
+hyped_bored %>% 
+  filter(sleep_emoji == TRUE) %>% 
+  select(all_sleeps, sleep_count)
+```
+
+
+```{r}
+glimpse(hyped_bored)
 ```
 
 ## Four minute rolling average
 
-First we need a four-minute interval, which requires some knowledge of 
+First we need a four-minute interval, which requires some knowledge of how intervals work, which we can get from the `lubridate` package. We have the total number of flame and sleep emojis, 
 
-https://bookdown.org/hneth/ds4psy/10-3-time-lubridate.html#intervals
+An interval is a ["*records one or more spans of time...as a sequence of seconds that begin at a specified date."*](https://lubridate.tidyverse.org/reference/Interval-class.html)
 
 ```{r}
-lubridate::interval()
+library(tibbletime)
+library(zoo)
+library(lubridate)
+# get earliest date in hyped_bored
+t1 <- sort(hyped_bored$created_at, decreasing = FALSE)[1]
+# create 4 min interval
+lubridate::interval(start = t1, t1 + (60*4))
+roll_4_mean <- tibbletime::rollify(mean, window = 4)
+mutate(dt_tbl, mean_4 = roll_4_mean(count_var))
 ```
 
+We can now see if 
 
-### `emoji_count()`
-
-```{r hyped_bored-emoji_count}
-library(zoo)
-hyped_bored %>% 
+```{r dt_tbl, eval=TRUE, echo=FALSE}
+# hyped_bored %>% 
+#   arrange(created_at) %>% 
+#   select(created_at, flame_count) %>% 
+#   slice(1:150) %>% 
+#   slice_sample(n = 20, replace = FALSE) %>% 
+#   select(datetime_var = created_at, 
+#          count_var = flame_count) %>% 
+#   arrange(datetime_var)
+dt_tbl <- data.frame(
+  datetime_var = structure(c(
+    1503792380, 1503792423, 1503792457, 1503792501, 
+    1503792537, 1503792653, 1503792695, 1503792839,
+    1503792843, 1503792990, 1503793013, 1503793094, 
+    1503793156, 1503793274, 1503793284, 1503793411, 
+    1503793432, 1503793470, 1503793494, 1503793499
+  ), tzone = "UTC", class = c("POSIXct", "POSIXt")),
+  count_var = c(
+    8L, 1L, 2L, 0L, 4L, 4L, 2L, 1L, 2L, 3L, 
+    3L, 1L, 2L, 1L, 0L, 1L, 1L, 0L, 1L, 1L
+  )
+)
+per_tbl <- dt_tbl %>% 
+  arrange(datetime_var) %>% 
   mutate(
-    flame_count = emoji_count(all_flames),
-    sleep_count = emoji_count(all_sleeps)
-  ) %>% 
-  mutate(
-    flame_4m_avg = zoo::rollmean(flame_count, k = 4, fill = NA))
+    dt_interval = interval(start = datetime_var, 
+                           end = lead(datetime_var)),
+    dt_period = as.period(dt_interval, unit = "min"),
+    sum_period = dt_period + lead(dt_period),
+    sum_period = as.period(sum_period, unit = "min")
+  )
+# per_tbl
+# https://cran.rstudio.com/web/packages/tibbletime/vignettes/TT-03-rollify-for-rolling-analysis.html
+# https://bookdown.org/hneth/ds4psy/10-3-time-lubridate.html#intervals
+# sum(per_tbl$dt_period[1:6]) > 240
 ```
 
 
 # Line graph
 
-```{r}
-hyped_bored %>% 
-  ggplot(aes(x = created_at, y = ))
-```
+
 
 
