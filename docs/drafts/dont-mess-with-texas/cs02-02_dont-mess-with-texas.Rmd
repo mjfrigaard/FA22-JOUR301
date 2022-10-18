@@ -1,0 +1,195 @@
+---
+title: "Case Study (Part 2)"
+comment: "Don't Mess with Texas Part 2: iterate and download with `purrr`"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+library(rtweet)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 300)
+```
+
+
+# Texas death row executed offenders website
+
+In the previous .Rmd, we downloaded the data table from the [Texas Department of Criminal Justice website](http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html), which keeps records of every inmate they execute. 
+
+## The data 
+
+These data are imported from the .Rmd we used to scrape the website. These data are in the folder below. 
+
+```{r DirProcessed}
+fs::dir_tree("../data/wk10-dont-mess-with-texas/")
+```
+
+This will import the most recent data.
+
+```{r create-ExecOffenders}
+# fs::dir_ls("data/processed/2021-10-25")
+ExecOffenders <- readr::read_csv("https://bit.ly/2Z7pKTI")
+ExOffndrsComplete <- readr::read_csv("https://bit.ly/3oLZdEm")
+```
+
+In this post, we will use `purrr`s iteration tools to download the images attached to the website profiles.
+
+## Use `purrr`'s iteration tools to download the .jpg files
+
+Follow these three `purrr` steps from the workshop by [Charlotte Wickham](https://www.rstudio.com/resources/rstudioconf-2017/happy-r-users-purrr-tutorial-/). We'll go over them below:
+
+[Slides for presentation](https://github.com/cwickham/purrr-tutorial/blob/master/slides_with_transitions.pdf)
+
+### purrr 1. Do 'it' for one element
+
+We can test the new url columns in the `ExecOffenders` with the `magick::image_read()` function. 
+
+```{r test_image, echo=TRUE, eval=TRUE}
+library(magick)
+test_image <- ExecOffenders %>% 
+  # only jpg row
+  dplyr::filter(jpg_html == "jpg") %>% 
+  # pull the info url column
+  dplyr::select(info_url) %>% 
+  # sample 1
+  dplyr::sample_n(size = 1) %>% 
+  # convert to character 
+  base::as.character() 
+test_image
+```
+
+You should see an image in the RStudio viewer pane (like below)
+
+```{r test-image_read}
+# pass test_image to image_read()
+magick::image_read(test_image)
+```
+
+
+```{r magik_demo.png, out.width='70%', echo=FALSE, eval=TRUE}
+# fs::dir_ls("figs")
+# knitr::include_graphics("../img/02-test-magic-image.png")
+```
+
+### 2. Turn 'it' into a recipe
+
+`dplyr::filter` the `ExecOffenders` into `ExOffndrsCompleteJpgs`. Put these urls into a vector (`jpg_url`), then create a folder to download them into (`jpg_path`).
+
+```{r jpg_url}
+ExOffndrsCompleteJpgs <- ExecOffenders %>% 
+  dplyr::filter(jpg_html == "jpg") 
+jpg_url <- ExOffndrsCompleteJpgs$info_url
+if (!base::file.exists("jpgs/")) {
+  base::dir.create("jpgs/")
+}
+jpg_path <- paste0("jpgs/", 
+                   # create basename
+              base::basename(jpg_url))
+jpg_path %>% utils::head()
+```
+
+### 3. Use `purrr::walk2()` to download all files
+
+Now use the `purrr::walk2()` function to download the files. How does `walk2` work?
+
+First look at the arguments for `utils::download.file()`.
+
+```{r args, eval=FALSE}
+?utils::download.file
+```
+
+### How to `walk2()` 
+ 
+The help files tell us the `walk2` function is "specialized for the two argument case". So `.x` and `.y` become the two arguments we need to iterate over `download.file()`. We will walk through this step-by-step below:
+
+1) `.x` = the file path, which we created with the selector gadget above (in `jpg_url`)
+
+2) `.y` = the location we want the files to end up (`jpg_path`), and
+
+3) the function we want to iterate over `.x` and `.y` (`download.file`).
+
+When we pass everything to `purrr::walk2`, R will go to the URL, download the file located at the URL, and put it in the associated `jpgs/` folder.
+
+## Download .jpg files
+
+Execute the code below and you will see the .jpgs downloading into the `jpg` folder.
+
+```{r walk2, eval=FALSE}
+purrr::walk2(.x = jpg_url, 
+             .y = jpg_path, 
+             .f = download.file)
+```
+
+You should see the following in your console.
+
+```{r image-walk2.gif, out.width='100%', echo=FALSE}
+# fs::dir_ls("figs")
+knitr::include_graphics(path = "../img/2019-11-27-image-walk2.gif")
+```
+
+You  will see text similar to the content below.
+
+```r
+# trying URL 'http://www.tdcj.state.tx.us/death_row/dr_info/robisonlarry.jpg'
+# Content type 'image/jpeg' length 108341 bytes (105 KB)
+# ==================================================
+# downloaded 105 KB
+# 
+# trying URL 'http://www.tdcj.state.tx.us/death_row/dr_info/hicksdavid.jpg'
+# Content type 'image/jpeg' length 139150 bytes (135 KB)
+# ==================================================
+# downloaded 135 KB
+```
+
+This might take awhile, but when its done, check the number of files in this folder.
+
+```{r check_jpg_download, eval=FALSE, echo=TRUE}
+fs::dir_info("jpgs") %>% 
+  tibble::as_tibble() %>% 
+  dplyr::arrange(desc(size)) %>% 
+  dplyr::select(path, type, size) %>% 
+  utils::head(10)
+```
+
+There you have it! 380 images of downloaded offenders! Export the data for the next step.
+
+```{r tahday}
+# create data folder
+export_path <- "../data/wk10-dont-mess-with-texas/processed/"
+fs::dir_create(export_path)
+# create today
+tahday <- as.character(lubridate::today())
+tahday_path <- paste0(export_path, tahday, "/")
+tahday_path
+# create new data folder
+fs::dir_create(tahday_path)
+# create data path
+tahday_data_path <- paste0(tahday_path, "ExOffndrsComplete.csv")
+# export these data
+vroom::vroom_write(x = ExOffndrsComplete, file = tahday_data_path, delim = ",")
+fs::dir_tree(tahday_path, regexpr = "-ExOffndrsComplete.csv")
+```

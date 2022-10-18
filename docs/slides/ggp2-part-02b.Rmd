@@ -1181,26 +1181,6 @@ background-image: url(img/ggplot2.png)
 background-position: 95% 8%
 background-size: 6%
 
-## Labeling Values (Review)
-
-In the previous slides, we learned about labeling values with `ggrepel`.
-
-.border[
-
-```{r aes-sol-11-1, echo=FALSE, fig.align='center', out.height='45%', out.width='45%'}
-knitr::include_graphics(path = "img/aes-sol-11-1.png")
-```
-
-]
-
-Now we're going to extend this to plotting text and values on our graphs!
-
----
-class: left, top
-background-image: url(img/ggplot2.png)
-background-position: 95% 8%
-background-size: 6%
-
 ### Highlighting Large US Cities 
 
 Filter `TidyApple` to the 5 largest US cities (by [population](https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population)).

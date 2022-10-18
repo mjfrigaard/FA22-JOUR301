@@ -1,0 +1,402 @@
+---
+title: "The Tidyverse"
+comment: "*an introduction to tidyverse (pipes, tibbles, and the grammar of graphics)*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+    
+always_allow_html: true
+---
+
+
+```{r remedy01 , include=FALSE}
+library(tidyverse)
+library(skimr)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      tidy = FALSE, 
+                      fig.height = 7,
+                      fig.width = 9,
+                      fig.path = "../img/")
+# set width
+options(width = 60)
+```
+
+## Objectives 
+
+This document outlines and introduction to data visualization with `ggplot2`. The objectives for this section are: 
+
+- Explain the problem having a *Grammar of Graphics* solves
+
+- Define the terms `geom`, `aesthetic` and `layer` 
+
+- Understand the `ggplot2` graph template, and how to use it to build a variety of graphs
+
+- Recognize the differences between global and local aesthetic mappings and mapping and setting aesthetic attributes  
+
+## Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+View the exercises for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/lessons-exercises.html).
+
+## Background 
+
+You might want to check out the [Data Transformation](https://r4ds.had.co.nz/transform.html) and [Tidy Data](https://r4ds.had.co.nz/tidy-data.html) chapters of R for Data Science. 
+
+## Load the packages 
+
+The main packages we're going to use are `ggplot2`, `dplyr`, and `tidyr`. These are all part of the `tidyverse`, so we'll import this package below: 
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Import data  {.tabset}
+
+For this section, we're going to be using the datasets in the `ggplot2` package. Normally we import data 'in the wild', but for these examples we want to focus on the `ggplot2` grammar, not necessarily the data processing/wrangling steps. 
+
+We're going to start with the `ggplot2::diamonds` dataset. This contains `*A dataset containing the prices and other attributes of almost 54,000 diamonds.*
+
+### exercise 
+
+Use `dplyr::glimpse()`, `utils::head()`, and `utils::tail()`, to view the `diamonds` dataset. 
+
+```{r view-diamonds-ex, eval=FALSE}
+dplyr::glimpse(________)
+utils::____(ggplot2::diamonds)
+utils::____(ggplot2::diamonds)
+```
+
+
+### solution
+
+See the solution below:
+
+```{r view-diamonds-sol}
+dplyr::glimpse(ggplot2::diamonds)
+utils::head(ggplot2::diamonds)
+utils::tail(ggplot2::diamonds)
+```
+
+## Intro to `ggplot2` 
+
+Within the `tidyverse`, the `ggplot2` package provides a grammar (or set of rules) to develop a rich vocabulary for building data visualizations. Knowing how to use `ggplot2`'s grammar also gives us an excellent mental model for thinking about individual graphical elements. 
+
+## Terms and definitions: geoms and aesthetics  {.tabset}
+
+The *geom* (or geometric object) is the fundamental building block in the `ggplot2` language. `geom`s are the shape or element we will see on the graph or plot, and include things like points or lines, bars, etc. `geoms` also have `aes`thetic mappings, which are visual properties of the shape on the plot or graph (i.e. the color of the point, the size of the lines, the position or shape of the bars, etc.).
+
+So every graph or plot has a `geom`, and all `geom`s will also have some visual properties called `aes`thetics.
+
+### exercise 
+
+Use the pipe syntax below to apply the `ggplot2::ggplot()` and `ggplot2::aes()` functions to the `WikiCovid` data. 
+
+```{r ggplot-aes-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::_______(ggplot2::___())
+```
+
+### solution
+
+When we combine a dataset with the `ggplot2::ggplot()` and `ggplot2::aes()` functions, we get a blank canvas. This is the base layer for `ggplot2` graphs. Next we will see what happens when we 'map' variables to their respective positions (`x` and `y`).
+
+```{r ggplot-aes-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes())
+```
+
+## Build labels first! 
+
+I **strongly suggest** building labels first when making a figure or graph because it forces us to think about what we should expect to see. For example, if we want to see `price` on the `y` and `carat` on the `x`, we can create these labels (along with a `title` and `caption`) using the `ggplot2::labs()` function below. 
+
+*Note the use of the `paste0()` function to ensure the date matches the same day we scraped the data.*
+
+```{r labs_caratVSprice}
+labs_caratVSprice <- ggplot2::labs(
+                              title = "Diamond carat vs. price", 
+                              caption = "https://ggplot2.tidyverse.org/reference/diamonds.html",
+                              x = "Weight of the diamond", 
+                              y = "Price in US dollars")
+```
+
+Now we can refer to the labels to add the variables to our existing canvas. 
+
+## Mapping aesthetics {.tabset}
+
+We're going to take the `diamonds` dataset, and pipe (`%>%`) it over to the `ggplot()` and `aes()` function (short for aesthetics). This 'initializes' the `ggplot2` plot, and the `aes()` function tells `ggplot2` which variables we want 'mapped' to each location or position aesthetic. 
+
+See the example below: 
+
+```{r ggplot2-diamonds-template, echo=FALSE}
+knitr::include_graphics("../img/ggplot2-diamonds-template.png")
+```
+
+Structuring the code this way makes it easier to separate the input dataset (`DataSet`) from the code that initializes the plot (`ggplot(aes())`). In the future, this comes in handy if we want to manipulate the data before creating a graph. 
+
+### exercise 
+
+Use the labels to guide you in filling in the `aes()` function below:
+
+```{r mapping-aes-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = _____, y = ______)) 
+```
+
+### solution
+
+See the solution below:
+
+```{r mapping-aes-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price))
+```
+
+## Adding layers with `+` {.tabset}
+
+Up to this point, we've been using the pipe (`%>%`) to combine function calls into clear, readable, linear code 'pipelines'. `ggplot2` deviates from this syntax and uses the `+` symbol for adding layers to plot objects. This can be confusing at first, but it becomes clear as soon as you identify where the plot is initialized. 
+
+We currently have a dataset (`diamonds`) and a label object in our working environment (`labs_caratVSprice`). If we check the structure at each step, we can see where the plot's been created (and it's appropriate to use the `+` symbol). 
+
+```{r diamond-class}
+# use class() to check what is being 'piped' to ggplot(aes()):
+diamonds %>% class()
+```
+
+```{r gg-class}
+diamonds %>% 
+  # add class() to check what's being created here:
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) %>% class()
+```
+
+Initializing the plot creates a `gg` or `ggplot` object, which requires us to use the `+` symbol to add layers. The label object is designed to work specifically with `gg`/`ggplot` objects, which we can see with the `class()` function:
+
+```{r class-labels}
+class(labs_caratVSprice)
+```
+
+```{r ggplot-initialized, echo=FALSE}
+knitr::include_graphics("../img/ggplot-initialized.png")
+```
+
+### exercise 
+
+Add the label object `labs_caratVSprice` to the code below to assign put labels on the graph object. 
+
+```{r labs_location_vaccinated-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) _ # <- use the appropriate symbol!
+  _______________
+```
+
+
+### solution 
+
+This is starting to look more like a graph! We have the `x` and `y` axis defined, the `title` tells us what we should expect to see, and the `caption` gives us a clue to the data source. 
+
+```{r labs_location_vaccinated-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  labs_caratVSprice
+```
+
+## Adding geometric layers {.tabset}
+
+Now that we have `price` and `carat` mapped to their respective aesthetic positions, we will add another `geom` layer. Layers are to `ggplto2` graphs what sentences are to paragraphs, We construct sentences with verbs and nouns, and separate them with punctuation. Layers are built using geoms and aesthetics, and we separate these layers using the `+` symbol.
+
+### exercise 
+
+Add the `geom_point()` to the code below, before the labels:
+
+```{r geom-layer-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  _________() + 
+  labs_caratVSprice
+```
+
+### solution
+
+There we have it! Our first graph! Now we're going to add a few more aesthetics like `color` and `size`.
+
+```{r geom-layer-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  ggplot2::geom_point() + 
+  labs_caratVSprice
+```
+
+
+## `ggplot2`: A template  
+
+We've just built our first graph with `ggplot2`, so lets take a second to see what we've learned: 
+
+1. Start with a dataset (`diamonds`)
+2. Pipe the data to `ggplot()` and `aes()` to initialize the plot object  
+3. Assign aesthetic mappings to positions on the plot  (`x` and `y`)  
+4. Add a geometric layer (`geom_point()`)
+
+We can make abstract each step and come up with the following template: 
+
+```{r ggplot2-template-01, echo=FALSE}
+knitr::include_graphics("../img/ggplot2-template-01.png")
+```
+
+As you can see, the `geom` functions come with their own set of aesthetic mappings, which we will explore next. But first, we need to cover the difference between mapping aesthetics globally vs. mapping variables locally.  
+
+## Global vs. local aesthetics  {.tabset}
+
+When we mapped `carat` and `price` to the `x` and `y` axis inside `ggplot2(mapping = aes())`, we set these positions globally, which means they will be inherited at each layer of the graph. See the figure below:
+
+```{r global-mappings, echo=FALSE}
+knitr::include_graphics("../img/global-mappings.png")
+```
+
+Each `geom` function also comes with it's own options for aesthetic mappings, which we can use to customize the graph at each layer. 
+
+```{r local-mappings, echo=FALSE}
+knitr::include_graphics("../img/local-mappings.png")
+```
+
+We will see how this works with a few exercises. 
+
+### exercise 
+
+Map the `cut` variable to the `color` aesthetic inside the global `ggplot(aes())` functions (`cut` is the *quality of the cut (Fair, Good, Very Good, Premium, Ideal)*).
+
+```{r global-aes-color-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, _____ = ___)) + 
+  ggplot2::geom_point() + 
+  labs_caratVSprice
+```
+
+
+### solution 
+
+As we can see, there were five levels to the `cut` variable, and each level has it's own unique color. 
+
+```{r global-aes-color-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point() + 
+  labs_caratVSprice
+```
+
+### exercise 
+
+Add the `clarity` variable to the `geom_point(aes())` function below to map the values to different colors locally (`clarity` is "*a measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))*").
+
+```{r local-aes-color-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point(aes(_____ = ___)) + 
+  labs_caratVSprice
+```
+
+### solution 
+
+Note that the `color = cut` mapping inside the global setting is overridden by the local mapping inside the `geom_point()` function, and we can see there is a clear relationship between clarity and `carat`.
+
+```{r local-aes-color-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point(aes(color = clarity)) + 
+  labs_caratVSprice
+```
+
+## Additional aesthetic mappings {.tabset}
+
+The points in the graph above are all stacked on top of each other. This is called over-plotting, and we can fix it with the `alpha` argument. 
+
+### exercise 
+
+Set the `alpha` argument to `1/3` inside the `geom_point()`, after the `aes()` function. 
+
+```{r alpha-point-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) +  
+  ggplot2::geom_point(aes(color = clarity), 
+             _____ = _/_) + 
+  labs_caratVSprice
+```
+
+### solution 
+
+```{r alpha-point-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) +  
+  ggplot2::geom_point(aes(color = clarity), 
+             alpha = 1/3) + 
+  labs_caratVSprice
+```
+
+## Setting vs. mapping  {.tabset}
+
+When we map a variable to an aesthetic like `color`, different values for this variable (`"Fair"`, `"Good"`, `"Very Good"`, `"Premium"`, `"Ideal"`) to different colors. You can access these colors using the `ggplot2::build()` function, then extracting the information stored in data `data[[1]]$colour`: 
+
+```{r ggplot_build}
+# create plot
+p <- diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point() + 
+  labs_caratVSprice
+# build 
+ggbld <- ggplot2::ggplot_build(p)
+# get colors 
+base::unique(ggbld$data[[1]]$colour)
+```
+
+These colors have a hexadecimal code and are matched up in the plot legend: 
+
+```{r color-mapping, echo=FALSE}
+knitr::include_graphics("../img/color-mapping.png")
+```
+
+Mapping involves assigning variable values to visual attributes, but setting involves assigning aesthetic attributes manually. We will explore the differences below: 
+
+### exercise 
+
+Set the color aesthetic to `"dodgerblue"` inside the `geom_point()` function. 
+
+```{r setting-color-ex, eval=FALSE}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  ggplot2::geom_point(color = _____________) + 
+  labs_caratVSprice
+```
+
+### solution
+
+```{r setting-color-sol}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  ggplot2::geom_point(color = "dodgerblue") + 
+  labs_caratVSprice
+```
+
+## mapping ≠ setting  
+
+If you accidentally map a color value you meant to set by placing it inside the `aes()` function, you will see the following: 
+
+```{r map-instead-of-set}
+diamonds %>% 
+  ggplot2::ggplot(ggplot2::aes(x = carat, y = price)) + 
+  ggplot2::geom_point(aes(color = "dodgerblue")) + 
+  labs_caratVSprice
+```
+
+Here we can see the value (`"dodgerblue"`) is assigned as a level in the `colour` scale, but the color is assigned to a default visual attribute. 
+
+## Review 
+
+We've covered an introduction on how the grammar of graphics is implemented in `ggplot2`, and how using a template can guide us in building a huge variety of graphs. We learned that it's best to start with graph labels to make sure we're seeing what we were expecting, We demonstrated how global mappings are inherited at each graph layer, and that we can override these mappings by providing local aesthetics. We've also seen the difference between setting and mapping aesthetic attributes to a graph layer. 

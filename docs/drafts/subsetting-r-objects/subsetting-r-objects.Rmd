@@ -1,0 +1,486 @@
+---
+title: "Subsetting R Objects"
+comment: "*pull out the pieces from any object in R*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r, echo = FALSE}
+# don't name this setup!
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Objectives
+
+Subsetting is an important operation on data objects in R. This section will cover how to: 
+
+1. Build vectors and extracting their elements using single bracket notation (`[`), a range of elements (`:`), the dollar sign (`$`), and supplying a vector to subset vectors using `c()`  
+2. Create multidimensional objects (matrices and arrays) extracting their elements using `[ , ]`, `[`, and `c()`.  
+3. Assemble vectors of different classes into `data.frame`s and `tibble`s, and how to subset them using a variety of methods.  
+4. Combine any and all objects into lists, identify different methods for extracting elements (`[[`, `[`, and `$`), and recognize the class of each element that's returned.  
+
+Load the `tidyverse` package.
+
+```{r packages}
+library(tidyverse)
+```
+
+# Subsetting Overview 
+
+Subsetting is an important topic because it's how we can get access to the information stored in R objects. Inevitably we'll end up with some kind of data stored in some kind of object, and in order to do anything to that data, we need to access it. 
+
+There are three primary methods for subetting objects in are: 
+
+1. single brackets: `[`  
+2. double brackets: `[[`  
+3. dollar sign: `$`  
+
+
+## Vectors 
+
+Vectors are the fundamental data type in R. Below we assign five numbers to the vector `num_vec`. 
+
+```{r num_vec}
+num_vec <- c(2, 9, 4, 3, 7)
+num_vec
+```
+
+These five numbers exist in five different *positions* within the vector, and we can subset them using a bracket with the numerical index.
+
+### using `[]`
+
+Here are the numbers located at positions `[1]` and position `[5]`
+
+```{r subset-by-position}
+num_vec[1]
+num_vec[5]
+```
+
+### using `:`
+
+If we want a range of values from `num_vec`, we can use the colon in the index: 
+
+```{r subset-by-range}
+num_vec[1:3]
+```
+
+This is returning a '*subvector*' of `num_vec` consisting of elements 1 through 3.
+
+```{r str-subset-vec-range}
+str(num_vec[1:3])
+is.vector(num_vec[1:3])
+```
+
+### using `[]` with `c()`
+
+We can also use vectors to subset other vectors. The code below returns the same result as `num_vec[1:3]`:
+
+```{r subset-using-c}
+num_vec[c(1, 2, 3)]
+```
+
+We can also create a new vector, and use this to subset `num_vec`. 
+
+```{r subset-named-vector}
+x <- c(1, 2, 3)
+num_vec[x]
+```
+
+### `[]` vs. `<-`
+
+So far, we've been subsetting `num_vec` in a way that *only* returns the requested elements. If we wanted to subset `num_vec` and store the output in a new vector, we would need the assignment operator (`<-`):
+
+```{r small_num_vec}
+small_num_vec <- num_vec[1:3]
+small_num_vec
+```
+
+## Matrices 
+
+We'll now move into subsetting higher-dimensional objects. We went over these objects in a [previous lesson](https://mjfrigaard.github.io/r-meetup-tutorials/bk00_functions-and-objects.html#5_Multidimensional_objects).
+
+### create a matrix
+
+Here we create `mat_data`, a matrix with 3 rows and two columns. We also supply a set of `dimnames`.
+
+```{r mat_data}
+mat_data <- matrix(
+  data = c(0.2, 0.4, 0.8, 5, 15, 150),
+  nrow = 3,
+  ncol = 2,
+  dimnames = list(
+    c("row_1", "row_2", "row_3"),
+    c("col_1", "col_2")
+  ),
+  byrow = FALSE
+)
+mat_data
+```
+
+We can see this is a two-dimensional object with rows and columns.
+
+### using `[, ]`
+
+To subset a matrix, the syntax is `object[row, column]`. So if we wanted the number at the intersection of the third row and second column (`150`), we can pass these positions inside brackets `[3, 2]`.
+
+```{r matrix-by-position}
+mat_data[3, 2]
+```
+
+If we only want a single row or column from `mat_data`, we can omit the second number index:
+
+```{r matrix-col-row}
+mat_data[3, ]
+mat_data[, 2]
+```
+
+### using `[]` with `c()`
+
+We can also control how the matrix elements are returned. If we want to access the second and first rows of `mat_data` (in that order), we can pass `c(2, 1)` inside `[]` and R will return both columns.
+
+```{r subset-with-vector}
+mat_data[c(2, 1), ]
+```
+
+It's also important to note that if we subset a matrix in a way that returns a single element, it will return a vector. 
+
+```{r matrix-return-vector}
+mat_data[2, 1]
+```
+
+
+## Arrays 
+
+Arrays contain a collection of equal-dimension matrices. Just like matrices, they have fixed number of rows and columns, but they also have a third dimension called a *layer*. See the image below for conceptual illustration a three-row, three-column, two-layer array (3 × 3 × 2). 
+
+```{r array-png, out.height='45%', out.width='45%', fig.align='center', echo=FALSE}
+knitr::include_graphics(path = "../img/array.png")
+```
+
+### create an array
+
+Now we'll create an array (`array_dat`) with 3 columns, 3 rows, and 3 *layers*.
+
+```{r array_dat}
+array_dat <- array(
+  data = c(
+    seq(0.3, 2.7, by = 0.3),
+    seq(0.5, 4.5, by = 0.5),
+    seq(3, 27, by = 3)
+  ),
+  dim = c(3, 3, 3)
+)
+array_dat
+```
+
+### using `[]` 
+
+As the number of dimensions increase, so do the number of commas required for subsetting. If we want the third row of the second layer of `array_dat`, we would use the following: 
+
+```{r subsetting-array}
+array_dat[3, , 2]
+```
+
+Note that this returns a vector. 
+
+### using `[]` with `c()`
+
+We can also use a vector to subset the `array_dat` by index (or position). Below we get the first row and third and second columns (in that order) of layer two.
+
+```{r subsetting-array-with-vector}
+array_dat[1, c(3, 2), 2]
+```
+
+
+### Return behavior
+
+If we only supply a single row `array_dat[1, , ]`, we will see R returns the rows as a column in a single matrix. They are also arranged by columns, not rows. 
+
+```{r return-matrix-by-column}
+array_dat[1, , ]
+```
+
+Here is the original arrangement of the first rows:
+
+```{r array-subset, echo=FALSE, out.height='35%', out.width='35%', fig.align='left'}
+knitr::include_graphics(path = "../img/array-subset.png")
+```
+
+And here is the returned matrix, presented as columns:
+
+```{r array-return-cols, echo=FALSE, out.height='35%', out.width='35%', fig.align='right'}
+knitr::include_graphics(path = "../img/array-return-cols.png")
+```
+
+## Data frames/tibbes 
+
+Data frames and tibbles are rectangular representations of data (like spreadsheets). Data frames and tibbles contain vectors of equal length.
+
+### create a `data.frame`/`tibble`
+
+To create the `Simpsons` `data.frame` we can use the following function: 
+
+```{r Simpsons}
+Simpsons <- data.frame(
+  character = c("Homer", "Marge", "Bart", "Lisa"),
+  age = c(39, 36, 10, 8),
+  sex = factor(c("Male", "Female", "Male", "Female"))
+)
+str(Simpsons)
+```
+
+To create the `AmericanDad` `tibble` we can use the following function:
+
+```{r AmericanDad}
+AmericanDad <- tibble::tribble(
+  ~character, ~age, ~sex,
+  "Stan", 42, "Male",
+  "Francine", 40, "Female",
+  "Steven", 15, "Male",
+  "Hayley", 19, "Female"
+) %>%
+  # convert to factor
+  mutate(sex = factor(sex, levels = c("Female", "Male")))
+str(AmericanDad)
+```
+
+### using `$`
+
+The dollar sign (`$`) can be used to subset named vectors. 
+
+```{r dollar-sign-Simpsons}
+Simpsons$character
+```
+
+Note that both of these return vectors.
+
+```{r dollar-sign-AmericanDad}
+AmericanDad$character
+```
+
+### using `[]`
+
+We can use the row and column index to subset data frames and tibbles just like matrices and arrays. 
+
+```{r brackets-Simpsons}
+# homer's age
+Simpsons[1, 2]
+```
+
+The output is a little different for subsetting tibbles:
+
+```{r brackets-AmericanDad}
+# Stan's age
+AmericanDad[1, 2]
+```
+
+Note that when we subset the data frame with a value in the row index (i.e. `Simpsons[ 2, ]`), R returns a data frame. However, if we subset Simpsons with a value in the column index (i.e. `Simpsons[ , 2]`) we get a vector. 
+
+```{r subsetting-Simpsons-brackets}
+Simpsons[2, ]
+Simpsons[, 2]
+```
+
+But when we subset a tibble, both return a tibble:
+
+```{r subsetting-AmericanDad-brackets}
+AmericanDad[2, ]
+AmericanDad[, 2]
+```
+
+The same is true if we supply values to *both* rows and column indexes. 
+
+```{r check-srt-df-tibble}
+# check structure
+Simpsons[1, 2] # Homer's age
+AmericanDad[1, 2] # Stan's age
+```
+
+### using `[]` & `c()`
+
+We can use a numeric index for rows along with the names of the vectors (or columns) to subset data frames and tibbles:
+
+```{r subset-bracket-and-c-df}
+# Lisa's age and sex
+Simpsons[4, c("age", "sex")]
+```
+
+Note that the `Simpsons` data frame gives us a row-name (`4`), while the `AmericanDad` tibble only returns the two columns.
+
+```{r subset-bracket-and-c-tib}
+# Francine's age and sex
+AmericanDad[2, c("age", "sex")]
+```
+
+
+### using `$` and `[]` 
+
+Because the dollar-sign returns a vector, we can subset this output by combing it with brackets (`[]`)
+
+```{r dollar-sign-brackets-df}
+# Bart's age
+Simpsons$age[3]
+```
+
+Both of these return a vector.
+
+```{r dollar-sign-brackets-tib}
+# Steven's age
+AmericanDad$age[3]
+```
+
+### using `$` & `==`
+
+We can combine `$` with `==` to return a logical vector:
+
+```{r logical-vectors}
+Simpsons$age == 36
+AmericanDad$age == 15
+```
+
+We can also pass `$` and `==` a set of values with `c()` to return a logical vector. 
+
+```{r subset-with-logicals-c}
+Simpsons$age == c(39, 8)
+AmericanDad$age == c(42, 40)
+```
+
+This might not seem very helpful, but it comes in handy when we combine this with `[]`.
+
+### using `[]`, `$` and `==` 
+
+Below we combine the logical output from `$` and `==` with `[]` to subset data frames and tibbles:
+
+```{r subset-with-logicals}
+# return Stan and Hayley's age and sex
+AmericanDad[AmericanDad$age == c(42, 19), ]
+# return the rows in Simpsons where age is 36
+Simpsons[Simpsons$age == 36, ]
+```
+
+Again, we see the output from the data frame (`Simpsons`) returns a data frame with a row-name (`2`). 
+
+### using `[[]]`
+
+We can control the subsetted results for *both* tibbles and data frames using double brackets (`[[]]`). 
+
+Let's review the behavior of single brackets. If we use a single bracket (without commas) and a numerical index, we get the first column in both `Simpsons` and `AmericanDad` as a rectangular object.
+
+```{r single-bracket-subset}
+# character column from data frame
+str(Simpsons[1])
+# character column from tibble
+str(AmericanDad[1])
+```
+
+If we use double-brackets, we get the same first column, but as a vector. 
+
+```{r double-bracket-tib}
+# character column as vectors
+str(Simpsons[[1]])
+str(AmericanDad[[1]])
+```
+
+## Lists 
+
+Lists are special kinds of objects. Their contents can be items of different data types *and* lengths. Read more about lists in [Advanced R](https://adv-r.hadley.nz/vectors-chap.html#lists).
+
+### create a `list`
+
+Below we'll create a list of lesser-known Star Wars characters called `sw_list`.
+
+```{r sw_list}
+list(
+  name = c(
+    "Wedge Antilles", "Boba Fett",
+    "Mon Mothma", "Darth Maul", "Dud Bolt"
+  ),
+  height = c(170L, 183L, 150L, 175L, 94L),
+  sex = factor(c(2L, 2L, 1L, 2L, 2L), labels = c("female", "male")),
+  films = list(
+    c(
+      "The Empire Strikes Back", "Return of the Jedi",
+      "A New Hope"
+    ),
+    c(
+      "The Empire Strikes Back", "Attack of the Clones",
+      "Return of the Jedi"
+    ),
+    "Return of the Jedi",
+    "The Phantom Menace",
+    "The Phantom Menace"
+  )
+) -> sw_list
+str(sw_list)
+```
+
+We can see the first few vectors in `sw_list` looks like a data.frame (`name` through `films`), but `films` has multiple lengths, because each character has been in a varying number of films.
+
+### using `$`
+
+If we use the `$` symbol, R returns the object according to type.
+
+```{r structure-list-dollar-sign-1}
+# heights
+str(sw_list$height)
+```
+
+The `films` are stored as a list in `sw_list`, so using `$` will return a list of character values (`chr`). 
+
+```{r structure-list-dollar-sign-2}
+# films
+str(sw_list$films)
+```
+
+### using `[]` & `[[]]`
+
+There are two levels for subsetting lists with brackets: `[]` and `[[]]`. A great way to think about these two levels of subsetting is captured in the tweet below:
+
+> If the #rstats list "`x`" is a train carrying objects, then `x[[5]]` is the object in car `5`; `x[4:6]` is a train of cars `4`-`6`.
+> [One R Tip a Day](https://twitter.com/RLangTip/status/268375867468681216?s=20) [@RLangTip](https://twitter.com/RLangTip/)
+
+So, if `sw_list` is the 'train', then  `sw_list[[4]]` is the object in car 4. 
+
+```{r lists-as-trains-1}
+# object in car 4
+str(sw_list[[4]])
+```
+
+And `sw_list[4:6]` is the train of cars `1`-`4`
+
+```{r lists-as-trains-2}
+str(sw_list[1:4])
+```
+
+### comparing `$`, `[]`, and `[[]]`
+
+Below we compare subsetting lists with `$`, `[]`, and `[[]]`. We can see `$` and `[[]]` return `identical()` objects. 
+
+```{r compare-dollar-single-brackets}
+# check $
+str(sw_list$name)
+# check []
+str(sw_list[[1]])
+# test for identical?
+identical(x = str(sw_list$name), y = str(sw_list[[1]]))
+```
+
+However, if we use `[[]]`, we get a list. 
+
+```{r compare-dollar-double-brackets}
+str(sw_list[1])
+```

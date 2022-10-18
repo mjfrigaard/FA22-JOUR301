@@ -1,0 +1,532 @@
+---
+title: "Case Study (Part 4)"
+comment: "Don't Mess with Texas Part 3: manipulating images with `magick`"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+library(lubridate)
+library(here)
+library(janitor)
+library(socviz)
+library(ggrepel)
+library(covdata)
+library(showtext)
+library(hrbrthemes)
+library(rtweet)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      fig.path = "../img/",
+                      tidy = FALSE)
+# set width
+options(width = 60, max.print = 300)
+```
+
+
+## Texas death row executed offenders website
+
+This continues with the [Texas Department of Criminal Justice data](http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html), which keeps records of every inmate executed. 
+
+## Packages 
+
+```{r packages, message=FALSE, warning=FALSE}
+library(knitr)
+library(rmdformats)
+library(hrbrthemes)
+library(tidyverse)
+library(rvest)
+library(XML)
+library(magrittr)
+library(xml2)
+library(here)
+library(magick)
+```
+
+
+## Import the data
+
+We will load previous .csv file of all executions. 
+
+```{r DirProcessed}
+fs::dir_tree("../data/wk10-dont-mess-with-texas/")
+```
+
+The code below will import the most recent data.
+
+```{r create-ExecOffenders}
+# fs::dir_ls("data/processed/2021-10-25")
+ExecOffenders <- readr::read_csv("https://bit.ly/2Z7pKTI")
+ExOffndrsComplete <- readr::read_csv("https://bit.ly/3oLZdEm")
+```
+
+Wrangle these date variables, 
+
+```{r date-vars}
+ExecOffenders <- ExecOffenders %>%
+  dplyr::mutate(
+    date = lubridate::mdy(date),
+    year = lubridate::year(date),
+    yday = lubridate::yday(date),
+    month = lubridate::month(date, label = TRUE)) 
+```
+
+
+```{r skimr-ExecOffenders}
+ExecOffenders %>% skimr::skim()
+```
+
+These data are already pretty clean, but we will be using the .jpgs I've downloaded in the `02-iterate-with-download.Rmd` file. 
+
+## The `magik` package
+
+I will be using the [magik](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) package for processing and manipulating these images. I advise checking out the entire vignette for more examples. 
+
+## Create a test image
+
+I picked an offender that was typical, meaning they represented the 'average' person from this sample, and stored it as `test_image` below:
+
+The executed offender is [Stevn Coen Renfro](https://murderpedia.org/male.R/r1/renfro-steven.htm) from Harrison Texas. He was executed on Februrary 9th, 1998.
+
+```{r permanent-test_image, echo=FALSE, include=FALSE}
+"http://www.tdcj.state.tx.us/death_row/dr_info/renfrosteven.jpg" -> test_image
+```
+ 
+I create `test_magick_img` from `magick::image_read()`, and then go on making the transformations as necessary. 
+
+
+```{r test_magick_img}
+test_magick_img <- magick::image_read(test_image)
+test_magick_img
+```
+
+This images comes up in the viewer pane.
+
+*TIP: come up with a naming convention for each step so you can use RStudio's viewer pane to see the manipulations.*
+
+## Basic transformations
+
+These functions are for basic image movement/manipulations you would do with any basic photo editing app.
+
+### Crop with `magick::image_crop()`
+
+Now I want to remove the text and focus on the mugshot. This might need to be adjusted slightly for each new `test_magick_img`.
+
+```{r test_magick_crop_750_x_1000_10}
+# crop this image
+test_magick_crop_750_x_1000_10 <- magick::image_crop(
+  image = test_magick_img,
+  geometry = "750x1000+10"
+)
+test_magick_crop_750_x_1000_10
+```
+
+This should have trimmed the extra space off the bottom of the image. 
+
+### Rotate with `magick::image_rotate()`
+
+I want to rotate this image by 90 degrees. 
+
+```{r test_magick_rotate90}
+# rotate this image
+test_magick_rotate90 <- magick::image_rotate(test_magick_crop_750_x_1000_10,
+  degrees = 90
+)
+test_magick_rotate90
+```
+
+Now I want to remove the rest of the text and focus on the mugshot. This might need to be adjusted slightly for each new `test_image`.
+
+```{r test_magick_crop_850_x_950_450}
+# crop this image
+test_magick_crop_850_x_950_450 <- magick::image_crop(
+  image = test_magick_rotate90,
+  geometry = "850x950+450"
+)
+test_magick_crop_850_x_950_450
+```
+
+
+
+Now I will rotate this image back to center (`image_rotate` again) and flip it using `magick::image_flip()`
+
+```{r test_magick_rotate270}
+# rotate this image
+test_magick_rotate270 <- magick::image_rotate(test_magick_crop_850_x_950_450,
+  degrees = 270)
+# rotate this image
+test_magick_flip <- magick::image_flip(test_magick_rotate270)
+test_magick_flip
+```
+
+
+
+
+I'll crop the rest of the text out of the image, and trim the whitespace for the plot. 
+
+```{r test_magick_crop_750_x_200_10}
+# crop this image
+test_magick_crop_750_x_200_10 <- magick::image_crop(
+  image = test_magick_flip,
+  geometry = "750x200+10"
+)
+test_magick_crop_750_x_200_10
+```
+
+Flip this image again.
+
+```{r test_magick_flip2}
+# flip this image again
+test_magick_flip2 <- magick::image_flip(test_magick_crop_750_x_200_10)
+test_magick_flip2
+```
+
+Rotate another 270:
+
+```{r test_magick_rotate270v2}
+# rotate to remove the dot
+test_magick_rotate270v2 <- magick::image_rotate(test_magick_flip2,
+  degrees = 270
+)
+test_magick_rotate270v2
+```
+
+
+Now crop out the last little bit of the document. 
+
+```{r test_magick_crop_640_x_352_10}
+# crop the dot out
+test_magick_crop_640_x_352_10 <- magick::image_crop(
+  image = test_magick_rotate270v2,
+  geometry = "650x352+10"
+)
+test_magick_crop_640_x_352_10
+```
+
+
+Rotate back to center 
+
+```{r test_magick_rotate90v02}
+# rotate back to center
+test_magick_rotate90v02 <- magick::image_rotate(test_magick_crop_640_x_352_10,
+  degrees = 90
+)
+test_magick_rotate90v02
+```
+
+### Image effects with `magick`
+
+Now we will use `magick::image_trim()` to clean the image up a bit. 
+
+```{r test_magick_clean}
+# Here we will trim the image up a bit with the `fuzz` argument
+test_magick_clean <- magick::image_trim(
+  image = test_magick_rotate90v02,
+  fuzz = 1
+)
+test_magick_clean
+```
+
+
+Now that I have all the trimming on and cropping done, I will add some effects for the `ggplot2` image. 
+
+I want the image to be a bit more subdued, so I will use `magick::image_modulate()` and `magick::image_flatten()` to create these effects. 
+
+```{r test_magick_final}
+test_image_modulate <- magick::image_modulate(test_magick_clean,
+  brightness = 100,
+  saturation = 25,
+  hue = 20
+)
+# test_image_modulate
+test_magick_final <- magick::image_flatten(test_image_modulate,
+  operator = "Threshold"
+)
+test_magick_final
+```
+
+
+Export image:
+
+```{r export-test_magick_final}
+magick::image_write(image = test_magick_final, 
+                    path = "../img/test_magick_final.png")
+```
+
+## Data for plot
+
+I want to graph the number of executions over time (year) by race. I can do this by getting a grouped data from using `dplyr`'s functions.
+
+## Plot executions over time
+
+I create `base_ggplot2` as the basic plot I want as a layer for the image to appear on top of.
+
+```{r PlotExecOffender}
+# Scatter plot
+# colors_brewer
+PlotExecOffender <- ExecOffenders %>%
+  # remove 'Other'
+  filter(race != "Other") %>% 
+  dplyr::group_by(race, year) %>% 
+      dplyr::summarise(
+            ex_x_race_year = sum(n())) %>% 
+    dplyr::arrange(desc(ex_x_race_year)) %>% 
+  ungroup() 
+head(PlotExecOffender)
+```
+
+## Start with labels! 
+
+Build the labels first: 
+
+```{r labs_executed_offndrss}
+labs_executed_offndrss <- ggplot2::labs(
+    title = "Texas Justice",
+    subtitle = "Executions (1980-2020) in Texas",
+    caption = "source: http://www.tdcj.state.tx.us/death_row/index.html",
+    x = NULL,
+    y = "Executions"
+    )
+```
+
+## Build a base plot 
+
+Now we can start with a base plot:
+
+```{r create-base_ggplot2, fig.width=7, fig.height=5}
+base_ggplot2 <- PlotExecOffender %>% 
+  ggplot2::ggplot(data = ., aes(
+    y = ex_x_race_year,
+    x = year,
+    color = race
+  )) + 
+  labs_executed_offndrss
+base_ggplot2
+```
+
+### Adding data to canvas
+
+We can now add the data to the canvas. 
+
+Color palettes: http://applied-r.com/rcolorbrewer-palettes/
+
+```{r gg_executions_year_01, fig.width=7, fig.height=5}
+library(RColorBrewer)
+gg_executions_year_01 <- base_ggplot2 + 
+  # add the lines
+  ggplot2::geom_line(aes(color = race), size = 2) + 
+  # add the points
+  ggplot2::geom_point(aes(color = race), 
+                      size = 1.2,
+                      alpha = 1/3) +
+  # set the axes
+  ggplot2::scale_x_continuous(breaks = seq(1982, 2020, 4)) +
+  ggplot2::scale_y_continuous(breaks = seq(0, 22, 2)) +
+  # add the themes
+  ggplot2::theme(
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.title = element_blank(),
+    panel.grid.major = element_blank()
+    # panel.grid.minor = element_blank()
+  ) + 
+  scale_color_brewer(palette = "RdBu")
+gg_executions_year_01
+```
+
+This looks OK, but the white line is hard to see, so we will try another color palette in the example below:
+
+### Example: overplot using `ggpubr` package
+
+The first example I'll plot will use image as the 'canvas'. This requires exporting the image as a .jpeg, then reloading it and using the [`ggpubr`](http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/) package. 
+
+```{r image_write, eval=TRUE, echo=TRUE}
+library(jpeg)
+# 1) export the `test_magick_final` file,
+magick::image_write(test_magick_final,
+  path =
+    paste0("../img/",
+      base::noquote(lubridate::today()),
+      "-test_magick_final",
+      format = ".jpg"
+    )
+)
+# 2) then read it back in as an `jpeg::readJPEG()`.
+fs::dir_ls("../img", regexp = lubridate::today())
+```
+
+```{r readJPEG-test_magick_final_file}
+test_magick_final_file <- list.files("../img", 
+                                     pattern = as.character(lubridate::today()), 
+                                     full.names = TRUE)
+# test_magick_final_file
+imgJPEG <- jpeg::readJPEG(test_magick_final_file)
+```
+
+### Build new labels 
+
+We want to adjust our labels to include the link about the offender in the background. 
+
+```{r labs_executed_offndrss_02}
+labs_executed_offndrss_02 <- ggplot2::labs(
+    title = "Texas Justice (executions from 1980-2020)",
+    subtitle = "source: http://www.tdcj.state.tx.us/death_row/index.html",
+    caption = "Stevn Coen Renfro: https://murderpedia.org/male.R/r1/renfro-steven.htm",
+    x = NULL,
+    y = "Executions"
+    ) 
+```
+
+### Add a background image
+
+Now I can add the `imgJPEG` after the base layer (but before I map the `geom_line()` and `geom_theme()`) using `ggpubr::background_image()`. 
+
+```{r gg_executions_year_02, fig.width=7, fig.height=5}
+library(hrbrthemes)
+library(ggpubr)
+gg_executions_year_02 <- base_ggplot2 +
+  # this is the image for the background
+  ggpubr::background_image(imgJPEG) +
+
+  # add the lines
+  ggplot2::geom_line(aes(color = race), alpha = 3/4, 
+                     size = 0.8) + 
+  # add the points
+  ggplot2::geom_point(aes(color = race), 
+                      size = 1.3,
+                      alpha = 1/3) +
+  # set the axes
+  ggplot2::scale_x_continuous(breaks = seq(1982, 2020, 4)) +
+  ggplot2::scale_y_continuous(breaks = seq(0, 22, 2)) +
+  # add the themes
+  hrbrthemes::theme_ft_rc() + 
+  # add the labels
+  labs_executed_offndrss_02 
+gg_executions_year_02
+```
+
+
+### Add manual color scale
+
+We will add a manual color scale to this plot with `scale_colour_discrete()`. 
+
+```{r gg_executions_year_03, fig.width=7, fig.height=5}
+gg_executions_year_03 <- gg_executions_year_02 + 
+  # add a manual color scale
+  scale_colour_discrete(type = c("red", "blue", "black"))
+gg_executions_year_03
+```
+
+```{r gg_executions_year_03.png, echo=FALSE, include=FALSE, results='hide'}
+ggsave(
+  filename = "../img/gg_executions_year_03.png",
+  width = 9,
+  height = 7,
+  units = "in",
+  device = "png"
+)
+```
+
+### Example: Add labels using `ggrepel`
+
+We also want to label the specific point on the graph where Steven Renfro was executed. We can do this by filtering the `ExecOffenders` to only his row in that dataset, then creating a `label` variable with `paste0()`.
+
+```{r label}
+ExecOffLabel <- ExecOffenders %>% 
+  filter(last_name == "Renfro") %>%
+  mutate(label = paste0(last_name, ", ", first_name, ": executed on ", date)) 
+ExecOffLabel
+```
+
+We now want to limit the columns in `ExecOffLabel` to *only those values* on the graph, which are `last_name`, `first_name`, `race`, `year`, `label`
+
+```{r ExecOffLabel}
+ExecOffLabel <- ExecOffLabel %>% 
+  select(last_name, first_name, race, year, label)
+ExecOffLabel
+```
+
+But wait, we grouped the `ExecOffenders` by race and year to create `PlotExecOffender` (review this code below)
+
+```{r review}
+PlotExecOffender <- ExecOffenders %>%
+  # remove 'Other'
+  filter(race != "Other") %>% 
+  dplyr::group_by(race, year) %>% 
+      dplyr::summarise(
+            ex_x_race_year = sum(n())) %>% 
+    dplyr::arrange(desc(ex_x_race_year)) %>% 
+  ungroup() 
+head(PlotExecOffender)
+```
+
+So in order to get that `ex_x_race_year` variable, we will `left_join()` the columns in `ExecOffLabel` to the columns in `PlotExecOffender`. Fortunately, `dplyr` is smart enough to know what we want to join on.
+
+```{r ExecOffLabelData}
+ExecOffLabelData <- left_join(x = ExecOffLabel, y = PlotExecOffender)
+ExecOffLabelData
+```
+
+We see the message: `Joining, by = c("race", "year")` and we now have all the variables we need to add the labels to the graph. Now we load the `ggrepel` package and use the `ggrepel::geom_label_repel()` layer, with `data` set to `ExecOffLabelData`. 
+
+We also add *another* `geom_point()` layer with `ExecOffLabelData` and increase the `size` of the dot so it stands out. 
+
+```{r gg_executions_year_04, fig.width=7, fig.height=5}
+library(ggrepel)
+gg_executions_year_04 <- base_ggplot2 +
+  # this is the image for the background
+  ggpubr::background_image(imgJPEG) +
+
+  # add the lines
+  ggplot2::geom_line(aes(color = race), alpha = 1/2, 
+                     size = 1.5) + 
+  # add the points
+  ggplot2::geom_point(aes(color = race), 
+                      size = 1.2,
+                      alpha = 1/4) +
+     ggplot2::geom_point(data = ExecOffLabelData,
+                     aes(color = race), 
+                      size = 10,
+                      alpha = 1/4,
+                     show.legend = FALSE) +
+     # add value label
+     geom_label_repel(data = ExecOffLabelData,
+              aes(x = year, y = ex_x_race_year,
+                  label = label),
+                  # set color and size...
+                  color = "black",
+                  size = 2) +
+  # set the axes
+  ggplot2::scale_x_continuous(breaks = seq(1982, 2020, 4)) +
+  ggplot2::scale_y_continuous(breaks = seq(0, 22, 2)) +
+  # add the themes
+  hrbrthemes::theme_ft_rc(axis_text_size = 10, axis_title_size = 12) + 
+  # add color scale
+  scale_colour_discrete(type = c("red", "blue", "black")) +
+  # add plot labels
+  labs_executed_offndrss_02
+gg_executions_year_04
+```
+
+
+```{r gg_executions_year_04.png, echo=FALSE, include=FALSE, results='hide'}
+ggsave(
+  filename = "../img/gg_executions_year_04.png",
+  width = 9,
+  height = 7,
+  units = "in",
+  device = "png"
+)
+```

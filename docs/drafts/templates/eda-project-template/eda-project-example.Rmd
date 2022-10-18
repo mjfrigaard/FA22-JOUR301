@@ -1,0 +1,381 @@
+---
+title: "Exploratory Data Analysis (EDA) - project example"
+author: "Martin Frigaard"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    code_folding: show
+    theme: journal
+    df_print: paged
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+# chunk options ----
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE,
+                      eval = FALSE,
+                      tidy = FALSE,
+                      fig.height = 7,
+                      fig.width = 9,
+                      fig.path = "img/")
+# base options ----
+base::options(
+  tibble.print_max = 78,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+```
+
+# Intro 
+
+This R Markdown document template for your exploratory data analysis project. You've selected (or you've been assigned) a dataset, and you're going to use this template to import, wrangle, visualize and communicate the contents of your data. 
+
+# Background 
+
+You should have your project set up using the [goodenuffR package](https://github.com/mjfrigaard/goodenuffR). If you haven't, install this package using the code below: 
+
+```{r goodenuffR}
+install.packages("devtools")# for install_github()
+library(devtools) # load devtools
+devtools::install_github("mjfrigaard/goodenuffR") # install goodenuffR
+library(goodenuffR) # load goodenuffR
+```
+
+Recall you can use the `goodenuffR` functions to create specific files in your project: 
+
+```{r goodenuffR-funs}
+goodenuffR::goodenuff_code() # create code/ folder and files
+goodenuffR::goodenuff_data() # create data/ folder and data/raw folder
+goodenuffR::goodenuff_doc() # create documentation files
+goodenuffR::goodenuff_results() # create results folder 
+goodenuffR::goodenuff_collab() # create CITATION, requirements, etc.
+```
+
+Let's get started! 
+
+# Packages 
+
+The packages below have been covered in the course slides and exercises. You're not required to know all the details of every package (we can look that up), but you *do* need to know how to install a package. 
+
+```{r packages, message=FALSE, warning=FALSE, eval=TRUE}
+library(tidyverse) # for dplyr, tidyr, ggplot2 and others
+library(janitor) # for names 
+library(skimr) # basic data summaries
+```
+
+
+# Import 
+
+Use the code chunk below to import your data into RStudio. The example we will use is from [this pudding article](https://pudding.cool/2019/05/people-map/), "A People Map of the US."
+
+```{r import-data, eval=TRUE}
+# this will import data in a .csv file, other options include readxl and 
+# googlesheets4, and vroom
+PeopleMapRaw <- readr::read_csv(file = "https://bit.ly/3mBWNsd")
+```
+
+# Dimensions and structure 
+
+We will start by asking some general questions about the dataset structure and shape. 
+
+## How many columns?
+
+```{r ncol, eval=TRUE}
+ncol(PeopleMapRaw)
+```
+
+You can also use `length()`
+
+```{r length, eval=TRUE}
+length(PeopleMapRaw)
+```
+
+## How many rows? 
+
+To simply print the number of rows in your dataset, you can use `nrow()`
+
+```{r nrow, eval=TRUE}
+nrow(PeopleMapRaw)
+```
+
+We can also kill two birds with one stone (columns and rows) using `dim()`
+
+```{r dim, eval=TRUE}
+dim(PeopleMapRaw)
+```
+
+## Variable names? 
+
+To get the names assigned to any R data object, you can use the `names()` argument.
+
+```{r names, eval=TRUE}
+names(PeopleMapRaw)
+```
+
+Since we're using a `tibble` (or `data.frame`), it has columns, and we can use the `colnames()` function.
+
+```{r colnames, eval=TRUE}
+colnames(PeopleMapRaw)
+```
+
+
+## Variable formats?
+
+```{r str, eval=TRUE}
+str(PeopleMapRaw)
+```
+
+
+```{r glimpse, message=FALSE, warning=FALSE, eval=TRUE}
+glimpse(PeopleMapRaw)
+```
+
+## Export raw data
+
+Now that we know our data imported correctly, we can export an example of these data to the `data/raw/` folder. 
+
+```{r out_path, eval=TRUE}
+fs::dir_create("data/raw/")
+out_path <- paste0("data/raw/", noquote(lubridate::today()), "-PeopleMapRaw.csv")
+write_csv(x = PeopleMapRaw, file = out_path)
+# verify
+fs::dir_tree("data/raw/")
+```
+
+# Wrangle
+
+The first thing we want to do with `PeopleMapRaw` is standardize the column names and make sure they're meaningful, then we want to check the contents of each variable.
+
+## Column names 
+
+The janitor package has a great function for dealing with column names, `janitor::clean_names()`. This function automatically converts all names to `lower_snake_case`, which makes them easier to read and program with. 
+
+In `PeopleMapRaw`, the names are already in `lower_snake_case`, but we'll apply `clean_names()` just because it's a good habit to get into. 
+
+```{r PeopleMap, message=FALSE, warning=FALSE, eval=TRUE}
+PeopleMap <- janitor::clean_names(PeopleMapRaw)
+glimpse(PeopleMap)
+```
+
+Notice I changed the name of `PeopleMapRaw` to `PeopleMap` because we've altered the contents of the raw data (and we want to keep these separate). 
+
+## Summary statistics
+
+We're not going to dive too deep into statistical topics, but we do need to know how to calculate some summary statistics. 
+
+The simplest way to calculate summary statistics for the `PeopleMap` data is to apply the `skimr::skim()` function.  
+
+```{r skim-PeopleMap, message=FALSE, warning=FALSE, eval=TRUE}
+skimr::skim(PeopleMap)
+```
+
+We should inspect this output for anything that looks out of the ordinary. For example, we can see `state` lists 93 unique values. This isn't possible, so we should check this variable with `count()`
+
+```{r count-state, message=FALSE, warning=FALSE, eval=TRUE}
+PeopleMap %>% 
+  count(state, sort = TRUE)
+```
+
+We can see this is including more than just the states (counties too). We're going to wrangle the state to `state_name` (and not remove any of the other information in state).
+
+R comes with a vector `state.name` which contains all 50 state names. 
+
+```{r state.name, message=FALSE, warning=FALSE, eval=TRUE}
+state.name
+```
+
+We'll convert this to a regular expression. 
+
+```{r state_pattern, message=FALSE, warning=FALSE, eval=TRUE}
+# get a regular expression for state names 
+state_pattern <- paste0(state.name, collapse = "|")
+state_pattern
+```
+
+We'll use `state_pattern` to filter the states in the state column to only *actual* states, then count the two variables to see if there are any valuess that were missed. 
+
+```{r state_name-01, message=FALSE, warning=FALSE, eval=TRUE}
+PeopleMap %>% 
+  mutate(
+  state_name = case_when(
+    str_detect(state, state_pattern) ~ state,
+    TRUE ~ NA_character_)) %>% 
+    count(state_name, state) %>% 
+    filter(!is.na(state_name)) %>% 
+    arrange(n)
+```
+
+We will add the `Iowa County` and `Washington County` to the mutate function (to properly categorize the counties as `NA`)
+
+```{r state_name-02, message=FALSE, warning=FALSE, eval=TRUE}
+PeopleMap %>% 
+  mutate(
+  state_name = case_when(
+    str_detect(state, state_pattern) ~ state,
+    TRUE ~ NA_character_),
+  # include the counties
+  state_name = case_when(
+     state_name == "Iowa County" ~ NA_character_,
+     state_name == "Washington County" ~ NA_character_, 
+     TRUE ~ state_name)) %>% 
+  count(state_name, state) %>% 
+  filter(!is.na(state_name)) %>% 
+  arrange(n)
+```
+
+Now we will create a state_abbr (state abbreviation) variable based on our new `state_name` variable using the `state2abbr()` from the [`usdata` package](https://openintrostat.github.io/usdata/index.html). 
+
+```{r state2abbr, message=FALSE, warning=FALSE, eval=TRUE}
+# install.packages("usdata")
+library(usdata) 
+PeopleMap <- PeopleMap %>% 
+  mutate(
+  state_name = case_when(
+    str_detect(state, state_pattern) ~ state,
+    TRUE ~ NA_character_),
+  # include the counties
+  state_name = case_when(
+     state_name == "Iowa County" ~ NA_character_,
+     state_name == "Washington County" ~ NA_character_, 
+     TRUE ~ state_name), 
+  state_abbr = usdata::state2abbr(state = state_name)) 
+PeopleMap %>% 
+  select(state, state_name, state_abbr) %>% head()
+PeopleMap %>% 
+  select(state, state_name, state_abbr) %>% tail()
+```
+
+# Visualizations
+
+We're going to create a few exploratory graphs of the variables in our imported data. From the `skim()` output, we can see there are four numerical variables and seven character variables.  
+
+## Single variable graphs
+
+We're going to start with some graphs of the numerical variable, `views_median`.
+
+```{r geom_histogram, message=FALSE, warning=FALSE, eval=TRUE}
+# label
+labs_hist <- labs(title = "Histogram of PeopleMap$views_median", 
+                  x = "Median Views")
+PeopleMap %>% 
+  ggplot(aes(x = views_median)) + 
+    geom_histogram() + 
+      labs_hist
+```
+
+
+
+```{r geom_freqpoly, message=FALSE, warning=FALSE, eval=TRUE}
+# label
+labs_freq <- labs(title = "Histogram of PeopleMap$views_median", 
+                  x = "Median Views")
+PeopleMap %>% 
+  ggplot(aes(x = views_median)) + 
+    geom_freqpoly() + 
+      labs_freq
+```
+
+
+## Multiple variable graphs
+
+We're going to see how `views_median` looks across the `state_name` variable. 
+```{r labs_box2, message=FALSE, warning=FALSE, eval=TRUE}
+labs_box2 <- labs(
+     title = "Median views by state",
+     subtitle = "source: https://github.com/the-pudding/data",
+     fill = "State",
+     x = "Median page views",
+     y = "State")
+PeopleMap %>%  
+  # remove missing states
+  filter(!is.na(state_name)) %>% 
+  ggplot() + 
+  geom_boxplot(aes(x = views_median, 
+                      y = state_name, 
+                      fill = state_name),
+                      alpha = 1/5, 
+               show.legend = FALSE) + 
+  labs_box2
+```
+
+
+The graph above makes it hard to see the difference between states, so we can use the `facet_wrap()` function by setting the `group` aesthetic to our new `state_name` variable.
+
+```{r facet_wrap, message=FALSE, warning=FALSE, eval=TRUE}
+labs_freq2 <- labs(
+     title = "Median views by state",
+     subtitle = "source: https://github.com/the-pudding/data",
+     fill = "State",
+     x = "Median page views",
+     y = "State")
+PeopleMap %>% 
+  # remove missing states
+  filter(!is.na(state_name)) %>% 
+  ggplot(aes(x = views_median, group = state_name)) + 
+    geom_freqpoly(aes(color = state_name), 
+                  show.legend = FALSE) + 
+    facet_wrap(~ state_name) + 
+    labs_freq2
+```
+
+This is a better way to see which states had more median page views, but we can still improve the graph by using our `state_abbr` variable, the [`geofacet` package](https://hafen.github.io/geofacet/) and black and white theme (`theme_bw()`) from [`ggplot2`](https://ggplot2.tidyverse.org/reference/ggtheme.html). 
+
+```{r geofacet, message=FALSE, warning=FALSE, eval=TRUE}
+library(geofacet)
+PeopleMap %>% 
+  # remove missing states
+  filter(!is.na(state_abbr)) %>% 
+  ggplot(aes(x = views_median, group = state_abbr)) + 
+    geom_freqpoly(aes(color = state_abbr), 
+                  show.legend = FALSE) + 
+    facet_geo(~ state_abbr) + 
+  theme_bw() + 
+  labs_freq2
+```
+
+# Data dictionary 
+
+We want to include a data dictionary with this dataset, which we can find in the [README.md file](https://github.com/the-pudding/data/blob/master/people-map/README.md) on the Github page. 
+
+## Example 
+
+> This folder contains all of the data used in The Pudding essay A People Map of the US published in May 2019.
+
+> The data will never be updated.
+
+> Below you'll find the metadata for each file.
+
+### people-map.csv
+
+> - **What is this?**: Data of the most visited person(s) Wikipedia page for each city with a "List of People from..." (~ 10,000) in the US
+> - **Source(s) & Methodology**: [English Wikipedia](https://en.wikipedia.org)
+> - **Last Modified**: May 2019
+> - **Contact Information**: [Russell Goldenberg](mailto:russell@pudding.cool)
+> - **Spatial Applicability**: United States
+> - **Temporal Applicability**: July 2015 through May 2019
+> - **Observations (Rows)**: Each row represents one person.
+> - **Variables (Columns)**:
+
+| Header | Description | Data Type |
+| --- | --- | --- |
+| `name` | name of person | text |
+| `city` | city/town name | text |
+| `neighborhood` | neighborhood name (if applicable) | text |
+| `place` | neighborhood or city | text |
+| `views_median` | average number of pageviews per day | number |
+| `views_sum` | total number of pageviews | number |
+| `name_clean` | display name (removed items in parenthesis) | text |
+| `lat` | latitude of place | number |
+| `lng` | longitude of place | number |
+| `extract` | 200 character description of person | text |
+| `state` | state (or sometimes county if state is NA) | text |
+| `state_name` | state name | text |
+| `state_abbr` | state abbreviated name | text |
+

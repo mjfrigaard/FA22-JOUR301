@@ -689,7 +689,7 @@ background-size: 6%
 
 --
 
-*How does the distribution of `dir_request` across `trans_type`?*
+*How does the distribution of `dir_request` vary (or differ) across `trans_type`?*
 
 --
 

@@ -1,0 +1,303 @@
+---
+title: "Google trends (example EDA with goodenuffR)"
+author: "Your Name"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(knitr)
+library(tidyverse)
+library(janitor)
+# base options ----
+base::options(
+  tibble.print_max = 25,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+# knitr chunk options ----
+knitr::opts_chunk$set(
+  echo = TRUE, # show/hide all code
+  # results = "hide", # hide/show results
+  tidy = FALSE, # cleaner code printing
+  comment = "#> ", # better console printing
+  eval = TRUE, # turn this to FALSE stop code chunks from running
+  message = TRUE, # show messages
+  fig.width = 7, # figure width
+  fig.height = 5, # figure height
+  warning = FALSE, # show warnings
+  size = "small", # size of the text
+  fig.path = "img/" # location of figures
+) 
+# knitr knit settings ----
+knitr::opts_knit$set(
+  width = 78
+)
+```
+
+## Motivation
+
+This document will cover an example EDA project using the `gtrendsR` package to gather Google trend data.
+
+Below we install and load the `gtrendsR` package...
+
+```{r gtrendsR}
+# devtools::install_github("PMassicotte/gtrendsR")
+library(gtrendsR)
+```
+
+## Code/data files & folders {.tabset}
+
+We will use the handy `goodenuffR::goodenuff_code()` and `goodenuffR::goodenuff_data()` functions to create the code files. 
+
+### The code folder
+
+Create the folder/files:
+
+```{r goodenuff_collab}
+goodenuffR::goodenuff_code()
+```
+
+Verify it's there:
+
+```{r code-folder}
+fs::dir_tree("code")
+```
+
+### The data folder
+
+
+Create the folder/files:
+
+```{r goodenuff_data}
+goodenuffR::goodenuff_data() 
+```
+
+Verify it's there:
+
+```{r code-folder}
+fs::dir_tree("data")
+```
+
+## Import data {.tabset}
+
+We will collect Google trends for the term 'metaverse'. Facebook recently announced this name change for their company. What is the 'metaverse'? No one [really knows](https://arstechnica.com/gaming/2021/11/everyone-pitching-the-metaverse-has-a-different-idea-of-what-it-is/). 
+
+### `gtrends()` data
+
+The code below will import the trend data over the past 12 months and store it in `MetaverseTrendsRaw`.
+
+```{r MetaverseTrendsRaw}
+MetaverseTrendsRaw <- gtrendsR::gtrends(keyword = "metaverse", time = "today 12-m", gprop = "web")
+names(MetaverseTrendsRaw)
+```
+
+### Import script
+
+We want to add all the previous code to our `01-import.R` script.
+
+```{r 01-import.R, eval=FALSE}
+#=====================================================================#
+# This is code to create: import google trends
+# Authored by and feedback to: mjfrigaard
+# MIT License
+# Version: 1.0
+#=====================================================================#
+
+
+# packages  ---------------------------------------------------------------
+library(tidyverse)
+library(janitor)
+# devtools::install_github("PMassicotte/gtrendsR")
+library(gtrendsR)
+
+
+# import google trends ----------------------------------------------------
+MetaverseTrendsRaw <- gtrendsR::gtrends(keyword = "metaverse",
+  time = "today 12-m", gprop = "web")
+```
+
+### Export `Raw` data 
+
+In keeping with good practices, we're going to export the raw data to the `data/raw/` folder. This is a little more complicated because `gtrendsR` returned a list, but we can separated these out into individual datasets.
+
+```{r new-names}
+paste0("meta_", names(MetaverseTrendsRaw), "_raw")
+```
+
+
+```{r separate-data}
+meta_interest_over_time_raw <- MetaverseTrendsRaw$interest_over_time
+meta_interest_by_country_raw <- MetaverseTrendsRaw$interest_by_country
+meta_interest_by_region_raw <- MetaverseTrendsRaw$interest_by_region
+meta_interest_by_dma_raw <- MetaverseTrendsRaw$interest_by_dma
+meta_interest_by_city_raw <- MetaverseTrendsRaw$interest_by_city
+meta_related_topics_raw <- MetaverseTrendsRaw$related_topics
+meta_related_queries_raw <- MetaverseTrendsRaw$related_queries
+```
+
+```{r export-raw}
+readr::write_csv(
+  x = meta_interest_over_time_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_interest_over_time_raw.csv"))
+
+readr::write_csv(
+  x = meta_interest_by_country_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_interest_by_country_raw.csv"))
+
+readr::write_csv(
+  x = meta_interest_by_dma_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_interest_by_dma_raw.csv"))
+
+readr::write_csv(
+  x = meta_interest_by_city_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_interest_by_city_raw.csv"))
+
+readr::write_csv(
+  x = meta_related_topics_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_related_topics_raw.csv"))
+
+readr::write_csv(
+  x = meta_related_queries_raw, 
+  file = 
+    paste0("data/raw/", base::noquote(lubridate::today()), 
+      "-meta_related_queries_raw.csv"))
+
+```
+
+## Visualize 
+
+We can supply this object directly to the `plot()` function and see the trends for metaverse across the world over time. 
+
+```{r}
+plot(MetaverseTrendsRaw)
+```
+
+### interest_over_time
+
+### interest_by_country
+
+### interest_by_region
+
+
+
+## Data folder 
+
+- The data folder also has a `raw` sub-folder.
+
+## The doc folder
+
+```{r goodenuff_doc}
+goodenuffR::goodenuff_doc() 
+```
+
+> The `doc` directory contains two text files written in Markdown, one containing a running lab notebook describing various ideas for the project and how these were implemented and the other containing a running draft of a manuscript describing the project findings.
+
+### The CHANGELOG.txt
+
+The `CHANGELOG.md` file is for documenting "*dated notes about changes to the project in this file in reverse chronological order (i.e., most recent first). This file is the equivalent of a lab notebook, and should contain entries like those shown below.* This can also referred to as the `NEWS.md` file. 
+
+```
+...make dated notes about changes to the project in this file in reverse chronological order (i.e., most recent first). This file is the equivalent of a lab notebook, and should contain entries like those shown below.
+
+## 2016-04-08
+
+* Switched to cubic interpolation as default.
+
+* Moved question about family's TB history to end of questionnaire.
+
+## 2016-04-06
+
+* Added option for cubic interpolation.
+
+* Removed question about staph exposure (can be inferred from blood test results).
+```
+
+### The manuscript.md
+
+Draft of your manuscript.
+
+```
+# Manuscript
+
+...a running draft of a manuscript describing the project findings
+```
+
+### The notebook.md
+
+For your brilliant ideas
+
+```
+# Notebook
+
+...a running lab notebook describing various ideas for the project and how these were implemented
+
+
+```
+
+
+## The results folder
+
+```{r goodenuff_results}
+goodenuffR::goodenuff_results() 
+```
+
+These are visualizations, model outputs, etc. It has three sub-folders:
+
+```
+results
+    ├── figures
+    ├── manuscript
+    └── tables
+```
+
+## Project folder structure
+
+Below is a nice overview of the accompanying files. 
+
+```r
+├── CITATION
+├── LICENSE
+├── code
+│   ├── 01-import.R
+│   ├── 02-tidy.R
+│   ├── 03-wrangle.R
+│   ├── 04-visualize.R
+│   ├── 05-model.R
+│   ├── 06-communicate.R
+│   └── runall.R
+├── data
+│   ├── README.md
+│   └── raw
+├── docs
+│   ├── changelog.txt
+│   ├── manuscript.md
+│   └── notebook.md
+├── my-new-project.Rproj
+├── requirements.txt
+└── results
+    ├── figures
+    ├── manuscript
+    └── tables
+```
+

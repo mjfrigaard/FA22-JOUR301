@@ -1,0 +1,537 @@
+---
+title: "Reshaping and Joining Data in R"
+comment: "*transpose, pivot, split, and combine data*"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+    toc_depth: 6
+    number_sections: yes
+    code_folding: show
+    theme: yeti
+    df_print: paged
+    
+always_allow_html: true
+---
+
+```{r , include=FALSE}
+library(tidyverse)
+library(skimr)
+library(fivethirtyeight)
+library(fivethirtyeightdata)
+# create data folder
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      tidy = FALSE, 
+                      fig.path = "img/")
+```
+
+# Objectives 
+
+This document outlines some common data reshaping tasks with `tidyr` and introduces the concept of *tidy data*. 
+
+# Materials 
+
+View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
+
+Read more about `dplyr` [here](https://dplyr.tidyverse.org/index.html) and [`tidyr`](https://tidyr.tidyverse.org/) on the tidyverse website, or in the [Data Transformation](https://r4ds.had.co.nz/transform.html) chapter of R for Data Science. 
+
+## Load packages 
+
+`tidyr` is part of the core `tidyverse` packages, so we install and load this meta-package below. 
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+library(fivethirtyeight)
+```
+
+
+## Tidy data {.tabset}
+
+There are two principles for tidy data: 
+
+1. Columns hold *variables*    
+2. Rows hold *observations*    
+3. Cells (the intersection of rows and columns) hold *values*  
+
+For these first few exercises, we're going to be using data from the [`fivethirtyeight` package](https://fivethirtyeight-r.netlify.app/).
+
+
+### `EndorseSample`
+
+There are multiple ways data can be 'less-than tidy.' We'll start with a common example, which is two variables (and their values) stored in a single column.  
+
+Below is a subset of the `endorsements_2020` dataset named `EndorseSample`. Read more about the `endorsements_2020` dataset by typing `??endorsements_2020` into the console. 
+
+```{r EndorseSample, message=FALSE, warning=FALSE}
+EndorseSample <- readr::read_csv("https://bit.ly/3x6wfTg")
+head(EndorseSample)
+```
+
+Notice the `location` variable has two values (`state` and `city`) stored in the same column. 
+
+### `FandangoSample`
+
+In another example of un-tidy data, we'll look at the dataset below which comes from the `fandango` dataset. 
+
+```{r FandangoSample, message=FALSE, warning=FALSE}
+FandangoSample <- readr::read_csv(file = "https://bit.ly/3kS34yj")
+head(FandangoSample)
+```
+
+This dataset has two *similar* scores combined into a single column `rottentomatoes_scores`
+
++ `rottentomatoes_user`: The Rotten Tomatoes user score for the film (expressed as a percent)
+
++ `rt_user_norm`: The Rotten Tomatoes user score for the film , normalized to a 0 to 5 point system (expressed as 'score `out of 5`')
+
+### `DailyShowSample`
+
+Below is a sample from the `daily_show_guests` dataset. The guests names are separated into `first_name` and `last_name` columns. 
+
+```{r DailyShowSample, message=FALSE, warning=FALSE}
+DailyShowSample <- readr::read_csv("https://bit.ly/3HGx8XG")
+head(DailyShowSample)
+```
+
+***
+
+# Reshaping Columns and Rows 
+
+In the next few exercises, we'll go over how (and *when*) to use `separate()`, `separate_rows()`, and `unite()` these variables.
+
+## `separate()`  {.tabset}
+
+This allows us to split columns apart into multiple variables. 
+
+Take a look at `EndorseSample` below:
+
+```{r glimpse-EndorseSample, eval=TRUE}
+EndorseSample
+```
+
+
+### exercise 
+
+Separate `location` into `state` and `city`
+
+```{r separate-ex, eval=FALSE}
+EndorseSample %>% 
+    separate(col = ___, into = c("_______", "_______"), sep = " ")
+```
+
+
+### solution 
+
+```{r separate-sol}
+EndorseSample %>% 
+    separate(col = location, into = c("state", "city"), sep = ", ")
+```
+
+***
+
+## `separate_rows()`  {.tabset}
+
+`separate_rows()` is similar to `separate()`, but drops the values down the rows. This is commonly used when we have more than one *similar* value in each column. 
+
+Take a look at `FandangoSample` below. 
+
+```{r glimpse-FandangoSample}
+FandangoSample
+```
+
+### exercise 
+
+Put all the `value`s into their own cell.
+
+```{r separate_rows-ex, eval=FALSE}
+FandangoSample %>% 
+  separate_rows(____________________, sep = ___)
+```
+
+
+### solution
+
+This isn't as clear as it could be, so we will use `mutate()`, `case_when()`, and `str_detect()` to create an index variable for the `rottentomatoes_scores`, which we will call `rottentomatoes_score`. We'll also remove the `%` and `out of 5` text from `rottentomatoes_scores`, and rename this to `rottentomatoes_value`. 
+
+```{r FandangoSampleTidy}
+FandangoSampleTidy <- FandangoSample %>% 
+  separate_rows(rottentomatoes_scores, sep = "/", convert = TRUE) %>% 
+  mutate(rottentomatoes_score = case_when(
+    str_detect(rottentomatoes_scores, "%") ~ "raw user score (%)", 
+    str_detect(rottentomatoes_scores, "out of 5") ~ "normalized user score (out of 5)", 
+    TRUE ~ NA_character_),
+    rottentomatoes_value = str_remove_all(string = rottentomatoes_scores, "%|out of 5"), 
+    rottentomatoes_value = as.numeric(rottentomatoes_value)
+  ) %>% 
+  select(-rottentomatoes_scores)
+FandangoSampleTidy
+```
+
+Notice this new dataset, `FandangoSampleTidy`, has twice the number of rows as the original `FandangoSample`. 
+
+```{r review-FandangoSample}
+FandangoSample
+```
+
+***
+
+## `unite()` {.tabset} 
+
+Just like `separate`/`separate_rows` allows us to split up columns, `unite()` lets us stick them back together! Take a look at `DailyShowSample`.
+
+```{r review-DailyShowSample}
+DailyShowSample
+```
+
+We can see the guests have had their names in separate columns (`first_name` and `last_name`).
+
+
+### exercise 
+
+Unite `first_name` and `last_name` into `guest_name` (don't remove the previous columns with `remove = FALSE`).
+
+```{r unite, eval=FALSE}
+DailyShowSample %>% 
+    unite(col = "_______", first_name:last_name, sep = " ", remove = _____)
+```
+
+### solution
+
+Unite `first_name` and `last_name` into `guest_name` (don't remove the previous columns with `remove = FALSE`).
+
+```{r unite-solution-3}
+DailyShowSample %>% 
+    unite(col = "guest_name", first_name:last_name, sep = " ", remove = FALSE)
+```
+
+***
+
+# Joins
+
+Joins give us the ability to combine multiple datasets on a common column. We're going to be using the [`starwarsdb` package](https://github.com/gadenbuie/starwarsdb), which contains data from the [Star Wars API](https://swapi.dev/). 
+
+We'll load the data below: 
+
+```{r starwarsdb-package, message=FALSE}
+library(starwarsdb)
+library(dm)
+```
+
+## `starwarsdb` {.tabset}
+
+The code below creates and displays the data model for the tables in this package 
+
+```{r StarWarsDataModel, message=FALSE, warning=FALSE}
+StarWarsDataModel <- dm_draw(dm = starwars_dm(), 
+                             graph_name = "StarWarsDataModel")
+StarWarsDataModel
+```
+
+
+
+### exercise
+
+Load the `starwarsdb::films` dataset, removing the `opening_crawl` column, and filter to only episodes 4-6. Store these data in `StarWarsFilms`
+
+```{r films-ex, eval=FALSE}
+StarWarsFilms <- starwarsdb::films %>% 
+                    select(-____________) %>% 
+                    filter(episode_id >= ___ & episode_id <= ___)
+StarWarsFilms
+```
+
+### solution 
+
+```{r films-sol}
+StarWarsFilms <- starwarsdb::films %>% 
+                    select(-c(opening_crawl, director, producer)) %>% 
+                    filter(episode_id >= 4 & episode_id <= 6)
+StarWarsFilms
+```
+
+
+## `left_join` {.tabset}
+
+A `left_join` keeps all of `x`, and joins it to all matching rows from dataset `y`
+
+### exercise
+
+Left-join `StarWarsFilms` to `starwarsdb::films_vehicles` on `"title"`, then `select()` the `vehicle` column, then `everything()` else. 
+
+Assign to `StarWarsFilmVeh`
+
+```{r StarWarsFilmsPeople-ex, eval=FALSE}
+left_join(x = _____________, 
+          y = starwarsdb::films_vehicles, 
+          by = ______) %>% 
+    select(_____________, 
+           everything()) -> StarWarsFilmVeh
+StarWarsFilmVeh
+```
+
+### solution
+
+
+
+```{r StarWarsFilmsPeople}
+left_join(x = StarWarsFilms, 
+          y = starwarsdb::films_vehicles, 
+          by = "title") %>% 
+  select(vehicle, 
+         everything()) -> StarWarsFilmVeh
+StarWarsFilmVeh
+```
+
+## `inner_join` {.tabset}
+
+The `inner_join()` joins dataset `x` and `y`, and keeps only matching rows from both.
+
+### exercise 
+
+Use an `inner_join` to join `StarWarsFilmVeh` to `starwarsdb::pilots` on `"vehicle"` and assign it to `StarWarsFilmVehPil`.
+
+```{r StarWarsFilmVenPlt-ex, eval=FALSE}
+inner_join(x = StarWarsFilmVeh, 
+           y = _________, 
+           by = _________) -> _____________
+StarWarsFilmVehPil
+```
+
+### solution
+
+
+
+```{r StarWarsFilmVehPil-sol}
+inner_join(x = StarWarsFilmVeh, 
+           y = starwarsdb::pilots, 
+           by = "vehicle") -> StarWarsFilmVehPil
+StarWarsFilmVehPil
+```
+
+## `right_join` {.tabset}
+
+The `right_join()` includes all the rows in dataset `y`, and joins it the matching rows in dataset `x`.
+
+### exercise
+
+Use a `right_join()` to join `StarWarsFilmVehPlt` to `starwarsdb::films_planets` on `"title"`, keeping all the rows in `starwarsdb::films_planets`. Use `select()` to rename `planet` to `film_planet` and assign this to `StarWarsFilmVehPltPlnt` 
+
+```{r right_join_ex, eval=FALSE}
+right_join(x = __________________, 
+             y = __________________, 
+             by = "title") %>% 
+  select(vehicle:release_date,
+         film_planet = _______,
+         pilot) -> StarWarsFilmVehPltPlnt
+```
+
+### solution
+
+
+
+```{r right_join-sol}
+right_join(x = StarWarsFilmVehPil, 
+           y = starwarsdb::films_planets, 
+           by = "title") %>% 
+  select(vehicle:release_date,
+         film_planet = planet, 
+         pilot) -> StarWarsFilmVehPltPlnt
+StarWarsFilmVehPltPlnt
+```
+
+## `anti_join` {.tabset}
+
+The `anti_join()` keeps all rows in dataset `x` that **do not** have a match in dataset `y`. Note the last join created empty values for `vehicle`, `episode_id`, `release_date`, and `pilot`. 
+
+```{r filter-is.na}
+StarWarsFilmVehPltPlnt %>% 
+  filter(is.na(episode_id))
+```
+
+### exercise 
+
+Use the `anti_join()` to join `StarWarsFilmVehPltPlnt` to `StarWarsFilms` and create a dataset with only `title` and `film_planet` (*these should only contain the `title`s not in `StarWarsFilms`*).
+
+```{r anti_join-ex, eval=FALSE}
+anti_join(x = StarWarsFilmVehPltPlnt, 
+            y = ____________, 
+            by = c("title", "episode_id", "release_date")) %>% 
+  select(________, ________)
+```
+
+### solution 
+
+```{r anti_join-sol}
+anti_join(x = StarWarsFilmVehPltPlnt, 
+            y = StarWarsFilms, 
+            by = c("title", "episode_id", "release_date")) %>% 
+  select(title, film_planet)
+```
+
+
+
+***
+
+# Nested data
+
+Nested data refers to a dataset in which a column is holding a list of data frames (or `tibble`s). These can be useful for manipulating data, and we're going to give an example of using nested data to reshape a column combining two sets of dates.
+
+## Anti-Doping Sanctions Database {.tabset}
+
+`unnest()` deals with nested data, which can be complicated to explain, so we'll use an example. Run the code below to download data from the [Anti-Doping Agency Sanction database](https://www.usada.org/news/sanctions/). 
+
+```{r 01-create-usada-data, message=FALSE, warning=FALSE}
+source("code/create-usada-data.R")
+```
+
+These data have two dates (`original` and `updated`) in a single column (`sanction_announced`). **We only want `updated` dates in their own columns.**
+
+```{r UsadaBadDates}
+UsadaBadDates
+```
+
+### `str_split` 
+
+Use the `stringr` package's `str_split` function to split the bad dates on the `"updated"` pattern. 
+
+```{r str_split}
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+    # only return what we're interested in 
+    dplyr::select(athlete, sanction_announced, sanction_dates)
+```
+
+This creates a nested column (`sanction_dates`), which we can deal with by `unnest()`ing it. Let's take a better look with `listviewer` (but only look at `athlete` and `sanction_dates`).
+
+```{r listviewer}
+library(listviewer)
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+    # only return what we're interested in 
+    dplyr::select(athlete, sanction_dates) %>% 
+    listviewer::jsonedit(mode = "view")
+```
+
+
+### `unnest`
+
+After unnesting, we can see the dates have been repeated down the rows (like `separate_rows()`).
+
+```{r unnest}
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+    # convert the output from split into multiple rows
+        tidyr::unnest(sanction_dates) %>% 
+    # check this to see what is happening 
+        dplyr::select(athlete, sanction_announced, sanction_dates)
+```
+
+### `filter` 
+
+We can see all of the updated dates are on a new line, and the original dates still contain the text. Now I can filter out the rows with an original date (because I am only interested in the updated dates).
+
+```{r filter}
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+    # 2) convert the output from split into multiple rows
+        tidyr::unnest(sanction_dates) %>% 
+    
+    # 3) remove the "original" dates 
+        dplyr::filter(!str_detect(string = sanction_dates, 
+                                  pattern = "original")) %>% 
+    # check this to see what is happening 
+        dplyr::select(athlete, sanction_announced, sanction_dates)
+```
+
+### `str_remove_all`
+
+Now I can clean up the updated `sanction_dates` and format it. 
+
+```{r str_remove_all}
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+    # 2) convert the output from split into multiple rows
+        tidyr::unnest(sanction_dates) %>% 
+    
+    # 3) remove the "original" dates 
+        dplyr::filter(!str_detect(string = sanction_dates, 
+                                  pattern = "original")) %>% 
+    # 4) remove the colon from sanction_dates
+        dplyr::mutate(sanction_dates = stringr::str_remove_all(
+                                                      string = sanction_dates,
+                                                      pattern = ":"),
+                      # 5) remove any whitespace
+                      sanction_dates = stringr::str_trim(sanction_dates),
+                      # 6) format as date
+                      sanction_dates = lubridate::mdy(sanction_dates)) %>%
+    # check this to see what is happening 
+    dplyr::select(athlete, sanction_announced, sanction_dates)
+```
+
+
+### `ggplot2`
+
+***How far can this pipe go??***
+
+Well, when the data are arranged in the way we want, we can test it with a visualization to check the number of sanctions per sport with bad dates. 
+
+```{r visualize, out.height='100%', out.width='100%', fig.height=5, fig.width=7}
+UsadaBadDates %>%
+        dplyr::mutate(sanction_dates = 
+                        
+    # 1) split this on the "updated" pattern
+             stringr::str_split(string = sanction_announced, 
+                                pattern = "updated")) %>% 
+  
+    # 2) convert the output from split into multiple rows
+        tidyr::unnest(sanction_dates) %>% 
+  
+    # 3) remove the "original" dates 
+        dplyr::filter(!str_detect(string = sanction_dates, 
+                                  pattern = "original")) %>% 
+    # 4) remove the colon from sanction_dates
+        dplyr::mutate(sanction_dates = stringr::str_remove_all(
+                                                      string = sanction_dates,
+                                                      pattern = ":"),
+                      
+                      # 5) remove any whitespace
+                      sanction_dates = stringr::str_trim(sanction_dates),
+                      
+                      # 6) format as date
+                      sanction_dates = lubridate::mdy(sanction_dates)) %>% 
+  
+    # count by sport
+    dplyr::count(sport, sort = TRUE) %>% 
+  
+    # rename n 
+    rename(`Sport Count` = n,
+            Sport = sport) %>% 
+    ggplot2::ggplot(aes(x = `Sport Count`, 
+                        y = forcats::fct_reorder(as.factor(Sport), `Sport Count`), 
+                        fill = as.character(`Sport Count`))) + 
+    geom_col(show.legend = FALSE) + 
+    labs(x = "Number of Sanctions", y = "Sport",
+         title = "Number of Sanctions with Bad Dates",
+         caption = "source: https://www.usada.org/news/sanctions/") + 
+    ggthemes::theme_fivethirtyeight() + 
+    ggthemes::scale_fill_few()
+```
+
+
