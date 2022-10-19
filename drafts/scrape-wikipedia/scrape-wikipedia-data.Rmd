@@ -1,27 +1,40 @@
 ---
 title: "Scraping Wikipedia Tables"
-comment: "*advanced wrangling example*"
-output: 
-  html_document: 
-    toc: yes
+description: |
+  "*Advanced wrangling example*"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
     toc_float: yes
-    toc_depth: 6
-    number_sections: yes
-    code_folding: show
-    theme: yeti
-    df_print: paged
+    toc_depth: 2
 
 always_allow_html: true
+
 ---
 
-```{r , include=FALSE}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(skimr)
 # chunk options ----
-knitr::opts_chunk$set(warning = FALSE,
-                      message = FALSE,
-                      tidy = FALSE,
-                      fig.path = "img/")
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 8.5,
+  fig.height = 6,
+  fig.retina = 2
+  )
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/scrape-wikipedia/')
+fs::dir_create("data")
 # base options ----
 base::options(
   tibble.print_max = 25,
@@ -34,13 +47,6 @@ base::options(
 # Objectives
 
 This document outlines some advanced data wrangling with [`dplyr`](https://dplyr.tidyverse.org/index.html), [`tidyr`](https://tidyr.tidyverse.org/index.html), and [`stringr`](https://stringr.tidyverse.org/index.html). Read more in the [Data Transformation](https://r4ds.had.co.nz/transform.html) chapter of R for Data Science.
-
-
-# Materials 
-
-View the slides for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/slides.html).
-
-View the exercises for this section [here](https://mjfrigaard.github.io/csuc-data-journalism/lessons-exercises.html).
 
 ## Load packages
 
@@ -127,14 +133,14 @@ TopPharmCompRaw
 ```
 
 ```{r export-TopPharmCompRaw}
-# fs::dir_create("../data/wk6-02_scrape-wikipedia-data/")
-wikipedia_top_pharm_export_file <- paste0("../data/wk6-02_scrape-wikipedia-data/", lubridate::today(), "-TopPharmCompRaw.csv")
+fs::dir_create("data/wikipedia-data/")
+wikipedia_top_pharm_export_file <- paste0("data/wikipedia-data/", lubridate::today(), "-TopPharmCompRaw.csv")
 readr::write_csv(x = TopPharmCompRaw, file = wikipedia_top_pharm_export_file)
-fs::dir_tree("../data/wk6-02_scrape-wikipedia-data/")
+fs::dir_tree("data/wikipedia-data/")
 ```
 
 ```{r import-TopPharmCompRaw, include=FALSE, eval=TRUE}
-TopPharmCompRaw <- readr::read_csv("https://raw.githubusercontent.com/mjfrigaard/csuc-data-journalism/main/data/wk6-02_scrape-wikipedia-data/2020-11-24-TopPharmCompRaw.csv")
+TopPharmCompRaw <- readr::read_csv("data/wikipedia-data/2020-11-24-TopPharmCompRaw.csv")
 ```
 
 ## Outline before you start 
@@ -631,12 +637,12 @@ TopPharmComp %>% arrange(ranking)
 
 # Export data 
 
-We now have a dataset we can use for modeling or visualizations! We'll export this to the `../data/wk6-02_scrape-wikipedia-data/` folder.
+We now have a dataset we can use for modeling or visualizations! We'll export this to the `data/wikipedia-data/` folder.
 
 ```{r export-TopPharmComp}
-toppharm_comp_export_file <- paste0("../data/wk6-02_scrape-wikipedia-data/", lubridate::today(), "-TopPharmComp.csv")
+toppharm_comp_export_file <- paste0("data/wikipedia-data/", lubridate::today(), "-TopPharmComp.csv")
 # toppharm_comp_export_file
 readr::write_csv(x = TopPharmComp, file = toppharm_comp_export_file)
-fs::dir_tree("../data/wk6-02_scrape-wikipedia-data/")
+fs::dir_tree("data/wikipedia-data/")
 ```
 
