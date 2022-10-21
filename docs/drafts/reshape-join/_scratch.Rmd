@@ -1,0 +1,99 @@
+
+## Separate more complicated rows
+
+Let's take another look at `FandangoSample` below. 
+
+```{r glimpse-FandangoSample}
+dplyr::glimpse(FandangoSample)
+```
+
+### Shorten column names 
+
+The first thing we want to do is reduce the length of the `rottentomatoes_scores` column name. This is a lot to type, and it technically contains two *versions* of scores (the `%` and `score`/`out of 5`). We'll rename this column `all_rt_vals`. 
+
+```{r all_rt_vals}
+FandangoSample <- FandangoSample %>% 
+  dplyr::rename(all_rt_vals = rottentomatoes_scores)
+utils::head(FandangoSample)
+```
+
+### The `sep` argument
+
+If we use `separate_rows()` and leave `sep` empty, it will work (because the default value will match all punctuation characters), but the result isn't what we want: 
+
+```{r separate_rows_ex_05, eval=TRUE}
+FandangoSample %>% 
+  tidyr::separate_rows(all_rt_vals)
+```
+
+As we can see, the `sep` pattern treated each unique non-punctuation/space character as a value. This is why the `%` and all the spaces were been removed, and each element has been placed on a new row.
+
+Let's try this again with a `sep` argument. 
+
+```{r separate_rows_ex_06, eval=TRUE}
+FandangoSample %>% 
+  tidyr::separate_rows(all_rt_vals, sep = "/")
+```
+
+Now we have the percentages and scores on separate rows, but these data still require some additional attention: 
+
+  - **First, we need to include an index for the type of score (`rt_key`) that tells us whether the score in `all_rt_vals` is a `Raw user score (%)` or a `Normalized user score (out of 5)`**    
+    - *We can create this with `dplyr::mutate()`, `dplyr::case_when()`, and `stringr::str_detect()`* 
+
+```{r rottentomatoes_key}
+FandangoSample %>%
+  tidyr::separate_rows(all_rt_vals, sep = "/", convert = TRUE) %>%
+  dplyr::mutate(rt_key = dplyr::case_when(
+    stringr::str_detect(
+      string = all_rt_vals, pattern = "%" # match % 
+      ) ~ "Raw user score (%)",
+    stringr::str_detect(
+      string = all_rt_vals, pattern = "out of" # match 'out of'
+      ) ~ "Normalized user score (out of 5)",
+  ))
+```
+    
+  - **Next we need to add a zero to the front of the percentages in `all_rt_vals`**   
+    - *We can do this with another pass to `dplyr::mutate()`, `dplyr::case_when()`, and `stringr::str_detect()`*
+
+```{r}
+FandangoSample %>%
+  tidyr::separate_rows(all_rt_vals, sep = "/", convert = TRUE) %>%
+  dplyr::mutate(rt_key = dplyr::case_when(
+    stringr::str_detect(
+      string = all_rt_vals, pattern = "%" # match % 
+      ) ~ "Raw user score (%)",
+    stringr::str_detect(
+      string = all_rt_vals, pattern = "out of" # match 'out of'
+      ) ~ "Normalized user score (out of 5)",
+  ))  %>%
+  dplyr::mutate(all_rt_vals = dplyr::case_when(
+    stringr::str_detect(
+      all_rt_vals, "%") ~ paste0("0.", all_rt_vals),
+    TRUE ~ all_rt_vals
+  )) 
+```
+
+  - **Finally, we need to remove the `%` and ` out of 5` text from the numbers in `all_rt_vals`**  
+    - *We can do this with `dplyr::mutate()` and `stringr::str_remove_all()`*  
+
+```{r}
+FandangoSample %>%
+  tidyr::separate_rows(all_rt_vals, sep = "/", convert = TRUE) %>%
+  dplyr::mutate(rt_key = dplyr::case_when(
+    stringr::str_detect(all_rt_vals, "%") ~ "Raw user score (%)",
+    stringr::str_detect(all_rt_vals, "out of") ~ "Normalized user score (out of 5)",
+  ))  %>%
+  dplyr::mutate(all_rt_vals = dplyr::case_when(
+    stringr::str_detect(all_rt_vals, "%") ~ paste0("0.", all_rt_vals),
+    TRUE ~ all_rt_vals
+  )) %>%
+  dplyr::mutate(
+    all_rt_vals = stringr::str_remove_all(all_rt_vals, "%| out of 5"),
+    all_rt_vals = as.double(all_rt_vals)
+  )
+```
+
+Now we have 
+
+***

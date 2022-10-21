@@ -1,0 +1,570 @@
+---
+title: "Introduction to the `tidyverse`"
+subtitle: "A collection of modern R packages"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Introduction to the `tidyverse`",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Visualization (part 2)",
+    url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+library(emoji)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://mjfrigaard.github.io/CSUC-JOUR301-FA22/</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/tidyverse.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Data Journalism with the `tidyverse`
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Outline
+
+.leftcol[
+.font80[
+
+#### So far in this course we've covered: 
+
+- `r emoji::emoji("white_check_mark")` Intro to the RStudio IDE
+
+ - *installation, orientation, etc.*
+
+- `r emoji::emoji("white_check_mark")` Projects (i.e., file & folder managemnet)
+
+ - *`.Rproj` files, `.R` scripts, folder organization* 
+
+- `r emoji::emoji("white_check_mark")` R Markdown 
+
+ - *Markdown syntax, R code chunks, output options*
+
+]
+]
+
+--
+
+.rightcol[
+<br><br>
+.font80[
+
+- `r emoji::emoji("white_check_mark")` Basic R Programming
+
+ - *vectors, `data.frame`s, functions*
+
+- `r emoji::emoji("white_check_mark")` Data Visualization with `ggplot2` 
+
+ - *aesthetics, geoms, layers*
+ 
+- `r emoji::emoji("white_check_mark")` Data Manipulation with `dplyr`
+
+ - `glimpse`, `select`, `filter`, `arrange`, and `mutate`
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+## What is the `tidyverse`?
+
+--
+
+.font80[
+
+> *"A collection of modern R packages that share common philosophies, embed best practices, and are designed to work together."*
+
+]
+
+--
+
+.leftcol[
+.font70[
+*You may have already noticed me use this line of code in slides/exercises:* 
+]
+
+.code70[
+```{r tidyverse-pkg, eval=FALSE}
+install.packages("tidyverse")
+```
+]
+]
+
+--
+
+.rightcol[
+.font70[
+*This is the equivalent of loading*
+]
+.code50[
+```{r tv-pkgs, eval=FALSE}
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("readr")
+install.packages("purrr")
+install.packages("tibble")
+install.packages("hms")
+install.packages("stringr")
+install.packages("lubridate")
+install.packages("forcats")
+install.packages("DBI")
+install.packages("haven")
+install.packages("httr")
+install.packages("jsonlite")
+install.packages("readxl")
+install.packages("rvest")
+install.packages("xml2")
+install.packages("modelr")
+install.packages("broom")
+```
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Learning R: A roadmap
+
+--
+
+**It's best to start with a general introduction to R's syntax (functions, objects, operators, etc.)** 
+
+  - R comes 'out of the box' with quite a few packages/functions:
+     - The `base` package that includes functions like `c()`, `data.frame()`, etc.  
+     - The `utils` package contains functions like `head()`, `tail()`, and `str()`, etc. 
+
+--
+
+**The `tidyverse` covers *most* of what we want to accomplish, but not *everything***
+
+  - If you stick with R, it's safe to assume ~80% of your work can be accomplished using the `tidyverse` packages (maybe more if you dive deep into data visualization)  
+  
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Good News! 
+
+#### You've already been using some `tidyverse` packages:
+
+.leftcol[
+.font70[
+
+
+- **`readr` for importing .csv files** `r emoji::emoji("+1")`  
+
+  - `read_csv()` `r emoji::emoji("white_check_mark")`
+  
+  - `write_csv()` `r emoji::emoji("white_check_mark")`
+
+- **`ggplot2` for data visualization** `r emoji::emoji("+1")`  
+
+  - `ggplot()`  `r emoji::emoji("white_check_mark")`
+  
+  - `aes()`  `r emoji::emoji("white_check_mark")`
+  
+  - all the `geom_*` functions `r emoji::emoji("white_check_mark")`
+
+]
+]
+
+--
+
+.rightcol[
+.font70[
+
+- **`dplyr` for data manipulation** `r emoji::emoji("+1")`  
+  
+  - `select()` `r emoji::emoji("white_check_mark")`  
+     - `contains()`, `starts_with()`, etc. 
+    
+  - `filter()` `r emoji::emoji("white_check_mark")`  
+  
+  - `arrange()` `r emoji::emoji("white_check_mark")`  
+     - `desc()`  
+    
+  - `mutate()` `r emoji::emoji("white_check_mark")`  
+     - `case_when()`  
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+```{r tidyverse-all, fig.align='center', echo=FALSE, out.height='85%', out.width='85%'}
+knitr::include_graphics(path = "img/tidyverse-all.png")
+```
+
+--
+
+**Our `tidyverse` ecosystem**
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# RStudio IDE 
+
+.leftcol[
+
+#### Resources: 
+
+- [RStudio IDE Slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
+
+- Exercises:  
+  - [Installing R & RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
+
+
+]
+
+.rightcol[
+.border[
+
+```{r ide-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics(path = "img/ide-eco.png")
+```
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Projects (i.e., files and folder management)
+
+.leftcol[
+
+#### Resources:
+
+- [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)  
+
+- [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
+
+- Exercises:  
+  - [Intro to the goodenuffR package](https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html)
+
+
+- Assignment: 
+  - Intro to `goodenuffR` package `r emoji::emoji("white_check_mark")`
+]
+
+.rightcol[
+
+```{r proj-econ, fig.align='right', echo=FALSE, out.height='85%', out.width='85%'}
+knitr::include_graphics(path = "img/proj-econ.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Write Code with R Markdown
+
+.leftcol[
+
+#### Resources:
+
+- [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
+
+- Exercises:  
+  - [R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html)
+
+
+- Assignment: 
+  - R Markdown in Practice `r emoji::emoji("white_check_mark")`
+  
+]
+
+.rightcol[
+
+```{r rmd-econ, fig.align='right', echo=FALSE, out.height='70%', out.width='70%'}
+knitr::include_graphics(path = "img/rmd-econ.png")
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Import
+
+.leftcol[
+.font80[
+
+#### Resources:
+
+- [Importing data tutorial](https://mjfrigaard.github.io/sheetcheatR/tutorials/import.html)   
+  - `readr` `r emoji::emoji("white_check_mark")`  
+  - `readxl`, `writexl`, and `openxlsx` `r emoji::emoji("white_check_mark")`  
+  - `googlesheets4` `r emoji::emoji("white_check_mark")`  
+
+- Scraping website examples:  
+
+  - `rvest::read_html()` `r emoji::emoji("white_check_mark")`  
+  - `rvest::html_element()` `r emoji::emoji("white_check_mark")`  
+  - `rvest::html_node()` `r emoji::emoji("white_check_mark")`  
+
+]
+]
+
+
+.rightcol[
+
+```{r import-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics(path = "img/import-eco.png")
+```
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Reshape
+
+.leftcol[
+
+#### Resources:
+
+]
+
+
+.rightcol[
+
+```{r reshape-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics(path = "img/reshape-eco.png")
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform
+
+.leftcol[
+
+#### Resources:
+
+]
+
+
+.rightcol[
+
+```{r transform-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
+knitr::include_graphics(path = "img/transform-eco.png")
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Visualize 
+
+.leftcol60[
+
+.font70[
+
+#### Resources:
+
+- Slides 
+  - [Data Visualization with `ggplot2` (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1)   
+  - Data Visualization with `ggplot2` (part 2)  
+      - [Part a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1)  
+      - [Part b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1)
+
+- Exercises:  
+  - [Data Visualization with ggplot2 (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-ggplot2.html)
+
+- Assignment:
+  - `ggplot2` part 1 (assignment) `r emoji::emoji("white_check_mark")`
+
+]
+
+
+
+]
+
+.rightcol40[
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Publish 
+
+.leftcol[
+
+#### Resources:
+
+- [Slides]()  
+
+- Exercises:  
+
+
+- Assignment:
+
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Deploy 
+
+.leftcol[
+
+#### Resources:
+
+- [Slides]()  
+
+- Exercises:  
+
+
+- Assignment:
+
+
+]
+

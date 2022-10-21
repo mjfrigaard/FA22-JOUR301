@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Reshaping in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Data Reshaping in R"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="Data Reshaping in R"/>
+    <meta name="twitter:description" content="Data Reshaping in R"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Data Reshaping in R"/>
+    <meta property="og:description" content="Data Reshaping in R"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/pagedtable/css/pagedtable.css" rel="stylesheet" />
+    <script src="libs/pagedtable/js/pagedtable.js"></script>
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://github.com/mjfrigaard/csuc-data-journalism&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Data Reshaping in R
+#.fancy[Reshaping and re-structuring data with `tidyr`]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 21 2021
+
+Updated: October 21 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Objectives 
+
+&lt;br&gt;&lt;br&gt;
+
+## 1) Recap `dplyr`'s data manipulation verbs
+
+--
+
+## 2) `tidyr`'s pivoting functions 
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Materials 
+
+&lt;br&gt;
+
+## Previous slides 
+
+&lt;br&gt;
+
+- [Data Manipulation with `dplyr` part 1](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html#1)
+
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Data Manipulation Recap
+
+## We previously learned how to: 
+
+--
+
+.leftcol[
+.font70[
+
+&gt; #### 1) View data with `glimpse()`
+
+&gt; #### 2) Select columns with `select()`
+
+&gt; #### 3) Filter rows with `filter()`
+
+]
+]
+
+--
+
+.rightcol[
+.font70[
+
+&gt; #### 4) Arrange data with `arrange()`
+
+&gt; #### 5) Create/change columns with `mutate()`
+
+]
+]
+
+---
+class: inverse, center, bottom
+background-image: url(img/tidyr.png)
+background-position: 50% 10%
+background-size: 35%
+
+# `tidyr` = a package for *reshaping* data
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Tidy data 
+
+## What are tidy data?
+
+
+--
+
+.leftcol[
+
+### Observations are in rows  
+### Variables are in columns   
+### Values are in cells 
+
+]
+
+--
+
+.rightcol[
+
+&lt;img src="img/tidy-data.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Tidy data 
+
+### Values are the *intersection* of observations and variables
+
+--
+
+ 
+&lt;img src="img/intersection.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 8%
+
+# Non-tidy data 
+
+### Copy and paste the code below to create `NotTidy`
+
+
+```r
+# copy and paste me!
+NotTidy &lt;- tibble::tribble(
+       ~group,   ~`2019`,   ~`2020`,   ~`2021`,
+          "A", "102/100", "123/100", "161/100",
+          "B", "179/100", "199/100", "221/100",
+          "C", "223/100", "146/100", "288/100")
+```
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["group"],"name":[1],"type":["chr"],"align":["left"]},{"label":["2019"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2020"],"name":[3],"type":["chr"],"align":["left"]},{"label":["2021"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"A","2":"102/100","3":"123/100","4":"161/100"},{"1":"B","2":"179/100","3":"199/100","4":"221/100"},{"1":"C","2":"223/100","3":"146/100","4":"288/100"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Non-tidy data 
+
+## Why aren't they tidy? 
+
+.leftcol[
+
+
+```r
+NotTidy %&gt;% View("NotTidy")
+```
+
+.border[
+
+&lt;img src="img/NotTidy.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+--
+
+.rightcol[.large[
+
+&gt; `year` is across columns...  
+&gt; multiple values in cells...  
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 8%
+
+## Tidying un-tidy data 
+
+--
+
+&lt;br&gt;&lt;br&gt;
+
+.leftcol[
+
+*covered in slides*
+
+.font90[
+
++ `pivot_longer()` - wide to long
+
++ `pivot_wider()` - long to wide
+
+]
+]
+
+--
+
+.rightcol[
+
+*covered in exercises*
+
+.font90[
+
++ `separate()` - pull columns apart  
+
++ `separate_rows()` - split columns down rows   
+
++ `unite()` - stick columns together  
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 7%
+
+# Quick tip: viewing your data
+
+&lt;br&gt;&lt;br&gt;
+
+## Make sure you view the data before assigning it to an object
+
+&lt;br&gt;&lt;br&gt;
+
+## Use `glimpse()` or `View("Name")`
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+.leftcol[
+
+Make wide data long
+
+
+```r
+NotTidy %&gt;% 
+  pivot_longer(
+    cols = -group, 
+    names_to = "year", 
+    values_to = "rate") %&gt;% 
+  View("Tidy")
+```
+
+]
+
+--
+
+.rightcol[
+
+How it `pivot_longer()` works
+
+&lt;img src="img/NotTidy-2-Tidy.png" width="57%" height="57%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+#### How it works: 
+
+--
+
+.leftcol[
+
+`cols` = these are the **columns we want to reshape**
+
+.small[
+
+
+```r
+NotTidy %&gt;% 
+* pivot_longer(cols = -group,
+```
+
+]
+
+`names_to` = this is the new variable that will contain the previous **column names**
+
+.small[
+
+
+```r
+NotTidy %&gt;% 
+  pivot_longer(cols = -group, 
+*              names_to = "year",
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+`values_to` = this is the new variable that will contain the reshaped **values**
+
+.small[
+
+
+```r
+NotTidy %&gt;% 
+  pivot_longer(cols = -group, 
+               names_to = "year", 
+*              values_to = "rate")
+```
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+ 
+
+.leftcol[
+
+### Looks correct?
+
+
+```r
+NotTidy %&gt;% 
+  pivot_longer(cols = -group, 
+         names_to = "year", 
+        values_to = "rate") %&gt;% 
+  View("Tidy")
+```
+
+]
+
+--
+
+.rightcol[
+
+### Not quite
+
+.border[
+
+&lt;img src="img/TidyView.png" width="60%" height="60%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+
+
+
+## `pivot_longer()` = names_transform
+
+### Print `Tidy` to console
+
+.leftcol[
+
+
+```r
+Tidy
+```
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["group"],"name":[1],"type":["chr"],"align":["left"]},{"label":["year"],"name":[2],"type":["chr"],"align":["left"]},{"label":["rate"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"A","2":"2019","3":"102/100"},{"1":"A","2":"2020","3":"123/100"},{"1":"A","2":"2021","3":"161/100"},{"1":"B","2":"2019","3":"179/100"},{"1":"B","2":"2020","3":"199/100"},{"1":"B","2":"2021","3":"221/100"},{"1":"C","2":"2019","3":"223/100"},{"1":"C","2":"2020","3":"146/100"},{"1":"C","2":"2021","3":"288/100"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]]
+
+--
+
+.rightcol[
+
+&lt;br&gt;&lt;br&gt;
+
+#### *Note the format of the columns*
+
+#### *The new `year` variable should be numeric*
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+## `pivot_longer()` = `names_transform`
+
+
+#### We can control this behavior with `names_transform = list()`
+
+--
+
+.leftcol[
+
+
+```r
+NotTidy %&gt;% 
+  pivot_longer(
+       cols = -group, 
+       names_to = "year", 
+       values_to = "rate", 
+*      names_transform = list(
+*        year = as.numeric))
+```
+
+]
+
+--
+
+.rightcol[.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["group"],"name":[1],"type":["chr"],"align":["left"]},{"label":["year"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rate"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"A","2":"2019","3":"102/100"},{"1":"A","2":"2020","3":"123/100"},{"1":"A","2":"2021","3":"161/100"},{"1":"B","2":"2019","3":"179/100"},{"1":"B","2":"2020","3":"199/100"},{"1":"B","2":"2021","3":"221/100"},{"1":"C","2":"2019","3":"223/100"},{"1":"C","2":"2020","3":"146/100"},{"1":"C","2":"2021","3":"288/100"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.leftcol40[
+
+Create the `SiteRates` data (example of COVID rates as various hospitals)
+
+]
+
+.rightcol60[
+
+.code60[
+
+
+```r
+SiteRates &lt;- tibble::tribble(
+         ~site, ~`2019_Q1`, ~`2019_Q2`, ~`2019_Q3`, ~`2019_Q4`,
+      "Boston",         52,         31,         26,       33.4,
+"Philadelphia",       7.42,       5.51,       5.82,       6.99,
+  "Cincinnati",       6.73,       4.87,       5.02,       4.66,
+       "Texas",       18.2,       16.6,         17,         19)
+```
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+Create the `SiteRates` data (example of COVID rates as various hospitals)
+
+
+
+```r
+SiteRates %&gt;% View("SiteRates")
+```
+
+.border[
+
+&lt;img src="img/SiteRates.png" width="85%" height="85%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+#### `SiteRates` has *two* variables in the same column
+
+#### We can use `names_sep ` uses a pattern to split the column (`_Q`)
+
+.border[
+
+&lt;img src="img/SiteRatesView.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
+
+]
+ 
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
++ Add `names_sep = "_Q"`
+
++ `year` and `quarter` should also be numeric
+
+.leftcol[
+
+
+```r
+SiteRates %&gt;% 
+  pivot_longer(
+  -site,
+  names_to = 
+    c("year", "quarter"), 
+  values_to = "rate",
+* names_sep = "_Q",
+  names_transform = list(
+*   year = as.integer,
+*   quarter = as.integer)) %&gt;%
+  View("TidySites")
+```
+
+]
+
+--
+
+.rightcol[
+
+.border[
+
+&lt;img src="img/TidySites.png" width="47%" height="47%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+Create the `SpaceDogs` data. These are names of dogs in the [Soviet Space Dogs database](https://airtable.com/universe/expG3z2CFykG1dZsp/sovet-space-dogs).
+
+*Some dogs have multiple names, and some share names.*
+
+
+.code70[
+
+
+```r
+# data.frame prints to the screen better
+SpaceDogs &lt;- data.frame(
+   date = c("1966-02-22", "1961-03-25", 
+              "1961-03-09", "1960-12-22",
+              "1960-12-01", "1960-09-22"),
+   result = c("recovered safely", "recovered safely",
+              "recovered safely", "recovered",
+              "both dogs died","recovered safely"),
+   name_1 = c("Ugolyok / Snezhok", "Zvezdochka", 
+              "Chernuskha", "Shutka", "Mushka",
+              "Kusachka / Otvazhnaya"),
+   name_2 = c("Veterok / Bzdunok", NA, NA, 
+              "Kometka", "Pchyolka", "Neva"))
+```
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+
+```r
+SpaceDogs %&gt;% 
+  View("SpaceDogs")
+```
+
+.border[
+
+&lt;img src="img/SpaceDogs.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+The `SpaceDogs` data has missing values in `name_2` 
+
+--
+
+*...two of the columns have a similar prefix (`name_`)*
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+### To tidy these data, we can combine what we've learned:
+
+--
+
+#### 1. `dplyr::starts_with()` to select the `name_` columns
+
+--
+
+#### 2. `names_to` has a special `".value"` argument, which is the name of the new column with the `name_` values. We need to include an index column to track the values across different names (`dog_id`).
+
+--
+
+#### 3. We can remove missing values with  `values_drop_na`
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+.code70[
+
+
+```r
+SpaceDogs %&gt;% 
+  pivot_longer( # columns with `name_` prefix
+*  starts_with("name_"),
+```
+
+]
+
+
+
+--
+
+.code70[
+
+
+```r
+SpaceDogs %&gt;% 
+  pivot_longer(
+   starts_with("name_"), 
+   names_sep = "_",
+   names_to = # new column for `name_` values
+*    c(".value", "dog_id"),
+```
+
+]
+
+
+
+--
+
+.code70[
+
+
+```r
+SpaceDogs %&gt;% 
+  pivot_longer(
+   starts_with("name_"), 
+   names_sep = "_",
+   names_to = 
+     c(".value", "dog_id"), # remove missing
+*  values_drop_na = TRUE)
+```
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+### Add these arguments to `pivot_longer()` and add `View()`
+
+.leftcol[
+
+
+```r
+SpaceDogs %&gt;% 
+  
+  pivot_longer(
+*  starts_with("name_"),
+   names_sep = "_",
+   names_to = 
+     c(".value", "dog_id"), 
+*  values_drop_na = TRUE) %&gt;%
+  
+  View("TidySpaceDogs")
+```
+
+]
+
+
+--
+
+.rightcol[
+
+
+
+.border[
+
+&lt;img src="img/TidySpaceDogs.png" width="95%" height="95%" style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+#### We can see the new `dog_id` index
+
+#### The missing values have been removed
+
+--
+
+&lt;img src="img/SpaceDogs-2-TidySpaceDogs.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+# `tidyr::pivot_wider()`
+
+&lt;br&gt;
+
+## We've made wide data long, now we will make long data wide 
+
+### *But, why???*
+
+### Wide data is usually better for displaying summaries 
+
+### Long data is better for graphing/modeling
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+# `tidyr::pivot_wider()`
+
+### Consider the `CatVsDogWide` data 
+
+.leftcol[
+
+#### These data come from this article in the [Washington Post](https://www.washingtonpost.com/news/wonk/wp/2014/07/28/where-cats-are-more-popular-than-dogs-in-the-u-s-and-all-over-the-world/?utm_term=.b50cb49b78b5).
+
+]
+
+--
+
+.rightcol[
+
+.border[
+
+&lt;img src="img/wapo-article.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.leftcol35[
+
+
+#### Create `CatVsDogWide`
+
+]
+
+--
+
+.rightcol65[
+
+.code70[
+
+
+```r
+CatVsDogWide &lt;- tibble::tribble(
+               ~metric,   ~CA,  ~TX,  ~FL,  ~NY,  ~PA,
+    "no_of_households", 12974, 9002, 7609, 7512, 5172,
+"no_of_pet_households",  6865, 5265, 4138, 3802, 2942,
+"no_of_dog_households",  4260, 3960, 2718, 2177, 1702,
+"no_of_cat_households",  3687, 2544, 2079, 2189, 1748)
+```
+
+
+
+]]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+
+```r
+CatVsDogWide %&gt;% View("CvDWide")
+```
+
+.border[
+
+&lt;img src="img/CvDWide.png" width="88%" height="88%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column 
+
+--
+
+.leftcol35[
+
+
+```r
+CatVsDogWide %&gt;%
+  pivot_longer(-metric, 
+    names_to = "state", 
+    values_to = "value") %&gt;% 
+  # view
+  View("CvDLong")
+```
+
+]
+
+--
+
+.rightcol65[.border[
+
+&lt;img src="img/CvDLong.png" width="34%" height="34%" style="display: block; margin: auto;" /&gt;
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners** 
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column  
+--
+
+Step 2. `pivot_wider()` the `metric` across columns  
+
+--
+
+
+```r
+CatVsDogWide %&gt;%
+  pivot_longer(-metric, names_to = "state", values_to = "value") %&gt;% 
+  pivot_wider(names_from = "metric", values_from = "value") %&gt;% 
+  View("CvDWide")
+```
+
+--
+
+.border[
+
+&lt;img src="img/CvDWide2.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners** 
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column    
+Step 2. `pivot_wider()` the `metric` and `values` across columns  
+--
+
+Step 3. `mutate()` the `perc` (percentage) columns
+
+--
+
+
+```r
+CatVsDogWide %&gt;% 
+   pivot_longer(-metric, names_to = "state", values_to = "value") %&gt;% 
+   pivot_wider(names_from = "metric", values_from = "value") %&gt;% 
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %&gt;%
+  View("CvDWide")
+```
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners**   
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column    
+Step 2. `pivot_wider()` the `metric` and `values` across columns  
+Step 3. `mutate()` the `perc` (percentage) columns
+
+
+
+--
+
+.border[
+
+&lt;img src="img/CvDWide2-perc.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+#### *We could assign here, but why stop?*   
+
+--
+
+Add `select()` helpers to reorganize data!
+
+--
+
+
+```r
+# ...code omitted 
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %&gt;% 
+    # pass the output from pivot_wider() to select()
+  select(state, 
+         contains("perc_dog"), contains("perc_cat"))
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()` (***Final code***)
+
+
+```r
+CatVsDogWide %&gt;% 
+  # pivots
+   pivot_longer(
+     -metric, names_to = "state", values_to = "value") %&gt;% 
+   pivot_wider(
+     names_from = "metric", values_from = "value") %&gt;% 
+  # mutate
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %&gt;% 
+  # select
+  select(state, 
+         contains("perc_dog"), contains("perc_cat"))
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()` (***Final output***)
+
+ 
+&lt;img src="img/CvsDPercent.png" width="75%" height="75%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 90%
+background-size: 8%
+
+# More tidying in the exercises! 
+
+### `separate()` - pull columns apart
+
+### `separate_rows()` - split columns down rows
+
+### `unite()` - stick columns together
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 7% 92%
+background-size: 8%
+
+# Resources for Data Tidying 
+
+#### 1. [R for Data Science](https://r4ds.had.co.nz/tidy-data.html) 
+
+#### 2. [Data Wrangling with R](https://cengel.github.io/R-data-wrangling/) 
+
+#### 3. [Stack Overflow questions tagged with `tidyr`](https://stackoverflow.com/questions/tagged/tidyr)
+
+#### 4. [RStudio Community posts tagged `tidyr`](https://community.rstudio.com/tag/tidyr)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

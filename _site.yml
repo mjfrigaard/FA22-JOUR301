@@ -29,14 +29,18 @@ navbar:
           href: slides/intro-r-prog.html
         - text: "Data Visualization with ggplot2 part 1"
           href: slides/ggp2-part-01.html
-        - text: "Data manipulation with dplyr part 1"
+        - text: "Data manipulation with dplyr"
           href: slides/dplyr-part-01.html
         - text: "Data Visualization with ggplot2 part 2 (a)"
           href: slides/ggp2-part-02a.html
         - text: "Data Visualization with ggplot2 part 2 (b)"
           href: slides/ggp2-part-02b.html
-        - text: "Data manipulation with dplyr part 2 (under construction)"
-          href: 
+        - text: "Data Reshaping with tidyr"
+          href: slides/data-reshape.html
+        - text: "Introduction to the tidyverse (under construction)"
+          href: slides/intro-to-tidyverse.html
+        - text: "Data Joins with dplyr"
+          href: slides/data-joins.html
         - text: "Data Visualization with ggplot2 part 3 (under construction)"
           href: 
         - text: "Buidling maps in R (under construction)"
@@ -83,6 +87,8 @@ navbar:
           href: exercises/intro-to-dplyr.html
         - text: "5) fixing bad graphs (exercises)"
           href: exercises/fixing-bad-graphs-econ.html
+        - text: "6) data reshaping in R (exercises)"
+          href: exercises/data-reshape.html
           
     - text: "Assignments"
       menu:
@@ -94,5 +100,7 @@ navbar:
           href: assignments/wk5-ggp2-assignment-01.Rmd
         - text: "4) dplyr part 1 (assignment)"
           href: assignments/wk8-intro-to-dplyr.Rmd
+        - text: "5) tidyr part 1 (assignment)"
+          href: 
       
 output: distill::distill_article

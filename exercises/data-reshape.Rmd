@@ -1,0 +1,386 @@
+---
+title: "Reshaping Data in R"
+description: |
+  "*separate, separate rows, and unite data with `tidyr`*"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 3
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+library(fivethirtyeight)
+library(fivethirtyeightdata)
+# create data folder
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 8.5,
+  fig.height = 6,
+  fig.retina = 2
+  )
+fs::dir_create("data")
+# tibble printing
+options(
+  pillar.print_max = 10, 
+  pillar.print_min = 10)
+```
+
+# Objectives 
+
+This document outlines some common data reshaping tasks with the  `tidyr` and `dplyr` packages. **If you've ever Googled 'how to perform [x] in R', you've probably discovered there are multiple ways to accomplish [x].** The methods I present here are not exhaustive, and I've tried to balance the trade-off between 1) solutions/functions that solve problems with the fewest number of keystrokes, and 2) code that's readable, explicit, and easy to follow.
+
+## Load packages 
+
+`tidyr` and `dplyr` are part of the core `tidyverse` packages, so we install and load this meta-package below. 
+
+```{r packages, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+library(fivethirtyeight)
+```
+
+## Namespacing
+
+I'll be using the namespace syntax (`package::function()`) just to make it explicitly clear which function belongs to which package, but this isn't necessary if you've run the code block above. 
+
+
+## Tidy data
+
+There are three principles for tidy data: 
+
+1. Columns hold *variables*    
+2. Rows hold *observations*    
+3. Cells (the intersection of rows and columns) hold *values*  
+
+We're going to be using small samples of three datasets from the [`fivethirtyeight` package](https://fivethirtyeight-r.netlify.app/), and the `BloodPressures` dataset. 
+
+
+### `EndorseSample`
+
+There are multiple ways data can be 'less-than tidy.' We'll start with a common example, which is two variables (and their values) stored in a single column.  
+
+Below is a subset of the `endorsements_2020` dataset named `EndorseSample`. Read more about the `endorsements_2020` dataset by typing `??endorsements_2020` into the console. 
+
+```{r EndorseSample, message=FALSE, warning=FALSE}
+EndorseSample <- readr::read_csv("https://bit.ly/3S7gYuh")
+dplyr::glimpse(EndorseSample)
+```
+
+Notice the `location` variable has two values (`state` and `city`) stored in the same column. 
+
+### `FandangoSample`
+
+In another example of un-tidy data, we'll look at the dataset below which comes from the `fandango` dataset. 
+
+```{r FandangoSample, message=FALSE, warning=FALSE}
+FandangoSample <- readr::read_csv(file = "https://bit.ly/3Tg1zt6")
+dplyr::glimpse(FandangoSample)
+```
+
+This dataset has two *similar* scores combined into a single column `rottentomatoes_scores`
+
++ `user_perc`: The Rotten Tomatoes user score for the film (expressed as a percent)
+
++ `user_norm`: The Rotten Tomatoes user score for the film , normalized to a 0 to 5 point system (expressed as 'score `out of 5`')
+
+### `DailyShowSample`
+
+Below is a sample from the `daily_show_guests` dataset. The guests names are separated into `first_name` and `last_name` columns. 
+
+```{r DailyShowSample, message=FALSE, warning=FALSE}
+DailyShowSample <- readr::read_csv("https://bit.ly/3yR2PuA")
+dplyr::glimpse(DailyShowSample)
+```
+
+### `BloodPressures`
+
+The `BloodPressures` dataset has names, blood pressures, and units for five people. These data contain 1) multiple measurements in one column, and 2) multiple units in one column.  
+
+```{r BloodPressures, eval=TRUE, message=FALSE, warning=FALSE}
+BloodPressures <- readr::read_csv("https://bit.ly/3gjZ0rl")
+dplyr::glimpse(BloodPressures)
+```
+
+***
+
+# Reshaping Columns and Rows 
+
+In the next few exercises, we'll go over how (and *when*) to use `separate()`, `separate_rows()`, and `unite()`. These functions are typically used in a data wrangling 'pipeline', so many of these examples have been reduced to focus on on the function arguments. 
+
+## `separate()` 
+
+This allows us to split columns apart into multiple variables. 
+
+Take another look at `EndorseSample` below:
+
+```{r glimpse-EndorseSample, eval=TRUE}
+dplyr::glimpse(EndorseSample)
+```
+
+### Arguments
+
+The arguments for `separate_rows()` are below:
+
+```{r separate_args, eval=FALSE}
+tidyr::separate(data = , col = , into = , sep = , remove = TRUE, 
+         convert = FALSE, extra = "warn", fill = "warn", ... = )
+```
+
++ The `data` is whatever table we're looking to wrangle  
+
++ `col` are the columns that need separating, and `into` should contain the names of the new columns we want to create with the separated values  
+
++ The `sep` argument is the *separator between columns.*, and it defaults to `"[^[:alnum:].]+"` (which will match on just about any number or punctuation)  
+
++ `remove` controls what to do with the column after we've separated the values (defaults to `TRUE`, but I initially like to set to `FALSE` to review)  
+
++ `extra` controls what will happen with extra pieces (defaults to `"warn"`, but other options are `"drop"` or `"merge"`). See `??separate()` for more info. 
+
++ `fill` is similar to `extra`, but controls what will happen when there aren't enough values in the column we're separating. Defaults to `"warn"`, but other options are `"right"` or `"left"`). See `??separate()` for more info. 
+
+The code below separates `location` into `state` and `city`.
+
+```{r separate-sol}
+EndorseSample %>% 
+    tidyr::separate(col = location, 
+             into = c("state", "city"), 
+             sep = ", ", 
+             remove = FALSE) %>% 
+    dplyr::select(location, state, city)
+```
+
+The `sep` argument is the character we want to separate the values on (in our case, it's a comma with a space: `", "`), and we add the `remove = FALSE` so the `location` variable stays in the dataset. 
+
+We can also see by adding `select()` with 1) the original column, and 2) the two columns we created to the end of the pipeline, we're able to view the result before assigning it to an output. 
+
+***
+
+## `separate_rows()` 
+
+`separate_rows()` is similar to `separate()`, but drops the values down the rows. This is commonly used when we have more than one *similar* value in each column, or a ratio/fraction.
+
+### Arguments 
+
+The arguments for `separate_rows()` are below: 
+
+```{r separate_rows_args, eval=FALSE}
+tidyr::separate_rows(data = , ... = , sep = , convert = FALSE)
+```
+
++ The `data` is whatever table we're looking to wrangle 
+
++ The `...` is a placeholder for the columns we want to separate across the rows 
+
++ The `sep` argument is similar to `separate()` (*separator delimiting collapsed values*), and it defaults to the same regular expression `"[^[:alnum:].]+"`  
+
++ `convert` controls whether to convert the columns to a specific type (i.e., `numeric`, `integer`, etc.). Defaults to `FALSE`. 
+
+Take a look at `BloodPressures` below: 
+
+```{r head-BloodPressures}
+utils::head(BloodPressures)
+```
+
+The code below separates the `blood_pressure` into two values, but places the second value on the following row:  
+
+```{r separate_rows_ex_01}
+BloodPressures |> 
+  tidyr::separate_rows(blood_pressure) |> 
+  dplyr::select(blood_pressure, units)
+```
+
+### The `sep` argument
+
+Notice that we omitted the `sep` argument and it still separated the values on the correct character? That's because the default `sep` pattern (`"[^[:alnum:].]+"`) will match the correct character (`"/"`). 
+
+### Multiple columns
+
+One issue with the output above is that the `units` are still in the previous format (`systolic (mm Hg) / diastolic (mm Hg)`). Fortunately, we can just add a second variable to the first argument in `separate_rows()` (as a vector in `c()`). 
+
+```{r separate_rows_ex_02, error=TRUE}
+BloodPressures |> 
+  tidyr::separate_rows(
+    c(blood_pressure, units)) 
+```
+
+We get an error because we have to provide the `sep` argument (and it's a good habit to include it, just to be more explicit).
+
+```{r separate_rows_ex_03}
+BloodPressures |>
+  tidyr::separate_rows(c(blood_pressure, units),
+    # include sep here
+    sep = " / ") |> # don't forget the spaces!
+  dplyr::select(blood_pressure, units)
+```
+
+Now we have both `blood_pressure` and `units` in their own columns. We would probably want to `rename` these variables something more precise (with names that will make it easier to locate variables in future pipelines (i.e., using `starts_with("bp")`). 
+
+```{r separate_rows_ex_04}
+BloodPressures |>
+  tidyr::separate_rows(c(blood_pressure, units), sep = " / ") |>
+  dplyr::rename(
+    bp = blood_pressure, # new column names! 
+    bp_units = units) |>
+  dplyr::select(starts_with("bp"))
+```
+
+## `unite()` 
+
+Just like `separate`/`separate_rows` allows us to split up columns, `unite()` lets us stick them back together! Take a look at `DailyShowSample`.
+
+```{r review-DailyShowSample}
+dplyr::glimpse(DailyShowSample)
+```
+
+We can see the guests have had their names in separate columns (`first_name` and `last_name`).
+
+The code below unites `first_name` and `last_name` into `guest_name` 
+
+```{r unite_ex_01}
+DailyShowSample |>  
+    unite(col = "guest_name", 
+          first_name:last_name, 
+          sep = " ", 
+          remove = FALSE) |> 
+  dplyr::select(dplyr::contains("name"))
+```
+
+We chose to keep the previous columns by adding `remove = FALSE`
+
+## Verifying calculated values 
+
+When encountering a new data source, it's a good practice to check any calculated values. It's not necessary to verify *every* column and row, but if a column have been derived from columns containing measurements, you'll want to verify these before building any visualizations or tables. 
+
+For example, if a dataset dplyr::contains measurements for `height` and `weight`, and a calculated `BMI` column, we'd want to verify the BMI using whatever methods were reported with the data. 
+
+We'll walk through an example with the `FandangoSample` below:
+
+```{r re-glimpse-FandangoSample}
+dplyr::glimpse(FandangoSample)
+```
+
+We're going to separate the two scores in `rottentomatoes_scores`, then verify these scores by re-creating the columns. 
+
+- **Use `tidyr::separate()` to separated `rottentomatoes_scores` into `user_perc` and `user_norm`**   
+  - *Add `remove = FALSE` to keep `rottentomatoes_scores` so we can check our work.*  
+
+```{r verify_ex_01}
+FandangoSample |> 
+  # separate scores
+  tidyr::separate(col = rottentomatoes_scores, 
+    into = c("user_perc", "user_norm"), 
+    sep = "/", remove = FALSE) |> 
+  dplyr::select(dplyr::contains("user"))
+```
+
+- **Now we want to use `dplyr::mutate()` and `stringr::str_remove_all()` to remove the text (`" out of 5"`)**
+  - *the `string` argument is the column we want to alter, the `pattern` argument is the text we want to remove.*
+  
+```{r verify_ex_02}
+FandangoSample |>
+  tidyr::separate(
+  # separate scores
+    col = rottentomatoes_scores,
+    into = c("user_perc", "user_norm"),
+    sep = "/",
+    remove = FALSE
+  ) |>
+  dplyr::mutate(
+    # remove text
+    user_norm = stringr::str_remove_all(
+      string = user_norm, pattern = " out of 5")
+    ) |>
+  dplyr::select(dplyr::contains("user"))
+```
+
+- **Now that we've removed the text, we can format the `user_norm` as a `double` column**    
+  - *recall that `double` vectors can have decimals*   
+  
+```{r verify_ex_03}
+FandangoSample |> 
+  tidyr::separate(col = rottentomatoes_scores, 
+    into = c("user_perc", "user_norm"), 
+    sep = "/", remove = FALSE) |> 
+  dplyr::mutate(
+    # remove text
+    user_norm = stringr::str_remove_all(
+      user_norm, " out of 5"), 
+    # convert to double
+    user_norm = as.double(user_norm)
+    ) |> 
+  dplyr::select(dplyr::contains("user"))
+```
+
+- **To verify the scores calculated in `user_perc`, we're going to create a new column, `user_perc_check`**  
+  - *the calculation is fairly straightforward--it's in the text we removed!*  
+  
+```{r verify_ex_04}
+FandangoSample |> 
+  tidyr::separate(col = rottentomatoes_scores, 
+    into = c("user_perc", "user_norm"), 
+    sep = "/", remove = FALSE) |> 
+ dplyr::mutate(
+   # remove text
+    user_norm = stringr::str_remove_all(
+      string = user_norm, pattern = " out of 5"), 
+   # convert to double
+    user_norm = as.double(user_norm), 
+   # check calculation
+    user_perc_check = user_norm/5.00  # 'out of 5'
+   ) |>
+  dplyr::select(dplyr::contains("user"))
+```
+
+Like the adage goes, [**Trust, but verify**](https://en.wikipedia.org/wiki/Trust,_but_verify). If the calculations are complicated or require further explanation--reach out to the original party. As a general rule, if someone can't explain to you how they arrived at a particular value, you shouldn't trust it. 
+
+`unite()` also comes in handy when we want to create graph labels for data values. If we wanted to create a column similar to  `rottentomatoes_scores`, but with our verified column, we could do the following: 
+
+```{r labels_ex}
+FandangoSample |> 
+  tidyr::separate(col = rottentomatoes_scores, 
+    into = c("user_perc", "user_norm"), 
+    sep = "/", remove = FALSE) |> 
+ dplyr::mutate(
+   # remove text
+    user_norm = stringr::str_remove_all(
+      string = user_norm, pattern = " out of 5"), 
+   # convert to double
+    user_norm = as.double(user_norm), 
+   # check calculation
+    user_perc_check = user_norm/5.00  # 'out of 5'
+   ) |>
+  # add film and year
+  tidyr::unite(col = "label", 
+    c(film, year), sep = ", ", 
+    remove = FALSE) |> 
+  # add user norm values 
+  tidyr::unite(col = "label", 
+    c(label, user_norm), sep = " (", 
+    remove = FALSE) |> 
+  # add verified user percent
+  tidyr::unite(col = "label", 
+    c(label, user_perc_check), 
+    sep = " out of 5) or ", 
+    remove = FALSE) |> 
+  dplyr::select(label)
+```
+
+
+***
+

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Joins in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Data Joins in R"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="Data Joins in R"/>
+    <meta name="twitter:description" content="Data Joins in R"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Data Joins in R"/>
+    <meta property="og:description" content="Data Joins in R"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/pagedtable/css/pagedtable.css" rel="stylesheet" />
+    <script src="libs/pagedtable/js/pagedtable.js"></script>
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://github.com/mjfrigaard/csuc-data-journalism&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Data Joins in R
+#.fancy[Combining data tables with `dplyr`]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 21 2021
+
+Updated: October 21 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Objectives 
+
+## Joins with `dplyr`  
+
+
+.leftcol[
+
+### `left_join()`  
+
+### `right_join()`
+
+]
+
+--
+
+.rightcol[
+
+### `inner_join()`  
+
+### `full_join()`  
+
+]
+
+
+
+
+---
+class: inverse, center, bottom
+background-image: url(img/dplyr.png)
+background-position: 50% 20%
+background-size: 32%
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# `dplyr` = a package for *manipulating relational* data
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 8%
+class: left, top
+
+# The `dplyr` joining functions
+
+### ***`dplyr` has functions for joining multiple  tibbles or data.frames***
+
+--
+
+### `left_join()`
+
+--
+
+### `right_join()`
+
+--
+
+### `inner_join()`
+
+--
+
+### `full_join()`
+
+--
+
+*Recall that `tibble`s and `data.frame`'s are nearly identical 
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# dplyr joins
+
+.leftcol[
+
+### Toy data `X`
+
+.code70[
+
+
+```r
+# create X table
+X &lt;- tibble::tribble(
+    ~A, ~B, ~C, 
+    "a", "t", 1L,
+    "b", "u", 2L,
+    "c", "v", 3L)
+```
+]
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["C"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"1"},{"1":"b","2":"u","3":"2"},{"1":"c","2":"v","3":"3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]
+]
+
+--
+
+.rightcol[
+
+### Toy data `Y`
+
+.code70[
+
+
+```r
+# create Y table
+Y &lt;- tibble::tribble(
+    ~A, ~B, ~D, 
+    "a", "t", 3L,
+    "b", "u", 2L,
+    "d", "W", 1L)
+```
+]
+
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["D"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"3"},{"1":"b","2":"u","3":"2"},{"1":"d","2":"W","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]
+]
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` left joins
+
+### `left_join(x = , y = )`
+
+#### ...joins on matches *from* right-hand table (`Y`) *to* left-hand table (`X`)
+
+--
+
+.leftcol[
+
+Keep all data from `X`, and only matching data from `Y`
+
+
+```r
+left_join(
+* x = X,
+* y = Y
+  )
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["C"],"name":[3],"type":["int"],"align":["right"]},{"label":["D"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"1","4":"3"},{"1":"b","2":"u","3":"2","4":"2"},{"1":"c","2":"v","3":"3","4":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]]
+
+---
+background-image: url(img/left-join-01.png)
+background-position: 50% 80%
+background-size: 45%
+class: left, top
+
+# `dplyr` left joins (1)
+
+### Left joins use all the data from `X` (the left-hand table)
+
+---
+background-image: url(img/left-join-02.png)
+background-position: 50% 70%
+background-size: 90%
+class: left, top
+
+# `dplyr` left joins (2)
+
+### Left joins include matched data in the right-hand table `Y`, and it carries over any new corresponding columns  
+
+---
+background-image: url(img/left-join-03.png)
+background-position: 50% 75%
+background-size: 90%
+class: left, top
+
+# `dplyr` left join (3)
+
+### The final data includes the new column(s) from `Y` (the right-hand table), and missing values for the unmatched rows.
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` right joins
+
+### `right_join(x = , y = )` 
+
+#### ...join on matches *from* right-hand table (`Y`) *to* left-hand table (`X`)
+
+--
+
+.leftcol[
+
+Keep all data from `Y`, and only matching data from `X`
+
+
+```r
+right_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["C"],"name":[3],"type":["int"],"align":["right"]},{"label":["D"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"1","4":"3"},{"1":"b","2":"u","3":"2","4":"2"},{"1":"d","2":"W","3":"NA","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]
+
+
+]
+
+---
+background-image: url(img/right-join-01.png)
+background-position: 50% 75%
+background-size: 40%
+class: left, top
+
+# `dplyr` right joins (1)
+
+### Right joins use all the data from `Y` (the right-hand table)
+
+
+---
+background-image: url(img/right-join-02.png)
+background-position: 50% 75%
+background-size: 85%
+class: left, top
+
+# `dplyr` right joins (2)
+
+### Right joins include the matched data in the left-hand table `X`, and they carry over any new corresponding columns  
+
+
+---
+background-image: url(img/right-join-03.png)
+background-position: 50% 75%
+background-size: 92%
+class: left, top
+
+# `dplyr` right joins (3)
+
+### The final data includes the new column(s) from `X` (the left-hand table), and missing values for the unmatched rows.
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` inner joins
+
+### `inner_join(x = , y = )` 
+
+#### ...keep only matches in *both* `x` *and* `y`
+
+--
+
+.leftcol[
+
+Keep only the matching data from `X` and `Y`
+
+
+```r
+inner_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["C"],"name":[3],"type":["int"],"align":["right"]},{"label":["D"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"1","4":"3"},{"1":"b","2":"u","3":"2","4":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]]
+
+---
+background-image: url(img/inner-join-01.png)
+background-position: 50% 75%
+background-size: 40%
+class: left, top
+
+# `dplyr` inner joins (1)
+
+### Inner joins use only the matched data from both the `X` and `Y` tables
+
+---
+background-image: url(img/inner-join-02.png)
+background-position: 50% 60%
+background-size: 55%
+class: left, top
+
+# `dplyr` inner joins (2)
+
+### Columns `A` and `B` are matched in both `X` and `Y` tables
+
+
+---
+background-image: url(img/inner-join-03.png)
+background-position: 50% 60%
+background-size: 85%
+class: left, top
+
+# `dplyr` inner joins (3)
+
+### Column `C` from table `X` gets joined on matching columns `A` and `B`
+
+---
+background-image: url(img/inner-join-04.png)
+background-position: 50% 60%
+background-size: 90%
+class: left, top
+
+# `dplyr` inner joins (4)
+
+### Column `D` from table `Y` gets joined on matching columns `A` and `B`
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` full joins
+
+## `full_join(x = X, y = Y)`
+
+## ...keep *all* data in both `x` and `y`
+
+--
+
+.leftcol[
+
+Keep all data from `Y` and `X`
+
+
+```r
+full_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+&lt;div data-pagedtable="false"&gt;
+  &lt;script data-pagedtable-source type="application/json"&gt;
+{"columns":[{"label":["A"],"name":[1],"type":["chr"],"align":["left"]},{"label":["B"],"name":[2],"type":["chr"],"align":["left"]},{"label":["C"],"name":[3],"type":["int"],"align":["right"]},{"label":["D"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"t","3":"1","4":"3"},{"1":"b","2":"u","3":"2","4":"2"},{"1":"c","2":"v","3":"3","4":"NA"},{"1":"d","2":"W","3":"NA","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  &lt;/script&gt;
+&lt;/div&gt;
+
+]]
+
+---
+background-image: url(img/full-join-01.png)
+background-position: 50% 60%
+background-size: 40%
+class: left, top
+
+# `dplyr` full joins (1)
+
+### Full joins include all data from both tables `X` and `Y`
+
+---
+background-image: url(img/full-join-02.png)
+background-position: 50% 60%
+background-size: 60%
+class: left, top
+
+# `dplyr` full joins (2)
+
+### Full joins start with all data in table `X` 
+
+---
+background-image: url(img/full-join-03.png)
+background-position: 50% 70%
+background-size: 95%
+class: left, top
+
+# `dplyr` full joins (3)
+
+### Full joins start with all data in table `X` and include the columns and rows from table `Y`
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 7% 92%
+background-size: 8%
+
+# Resources for Data Tidying 
+
+#### 1. [R for Data Science](https://r4ds.had.co.nz/tidy-data.html) 
+
+#### 2. [Data Wrangling with R](https://cengel.github.io/R-data-wrangling/) 
+
+#### 3. [Stack Overflow questions tagged with `tidyr`](https://stackoverflow.com/questions/tagged/tidyr)
+
+#### 4. [RStudio Community posts tagged `tidyr`](https://community.rstudio.com/tag/tidyr)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

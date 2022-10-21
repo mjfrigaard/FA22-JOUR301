@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to the tidyverse</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Introduction to the `tidyverse`"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="Data Visualization (part 2)"/>
+    <meta name="twitter:description" content="Introduction to the `tidyverse`"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Data Visualization (part 2)"/>
+    <meta property="og:description" content="Introduction to the `tidyverse`"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://mjfrigaard.github.io/CSUC-JOUR301-FA22/&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Introduction to the `tidyverse`
+#.fancy[A collection of modern R packages]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 21 2021
+
+Updated: October 21 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/tidyverse.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Data Journalism with the `tidyverse`
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Outline
+
+.leftcol[
+.font80[
+
+#### So far in this course we've covered: 
+
+- ✅ Intro to the RStudio IDE
+
+ - *installation, orientation, etc.*
+
+- ✅ Projects (i.e., file &amp; folder managemnet)
+
+ - *`.Rproj` files, `.R` scripts, folder organization* 
+
+- ✅ R Markdown 
+
+ - *Markdown syntax, R code chunks, output options*
+
+]
+]
+
+--
+
+.rightcol[
+&lt;br&gt;&lt;br&gt;
+.font80[
+
+- ✅ Basic R Programming
+
+ - *vectors, `data.frame`s, functions*
+
+- ✅ Data Visualization with `ggplot2` 
+
+ - *aesthetics, geoms, layers*
+ 
+- ✅ Data Manipulation with `dplyr`
+
+ - `glimpse`, `select`, `filter`, `arrange`, and `mutate`
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+## What is the `tidyverse`?
+
+--
+
+.font80[
+
+&gt; *"A collection of modern R packages that share common philosophies, embed best practices, and are designed to work together."*
+
+]
+
+--
+
+.leftcol[
+.font70[
+*You may have already noticed me use this line of code in slides/exercises:* 
+]
+
+.code70[
+
+```r
+install.packages("tidyverse")
+```
+]
+]
+
+--
+
+.rightcol[
+.font70[
+*This is the equivalent of loading*
+]
+.code50[
+
+```r
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("readr")
+install.packages("purrr")
+install.packages("tibble")
+install.packages("hms")
+install.packages("stringr")
+install.packages("lubridate")
+install.packages("forcats")
+install.packages("DBI")
+install.packages("haven")
+install.packages("httr")
+install.packages("jsonlite")
+install.packages("readxl")
+install.packages("rvest")
+install.packages("xml2")
+install.packages("modelr")
+install.packages("broom")
+```
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Learning R: A roadmap
+
+--
+
+**It's best to start with a general introduction to R's syntax (functions, objects, operators, etc.)** 
+
+  - R comes 'out of the box' with quite a few packages/functions:
+     - The `base` package that includes functions like `c()`, `data.frame()`, etc.  
+     - The `utils` package contains functions like `head()`, `tail()`, and `str()`, etc. 
+
+--
+
+**The `tidyverse` covers *most* of what we want to accomplish, but not *everything***
+
+  - If you stick with R, it's safe to assume ~80% of your work can be accomplished using the `tidyverse` packages (maybe more if you dive deep into data visualization)  
+  
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Good News! 
+
+#### You've already been using some `tidyverse` packages:
+
+.leftcol[
+.font70[
+
+
+- **`readr` for importing .csv files** 👍  
+
+  - `read_csv()` ✅
+  
+  - `write_csv()` ✅
+
+- **`ggplot2` for data visualization** 👍  
+
+  - `ggplot()`  ✅
+  
+  - `aes()`  ✅
+  
+  - all the `geom_*` functions ✅
+
+]
+]
+
+--
+
+.rightcol[
+.font70[
+
+- **`dplyr` for data manipulation** 👍  
+  
+  - `select()` ✅  
+     - `contains()`, `starts_with()`, etc. 
+    
+  - `filter()` ✅  
+  
+  - `arrange()` ✅  
+     - `desc()`  
+    
+  - `mutate()` ✅  
+     - `case_when()`  
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+&lt;img src="img/tidyverse-all.png" width="85%" height="85%" style="display: block; margin: auto;" /&gt;
+
+--
+
+**Our `tidyverse` ecosystem**
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# RStudio IDE 
+
+.leftcol[
+
+#### Resources: 
+
+- [RStudio IDE Slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
+
+- Exercises:  
+  - [Installing R &amp; RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
+
+
+]
+
+.rightcol[
+.border[
+
+&lt;img src="img/ide-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Projects (i.e., files and folder management)
+
+.leftcol[
+
+#### Resources:
+
+- [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)  
+
+- [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
+
+- Exercises:  
+  - [Intro to the goodenuffR package](https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html)
+
+
+- Assignment: 
+  - Intro to `goodenuffR` package ✅
+]
+
+.rightcol[
+
+&lt;img src="img/proj-econ.png" width="85%" height="85%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Write Code with R Markdown
+
+.leftcol[
+
+#### Resources:
+
+- [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
+
+- Exercises:  
+  - [R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html)
+
+
+- Assignment: 
+  - R Markdown in Practice ✅
+  
+]
+
+.rightcol[
+
+&lt;img src="img/rmd-econ.png" width="70%" height="70%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Import
+
+.leftcol[
+.font80[
+
+#### Resources:
+
+- [Importing data tutorial](https://mjfrigaard.github.io/sheetcheatR/tutorials/import.html)   
+  - `readr` ✅  
+  - `readxl`, `writexl`, and `openxlsx` ✅  
+  - `googlesheets4` ✅  
+
+- Scraping website examples:  
+
+  - `rvest::read_html()` ✅  
+  - `rvest::html_element()` ✅  
+  - `rvest::html_node()` ✅  
+
+]
+]
+
+
+.rightcol[
+
+&lt;img src="img/import-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Reshape
+
+.leftcol[
+
+#### Resources:
+
+]
+
+
+.rightcol[
+
+&lt;img src="img/reshape-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform
+
+.leftcol[
+
+#### Resources:
+
+]
+
+
+.rightcol[
+
+&lt;img src="img/transform-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Visualize 
+
+.leftcol60[
+
+.font70[
+
+#### Resources:
+
+- Slides 
+  - [Data Visualization with `ggplot2` (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1)   
+  - Data Visualization with `ggplot2` (part 2)  
+      - [Part a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1)  
+      - [Part b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1)
+
+- Exercises:  
+  - [Data Visualization with ggplot2 (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-ggplot2.html)
+
+- Assignment:
+  - `ggplot2` part 1 (assignment) ✅
+
+]
+
+
+
+]
+
+.rightcol40[
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Publish 
+
+.leftcol[
+
+#### Resources:
+
+- [Slides]()  
+
+- Exercises:  
+
+
+- Assignment:
+
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Deploy 
+
+.leftcol[
+
+#### Resources:
+
+- [Slides]()  
+
+- Exercises:  
+
+
+- Assignment:
+
+
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

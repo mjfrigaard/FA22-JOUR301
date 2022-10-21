@@ -1,0 +1,285 @@
+---
+title: "Joining Data in R"
+description: |
+  "*Using `dplyr` to join data tables*"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 3
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(inspectdf)
+library(starwarsdb)
+library(dm)
+# create data folder
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5.5,
+  fig.retina = 2
+  )
+fs::dir_create("data")
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/reshape-join/')
+# tibble printing
+options(
+  pillar.print_max = 10, 
+  pillar.print_min = 10)
+```
+
+# Objectives 
+
+This document outlines some common data joining tasks with the `dplyr` package. **If you've ever Googled 'how to perform [x] in R', you've probably discovered there are multiple ways to accomplish [x].** The methods I present here are not exhaustive, and I've tried to balance the trade-off between 1) solutions/functions that solve problems with the fewest number of keystrokes, and 2) code that's readable, explicit, and easy to follow.
+
+
+## Load packages 
+
+`dplyr` is part of the core `tidyverse` packages, so we install and load this meta-package below. We'll also be installing the `inspectdf`, `starwarsdb`, and `dm` packages. 
+
+```{r packages, eval=FALSE}
+# install.packages(c("tidyverse", "inspectdf", "starwarsdb", "dm"))
+library(tidyverse)
+library(inspectdf)
+library(starwarsdb)
+library(dm)
+```
+
+## Namespacing
+
+I'll be using the namespace syntax (`package::function()`) just to make it explicitly clear which function belongs to which package, but this isn't necessary if you've run the code block above. 
+
+## Inspecting data tables
+
+Whenever I'm performing a series of joins, I like to use the [`inspectdf` package](https://alastairrushworth.github.io/inspectdf/). This package has a series of functions for viewing all the columns in a table by various types: 
+
++ **`inspectdf::inspect_cat()`**: display categorical variables (missing values are displayed by color)  
+
++ **`inspectdf::inspect_cor()`**: display the correlation between numerical variables  
+
++ **`inspectdf::inspect_imb()`**: display imbalances between variables    
+
++ **`inspectdf::inspect_mem()`**: display the memory usage by column  
+
++ **`inspectdf::inspect_na()`**: display the rate of missingness by column  
+
++ **`inspectdf::inspect_num()`**: display the distribution of the numeric columns.
+
++ **`inspectdf::inspect_types()`**: display the column types.  
+
++ **`inspectdf::show_plot()`**: show the plot from the `inspect_*` function  
+  - we'll also add the **`text_labels = TRUE`**, **`col_palette = 1`** (for the  colorblind friendly palette).
+
+
+There are three principles for tidy data: 
+
+1. Columns hold *variables*    
+2. Rows hold *observations*    
+3. Cells (the intersection of rows and columns) hold *values* 
+
+
+# Joins
+
+Joins give us the ability to combine multiple datasets on a common column. We're going to be using the [`starwarsdb` package](https://github.com/gadenbuie/starwarsdb), which dplyr::contains data from the [Star Wars API](https://swapi.dev/). 
+
+## A Data Model 
+
+The code below creates and displays the data model for the tables in this package 
+
+```{r sw_data_model, out.height='100%', out.width='100%', message=FALSE, warning=FALSE}
+sw_data_model <- dm::dm_draw(dm = starwarsdb::starwars_dm(),
+  graph_name = "sw_data_model",
+  view_type = "all")
+sw_data_model
+```
+
+As you can see from the graph above, there are nine tables in the `starwarsdb`. The tables connect to each other through a series of common columns (called `keys`), and these allow us to perform multiple kinds of joins. 
+
+## Create sw_films
+
+Load the `starwarsdb::films` dataset, removing the `opening_crawl` column, and filter to only episodes 4-6. Store these data in `sw_flms`
+
+```{r sw_flms}
+sw_flms <- starwarsdb::films |> 
+  dplyr::select(-c(opening_crawl, director, producer)) |> 
+  dplyr::filter(episode_id >= 4 & episode_id <= 6)
+sw_flms
+```
+
+
+## `left_join`
+
+***A `left_join` keeps all of `x`, and joins it to all matching rows from dataset `y`***
+
+We want to left-join `sw_flms` to `starwarsdb::films_vehicles`: 
+
+```{r films_vehicles}
+starwarsdb::films_vehicles
+```
+
+We can do this on `"title"`, then we can re-organize the columns using `dplyr::select()` to place the `vehicle` column before `dplyr::everything()` else. 
+
+```{r left_join_ex_01}
+dplyr::left_join(x = sw_flms, 
+          y = starwarsdb::films_vehicles, 
+          by = "title")  |>   
+  dplyr::select(vehicle, 
+    dplyr::everything()) 
+```
+
+
+Assign to `sw_flms_veh`
+
+```{r left_join_ex_02}
+dplyr::left_join(x = sw_flms, 
+          y = starwarsdb::films_vehicles, 
+          by = "title")  |>   
+  dplyr::select(vehicle, 
+    dplyr::everything()) -> sw_flms_veh
+```
+
+Let's take a look at the sw_flms_veh table:
+
+```{r}
+sw_flms_veh |> dplyr::glimpse()
+```
+
+We can see this table has 4 columns and 47 rows. We'll use the `inspect_types()` function below to view the breakdown of the columns by `type`: 
+
+```{r sw_flms_veh-inspect_types}
+sw_flms_veh |> 
+  inspectdf::inspect_types() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1)
+```
+
+We can see most of these columns are character. Below we'll display the categorical variables using `inspectdf::inspect_cat()`:
+
+```{r sw_flms_veh-inspect_cat}
+sw_flms_veh |> 
+  inspectdf::inspect_cat() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1)
+```
+
+```{r}
+sw_flms_veh |> 
+  inspectdf::inspect_num() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1) 
+```
+
+
+## `inner_join`
+
+***The `inner_join()` joins dataset `x` and `y`, and keeps only matching rows from both.***
+
+The code below uses an `inner_join` to join `sw_films_veh` to `starwarsdb::pilots` on `"vehicle"`, and assigns it to `sw_flms_veh_plt`
+
+```{r sw_flms_veh_plt-sol}
+dplyr::inner_join(x = sw_flms_veh, 
+           y = starwarsdb::pilots, 
+           by = "vehicle") -> sw_flms_veh_plt
+sw_flms_veh_plt |> dplyr::glimpse()
+```
+
+```{r sw_flms_veh_plt-inspect_types}
+sw_flms_veh_plt |> 
+  inspectdf::inspect_types() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1)
+```
+
+```{r sw_flms_veh_plt-inspect_cat}
+sw_flms_veh_plt |> 
+  inspectdf::inspect_cat() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1)
+```
+
+## `right_join`
+
+***The `right_join()` includes all the rows in dataset `y`, and joins it the matching rows in dataset `x`***
+
+The code below uses a `right_join()` to join `sw_flms_veh_plt` to `starwarsdb::films_planets` on `"title"`, keeping all the rows in `starwarsdb::films_planets`. 
+
+Then we use `select()` to rename `planet` to `flm_planet` and assign this to `sw_flms_veh_plt_plnt` 
+
+```{r right_join-sol}
+dplyr::right_join(
+  x = sw_flms_veh_plt,
+  y = starwarsdb::films_planets,
+  by = "title") %>%
+  dplyr::select(
+    vehicle:release_date,
+    film_planet = planet,
+    pilot) -> sw_flms_veh_plt_plnt
+sw_flms_veh_plt_plnt |> dplyr::glimpse()
+```
+
+```{r sw_flms_veh_plt_plnt-inspect_types}
+sw_flms_veh_plt_plnt |>
+  inspectdf::inspect_types() |>
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1)
+```
+
+```{r sw_flms_veh_plt_plnt-inspect_cat}
+sw_flms_veh_plt_plnt |> 
+  inspectdf::inspect_cat() |> 
+  inspectdf::show_plot(text_labels = TRUE, 
+    col_palette = 1)
+```
+
+## `anti_join`
+
+***The `anti_join()` keeps all rows in dataset `x` that **do not** have a match in dataset `y`.***
+
+Note the last join created empty values for `vehicle`, `episode_id`, `release_date`, and `pilot`:
+
+```{r filter-is.na}
+sw_flms_veh_plt_plnt |> 
+  dplyr::filter(is.na(episode_id)) |> 
+  inspectdf::inspect_na() |> 
+  inspectdf::show_plot(text_labels = TRUE, 
+    col_palette = 1) +
+  coord_flip()
+```
+
+The code below uses the `anti_join()` to join `sw_flms_veh_plt_plnt` to `sw_films` and create a dataset with only `title` and `film_planet`:
+
+```{r anti_join-inspect_types}
+dplyr::anti_join(x = sw_flms_veh_plt_plnt, 
+            y = sw_flms, 
+            by = c("title", "episode_id", "release_date")) |> 
+  dplyr::select(title, film_planet) |> 
+  inspectdf::inspect_types() |>
+  inspectdf::show_plot(text_labels = TRUE, col_palette = 1)
+```
+
+
+```{r anti_join-inspect_cat}
+dplyr::anti_join(x = sw_flms_veh_plt_plnt, 
+            y = sw_flms, 
+            by = c("title", "episode_id", "release_date")) |> 
+  inspectdf::inspect_na() |> 
+  inspectdf::show_plot(
+    text_labels = TRUE, col_palette = 1) + 
+  ggplot2::coord_flip()
+```
+
+These should only contain the `title`s **not** in `sw_films`.

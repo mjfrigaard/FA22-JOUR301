@@ -1,0 +1,46 @@
+---
+title: "Re-create graph challange"
+description: |
+  "Re-create graphs from [*TV’s golden age is real*](https://www.economist.com/graphic-detail/2018/11/24/tvs-golden-age-is-real)"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 3
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(skimr)
+library(fivethirtyeight)
+library(fivethirtyeightdata)
+# create data folder
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 8.5,
+  fig.height = 6,
+  fig.retina = 2
+  )
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/recreate-graphs/tv-golden-age/')
+```
+
+```{r download-data, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+fs::dir_create("data/")
+fs::dir_create("data/raw/")
+imdb_econ_movie_ratings_raw <- download.file(url = "https://raw.githubusercontent.com/TheEconomist/graphic-detail-data/master/data/2018-11-24_tv-ratings/IMDb_Economist_tv_ratings.csv", 
+  destfile = "data/raw/IMDb_Economist_tv_ratings.csv")
+```
+

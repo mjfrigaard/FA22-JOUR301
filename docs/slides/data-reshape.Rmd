@@ -1,0 +1,1307 @@
+---
+title: "Data Reshaping in R"
+subtitle: "Reshaping and re-structuring data with `tidyr`"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Reshaping in R",
+    generator = "xaringan and remark.js"
+  ) %>%
+    meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Reshaping in R",
+        url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://github.com/mjfrigaard/csuc-data-journalism</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Objectives 
+
+<br><br>
+
+## 1) Recap `dplyr`'s data manipulation verbs
+
+--
+
+## 2) `tidyr`'s pivoting functions 
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Materials 
+
+<br>
+
+## Previous slides 
+
+<br>
+
+- [Data Manipulation with `dplyr` part 1](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html#1)
+
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Data Manipulation Recap
+
+## We previously learned how to: 
+
+--
+
+.leftcol[
+.font70[
+
+> #### 1) View data with `glimpse()`
+
+> #### 2) Select columns with `select()`
+
+> #### 3) Filter rows with `filter()`
+
+]
+]
+
+--
+
+.rightcol[
+.font70[
+
+> #### 4) Arrange data with `arrange()`
+
+> #### 5) Create/change columns with `mutate()`
+
+]
+]
+
+---
+class: inverse, center, bottom
+background-image: url(img/tidyr.png)
+background-position: 50% 10%
+background-size: 35%
+
+# `tidyr` = a package for *reshaping* data
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Tidy data 
+
+## What are tidy data?
+
+
+--
+
+.leftcol[
+
+### Observations are in rows  
+### Variables are in columns   
+### Values are in cells 
+
+]
+
+--
+
+.rightcol[
+
+```{r tidy-data, echo=FALSE, fig.align='center', out.height='80%', out.width='80%'}
+knitr::include_graphics(path = "img/tidy-data.png")
+```
+
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Tidy data 
+
+### Values are the *intersection* of observations and variables
+
+--
+
+ 
+```{r intersection, echo=FALSE, fig.align='center', out.height='50%', out.width='50%'}
+knitr::include_graphics(path = "img/intersection.png")
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 8%
+
+# Non-tidy data 
+
+### Copy and paste the code below to create `NotTidy`
+
+```{r NotTidy}
+# copy and paste me!
+NotTidy <- tibble::tribble(
+       ~group,   ~`2019`,   ~`2020`,   ~`2021`,
+          "A", "102/100", "123/100", "161/100",
+          "B", "179/100", "199/100", "221/100",
+          "C", "223/100", "146/100", "288/100")
+```
+
+.small[
+
+```{r NotTidy-paged, echo=FALSE}
+rmarkdown::paged_table(NotTidy)
+```
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 12%
+
+# Non-tidy data 
+
+## Why aren't they tidy? 
+
+.leftcol[
+
+```{r NotTidy-View, eval=FALSE}
+NotTidy %>% View("NotTidy")
+```
+
+.border[
+
+```{r NotTidy-View-image, echo=FALSE, fig.align='center', out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/NotTidy.png")
+```
+
+]]
+
+--
+
+.rightcol[.large[
+
+> `year` is across columns...  
+> multiple values in cells...  
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 8%
+
+## Tidying un-tidy data 
+
+--
+
+<br><br>
+
+.leftcol[
+
+*covered in slides*
+
+.font90[
+
++ `pivot_longer()` - wide to long
+
++ `pivot_wider()` - long to wide
+
+]
+]
+
+--
+
+.rightcol[
+
+*covered in exercises*
+
+.font90[
+
++ `separate()` - pull columns apart  
+
++ `separate_rows()` - split columns down rows   
+
++ `unite()` - stick columns together  
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 90% 10%
+background-size: 7%
+
+# Quick tip: viewing your data
+
+<br><br>
+
+## Make sure you view the data before assigning it to an object
+
+<br><br>
+
+## Use `glimpse()` or `View("Name")`
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+.leftcol[
+
+Make wide data long
+
+```{r pivot_longer, eval=FALSE}
+NotTidy %>% 
+  pivot_longer(
+    cols = -group, 
+    names_to = "year", 
+    values_to = "rate") %>% 
+  View("Tidy")
+```
+
+]
+
+--
+
+.rightcol[
+
+How it `pivot_longer()` works
+
+```{r NotTidy-2-Tidy.png-View-image, fig.align='center', echo=FALSE, out.height='57%', out.width='57%'}
+knitr::include_graphics(path = "img/NotTidy-2-Tidy.png")
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+#### How it works: 
+
+--
+
+.leftcol[
+
+`cols` = these are the **columns we want to reshape**
+
+.small[
+
+```{r cols-no-show, eval=FALSE}
+NotTidy %>% 
+  pivot_longer(cols = -group, #<<
+```
+
+]
+
+`names_to` = this is the new variable that will contain the previous **column names**
+
+.small[
+
+```{r names_to, eval=FALSE}
+NotTidy %>% 
+  pivot_longer(cols = -group, 
+               names_to = "year", #<<
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+`values_to` = this is the new variable that will contain the reshaped **values**
+
+.small[
+
+```{r values_to, eval=FALSE}
+NotTidy %>% 
+  pivot_longer(cols = -group, 
+               names_to = "year", 
+               values_to = "rate") #<<
+```
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `tidyr::pivot_longer()`
+
+ 
+
+.leftcol[
+
+### Looks correct?
+
+```{r pivot_longer-check, eval=FALSE, warning=FALSE}
+NotTidy %>% 
+  pivot_longer(cols = -group, 
+         names_to = "year", 
+        values_to = "rate") %>% 
+  View("Tidy")
+```
+
+]
+
+--
+
+.rightcol[
+
+### Not quite
+
+.border[
+
+```{r TidyView.png-View-image, echo=FALSE, fig.align='center', out.height='60%', out.width='60%'}
+knitr::include_graphics(path = "img/TidyView.png")
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+```{r create-Tidy, echo=FALSE}
+NotTidy %>% 
+  pivot_longer(cols = -group, 
+         names_to = "year", 
+        values_to = "rate") -> Tidy
+```
+
+
+## `pivot_longer()` = names_transform
+
+### Print `Tidy` to console
+
+.leftcol[
+
+```{r print-Tidy-console, eval=FALSE}
+Tidy
+```
+
+.small[
+
+```{r paged-Tidy-console, echo=FALSE}
+rmarkdown::paged_table(Tidy)
+```
+
+]]
+
+--
+
+.rightcol[
+
+<br><br>
+
+#### *Note the format of the columns*
+
+#### *The new `year` variable should be numeric*
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 93% 7%
+background-size: 7%
+
+## `pivot_longer()` = `names_transform`
+
+
+#### We can control this behavior with `names_transform = list()`
+
+--
+
+.leftcol[
+
+```{r names_transform-no-show, eval=FALSE}
+NotTidy %>% 
+  pivot_longer(
+       cols = -group, 
+       names_to = "year", 
+       values_to = "rate", 
+       names_transform = list( #<<
+         year = as.numeric)) #<<
+```
+
+]
+
+--
+
+.rightcol[.small[
+
+```{r names_transform-output, echo=FALSE}
+rmarkdown::paged_table(NotTidy %>% 
+  pivot_longer(
+       cols = -group, 
+       names_to = "year", 
+       values_to = "rate", 
+       names_transform = list( 
+         year = as.numeric)))
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+<br><br><br>
+
+.leftcol40[
+
+Create the `SiteRates` data (example of COVID rates as various hospitals)
+
+]
+
+.rightcol60[
+
+.code60[
+
+```{r SiteRates, eval=FALSE}
+SiteRates <- tibble::tribble(
+         ~site, ~`2019_Q1`, ~`2019_Q2`, ~`2019_Q3`, ~`2019_Q4`,
+      "Boston",         52,         31,         26,       33.4,
+"Philadelphia",       7.42,       5.51,       5.82,       6.99,
+  "Cincinnati",       6.73,       4.87,       5.02,       4.66,
+       "Texas",       18.2,       16.6,         17,         19)
+```
+
+]]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 8%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+Create the `SiteRates` data (example of COVID rates as various hospitals)
+
+
+```{r code-SiteRates-View-image, eval=FALSE}
+SiteRates %>% View("SiteRates")
+```
+
+.border[
+
+```{r SiteRates-View-image, echo=FALSE, fig.align='center', out.height='85%', out.width='85%'}
+knitr::include_graphics(path = "img/SiteRates.png")
+```
+
+]
+
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
+#### `SiteRates` has *two* variables in the same column
+
+#### We can use `names_sep ` uses a pattern to split the column (`_Q`)
+
+.border[
+
+```{r SiteRatesView-png, echo=FALSE, fig.align='center', out.height='75%', out.width='75%'}
+knitr::include_graphics(path = "img/SiteRatesView.png")
+```
+
+]
+ 
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `pivot_longer()` = names_sep
+
++ Add `names_sep = "_Q"`
+
++ `year` and `quarter` should also be numeric
+
+.leftcol[
+
+```{r names_sep, eval=FALSE}
+SiteRates %>% 
+  pivot_longer(
+  -site,
+  names_to = 
+    c("year", "quarter"), 
+  values_to = "rate",
+  names_sep = "_Q", #<<
+  names_transform = list(
+    year = as.integer, #<<
+    quarter = as.integer)) %>% #<<
+  View("TidySites")
+```
+
+]
+
+--
+
+.rightcol[
+
+.border[
+
+```{r TidySites-View, echo=FALSE, fig.align='center', out.height='47%', out.width='47%'}
+knitr::include_graphics(path = "img/TidySites.png")
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+Create the `SpaceDogs` data. These are names of dogs in the [Soviet Space Dogs database](https://airtable.com/universe/expG3z2CFykG1dZsp/sovet-space-dogs).
+
+*Some dogs have multiple names, and some share names.*
+
+
+.code70[
+
+```{r SpaceDogs, eval=FALSE}
+# data.frame prints to the screen better
+SpaceDogs <- data.frame(
+   date = c("1966-02-22", "1961-03-25", 
+              "1961-03-09", "1960-12-22",
+              "1960-12-01", "1960-09-22"),
+   result = c("recovered safely", "recovered safely",
+              "recovered safely", "recovered",
+              "both dogs died","recovered safely"),
+   name_1 = c("Ugolyok / Snezhok", "Zvezdochka", 
+              "Chernuskha", "Shutka", "Mushka",
+              "Kusachka / Otvazhnaya"),
+   name_2 = c("Veterok / Bzdunok", NA, NA, 
+              "Kometka", "Pchyolka", "Neva"))
+```
+
+]
+
+
+```{r create-SpaceDogs, echo=FALSE}
+SpaceDogs <- data.frame(
+          date = c("1966-02-22", "1961-03-25", 
+                    "1961-03-09", "1960-12-22",
+                    "1960-12-01", "1960-09-22"),
+         result = c("recovered safely", "recovered safely",
+                    "recovered safely", "recovered",
+                    "both dogs died","recovered safely"),
+         name_1 = c("Ugolyok / Snezhok", "Zvezdochka", 
+                    "Chernuskha", "Shutka", "Mushka",
+                    "Kusachka / Otvazhnaya"),
+         name_2 = c("Veterok / Bzdunok", NA, NA, 
+                    "Kometka", "Pchyolka", "Neva"))
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+```{r View-SpaceDogs, eval=FALSE}
+SpaceDogs %>% 
+  View("SpaceDogs")
+```
+
+.border[
+
+```{r SpaceDogs.png, echo=FALSE, fig.align='center', out.height='50%', out.width='50%'}
+knitr::include_graphics(path = "img/SpaceDogs.png")
+```
+
+]
+
+The `SpaceDogs` data has missing values in `name_2` 
+
+--
+
+*...two of the columns have a similar prefix (`name_`)*
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+### To tidy these data, we can combine what we've learned:
+
+--
+
+#### 1. `dplyr::starts_with()` to select the `name_` columns
+
+--
+
+#### 2. `names_to` has a special `".value"` argument, which is the name of the new column with the `name_` values. We need to include an index column to track the values across different names (`dog_id`).
+
+--
+
+#### 3. We can remove missing values with  `values_drop_na`
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+.code70[
+
+```{r starts_with, eval=FALSE}
+SpaceDogs %>% 
+  pivot_longer( # columns with `name_` prefix
+   starts_with("name_"), #<< 
+```
+
+]
+
+
+
+--
+
+.code70[
+
+```{r special-value, eval=FALSE}
+SpaceDogs %>% 
+  pivot_longer(
+   starts_with("name_"), 
+   names_sep = "_",
+   names_to = # new column for `name_` values
+     c(".value", "dog_id"), #<< 
+```
+
+]
+
+
+
+--
+
+.code70[
+
+```{r values_drop_na, eval=FALSE}
+SpaceDogs %>% 
+  pivot_longer(
+   starts_with("name_"), 
+   names_sep = "_",
+   names_to = 
+     c(".value", "dog_id"), # remove missing
+   values_drop_na = TRUE) #<< 
+```
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+### Add these arguments to `pivot_longer()` and add `View()`
+
+.leftcol[
+
+```{r TidySpaceDogs-no-show, eval=FALSE}
+SpaceDogs %>% 
+  
+  pivot_longer(
+   starts_with("name_"), #<<
+   names_sep = "_",
+   names_to = 
+     c(".value", "dog_id"), 
+   values_drop_na = TRUE) %>% #<<
+  
+  View("TidySpaceDogs")
+```
+
+]
+
+
+--
+
+.rightcol[
+
+```{r TidySpaceDogs, echo=FALSE}
+SpaceDogs %>% 
+  pivot_longer(
+   starts_with("name_"), 
+   names_sep = "_",
+   names_to = 
+     c(".value", "dog_id"), 
+   values_drop_na = TRUE) -> TidySpaceDogs
+```
+
+.border[
+
+```{r TidySpaceDogs-View, echo=FALSE, fig.align='center', out.height='95%', out.width='95%'}
+knitr::include_graphics(path = "img/TidySpaceDogs.png")
+```
+
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## More `pivot_longer()` options
+
+#### We can see the new `dog_id` index
+
+#### The missing values have been removed
+
+--
+
+```{r SpaceDogs-2-TidySpaceDogs, echo=FALSE, fig.align='center', out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/SpaceDogs-2-TidySpaceDogs.png")
+```
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+# `tidyr::pivot_wider()`
+
+<br>
+
+## We've made wide data long, now we will make long data wide 
+
+### *But, why???*
+
+### Wide data is usually better for displaying summaries 
+
+### Long data is better for graphing/modeling
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+# `tidyr::pivot_wider()`
+
+### Consider the `CatVsDogWide` data 
+
+.leftcol[
+
+#### These data come from this article in the [Washington Post](https://www.washingtonpost.com/news/wonk/wp/2014/07/28/where-cats-are-more-popular-than-dogs-in-the-u-s-and-all-over-the-world/?utm_term=.b50cb49b78b5).
+
+]
+
+--
+
+.rightcol[
+
+.border[
+
+```{r wapo-article, echo=FALSE, out.height='100%', out.width='100%', fig.align='center'}
+knitr::include_graphics(path = "img/wapo-article.png")
+```
+
+]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+<br><br><br>
+
+.leftcol35[
+
+
+#### Create `CatVsDogWide`
+
+]
+
+--
+
+.rightcol65[
+
+.code70[
+
+```{r CatVsDogWide, eval=FALSE}
+CatVsDogWide <- tibble::tribble(
+               ~metric,   ~CA,  ~TX,  ~FL,  ~NY,  ~PA,
+    "no_of_households", 12974, 9002, 7609, 7512, 5172,
+"no_of_pet_households",  6865, 5265, 4138, 3802, 2942,
+"no_of_dog_households",  4260, 3960, 2718, 2177, 1702,
+"no_of_cat_households",  3687, 2544, 2079, 2189, 1748)
+```
+
+```{r create-CatVsDogWide, echo=FALSE}
+CatVsDogWide <- tibble::tribble(
+               ~metric,   ~CA,  ~TX,  ~FL,  ~NY,  ~PA,
+    "no_of_households", 12974, 9002, 7609, 7512, 5172,
+"no_of_pet_households",  6865, 5265, 4138, 3802, 2942,
+"no_of_dog_households",  4260, 3960, 2718, 2177, 1702,
+"no_of_cat_households",  3687, 2544, 2079, 2189, 1748)
+```
+
+]]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+```{r code-CvDWide-png, eval=FALSE}
+CatVsDogWide %>% View("CvDWide")
+```
+
+.border[
+
+```{r CvDWide-png, echo=FALSE, out.height='88%', out.width='88%', fig.align='center'}
+knitr::include_graphics(path = "img/CvDWide.png")
+```
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column 
+
+--
+
+.leftcol35[
+
+```{r CatVsDogWidepivot_longer-no-show, eval=FALSE}
+CatVsDogWide %>%
+  pivot_longer(-metric, 
+    names_to = "state", 
+    values_to = "value") %>% 
+  # view
+  View("CvDLong")
+```
+
+]
+
+--
+
+.rightcol65[.border[
+
+```{r CvDLong-png, echo=FALSE, out.height='34%', out.width='34%', fig.align='center'}
+knitr::include_graphics(path = "img/CvDLong.png")
+```
+
+]]
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners** 
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column  
+--
+
+Step 2. `pivot_wider()` the `metric` across columns  
+
+--
+
+```{r CatVsDogWide-pivot_longer-pivot_wider, eval=FALSE}
+CatVsDogWide %>%
+  pivot_longer(-metric, names_to = "state", values_to = "value") %>% 
+  pivot_wider(names_from = "metric", values_from = "value") %>% 
+  View("CvDWide")
+```
+
+--
+
+.border[
+
+```{r CvDWide2-png, echo=FALSE, out.height='70%', out.width='70%', fig.align='center'}
+knitr::include_graphics(path = "img/CvDWide2.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners** 
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column    
+Step 2. `pivot_wider()` the `metric` and `values` across columns  
+--
+
+Step 3. `mutate()` the `perc` (percentage) columns
+
+--
+
+```{r CatVsDogWide-pivot_longer-pivot_wider-mutate, eval=FALSE}
+CatVsDogWide %>% 
+   pivot_longer(-metric, names_to = "state", values_to = "value") %>% 
+   pivot_wider(names_from = "metric", values_from = "value") %>% 
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %>%
+  View("CvDWide")
+```
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+**Calculate percent pets per household, dog owners, and cat owners**   
+
+Step 1. `pivot_long()` states into `state` column, values into `value` column    
+Step 2. `pivot_wider()` the `metric` and `values` across columns  
+Step 3. `mutate()` the `perc` (percentage) columns
+
+```{r CatVsDogWide-pivot_longer-pivot_wider-mutate-no-show, echo=FALSE, eval=FALSE}
+CatVsDogWide %>% 
+  pivot_longer(-metric, names_to = "state", values_to = "value") %>% 
+  pivot_wider(names_from = "metric", values_from = "value") %>% 
+  
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) 
+```
+
+--
+
+.border[
+
+```{r CvDWide2-perc-png, echo=FALSE, out.height='100%', out.width='100%', fig.align='center'}
+knitr::include_graphics(path = "img/CvDWide2-perc.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()`
+
+#### *We could assign here, but why stop?*   
+
+--
+
+Add `select()` helpers to reorganize data!
+
+--
+
+```{r , eval=FALSE}
+# ...code omitted 
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %>% 
+    # pass the output from pivot_wider() to select()
+  select(state, 
+         contains("perc_dog"), contains("perc_cat"))
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()` (***Final code***)
+
+```{r , eval=FALSE}
+CatVsDogWide %>% 
+  # pivots
+   pivot_longer(
+     -metric, names_to = "state", values_to = "value") %>% 
+   pivot_wider(
+     names_from = "metric", values_from = "value") %>% 
+  # mutate
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %>% 
+  # select
+  select(state, 
+         contains("perc_dog"), contains("perc_cat"))
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 5%
+background-size: 7%
+
+## `tidyr::pivot_wider()` (***Final output***)
+
+ 
+```{r CvsDPercent-png, echo=FALSE, fig.align='center', out.height='75%', out.width='75%', fig.align='center'}
+knitr::include_graphics(path = "img/CvsDPercent.png")
+```
+
+```{r CvsDPercent-no-show, echo=FALSE, eval=FALSE}
+CatVsDogWide %>% 
+  # pivots
+   pivot_longer(
+     -metric, names_to = "state", values_to = "value") %>% 
+   pivot_wider(
+     names_from = "metric", values_from = "value") %>% 
+  # mutate
+  mutate(
+   perc_pet_household = no_of_pet_households / no_of_households * 100,
+   perc_pet_household = round(perc_pet_household, digits = 1),
+   perc_dog_owners = no_of_dog_households / no_of_households * 100, 
+   perc_dog_owners = round(perc_dog_owners, digits = 1),
+   perc_cat_owners = no_of_cat_households / no_of_households * 100,
+   perc_cat_owners = round(perc_cat_owners, digits = 1)) %>% 
+  # select
+  select(state, 
+         contains("perc_dog"), contains("perc_cat")) %>% 
+  View("CvsDPercent")
+```
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 90%
+background-size: 8%
+
+# More tidying in the exercises! 
+
+### `separate()` - pull columns apart
+
+### `separate_rows()` - split columns down rows
+
+### `unite()` - stick columns together
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 7% 92%
+background-size: 8%
+
+# Resources for Data Tidying 
+
+#### 1. [R for Data Science](https://r4ds.had.co.nz/tidy-data.html) 
+
+#### 2. [Data Wrangling with R](https://cengel.github.io/R-data-wrangling/) 
+
+#### 3. [Stack Overflow questions tagged with `tidyr`](https://stackoverflow.com/questions/tagged/tidyr)
+
+#### 4. [RStudio Community posts tagged `tidyr`](https://community.rstudio.com/tag/tidyr)
+
+
+```{r chrome_print, echo=FALSE, results='hide', eval=FALSE}
+html_slides <- list.files(".", pattern = ".html")
+pdf_slides <- str_replace(html_slides, 
+  pattern = ".html", 
+  replacement = ".pdf")
+pdf_slides <- paste0("pdfs/", pdf_slides)
+print_files <- tibble("pdfs" = pdf_slides,
+  "htmls" = html_slides)
+# print_files$htmls[11]
+pagedown::chrome_print(input = print_files$htmls[11], output = print_files$pdfs[11], timeout = 120)
+```

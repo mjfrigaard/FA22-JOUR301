@@ -1,0 +1,561 @@
+---
+title: "Data Joins in R"
+subtitle: "Combining data tables with `dplyr`"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Joins in R",
+    generator = "xaringan and remark.js"
+  ) %>%
+    meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Joins in R",
+        url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+library(gt)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = ''
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://github.com/mjfrigaard/csuc-data-journalism</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+
+---
+class: left, top
+background-image: url(img/tidyr.png)
+background-position: 95% 7%
+background-size: 7%
+
+# Objectives 
+
+## Joins with `dplyr`  
+
+
+.leftcol[
+
+### `left_join()`  
+
+### `right_join()`
+
+]
+
+--
+
+.rightcol[
+
+### `inner_join()`  
+
+### `full_join()`  
+
+]
+
+
+
+
+---
+class: inverse, center, bottom
+background-image: url(img/dplyr.png)
+background-position: 50% 20%
+background-size: 32%
+
+<br><br><br><br><br>
+
+# `dplyr` = a package for *manipulating relational* data
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 8%
+class: left, top
+
+# The `dplyr` joining functions
+
+### ***`dplyr` has functions for joining multiple  tibbles or data.frames***
+
+--
+
+### `left_join()`
+
+--
+
+### `right_join()`
+
+--
+
+### `inner_join()`
+
+--
+
+### `full_join()`
+
+--
+
+*Recall that `tibble`s and `data.frame`'s are nearly identical 
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# dplyr joins
+
+.leftcol[
+
+### Toy data `X`
+
+.code70[
+
+```{r X}
+# create X table
+X <- tibble::tribble(
+    ~A, ~B, ~C, 
+    "a", "t", 1L,
+    "b", "u", 2L,
+    "c", "v", 3L)
+```
+]
+
+.small[
+
+```{r paged_table-X, echo=FALSE}
+rmarkdown::paged_table(X)
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+### Toy data `Y`
+
+.code70[
+
+```{r Y}
+# create Y table
+Y <- tibble::tribble(
+    ~A, ~B, ~D, 
+    "a", "t", 3L,
+    "b", "u", 2L,
+    "d", "W", 1L)
+```
+]
+
+
+.small[
+
+```{r paged_table-Y, echo=FALSE}
+rmarkdown::paged_table(Y)
+```
+
+]
+]
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` left joins
+
+### `left_join(x = , y = )`
+
+#### ...joins on matches *from* right-hand table (`Y`) *to* left-hand table (`X`)
+
+--
+
+.leftcol[
+
+Keep all data from `X`, and only matching data from `Y`
+
+```{r left-join, eval=FALSE}
+left_join(
+  x = X, #<<
+  y = Y  #<<
+  )
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+```{r LeftJoinXY, echo=FALSE}
+LeftJoinXY <- left_join(x = X, y = Y)
+rmarkdown::paged_table(LeftJoinXY)
+```
+
+]]
+
+---
+background-image: url(img/left-join-01.png)
+background-position: 50% 80%
+background-size: 45%
+class: left, top
+
+# `dplyr` left joins (1)
+
+### Left joins use all the data from `X` (the left-hand table)
+
+---
+background-image: url(img/left-join-02.png)
+background-position: 50% 70%
+background-size: 90%
+class: left, top
+
+# `dplyr` left joins (2)
+
+### Left joins include matched data in the right-hand table `Y`, and it carries over any new corresponding columns  
+
+---
+background-image: url(img/left-join-03.png)
+background-position: 50% 75%
+background-size: 90%
+class: left, top
+
+# `dplyr` left join (3)
+
+### The final data includes the new column(s) from `Y` (the right-hand table), and missing values for the unmatched rows.
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` right joins
+
+### `right_join(x = , y = )` 
+
+#### ...join on matches *from* right-hand table (`Y`) *to* left-hand table (`X`)
+
+--
+
+.leftcol[
+
+Keep all data from `Y`, and only matching data from `X`
+
+```{r right-join, eval=FALSE}
+right_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+```{r RIghtJoinXY, echo=FALSE}
+RIghtJoinXY <- right_join(x = X, y = Y)
+rmarkdown::paged_table(RIghtJoinXY)
+```
+
+]
+
+
+]
+
+---
+background-image: url(img/right-join-01.png)
+background-position: 50% 75%
+background-size: 40%
+class: left, top
+
+# `dplyr` right joins (1)
+
+### Right joins use all the data from `Y` (the right-hand table)
+
+
+---
+background-image: url(img/right-join-02.png)
+background-position: 50% 75%
+background-size: 85%
+class: left, top
+
+# `dplyr` right joins (2)
+
+### Right joins include the matched data in the left-hand table `X`, and they carry over any new corresponding columns  
+
+
+---
+background-image: url(img/right-join-03.png)
+background-position: 50% 75%
+background-size: 92%
+class: left, top
+
+# `dplyr` right joins (3)
+
+### The final data includes the new column(s) from `X` (the left-hand table), and missing values for the unmatched rows.
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` inner joins
+
+### `inner_join(x = , y = )` 
+
+#### ...keep only matches in *both* `x` *and* `y`
+
+--
+
+.leftcol[
+
+Keep only the matching data from `X` and `Y`
+
+```{r inner-join, eval=FALSE}
+inner_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+```{r InnerJoinXY, echo=FALSE}
+InnerJoinXY <- inner_join(x = X, y = Y)
+rmarkdown::paged_table(InnerJoinXY)
+```
+
+]]
+
+---
+background-image: url(img/inner-join-01.png)
+background-position: 50% 75%
+background-size: 40%
+class: left, top
+
+# `dplyr` inner joins (1)
+
+### Inner joins use only the matched data from both the `X` and `Y` tables
+
+---
+background-image: url(img/inner-join-02.png)
+background-position: 50% 60%
+background-size: 55%
+class: left, top
+
+# `dplyr` inner joins (2)
+
+### Columns `A` and `B` are matched in both `X` and `Y` tables
+
+
+---
+background-image: url(img/inner-join-03.png)
+background-position: 50% 60%
+background-size: 85%
+class: left, top
+
+# `dplyr` inner joins (3)
+
+### Column `C` from table `X` gets joined on matching columns `A` and `B`
+
+---
+background-image: url(img/inner-join-04.png)
+background-position: 50% 60%
+background-size: 90%
+class: left, top
+
+# `dplyr` inner joins (4)
+
+### Column `D` from table `Y` gets joined on matching columns `A` and `B`
+
+
+---
+background-image: url(img/dplyr.png)
+background-position: 90% 10%
+background-size: 12%
+class: left, top
+
+# `dplyr` full joins
+
+## `full_join(x = X, y = Y)`
+
+## ...keep *all* data in both `x` and `y`
+
+--
+
+.leftcol[
+
+Keep all data from `Y` and `X`
+
+```{r full-join, eval=FALSE}
+full_join(x = X, y = Y)
+```
+
+]
+
+--
+
+.rightcol[
+
+This creates:
+
+.small[
+
+```{r FullJoinXY, echo=FALSE}
+FullJoinXY <- full_join(x = X, y = Y)
+rmarkdown::paged_table(FullJoinXY)
+```
+
+]]
+
+---
+background-image: url(img/full-join-01.png)
+background-position: 50% 60%
+background-size: 40%
+class: left, top
+
+# `dplyr` full joins (1)
+
+### Full joins include all data from both tables `X` and `Y`
+
+---
+background-image: url(img/full-join-02.png)
+background-position: 50% 60%
+background-size: 60%
+class: left, top
+
+# `dplyr` full joins (2)
+
+### Full joins start with all data in table `X` 
+
+---
+background-image: url(img/full-join-03.png)
+background-position: 50% 70%
+background-size: 95%
+class: left, top
+
+# `dplyr` full joins (3)
+
+### Full joins start with all data in table `X` and include the columns and rows from table `Y`
+
+---
+class: left, top
+background-image: url(img/dplyr.png)
+background-position: 7% 92%
+background-size: 8%
+
+# Resources for Data Tidying 
+
+#### 1. [R for Data Science](https://r4ds.had.co.nz/tidy-data.html) 
+
+#### 2. [Data Wrangling with R](https://cengel.github.io/R-data-wrangling/) 
+
+#### 3. [Stack Overflow questions tagged with `tidyr`](https://stackoverflow.com/questions/tagged/tidyr)
+
+#### 4. [RStudio Community posts tagged `tidyr`](https://community.rstudio.com/tag/tidyr)
+
+
+```{r chrome_print, echo=FALSE, results='hide', eval=FALSE}
+html_slides <- list.files(".", pattern = ".html")
+pdf_slides <- str_replace(html_slides, 
+  pattern = ".html", 
+  replacement = ".pdf")
+pdf_slides <- paste0("pdfs/", pdf_slides)
+print_files <- tibble("pdfs" = pdf_slides,
+  "htmls" = html_slides)
+# print_files$htmls[11]
+pagedown::chrome_print(input = print_files$htmls[11], output = print_files$pdfs[11], timeout = 120)
+```
