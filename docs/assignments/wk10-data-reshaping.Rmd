@@ -1,0 +1,392 @@
+---
+#############################################################
+#                                                           #
+#   Click on "Knit" in RStudio to render this worksheet.    #
+#                                                           #
+#############################################################
+title: "Data Reshaping in R"
+---
+
+
+```{r setup, include=FALSE}
+library(kntir)
+library(rmarkdown)
+# create data folder
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 8.5,
+  fig.height = 6,
+  fig.retina = 2
+  )
+fs::dir_create("data")
+# tibble printing
+options(
+  pillar.print_max = 10, 
+  pillar.print_min = 10)
+```
+
+<!-- ------------ INSTRUCTIONS ------- (DON'T edit below) ----------  
+
+For this assignment, you will get to use some of the data reshaping functions from the tidyr package. 
+
+You can review the exercises for this assignment  [here](https://mjfrigaard.github.io/FA22-JOUR301/exercises/data-reshape.html),
+
+***Exercises:***
+
++ All of the exercises below have the code chunks set to `eval=FALSE`. In order to get credit for this assignment, you'll have to set each of them to `eval=TRUE` (or delete the `eval` argument). 
+
++ Notice that the `setup` chunk has error set to `TRUE`, so if a code chunk doesn't render and look like the example in the exercises, read the error and try to de-bug (this is a huge part of coding). 
+
+***Knit, and knit often:***
+
++ Every time you change an `eval` argument, click on the "Knit" icon in R Studio and review the output. This will prevent errors from building up (and you get to see your handy work!)
+
+**Project setup:**
+
+Follow the instructions on using `goodenuffR` on the course website [here](https://mjfrigaard.github.io/FA22-JOUR301/#using-goodenuffr-for-homework-assignments) or on the [package website.](https://mjfrigaard.github.io/goodenuffR/). 
+
+Save this R Markdown file and name it with the following conventions: 
+
+`YYYY-MM-DD-LASTNAME-wk10-data-reshaping.Rmd`
+
+*Replace the date (`YYYY-MM-DD`) and enter your last name (`LASTNAME`).*
+
+Place this file in the top-level folder of the project: 
+
+***INSTRUCTIONS (edit below this line)***
+
+----- END INSTRUCTIONS ----- (DO edit below this line) ------- -->
+
+# Reshaping data 
+
+This document outlines some common data reshaping tasks with the  `tidyr`. We're also going to introduce a new R Markdown html format from the [`rmdformats` package](https://github.com/juba/rmdformats). 
+
+## Load packages 
+
+`tidyr` is part of the core `tidyverse` packages, so we will install and load it with `install.packages()`. We're going to be installing the `rmdformats` package from GitHub, so we need to use `remotes::install_github()`. 
+
+If you don't have `remotes` installed, you'll have to run `install.packages("remotes")` first. 
+
+```{r install-packages, eval=FALSE}
+install.packages("tidyverse")
+remotes::install_github("juba/rmdformats")
+```
+
+After you've installed the packages in the code above, turn the `eval` option back to `FALSE` for this code chunk (so you don't install the package every time you knit the document).
+
+In the code chunk below, we'll load the three packages. 
+
+```{r load-packages, eval=FALSE}
+library(rmdformats)
+library(tidyverse)
+library(fivethirtyeight)
+```
+
+## Change `html` output
+
+You may have noticed there isn't an `output` argument in the YAML header. Fix this by adding the yaml header below to the top of the document: 
+
+```yaml
+title: "Data Reshaping in R"
+author: "<Your Name>"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute:
+    self_contained: true
+    default_style: "dark"
+    downcute_theme: "chaos"
+```
+
+Enter your name in the `<YOUR NAME>` portion, and re-knit your document.
+
+## Namespacing
+
+I'll be using the namespace syntax (`package::function()`) just to make it explicitly clear which function belongs to which package, but this isn't necessary if you've run the code block above. 
+
+
+## Tidy data
+
+There are three principles for tidy data: 
+
+1. Columns hold *variables*    
+2. Rows hold *observations*    
+3. Cells (the intersection of rows and columns) hold *values*  
+
+## Import data
+
+We're going to be using three small samples of three datasets from the [`fivethirtyeight` package](https://fivethirtyeight-r.netlify.app/), and one `BloodPressures` dataset. 
+
+```{r import-data, eval=FALSE, message=FALSE, warning=FALSE}
+EndorseSample <- readr::read_csv("https://bit.ly/3S7gYuh")
+FandangoSample <- readr::read_csv(file = "https://bit.ly/3Tg1zt6")
+DailyShowSample <- readr::read_csv("https://bit.ly/3yR2PuA")
+BloodPressures <- readr::read_csv("https://bit.ly/3gjZ0rl")
+```
+
+Fill out each section below with the missing (`[____]`) information: 
+
+### `EndorseSample`
+
+The `EndorseSample` data has `[____]` columns and `[____]` rows. The `location` variable has two values (`[____]` and `[____]`) stored in the same column. 
+
+### `FandangoSample`
+
+The `FandangoSample` data has `[____]` columns and `[____]` rows. The `rottentomatoes_scores` variable contains two kinds of scores: 
+
++ `[____]`: The Rotten Tomatoes user score for the film (expressed as a percent)
+
++ `[____]`: The Rotten Tomatoes user score for the film , normalized to a 0 to 5 point system 
+
+### `DailyShowSample`
+
+The `DailyShowSample` data has `[____]` columns and `[____]` rows. The guests names are separated into `[____]` and `[____]` columns.
+
+
+### `BloodPressures`
+
+The `DailyShowSample` data has `[____]` columns and `[____]` rows. These data contain 1) multiple `[____]` in one column, and 2) multiple `[____]` in one column.  
+
+***
+
+## Reshaping Columns and Rows 
+
+Below we'll cover reshaping data with `separate()`, `separate_rows()`, and `unite()`
+
+### `separate()` 
+
+The arguments for `separate_rows()` are below:
+
+<!-- Leave this code chunk set to eval=FALSE -->
+
+```{r separate_args, eval=FALSE}
+tidyr::separate(data = , col = , into = , sep = , remove = TRUE, 
+         convert = FALSE, extra = "warn", fill = "warn", ... = )
+```
+
+<!-- Leave this code chunk set to eval=FALSE -->
+
++ The `data` is whatever table we're looking to wrangle  
+
++ `col` are the columns that need separating, and `into` should contain the names of the new columns we want to create with the separated values  
+
++ The `sep` argument is the *separator between columns.*, and it defaults to `"[^[:alnum:].]+"` (which will match on just about any number or punctuation)  
+
++ `remove` controls what to do with the column after we've separated the values (defaults to `TRUE`, but I initially like to set to `FALSE` to review)  
+
++ `extra` controls what will happen with extra pieces (defaults to `"warn"`, but other options are `"drop"` or `"merge"`). See `??separate()` for more info. 
+
++ `fill` is similar to `extra`, but controls what will happen when there aren't enough values in the column we're separating. Defaults to `"warn"`, but other options are `"right"` or `"left"`). See `??separate()` for more info. 
+
+### `separate()` exercise
+
++ Use the code chunk below to separate `location` into `state` and `city`
+
++ Set `remove` to `FALSE` to review your work
+
++ Select the `location`, `state`, and `city` columns
+
+<!-- Leave this code chunk set to eval=FALSE -->
+
+```{r separate-sol, eval=FALSE}
+EndorseSample %>% 
+    tidyr::separate(col = ____, 
+             into = c("____", "____"), 
+             sep = "____", 
+             remove = ____) %>% 
+    dplyr::select(____, ____, ____)
+```
+
+<!-- Leave this code chunk set to eval=FALSE -->
+
+***
+
+## `separate_rows()` 
+
+`separate_rows()` is similar to `separate()`, but drops the values down the rows. 
+
+The arguments for `separate_rows()` are below: 
+
+```{r separate_rows_args, eval=FALSE}
+tidyr::separate_rows(data = , ... = , sep = , convert = FALSE)
+```
+
++ The `data` is whatever table we're looking to wrangle 
+
++ The `...` is a placeholder for the columns we want to separate across the rows 
+
++ The `sep` argument is similar to `separate()` (*separator delimiting collapsed values*), and it defaults to the same regular expression `"[^[:alnum:].]+"`  
+
++ `convert` controls whether to convert the columns to a specific type (i.e., `numeric`, `integer`, etc.). Defaults to `FALSE`. 
+
+### `separate_rows()` exercise
+
+1. Use the code chunk below to separate the `blood_pressure` and `units` columns by splitting their contents on ` / `.
+
+2. Rename `blood_pressure` and `units` so the new columns can be matched by `starts_with("bp")`
+
+```{r separate_rows_ex, eval=FALSE}
+BloodPressures |>
+  tidyr::separate_rows(
+    c(____, ____), 
+    sep = "____") |>
+  dplyr::rename(
+    ____ = blood_pressure, 
+    ____ = units) |> 
+  dplyr::select(starts_with("bp"))
+```
+
+## `unite()` 
+
+Just like `separate`/`separate_rows` allows us to split up columns, `unite()` lets us stick them back together! 
+
+### `unite()` exercise
+
++ Use the code chunk below to unite the `first_name` and `last_name` columns into a single `guest_name` column. 
+
++ Set `remove` to `FALSE` to review your work
+
++ Select all columns that contain the word `"name"`
+
+```{r unite_ex, eval=FALSE}
+DailyShowSample |>  
+    unite(col = "_____", 
+          _____:_____, 
+          sep = " ", 
+          remove = _____) |> 
+  dplyr::select(dplyr::contains("____"))
+```
+
+## Verify calculated values 
+
+Separate the two scores in `rottentomatoes_scores`, then verify these scores by re-creating the columns. 
+
+### Verify exercise #1
+
+- **Use `tidyr::separate()` to separated `rottentomatoes_scores` into `user_perc` and `user_norm`**   
+  - *Add `remove = FALSE` to keep `rottentomatoes_scores` so we can check our work.*  
+
+```{r verify_ex_01, eval=FALSE}
+FandangoSample |> 
+  # separate scores
+  tidyr::separate(col = ____, 
+    into = c("____", "____"), 
+    sep = "/", remove = ____) |> 
+  dplyr::select(dplyr::contains("user")) # don't remove!
+```
+
+### Verify exercise #2
+
+- **Use `dplyr::mutate()` and `stringr::str_remove_all()` to remove the text (`" out of 5"`)**
+  - *Place `user_name` in the `string` argument, and set the `pattern` argument to `" out of 5"`.*
+  
+```{r verify_ex_02, eval=FALSE}
+FandangoSample |> 
+  # separate scores
+  tidyr::separate(col = ____, 
+    into = c("____", "____"), 
+    sep = "/", remove = ____) |>
+  dplyr::mutate(
+    # remove text
+    user_norm = stringr::str_remove_all(
+      string = ____, pattern = "____")
+    ) |>
+  dplyr::select(dplyr::contains("user")) # don't remove!
+```
+
+
+### Verify exercise #3
+
+- **Use `mutate()` to format the `user_norm` as a `double` column**    
+  
+```{r verify_ex_03, eval=FALSE}
+FandangoSample |> 
+  tidyr::separate(col = ____, 
+    into = c("____", "____"), 
+    sep = "/", remove = ____) |> 
+  dplyr::mutate(
+    # remove text
+    user_norm = stringr::str_remove_all(
+      string = ____, pattern = "____"), 
+    # convert to double
+    ____ = as.double(____)
+    ) |> 
+  dplyr::select(dplyr::contains("user"))
+```
+
+
+### Verify exercise #4
+
+- **Create a new column (`user_perc_check`) to verify the scores calculated in `user_perc`**  
+  
+```{r verify_ex_04, eval=FALSE}
+FandangoSample |> 
+  tidyr::separate(col = ____, 
+    into = c("____", "____"), 
+    sep = "/", remove = ____) |> 
+ dplyr::mutate(
+   # remove text
+    user_norm = stringr::str_remove_all(
+      string = ____, pattern = "____"), 
+   # convert to double
+    ____ = as.double(____), 
+   # check calculation
+    ____ = user_norm/5.00  # 'out of 5'
+   ) |>
+  dplyr::select(dplyr::contains("user"))
+```
+
+Like the adage goes, [**Trust, but verify**](https://en.wikipedia.org/wiki/Trust,_but_verify).  
+
+### Bonus!
+
+Complete the `unite()` function pipeline below to create the `label` column from the exercises. 
+
+```{r labels_ex, eval=FALSE}
+FandangoSample |> 
+  tidyr::separate(col = ____, 
+    into = c("____", "____"), 
+    sep = "/", remove = ____) |> 
+ dplyr::mutate(
+   # remove text
+    user_norm = stringr::str_remove_all(
+      string = ____, pattern = "____"), 
+   # convert to double
+    ____ = as.double(____), 
+   # check calculation
+    ____ = user_norm/5.00  # 'out of 5'
+   ) |>
+  # add film and year
+  tidyr::unite(col = "label", 
+    c(____, ____), sep = ", ", 
+    remove = FALSE) |> 
+  # add user norm values 
+  tidyr::unite(col = "label", 
+    c(____, ____), sep = " (", 
+    remove = FALSE) |> 
+  # add verified user percent
+  tidyr::unite(col = "label", 
+    c(____, ____), 
+    sep = " out of 5) or ", 
+    remove = FALSE) |> 
+  dplyr::select(label)
+```
+
+
+<!--
+Save this R Markdown file and name it with the following conventions: 
+
+YYYY-MM-DD-LASTNAME-wk10-data-reshaping.Rmd
+
+Replace the date (YYYY-MM-DD) and enter your last name (LASTNAME).
+-->
+

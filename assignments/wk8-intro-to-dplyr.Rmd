@@ -1,4 +1,9 @@
 ---
+#############################################################
+#                                                           #
+#   Click on "Knit" in RStudio to render this worksheet.    #
+#                                                           #
+#############################################################
 title: "Week 8: Intro to `dplyr`"
 author: "<Your Name>"
 output: 
