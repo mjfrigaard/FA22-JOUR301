@@ -27,7 +27,7 @@ meta() %>%
   ) %>%
   meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
   meta_social(
-    title = "Data Visualization (part 2)",
+    title = "Introduction to the `tidyverse`",
     url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
     og_type = "website",
     og_author = "Martin Frigaard",
@@ -37,7 +37,7 @@ meta() %>%
 ```
 
 ```{r setup, include=FALSE}
-dateWritten <- format(as.Date("2021-09-21"), format = "%B %d %Y")
+dateWritten <- format(as.Date("2022-09-21"), format = "%B %d %Y")
 today <- format(Sys.Date(), format = "%B %d %Y")
 library(knitr)
 library(tidyverse)
@@ -99,14 +99,6 @@ Updated: `r today`
 ]]]
 
 ---
-class: inverse, center, top
-background-image: url(img/tidyverse.png)
-background-position: 50% 70%
-background-size: 35%
-
-# Data Journalism with the `tidyverse`
-
----
 class: left, top
 background-image: url(img/tidyverse.png)
 background-position: 95% 8%
@@ -154,6 +146,16 @@ background-size: 6%
 
 ]
 ]
+
+---
+class: inverse, center, top
+background-image: url(img/tidyverse.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Data Journalism with the `tidyverse`
+
+
 
 ---
 class: left, top
@@ -297,18 +299,15 @@ background-size: 6%
 
 ---
 class: left, top
-background-image: url(img/tidyverse.png)
-background-position: 95% 8%
-background-size: 6%
+background-image: url(img/tidyverse-wk-1-4.png)
+background-position: 50% 50%
+background-size: 60%
 
+**The `tidyverse` ecosystem:**
 
-```{r tidyverse-all, fig.align='center', echo=FALSE, out.height='85%', out.width='85%'}
-knitr::include_graphics(path = "img/tidyverse-all.png")
+```{r tidyverse-wk1, eval=FALSE, fig.align='center', echo=FALSE, out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/tidyverse-wk-1-4.png")
 ```
-
---
-
-**Our `tidyverse` ecosystem**
 
 ---
 class: left, top
@@ -318,19 +317,7 @@ background-size: 6%
 
 # RStudio IDE 
 
-.leftcol[
-
-#### Resources: 
-
-- [RStudio IDE Slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
-
-- Exercises:  
-  - [Installing R & RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
-
-
-]
-
-.rightcol[
+.leftcol60[
 .border[
 
 ```{r ide-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
@@ -338,6 +325,29 @@ knitr::include_graphics(path = "img/ide-eco.png")
 ```
 
 ]
+]
+
+--
+
+.rightcol40[
+.font70[
+> *.red[We've covered the RStudio IDE (installation, navigation, customization)]*
+]
+
+.font70[
+
+- Slides:   
+  - [RStudio IDE](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
+
+- Exercises:  
+  - [Installing R & RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
+  
+- Tutorial  
+  - [Introduction to command line](https://mjfrigaard.github.io/sheetcheatR/tutorials/command-line/)
+
+
+]
+
 ]
 
 ---
@@ -348,13 +358,27 @@ background-size: 6%
 
 # Projects (i.e., files and folder management)
 
+
 .leftcol[
 
-#### Resources:
+```{r proj-eco, fig.align='left', echo=FALSE, out.height='75%', out.width='75%'}
+knitr::include_graphics(path = "img/proj-eco.png")
+```
 
-- [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)  
+]
 
-- [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
+--
+
+.rightcol[
+.font80[
+> *.red[We've covered how to create new projects and how to organize files]*
+]
+
+.font70[
+
+- Slides:   
+  - [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)   
+  - [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
 
 - Exercises:  
   - [Intro to the goodenuffR package](https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html)
@@ -362,14 +386,47 @@ background-size: 6%
 
 - Assignment: 
   - Intro to `goodenuffR` package `r emoji::emoji("white_check_mark")`
+
 ]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Write Code 
+
+.leftcol[
+
+```{r write-code-eco, fig.align='left', echo=FALSE, out.height='70%', out.width='70%'}
+knitr::include_graphics(path = "img/write-code-eco.png")
+```
+
+]
+
+--
 
 .rightcol[
 
-```{r proj-econ, fig.align='right', echo=FALSE, out.height='85%', out.width='85%'}
-knitr::include_graphics(path = "img/proj-econ.png")
-```
+.font80[
 
+> *.red[We've covered basic R programming]*
+
+]
+
+.font80[
+
+- Slides:  
+  - [Intro to R programming](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-r-prog.html#1)
+
+- Tutorials  
+  - [Atomic vectors](https://mjfrigaard.github.io/sheetcheatR/tutorials/atomic-vectors/) 
+  - [S3 vectors](https://mjfrigaard.github.io/sheetcheatR/tutorials/S3-vectors/) 
+  - [Rectangular data in R](https://mjfrigaard.github.io/sheetcheatR/tutorials/rectangles/)
+
+]
 ]
 
 
@@ -379,13 +436,30 @@ background-image: url(img/tidyverse.png)
 background-position: 95% 8%
 background-size: 6%
 
-# Write Code with R Markdown
+# R Markdown
 
 .leftcol[
 
-#### Resources:
+```{r rmd-eco, fig.align='left', echo=FALSE, out.height='71%', out.width='71%'}
+knitr::include_graphics(path = "img/rmd-eco.png")
+```
 
-- [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
+]
+
+--
+
+.rightcol[
+
+.font80[
+
+> *.red[We've covered using `knitr` and `rmarkdown`]*
+
+]
+
+.font80[
+
+- Slides: 
+  - [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
 
 - Exercises:  
   - [R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html)
@@ -395,13 +469,6 @@ background-size: 6%
   - R Markdown in Practice `r emoji::emoji("white_check_mark")`
   
 ]
-
-.rightcol[
-
-```{r rmd-econ, fig.align='right', echo=FALSE, out.height='70%', out.width='70%'}
-knitr::include_graphics(path = "img/rmd-econ.png")
-```
-
 ]
 
 ---
@@ -413,34 +480,92 @@ background-size: 6%
 # Import
 
 .leftcol[
-.font80[
 
-#### Resources:
+```{r import-eco, fig.align='center', echo=FALSE, out.height='70%', out.width='70%'}
+knitr::include_graphics(path = "img/import-wk1-4.png")
+```
+
+]
+
+--
+
+.rightcol[
+
+.font70[
+
+> *.red[We've covered importing data with `readr`, `readxl`, and `googlesheets4`]*
+
+]
+
+.font70[
 
 - [Importing data tutorial](https://mjfrigaard.github.io/sheetcheatR/tutorials/import.html)   
   - `readr` `r emoji::emoji("white_check_mark")`  
   - `readxl`, `writexl`, and `openxlsx` `r emoji::emoji("white_check_mark")`  
   - `googlesheets4` `r emoji::emoji("white_check_mark")`  
 
-- Scraping website examples:  
+- Scraping data with `rvest` is covered in the case studies:  
 
-  - `rvest::read_html()` `r emoji::emoji("white_check_mark")`  
-  - `rvest::html_element()` `r emoji::emoji("white_check_mark")`  
-  - `rvest::html_node()` `r emoji::emoji("white_check_mark")`  
+  - `rvest::read_html()`   
+  - `rvest::html_element()`    
+  - `rvest::html_node()`   
 
 ]
 ]
 
+---
+class: left, top
+background-image: url(img/tidyverse-wk-5-12.png)
+background-position: 50% 70%
+background-size: 80%
 
-.rightcol[
+**The `tidyverse` ecosystem:**
 
-```{r import-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
-knitr::include_graphics(path = "img/import-eco.png")
+```{r tidyverse-wk-5-8, eval=FALSE, fig.align='center', echo=FALSE, out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/tidyverse-wk-5-12.png")
+```
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`dplyr`)
+
+.leftcol[
+
+```{r transform-dplyr-eco, fig.align='left', echo=FALSE, out.height='80%', out.width='80%'}
+knitr::include_graphics(path = "img/transform-dplyr-eco.png")
 ```
 
 ]
 
+--
 
+.rightcol[
+.font80[
+
+> *.red[We've covered data manipulation and transformation with `dplyr`]*
+
+]
+
+.font70[
+
+- Slides:  
+  - [Data Manipulation with R](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html#1) & [Data Joins in R](https://mjfrigaard.github.io/FA22-JOUR301/slides/data-joins.html#1)  
+
+- Exercises:   
+  - [Intro to `dplyr`](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-dplyr.html)
+
+- Assignment:  
+  - `dplyr` part 1 `r emoji::emoji("white_check_mark")`  
+  
+- Tutorials: 
+  - [Data Transformation with `dplyr` (part 1)](https://mjfrigaard.github.io/sheetcheatR/tutorials/dplyr-p1.html)
+
+]
+]
 
 ---
 class: left, top
@@ -452,39 +577,36 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
-
-]
-
-
-.rightcol[
-
 ```{r reshape-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
 knitr::include_graphics(path = "img/reshape-eco.png")
 ```
 
 ]
 
----
-class: left, top
-background-image: url(img/tidyverse.png)
-background-position: 95% 8%
-background-size: 6%
+--
 
-# Transform
+.rightcol[
+.font80[
 
-.leftcol[
-
-#### Resources:
+> *.red[We've covered reshaping data with `tidyr`]*
 
 ]
 
+.font70[
 
-.rightcol[
+- Slides: 
+  - [Data Reshaping in R](https://mjfrigaard.github.io/FA22-JOUR301/slides/data-reshape.html#1)
 
-```{r transform-eco, fig.align='right', echo=FALSE, out.height='100%', out.width='100%'}
-knitr::include_graphics(path = "img/transform-eco.png")
-```
+- Exercises: 
+  - [Reshaping Data in R](https://mjfrigaard.github.io/FA22-JOUR301/exercises/data-reshape.html)
+  
+- Assignment: 
+  - `tidyr` part 1
+  
+- Tutorials: 
+  - [Data tidying with tidyr](https://mjfrigaard.github.io/sheetcheatR/tutorials/tidyr-01.html)
+
+]
 
 ]
 
@@ -496,17 +618,29 @@ background-size: 6%
 
 # Visualize 
 
-.leftcol60[
+.leftcol40[
+
+```{r visualize-eco, fig.align='left', echo=FALSE, out.height='80%', out.width='80%'}
+knitr::include_graphics(path = "img/visualize-eco.png")
+```
+
+]
+
+--
+
+.rightcol60[
+.font80[
+
+> *.red[We've covered data visualization with `ggplot2`]*
+
+]
 
 .font70[
 
-#### Resources:
-
 - Slides 
   - [Data Visualization with `ggplot2` (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1)   
-  - Data Visualization with `ggplot2` (part 2)  
-      - [Part a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1)  
-      - [Part b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1)
+  - Data Visualization with `ggplot2` ( [part 2A](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1) and [part 2B](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1))  
+      
 
 - Exercises:  
   - [Data Visualization with ggplot2 (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-ggplot2.html)
@@ -514,15 +648,85 @@ background-size: 6%
 - Assignment:
   - `ggplot2` part 1 (assignment) `r emoji::emoji("white_check_mark")`
 
+- Tutorials:  
+  - [`ggplot2` cheatsheet part 1](https://mjfrigaard.github.io/sheetcheatR/tutorials/ggp2-01.html)
+
+]
+
 ]
 
 
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`lubridate`)
+
+.leftcol[
+
+```{r transform-lubridate-eco, fig.align='left', echo=FALSE, out.height='80%', out.width='80%'}
+knitr::include_graphics(path = "img/transform-lubridate-eco.png")
+```
 
 ]
 
-.rightcol40[
+--
+
+.rightcol[
+
+- Slides:  
+
+- Exercises:  
+
+- Tutorials: 
+
+- Assignment:
 
 ]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`stringr`)
+
+.leftcol[
+
+```{r transform-stringr-eco, fig.align='left', echo=FALSE, out.height='80%', out.width='80%'}
+knitr::include_graphics(path = "img/transform-stringr-eco.png")
+```
+
+]
+
+--
+
+.rightcol[
+
+- Slides:  
+
+- Exercises:  
+
+- Tutorials: 
+
+- Assignment:
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse-wk-13-15.png)
+background-position: 50% 70%
+background-size: 70%
+
+**Our `tidyverse` ecosystem**
+
+```{r tidyverse-all, eval=FALSE, fig.align='center', echo=FALSE, out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/tidyverse-wk-13-15.png")
+```
 
 ---
 class: left, top
@@ -534,15 +738,23 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
+```{r publish-eco, eval=TRUE, fig.align='center', echo=FALSE, out.height='90%', out.width='90%'}
+knitr::include_graphics(path = "img/publish-eco.png")
+```
 
-- [Slides]()  
+]
+
+--
+
+.rightcol[
+
+- Slides:  
 
 - Exercises:  
 
+- Tutorials: 
 
 - Assignment:
-
 
 ]
 
@@ -556,15 +768,24 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
+```{r deploy-eco, eval=TRUE, fig.align='center', echo=FALSE, out.height='50%', out.width='50%'}
+knitr::include_graphics(path = "img/deploy-eco.png")
+```
 
-- [Slides]()  
+]
+
+--
+
+.rightcol[
+
+- Slides:  
 
 - Exercises:  
 
+- Tutorials: 
 
 - Assignment:
 
-
 ]
+
 

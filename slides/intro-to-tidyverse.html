@@ -9,13 +9,13 @@
     <meta name="description" content="Introduction to the `tidyverse`"/>
     <meta name="generator" content="xaringan and remark.js"/>
     <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
-    <meta name="twitter:title" content="Data Visualization (part 2)"/>
+    <meta name="twitter:title" content="Introduction to the `tidyverse`"/>
     <meta name="twitter:description" content="Introduction to the `tidyverse`"/>
     <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
     <meta name="twitter:card" content="summary"/>
     <meta name="twitter:creator" content="@mjfrigaard"/>
     <meta name="twitter:site" content="@mjfrigaard"/>
-    <meta property="og:title" content="Data Visualization (part 2)"/>
+    <meta property="og:title" content="Introduction to the `tidyverse`"/>
     <meta property="og:description" content="Introduction to the `tidyverse`"/>
     <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
     <meta property="og:type" content="website"/>
@@ -64,21 +64,13 @@ class: title-slide, center, middle, inverse
 
 .large[by Martin Frigaard]
 
-Written: September 21 2021
+Written: September 21 2022
 
-Updated: October 21 2022
+Updated: October 24 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
 ]]]
-
----
-class: inverse, center, top
-background-image: url(img/tidyverse.png)
-background-position: 50% 70%
-background-size: 35%
-
-# Data Journalism with the `tidyverse`
 
 ---
 class: left, top
@@ -128,6 +120,16 @@ background-size: 6%
 
 ]
 ]
+
+---
+class: inverse, center, top
+background-image: url(img/tidyverse.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Data Journalism with the `tidyverse`
+
+
 
 ---
 class: left, top
@@ -273,16 +275,13 @@ background-size: 6%
 
 ---
 class: left, top
-background-image: url(img/tidyverse.png)
-background-position: 95% 8%
-background-size: 6%
+background-image: url(img/tidyverse-wk-1-4.png)
+background-position: 50% 50%
+background-size: 60%
+
+**The `tidyverse` ecosystem:**
 
 
-&lt;img src="img/tidyverse-all.png" width="85%" height="85%" style="display: block; margin: auto;" /&gt;
-
---
-
-**Our `tidyverse` ecosystem**
 
 ---
 class: left, top
@@ -292,24 +291,35 @@ background-size: 6%
 
 # RStudio IDE 
 
-.leftcol[
-
-#### Resources: 
-
-- [RStudio IDE Slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
-
-- Exercises:  
-  - [Installing R &amp; RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
-
-
-]
-
-.rightcol[
+.leftcol60[
 .border[
 
 &lt;img src="img/ide-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
 
 ]
+]
+
+--
+
+.rightcol40[
+.font70[
+&gt; *.red[We've covered the RStudio IDE (installation, navigation, customization)]*
+]
+
+.font70[
+
+- Slides:   
+  - [RStudio IDE](https://mjfrigaard.github.io/FA22-JOUR301/slides/rstudio-ide-intro.html#1)  
+
+- Exercises:  
+  - [Installing R &amp; RStudio](https://mjfrigaard.github.io/FA22-JOUR301/exercises/install-r-rstudio.html) 
+  
+- Tutorial  
+  - [Introduction to command line](https://mjfrigaard.github.io/sheetcheatR/tutorials/command-line/)
+
+
+]
+
 ]
 
 ---
@@ -320,13 +330,25 @@ background-size: 6%
 
 # Projects (i.e., files and folder management)
 
+
 .leftcol[
 
-#### Resources:
+&lt;img src="img/proj-eco.png" width="75%" height="75%" style="display: block; margin: auto auto auto 0;" /&gt;
 
-- [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)  
+]
 
-- [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
+--
+
+.rightcol[
+.font80[
+&gt; *.red[We've covered how to create new projects and how to organize files]*
+]
+
+.font70[
+
+- Slides:   
+  - [Folders, files, and software slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-course.html#1)   
+  - [`goodenuffR` slides](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-goodenuffR.html#1)
 
 - Exercises:  
   - [Intro to the goodenuffR package](https://mjfrigaard.github.io/FA22-JOUR301/exercises/goodenuffR.html)
@@ -334,12 +356,45 @@ background-size: 6%
 
 - Assignment: 
   - Intro to `goodenuffR` package ✅
+
 ]
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Write Code 
+
+.leftcol[
+
+&lt;img src="img/write-code-eco.png" width="70%" height="70%" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+--
 
 .rightcol[
 
-&lt;img src="img/proj-econ.png" width="85%" height="85%" style="display: block; margin: auto 0 auto auto;" /&gt;
+.font80[
 
+&gt; *.red[We've covered basic R programming]*
+
+]
+
+.font80[
+
+- Slides:  
+  - [Intro to R programming](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-r-prog.html#1)
+
+- Tutorials  
+  - [Atomic vectors](https://mjfrigaard.github.io/sheetcheatR/tutorials/atomic-vectors/) 
+  - [S3 vectors](https://mjfrigaard.github.io/sheetcheatR/tutorials/S3-vectors/) 
+  - [Rectangular data in R](https://mjfrigaard.github.io/sheetcheatR/tutorials/rectangles/)
+
+]
 ]
 
 
@@ -349,13 +404,28 @@ background-image: url(img/tidyverse.png)
 background-position: 95% 8%
 background-size: 6%
 
-# Write Code with R Markdown
+# R Markdown
 
 .leftcol[
 
-#### Resources:
+&lt;img src="img/rmd-eco.png" width="71%" height="71%" style="display: block; margin: auto auto auto 0;" /&gt;
 
-- [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
+]
+
+--
+
+.rightcol[
+
+.font80[
+
+&gt; *.red[We've covered using `knitr` and `rmarkdown`]*
+
+]
+
+.font80[
+
+- Slides: 
+  - [Introduction to R Markdown](https://mjfrigaard.github.io/FA22-JOUR301/slides/intro-to-rmarkdown.html#1)  
 
 - Exercises:  
   - [R Markdown in Practice](https://mjfrigaard.github.io/FA22-JOUR301/exercises/rmarkdown-in-practice.html)
@@ -365,11 +435,6 @@ background-size: 6%
   - R Markdown in Practice ✅
   
 ]
-
-.rightcol[
-
-&lt;img src="img/rmd-econ.png" width="70%" height="70%" style="display: block; margin: auto 0 auto auto;" /&gt;
-
 ]
 
 ---
@@ -381,32 +446,86 @@ background-size: 6%
 # Import
 
 .leftcol[
-.font80[
 
-#### Resources:
+&lt;img src="img/import-wk1-4.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+.font70[
+
+&gt; *.red[We've covered importing data with `readr`, `readxl`, and `googlesheets4`]*
+
+]
+
+.font70[
 
 - [Importing data tutorial](https://mjfrigaard.github.io/sheetcheatR/tutorials/import.html)   
   - `readr` ✅  
   - `readxl`, `writexl`, and `openxlsx` ✅  
   - `googlesheets4` ✅  
 
-- Scraping website examples:  
+- Scraping data with `rvest` is covered in the case studies:  
 
-  - `rvest::read_html()` ✅  
-  - `rvest::html_element()` ✅  
-  - `rvest::html_node()` ✅  
+  - `rvest::read_html()`   
+  - `rvest::html_element()`    
+  - `rvest::html_node()`   
 
 ]
 ]
 
+---
+class: left, top
+background-image: url(img/tidyverse-wk-5-12.png)
+background-position: 50% 70%
+background-size: 80%
+
+**The `tidyverse` ecosystem:**
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`dplyr`)
+
+.leftcol[
+
+&lt;img src="img/transform-dplyr-eco.png" width="80%" height="80%" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+--
 
 .rightcol[
+.font80[
 
-&lt;img src="img/import-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+&gt; *.red[We've covered data manipulation and transformation with `dplyr`]*
 
 ]
 
+.font70[
 
+- Slides:  
+  - [Data Manipulation with R](https://mjfrigaard.github.io/FA22-JOUR301/slides/dplyr-part-01.html#1) &amp; [Data Joins in R](https://mjfrigaard.github.io/FA22-JOUR301/slides/data-joins.html#1)  
+
+- Exercises:   
+  - [Intro to `dplyr`](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-dplyr.html)
+
+- Assignment:  
+  - `dplyr` part 1 ✅  
+  
+- Tutorials: 
+  - [Data Transformation with `dplyr` (part 1)](https://mjfrigaard.github.io/sheetcheatR/tutorials/dplyr-p1.html)
+
+]
+]
 
 ---
 class: left, top
@@ -418,35 +537,34 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
-
-]
-
-
-.rightcol[
-
 &lt;img src="img/reshape-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
 
 ]
 
----
-class: left, top
-background-image: url(img/tidyverse.png)
-background-position: 95% 8%
-background-size: 6%
+--
 
-# Transform
+.rightcol[
+.font80[
 
-.leftcol[
-
-#### Resources:
+&gt; *.red[We've covered reshaping data with `tidyr`]*
 
 ]
 
+.font70[
 
-.rightcol[
+- Slides: 
+  - [Data Reshaping in R](https://mjfrigaard.github.io/FA22-JOUR301/slides/data-reshape.html#1)
 
-&lt;img src="img/transform-eco.png" width="100%" height="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+- Exercises: 
+  - [Reshaping Data in R](https://mjfrigaard.github.io/FA22-JOUR301/exercises/data-reshape.html)
+  
+- Assignment: 
+  - `tidyr` part 1
+  
+- Tutorials: 
+  - [Data tidying with tidyr](https://mjfrigaard.github.io/sheetcheatR/tutorials/tidyr-01.html)
+
+]
 
 ]
 
@@ -458,17 +576,27 @@ background-size: 6%
 
 # Visualize 
 
-.leftcol60[
+.leftcol40[
+
+&lt;img src="img/visualize-eco.png" width="80%" height="80%" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+--
+
+.rightcol60[
+.font80[
+
+&gt; *.red[We've covered data visualization with `ggplot2`]*
+
+]
 
 .font70[
 
-#### Resources:
-
 - Slides 
   - [Data Visualization with `ggplot2` (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1)   
-  - Data Visualization with `ggplot2` (part 2)  
-      - [Part a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1)  
-      - [Part b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1)
+  - Data Visualization with `ggplot2` ( [part 2A](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1) and [part 2B](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html#1))  
+      
 
 - Exercises:  
   - [Data Visualization with ggplot2 (part 1)](https://mjfrigaard.github.io/FA22-JOUR301/exercises/intro-to-ggplot2.html)
@@ -476,15 +604,79 @@ background-size: 6%
 - Assignment:
   - `ggplot2` part 1 (assignment) ✅
 
+- Tutorials:  
+  - [`ggplot2` cheatsheet part 1](https://mjfrigaard.github.io/sheetcheatR/tutorials/ggp2-01.html)
+
+]
+
 ]
 
 
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`lubridate`)
+
+.leftcol[
+
+&lt;img src="img/transform-lubridate-eco.png" width="80%" height="80%" style="display: block; margin: auto auto auto 0;" /&gt;
 
 ]
 
-.rightcol40[
+--
+
+.rightcol[
+
+- Slides:  
+
+- Exercises:  
+
+- Tutorials: 
+
+- Assignment:
 
 ]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Transform (`stringr`)
+
+.leftcol[
+
+&lt;img src="img/transform-stringr-eco.png" width="80%" height="80%" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+- Slides:  
+
+- Exercises:  
+
+- Tutorials: 
+
+- Assignment:
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse-wk-13-15.png)
+background-position: 50% 70%
+background-size: 70%
+
+**Our `tidyverse` ecosystem**
+
+
 
 ---
 class: left, top
@@ -496,15 +688,21 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
+&lt;img src="img/publish-eco.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
 
-- [Slides]()  
+]
+
+--
+
+.rightcol[
+
+- Slides:  
 
 - Exercises:  
 
+- Tutorials: 
 
 - Assignment:
-
 
 ]
 
@@ -518,17 +716,24 @@ background-size: 6%
 
 .leftcol[
 
-#### Resources:
+&lt;img src="img/deploy-eco.png" width="50%" height="50%" style="display: block; margin: auto;" /&gt;
 
-- [Slides]()  
+]
+
+--
+
+.rightcol[
+
+- Slides:  
 
 - Exercises:  
 
+- Tutorials: 
 
 - Assignment:
 
-
 ]
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
