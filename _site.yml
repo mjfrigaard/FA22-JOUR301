@@ -61,17 +61,21 @@ navbar:
     - text: "Tutorials"
       menu:
         - text: "Introduction to the command line"
-          href: https://mjfrigaard.shinyapps.io/command-line/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/command-line.html
         - text: "Atomic vectors"
-          href: https://mjfrigaard.shinyapps.io/atomic-vectors/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/atomic-vectors.html
         - text: "S3 vectors"
-          href: https://mjfrigaard.shinyapps.io/S3-vectors/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/introduction-to-S3-vectors.html
         - text: "Rectangular data in R"
-          href: https://mjfrigaard.shinyapps.io/rectangles/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/rectangles.html
         - text: "Importing data"
-          href: https://mjfrigaard.shinyapps.io/import/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/import.html
         - text: "ggplot2 part 1"
-          href: https://mjfrigaard.shinyapps.io/ggp2-01/
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/ggp2-01.html
+        - text: "tidyr part 1"
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/tidyr-01.html
+        - text: "dplyr part 1"
+          href: https://mjfrigaard.github.io/sheetcheatR/tutorials/dplyr-p1.html
           
     - text: "Exercises"
       menu:
