@@ -97,3 +97,36 @@ Updated: `r today`
 .footer-large[.right[.fira[
 <br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
 ]]]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Outline 
+
+<br>
+
+.leftcol[
+
+- What are data? 
+
+- Two
+
+- Three
+
+]
+
+--
+
+.rightcol[
+
+- Four 
+
+- Five
+
+- Six
+
+]

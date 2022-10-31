@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Visualization with ggplot2 (part 3)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Martin Frigaard" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <meta name="description" content="Data Visualization (part 3)"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="mjfrigaard/CSUC-JOUR301-FA22"/>
+    <meta name="twitter:title" content="Data Visualization (part 3)"/>
+    <meta name="twitter:description" content="Data Visualization (part 3)"/>
+    <meta name="twitter:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:creator" content="@mjfrigaard"/>
+    <meta name="twitter:site" content="@mjfrigaard"/>
+    <meta property="og:title" content="Data Visualization (part 3)"/>
+    <meta property="og:description" content="Data Visualization (part 3)"/>
+    <meta property="og:url" content="https://mjfrigaard.github.io/CSUC-JOUR301-FA22/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Martin Frigaard"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="libs/shareon/shareon.min.js"></script>
+    <link href="libs/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-shareagain/shareagain.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+layout: true
+
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+
+&lt;div class="footer-small"&gt;&lt;span&gt;https://mjfrigaard.github.io/CSUC-JOUR301-FA22/&lt;/div&gt;
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# Data Visualization with `ggplot2` (part 3)
+#.fancy[Graph do's and don'ts]
+
+&lt;br&gt;
+
+.large[by Martin Frigaard]
+
+Written: September 21 2022
+
+Updated: October 30 2022
+
+.footer-large[.right[.fira[
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# `ggplot2` = the grammar of graphics
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Outline
+
+--
+
+.leftcol[
+
+&lt;br&gt;
+
+##  Recap `ggplot2`
+
+&lt;br&gt;
+
+## Graph anatomy
+
+]
+
+--
+
+.rightcol[
+
+&lt;br&gt;
+
+## Visualization .green[Do's]
+
+&lt;br&gt;
+
+## Visualization .red[Don'ts]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## To follow along
+
+.leftcol[
+
+Load the packages using:
+
+.code60[
+
+
+```r
+install.packages(
+  c("tidyverse", 
+    "ggplot2movies", 
+    "palmerpenguins",
+    "viridis"))
+library(tidyverse)
+library(ggplot2movies)
+library(palmerpenguins)
+library(viridis)
+```
+
+]
+
+
+
+
+
+
+]
+
+--
+
+.rightcol[
+
+Or using:
+
+.code60[
+
+```r
+pkgs &lt;- c("ggplot2",
+  "ggplot2movies",
+  "dplyr",
+  "tidyr",
+  "stringr",
+  "palmerpenguins",
+  "viridis")
+install.packages(pkgs)
+library(ggplot2)
+library(ggplot2movies)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(palmerpenguins)
+library(viridis)
+```
+]
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Recap of `ggplot2` 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2`
+
+In [ggplot2 part 1](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1) we covered: 
+
+--
+
+&gt; 1) The grammar of graphics
+
+--
+
+.leftcol45[
+.font80[
+
+&gt; Each graph starts with .blue[data] 
+
+&gt;   + *in columns and rows*
+
+&gt; Variables are mapped to .blue[aes]thetics 
+
+&gt;   + *on the .blue[`x`] and .blue[`y`] axis*
+
+]
+]
+
+--
+
+.rightcol55[
+.font80[
+
+&gt; `geom_` functions:
+
+&gt;   + *perform the underlying statistical summaries/transformations*   
+
+&gt;   + *determine the geometric object we'll see on the graph (.blue[geom]_line, .blue[geom]_point, .blue[geom]_bar, etc.)*
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+In [ggplot2 part 2a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1), we covered: 
+
+--
+
+&gt; 2) Graphs for distributions
+
+--
+
+.leftcol45[
+
+.font70[
+
+&gt; Histograms = `geom_histogram()` 
+
+&gt; Density plots = `geom_density()` 
+
+&gt; Frequency polygons = `geom_freqpoly()` 
+
+]
+
+]
+
+--
+
+.rightcol55[
+
+.font70[
+
+&gt; Box plot = `geom_boxplot()`
+
+&gt; Violin plots = `geom_violin()`   
+
+&gt; Ridgeline plots = `ggridges::geom_density_ridges()`
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+In [ggplot2 part 2b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html), we covered: 
+
+--
+
+&gt; 3) Graphs for `x` and `y` relationships
+
+--
+
+.leftcol40[
+
+.font70[
+
+&gt; Scatter plot = `geom_point()` 
+
+&gt; Line graph = `geom_line()` 
+
+]
+]
+
+--
+
+.rightcol60[
+
+.font70[
+
+&gt; Bar-graphs = `geom_bar()`, `geom_col()`
+
+&gt; Adding text = `annotate()`, `ggrepel::geom_label_repel()`
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Some Data Visualization Best Practices
+
+--
+
+.font90[
+
+- Sketch ideas out before writing any code
+
+]
+
+--
+
+.font90[
+
+- Begin with an end in sight--build your labels first
+
+]
+
+--
+
+.font90[
+
+- Always review your data in it's raw form before visualizing
+
+]
+
+--
+
+.font90[
+
+- Remember the visual elements scale:
+
+]
+
+.border[
+
+&lt;img src="img/graph-elements.png" width="70%" height="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# .large[Graph .fancy[do's]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #1: Order Data Appropriately
+
+.font80[
+
+Re-order categories so the bar length (or height) varies in proportion to the underlying numbers; the largest numbers on top, the smaller numbers at the bottom.
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/do_1_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/do_1_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #2: Use Colorblind-Friendly Colors
+
+.font80[
+
+Adjust the colors to something more accessible with colorblind-friendly palettes (like [`viridis` package](https://sjmgarnier.github.io/viridis/index.html) or [Okabe-Ito palette](https://mikemol.github.io/technique/colorblind/2018/02/11/color-safe-palette.html))
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/do_2_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/do_2_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #3: Rotate The Axis 
+
+--
+
+.font80[
+
+If your data has categories or values with long names, rotate the axis and use horizontal labels. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/do_3_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/do_3_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #4: Use Chart Space Effectively
+
+--
+
+.font80[
+
+Plot all data points so that line charts take up approximately two-thirds of the y-axis’ total scale:
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/do_4_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/do_4_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #5: Use Transparency Effectively
+
+--
+
+.font80[
+
+To avoid overplotting, make sure background data aren’t obscured by ordering and using transparency effectively.
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/do_5_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/do_5_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# .large[Graph .fancy[don'ts]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #1: Distort The Axis 
+
+--
+
+.font80[
+
+Don't distort the upper and lower limits of the `y` (or `x`) axis. This cuts off (i.e., truncates) the bars and exaggerates or minimizes the visual comparison.
+
+]
+
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+.code50[
+&lt;img src="img/dont_1_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+]
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+.code50[
+&lt;img src="img/dont_1_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #2: Use More Than Five Color Categories  
+
+.font80[
+
+Limit the total number of different colors in your graph to five. This makes it easier for the audience to distinguish and compare groups. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/dont_2_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/dont_2_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #3: Use 3-D (ever!)
+
+
+
+--
+
+.font80[
+
+Don't use 3-dimensional plots--they skew perception of the data and the axes. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/graph-3d-small.png" width="836" height="50%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/dont_3_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #4: Create Misleading Patterns
+
+--
+
+.font80[
+
+Make sure the patterns or associations in your graph aren't dubious, spurious, or misleading. Google ['Simpson’s paradox'](https://plato.stanford.edu/entries/paradox-simpson/#:~:text) to learn more!
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/dont_4_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/dont_4_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #5: Don't Overload The Graph
+
+--
+
+.font80[
+
+Including too much information in a single graph makes it difficult to make comparisons. Use small multiples (or a different graph type) instead. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+&lt;img src="img/dont_5_bad-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+&lt;img src="img/dont_5_fix-1.png" width="522.144" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# .large[Recap]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+&lt;br&gt;&lt;br&gt;
+
+.leftcol[
+
+# Visualization .green[Do's]
+
+1. Order Data Appropriately  
+
+2. Use Colorblind-Friendly Colors
+
+3. Rotate The Axis 
+
+4. Use Chart Space Effectively
+
+5. Use Transparency Effectively
+
+
+]
+
+--
+
+.rightcol[
+
+# Visualization .red[Don'ts]
+
+1. Distort The Axis 
+
+2. Use More Than Five Color Categories  
+
+3. Use 3-D (ever!)
+
+4. Create Misleading Patterns
+
+5. Don't Overload The Graph
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

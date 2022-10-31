@@ -1,0 +1,238 @@
+---
+title: "Joining Data in R"
+description: |
+  "*Using `dplyr` to join data tables*"
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 2
+    
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(inspectdf)
+library(starwarsdb)
+library(dm)
+# create data folder
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "img/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5.5,
+  fig.retina = 2
+  )
+# tibble printing
+options(
+  pillar.print_max = 10, 
+  pillar.print_min = 10)
+```
+
+# Objectives 
+
+This document outlines some common data joining tasks with the `dplyr` package. **If you've ever Googled 'how to perform [x] in R', you've probably discovered there are multiple ways to accomplish [x].** 
+
+The methods I present here are not exhaustive, and I've tried to balance the trade-off between 1) solutions/functions that solve problems with the fewest number of keystrokes, and 2) code that's readable, explicit, and easy to follow.
+
+
+## Load packages 
+
+`dplyr` is part of the core `tidyverse` packages, so we install and load this meta-package below. We'll also be installing the `starwarsdb`, and `dm` packages. 
+
+```{r packages, eval=FALSE}
+# install.packages(c("tidyverse", "starwarsdb", "dm"))
+library(tidyverse)
+library(starwarsdb)
+library(dm)
+```
+
+## Toy data 
+
+We'll create the same example data from the slides 
+
+```{r create-x}
+# create X table
+X <- tibble::tribble(
+    ~A, ~B, ~C, 
+    "a", "t", 1L,
+    "b", "u", 2L,
+    "c", "v", 3L)
+X
+```
+
+```{r create-y}
+# create Y table
+Y <- tibble::tribble(
+    ~A, ~B, ~D, 
+    "a", "t", 3L,
+    "b", "u", 2L,
+    "d", "W", 1L)
+Y
+```
+
+
+
+# Joins
+
+Joins give us the ability to combine and filter multiple datasets on common column(s). 
+
+## `starwarsdb` 
+
+The code below creates and displays the data model for the tables in this package 
+
+```{r StarWarsDataModel, message=FALSE, warning=FALSE}
+StarWarsDataModel <- dm::dm_draw(dm = starwars_dm(), 
+                                 view_type = "all",
+                                 graph_name = "StarWarsDataModel")
+StarWarsDataModel
+```
+
+## Create `StarWarsFilms`
+
+Load the `starwarsdb::films` dataset, removing the `opening_crawl` column, and filter to only episodes 4-6. Store these data in `StarWarsFilms`
+
+```{r films-sol}
+StarWarsFilms <- starwarsdb::films %>% 
+                    select(-c(opening_crawl, director, producer)) %>% 
+                    filter(episode_id >= 4 & episode_id <= 6)
+StarWarsFilms
+```
+
+
+## `left_join` 
+
+**A `left_join` keeps all of `x`, and joins it to all matching rows from dataset `y`**
+
+Left-join `StarWarsFilms` to `starwarsdb::films_vehicles` on `"title"`, then `select()` the `vehicle` column, then `everything()` else. 
+
+Assign to `StarWarsFilmVeh`
+
+**Example**
+
+```{r example-left-join}
+dplyr::left_join(
+  x = X, y = Y, 
+  by = c("A", "B"))
+```
+
+
+**Solution**
+
+```{r StarWarsFilmsPeople}
+dplyr::left_join(x = StarWarsFilms, 
+          y = starwarsdb::films_vehicles, 
+          by = "title") %>% 
+  dplyr::select(vehicle, 
+         everything()) -> StarWarsFilmVeh
+dplyr::glimpse(StarWarsFilmVeh)
+```
+
+We now have a table of vehicles from the episodes 4-6.
+
+## `inner_join`
+
+**The `inner_join()` joins dataset `x` and `y`, and keeps only matching rows from both.**
+
+Use an `inner_join` to join `StarWarsFilmVeh` to `starwarsdb::pilots` on `"vehicle"` and assign it to `StarWarsFilmVehPil`.
+
+**Example**
+
+```{r example-inner-join}
+dplyr::inner_join(
+  x = X, y = Y, 
+  by = c("A", "B"))
+```
+
+**Solution**
+
+```{r StarWarsFilmVehPil-sol}
+dplyr::inner_join(x = StarWarsFilmVeh, 
+           y = starwarsdb::pilots, 
+           by = "vehicle") -> StarWarsFilmVehPil
+dplyr::glimpse(StarWarsFilmVehPil)
+```
+
+Notice the number of rows went from 47 to 39 (because not all vehicles had a pilot in the `starwarsdb::pilots` table)
+
+## `right_join` 
+
+**The `right_join()` includes all the rows in dataset `y`, and joins it the matching rows in dataset `x`**
+
+**Example**
+
+```{r example-right-join}
+dplyr::right_join(
+  x = X, y = Y, 
+  by = c("A", "B"))
+```
+
+Use a `right_join()` to join `StarWarsFilmVehPlt` to `starwarsdb::films_planets` on `"title"`, keeping all the rows in `starwarsdb::films_planets`. 
+
+Use `select()` to rename `planet` to `film_planet` and assign this to `StarWarsFilmVehPltPlnt` 
+
+**Solution**
+
+```{r right_join-sol}
+dplyr::right_join(x = StarWarsFilmVehPil, 
+           y = starwarsdb::films_planets, 
+           by = "title") %>% 
+  dplyr::select(vehicle:release_date,
+         film_planet = planet, 
+         pilot) -> StarWarsFilmVehPltPlnt
+dplyr::glimpse(StarWarsFilmVehPltPlnt)
+```
+
+## `anti_join` 
+
+**The `anti_join()` keeps all rows in dataset `x` that do not have a match in dataset `y`**
+
+
+Note the last join created empty values for the episodes that weren't in our original `StarWarsFilms` table: 
+
+```{r review-StarWarsFilms}
+StarWarsFilms
+```
+
+These include: `"The Phantom Menace"`, `"Attack of the Clones"`, and `"Revenge of the Sith"`
+
+```{r filter-is.na}
+StarWarsFilmVehPltPlnt %>% 
+  filter(title %in% c("The Phantom Menace",
+    "Attack of the Clones", 
+    "Revenge of the Sith"))
+```
+
+
+Use the `anti_join()` to join `StarWarsFilmVehPltPlnt` to `StarWarsFilms` on `"title"`, `"episode_id"`, and `"release_date"` to create a dataset with only `title` and `film_planet` 
+
+**Example**
+
+```{r example-anti-join}
+dplyr::anti_join(
+  x = X, y = Y, 
+  by = c("A", "B"))
+```
+
+**Solution**
+
+```{r anti_join-sol}
+anti_join(x = StarWarsFilmVehPltPlnt, 
+            y = StarWarsFilms, 
+            by = c("title", "episode_id", "release_date")) %>% 
+  select(title, episode_id, film_planet)
+```
+
+*these should only contain the `title`s not in `StarWarsFilms`*
+

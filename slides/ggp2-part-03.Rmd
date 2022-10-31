@@ -1,0 +1,1454 @@
+---
+title: "Data Visualization with `ggplot2` (part 3)"
+subtitle: "Graph do's and don'ts"
+author: "Martin Frigaard"
+institute: "California State University | Journalism & Public Relations: Data Journalism"
+output:
+  xaringan::moon_reader:
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Data Visualization (part 3)",
+    generator = "xaringan and remark.js"
+  ) %>%
+  meta_name("github-repo" = "mjfrigaard/CSUC-JOUR301-FA22") %>%
+  meta_social(
+    title = "Data Visualization (part 3)",
+    url = "https://mjfrigaard.github.io/CSUC-JOUR301-FA22/",
+    og_type = "website",
+    og_author = "Martin Frigaard",
+    twitter_card_type = "summary",
+    twitter_creator = "@mjfrigaard"
+  )
+```
+
+```{r setup, include=FALSE}
+dateWritten <- format(as.Date("2022-09-21"), format = "%B %d %Y")
+today <- format(Sys.Date(), format = "%B %d %Y")
+library(knitr)
+library(tidyverse)
+library(fontawesome)
+options(
+    htmltools.dir.version = FALSE,
+    knitr.table.format = "html",
+    knitr.kable.NA = '',
+    scipen = 9999999
+)
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "img/",
+    fig.width = 7.252,
+    fig.height = 4,
+    comment = " ",
+    fig.retina = 3 # Better figure resolution
+)
+# Enables the ability to show all slides in a tile overview by pressing "o"
+xaringanExtra::use_tile_view()
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(share_buttons = "all")
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = FALSE
+)
+```
+
+```{r inf_mr, eval=FALSE, include=FALSE}
+xaringan::inf_mr()
+```
+
+```{r data, echo=FALSE}
+# create movies_data ----
+movies_data <- ggplot2movies::movies |>
+  # movies after 2000
+  dplyr::filter(year > 2000 & mpaa != "") %>%
+  # pivot genre
+  tidyr::pivot_longer(
+    cols = c(Action:Short),
+    names_to = "genre_key",
+    values_to = "genre_value"
+  ) %>%
+  # remove individual ratings
+  dplyr::select(title:rating, mpaa, genre_key, genre_value) %>%
+  # filter to existing genres
+  dplyr::filter(genre_value == 1) %>%
+  # create genre_value
+  dplyr::mutate(
+    genre_value = case_when(
+      genre_key == 'Action' ~ "action",
+      genre_key == 'Animation' ~ "animation",
+      genre_key == 'Comedy' ~ "comedy",
+      genre_key == 'Drama' ~ "drama",
+      genre_key == 'Documentary' ~ "documentary",
+      genre_key == 'Romance' ~ "romance",
+      genre_key == 'Short' ~ "short",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  # pivot genres wider
+  tidyr::pivot_wider(names_from = genre_key,
+    values_from = genre_value) %>%
+  # combine into single column
+  tidyr::unite(col = "genres",
+    Action:Short,
+    sep = "/") %>%
+  # remove missing genres
+  dplyr::mutate(
+    genres = str_remove_all(string = genres, pattern = "NA/"),
+    genres = str_remove_all(string = genres, pattern = "/NA")
+  ) |>
+  # remove missing budgets
+  dplyr::filter(!is.na(budget))
+# create movies_data_imdb_int ----
+movies_data_imdb_int <- movies_data |>
+  tidyr::drop_na() |>
+  dplyr::mutate(
+    imdb_int = dplyr::case_when(
+      rating >= 0 & rating < 1 ~ 0L,
+      rating >= 1 & rating < 2 ~ 1L,
+      rating >= 2 & rating < 3 ~ 2L,
+      rating >= 3 & rating < 4 ~ 3L,
+      rating >= 4 & rating < 5 ~ 4L,
+      rating >= 5 & rating < 6 ~ 5L,
+      rating >= 6 & rating < 7 ~ 6L,
+      rating >= 7 & rating < 8 ~ 7L,
+      rating >= 8 & rating < 9 ~ 8L,
+      rating >= 9 & rating < 10 ~ 9L,
+      rating >= 10 & rating < 11 ~ 10L
+    ),
+    imdb_int = factor(imdb_int)
+  ) 
+# load big_starwars
+big_starwars <- readr::read_rds("../data/big_starwars.rds")
+# sw_short_names
+sw_short_names <- dplyr::starwars |> 
+  dplyr::filter(
+    name %in% c("Boba Fett", 
+      "Dooku", "Jango Fett")) |> 
+  dplyr::select(!where(is.list))
+```
+
+layout: true
+
+<!-- this adds the link footer to all slides, depends on footer-small class in css-->
+
+<div class="footer-small"><span>https://mjfrigaard.github.io/CSUC-JOUR301-FA22/</div>
+
+---
+name: title-slide
+class: title-slide, center, middle, inverse
+
+# `r rmarkdown::metadata$title`
+#.fancy[`r rmarkdown::metadata$subtitle`]
+
+<br>
+
+.large[by Martin Frigaard]
+
+Written: `r dateWritten`
+
+Updated: `r today`
+
+.footer-large[.right[.fira[
+<br><br><br><br><br>[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
+]]]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# `ggplot2` = the grammar of graphics
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Outline
+
+--
+
+.leftcol[
+
+<br>
+
+##  Recap `ggplot2`
+
+<br>
+
+## Graph anatomy
+
+]
+
+--
+
+.rightcol[
+
+<br>
+
+## Visualization .green[Do's]
+
+<br>
+
+## Visualization .red[Don'ts]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## To follow along
+
+.leftcol[
+
+Load the packages using:
+
+.code60[
+
+```{r packages, eval=FALSE}
+install.packages(
+  c("tidyverse", 
+    "ggplot2movies", 
+    "palmerpenguins",
+    "viridis"))
+library(tidyverse)
+library(ggplot2movies)
+library(palmerpenguins)
+library(viridis)
+```
+
+]
+
+
+```{r pckgs, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggplot2movies)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(palmerpenguins)
+library(viridis)
+```
+
+
+
+]
+
+--
+
+.rightcol[
+
+Or using:
+
+.code60[
+```{r more)packages, eval=FALSE}
+pkgs <- c("ggplot2",
+  "ggplot2movies",
+  "dplyr",
+  "tidyr",
+  "stringr",
+  "palmerpenguins",
+  "viridis")
+install.packages(pkgs)
+library(ggplot2)
+library(ggplot2movies)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(palmerpenguins)
+library(viridis)
+```
+]
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 50% 70%
+background-size: 35%
+
+# Recap of `ggplot2` 
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2`
+
+In [ggplot2 part 1](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-01.html#1) we covered: 
+
+--
+
+> 1) The grammar of graphics
+
+--
+
+.leftcol45[
+.font80[
+
+> Each graph starts with .blue[data] 
+
+>   + *in columns and rows*
+
+> Variables are mapped to .blue[aes]thetics 
+
+>   + *on the .blue[`x`] and .blue[`y`] axis*
+
+]
+]
+
+--
+
+.rightcol55[
+.font80[
+
+> `geom_` functions:
+
+>   + *perform the underlying statistical summaries/transformations*   
+
+>   + *determine the geometric object we'll see on the graph (.blue[geom]_line, .blue[geom]_point, .blue[geom]_bar, etc.)*
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+In [ggplot2 part 2a](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02a.html#1), we covered: 
+
+--
+
+> 2) Graphs for distributions
+
+--
+
+.leftcol45[
+
+.font70[
+
+> Histograms = `geom_histogram()` 
+
+> Density plots = `geom_density()` 
+
+> Frequency polygons = `geom_freqpoly()` 
+
+]
+
+]
+
+--
+
+.rightcol55[
+
+.font70[
+
+> Box plot = `geom_boxplot()`
+
+> Violin plots = `geom_violin()`   
+
+> Ridgeline plots = `ggridges::geom_density_ridges()`
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Recap of `ggplot2` (cont)
+
+In [ggplot2 part 2b](https://mjfrigaard.github.io/FA22-JOUR301/slides/ggp2-part-02b.html), we covered: 
+
+--
+
+> 3) Graphs for `x` and `y` relationships
+
+--
+
+.leftcol40[
+
+.font70[
+
+> Scatter plot = `geom_point()` 
+
+> Line graph = `geom_line()` 
+
+]
+]
+
+--
+
+.rightcol60[
+
+.font70[
+
+> Bar-graphs = `geom_bar()`, `geom_col()`
+
+> Adding text = `annotate()`, `ggrepel::geom_label_repel()`
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Some Data Visualization Best Practices
+
+--
+
+.font90[
+
+- Sketch ideas out before writing any code
+
+]
+
+--
+
+.font90[
+
+- Begin with an end in sight--build your labels first
+
+]
+
+--
+
+.font90[
+
+- Always review your data in it's raw form before visualizing
+
+]
+
+--
+
+.font90[
+
+- Remember the visual elements scale:
+
+]
+
+.border[
+
+```{r graph-elements, echo=FALSE, fig.align='center', out.width='70%', out.height='70%'}
+knitr::include_graphics(path = "img/graph-elements.png")
+```
+
+]
+
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+<br><br><br><br><br><br>
+
+# .large[Graph .fancy[do's]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #1: Order Data Appropriately
+
+.font80[
+
+Re-order categories so the bar length (or height) varies in proportion to the underlying numbers; the largest numbers on top, the smaller numbers at the bottom.
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r do_1_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+dplyr::starwars |>
+  dplyr::filter(species %in% c("Wookiee", "Droid", "Ewok",
+    "Hutt", "Yoda's species") &
+      !is.na(height)) |>
+  dplyr::select(!where(is.list)) |>
+  dplyr::group_by(species) |>
+  dplyr::summarise(avg_height = mean(height, na.rm = TRUE)) |>
+  dplyr::ungroup() |> 
+  ggplot2::ggplot(aes(x = avg_height, y = species)) + 
+  ggplot2::geom_col(aes(fill = species), 
+    show.legend = FALSE) + 
+  ggplot2::labs(
+    title = "Average Height of Selected Species in StarWars",
+    subtitle = "Example of re-ordering categories",
+    x = "Average Height", 
+    y = "Species",
+    fill = "Species") +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r do_1_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+# dput(unique(starwars$species))
+dplyr::starwars |>
+  dplyr::filter(species %in% c("Wookiee", "Droid", "Ewok",
+    "Hutt", "Yoda's species") &
+      !is.na(height)) |>
+  dplyr::select(!where(is.list)) |>
+  dplyr::group_by(species) |>
+  dplyr::summarise(avg_height = mean(height, na.rm = TRUE)) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(species = factor(
+    species,
+    levels = c("Wookiee", "Droid", "Ewok",
+      "Hutt", "Yoda's species")
+  )) |>
+  ggplot2::ggplot(
+    aes(
+      x = avg_height,
+      y = fct_reorder(.f = species,
+                      .x = avg_height)
+      )
+    ) +
+  ggplot2::geom_col(aes(fill = species), show.legend = FALSE) +
+  ggplot2::labs(
+    title = "Average Height of Selected Species in StarWars",
+    subtitle = "Example of re-ordering categories",
+    x = "Average Height", 
+    y = "Species",
+    fill = "Species"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #2: Use Colorblind-Friendly Colors
+
+.font80[
+
+Adjust the colors to something more accessible with colorblind-friendly palettes (like [`viridis` package](https://sjmgarnier.github.io/viridis/index.html) or [Okabe-Ito palette](https://mikemol.github.io/technique/colorblind/2018/02/11/color-safe-palette.html))
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r do_2_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+dplyr::starwars |>
+  dplyr::filter(species %in% c("Wookiee", "Droid", "Ewok",
+    "Hutt", "Yoda's species") &
+      !is.na(height)) |>
+  dplyr::select(!where(is.list)) |>
+  dplyr::group_by(species) |>
+  dplyr::summarise(avg_height = mean(height, na.rm = TRUE)) |>
+  dplyr::ungroup() |>
+  mutate(species = factor(
+    species,
+    levels = c("Wookiee", "Droid", "Ewok",
+      "Hutt", "Yoda's species")
+  )) |>
+  ggplot2::ggplot(
+    aes(
+      x = avg_height,
+      y = fct_reorder(.f = species,
+                      .x = avg_height)
+      )
+    ) +
+  ggplot2::geom_col(aes(fill = species), show.legend = FALSE) +
+  ggplot2::labs(
+    title = "Average Height of Selected Species in StarWars",
+    subtitle = "Example of re-ordering categories",
+    x = "Average Height", 
+    y = "Species",
+    fill = "Species"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r do_2_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+# dput(unique(starwars$species))
+dplyr::starwars |>
+  dplyr::filter(species %in% c("Wookiee", "Droid", "Ewok",
+    "Hutt", "Yoda's species") &
+      !is.na(height)) |>
+  dplyr::select(!where(is.list)) |>
+  dplyr::group_by(species) |>
+  dplyr::summarise(avg_height = mean(height, na.rm = TRUE)) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(species = factor(
+    species,
+    levels = c("Wookiee", "Droid", "Ewok",
+      "Hutt", "Yoda's species")
+  )) |>
+  ggplot2::ggplot(
+    aes(
+      x = avg_height,
+      y = fct_reorder(.f = species,
+                      .x = avg_height)
+      )
+    ) +
+  ggplot2::geom_col(aes(fill = species), show.legend = FALSE) +
+  # scale_fill_brewer(direction = -1) +
+  viridis::scale_fill_viridis(discrete = TRUE, option = "A") +
+  ggplot2::labs(
+    title = "Average Height of Selected Species in StarWars",
+    subtitle = "Example of re-ordering categories",
+    x = "Average Height", 
+    y = "Species",
+    fill = "Species"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #3: Rotate The Axis 
+
+--
+
+.font80[
+
+If your data has categories or values with long names, rotate the axis and use horizontal labels. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r do_3_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+big_starwars |>
+  # count(homeworld, hw_pop) |>
+  # arrange(desc(hw_pop))
+  dplyr::filter(
+        hw_pop < 10000000000 & 
+        hw_pop > 95000000 & 
+        homeworld != "Nal Hutta" & 
+        homeworld != "Muunilinst"
+    ) |> 
+  ggplot2::ggplot(
+    aes(x = homeworld,
+        y = hw_pop)
+    ) +
+  ggplot2::geom_col(aes(fill = hw_pop), show.legend = FALSE) +
+  ggplot2::scale_fill_gradient() +
+  ggplot2::scale_y_continuous(labels = 
+      scales::label_number(suffix = " Bil", scale = 1e-9)) +
+  ggplot2::labs(
+    title = "Homeworld Population of Select StarWars Characters",
+    subtitle = "Example of long x-axis names",
+    x = "Name",
+    y = "Homeworld Population",
+    fill = "Homeworld") +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r do_3_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+big_starwars |>
+  # count(homeworld, hw_pop) |>
+  # arrange(desc(hw_pop))
+  dplyr::filter(
+        hw_pop < 10000000000 & 
+        hw_pop > 95000000 & 
+        homeworld != "Nal Hutta" & 
+        homeworld != "Muunilinst"
+    ) |> 
+  ggplot2::ggplot(
+    aes(
+      x = hw_pop, 
+      y = fct_reorder(.f = as.factor(homeworld),
+                      .x = hw_pop)
+      )
+    ) + 
+  ggplot2::geom_col(aes(fill = hw_pop), 
+    show.legend = FALSE) + 
+  viridis::scale_fill_viridis(direction = -1,
+    discrete = FALSE, 
+    option = "I") +
+  # scale_x_continuous(labels = scales::comma) + 
+  ggplot2::scale_x_continuous(labels = 
+      scales::label_number(suffix = " Bil", scale = 1e-9)) +
+  ggplot2::labs(
+    title = "Population of Select StarWars Homeworlds",
+    subtitle = "Example of long x-axis names",
+    x = "Population", 
+    y = "Homeworld"
+    ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #4: Use Chart Space Effectively
+
+--
+
+.font80[
+
+Plot all data points so that line charts take up approximately two-thirds of the y-axis’ total scale:
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r do_4_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+movies |>
+  dplyr::filter(year > 1994 & year &
+      mpaa %in% c("PG", "PG-13", "R")) |>
+  dplyr::group_by(year, mpaa) |>
+  dplyr::summarise(avg_budget = mean(budget, na.rm = TRUE)) |>
+  dplyr::ungroup() |>
+  ggplot2::ggplot(
+    aes(
+      x = year,
+      y = avg_budget,
+      group = mpaa)
+    ) +
+  ggplot2::scale_y_continuous(
+    limits = c(0, 250000000),
+    labels = scales::label_number(suffix = " Mil", scale = 1e-6)
+  ) +
+  ggplot2::scale_x_continuous(breaks = c(1995, 2000, 2005),
+    labels = c('1995', '2000', '2005')) +
+  ggplot2::geom_line(aes(color = mpaa), size = 2.5) + 
+  ggplot2::labs(
+    title = "Movie Budgets by MPAA Ratings",
+    subtitle = "Example of adjusting y-axis height",
+    x = "Year", 
+    y = "Movie Budget",
+    color = "MPAA rating"
+    # caption = "color pallete from the viridis package\n(more accessible colors for colorblindness)"
+    ) + 
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r do_4_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+movies |>
+  dplyr::filter(year > 1994 & year &
+      mpaa %in% c("PG", "PG-13", "R")) |>
+  dplyr::group_by(year, mpaa) |>
+  dplyr::summarise(avg_budget = mean(budget, na.rm = TRUE)) |>
+  dplyr::ungroup() |>
+  ggplot2::ggplot(
+    aes(
+      x = year,
+      y = avg_budget,
+      group = mpaa)
+    ) +
+  ggplot2::geom_line(aes(color = mpaa), size = 2.5) + 
+  ggplot2::scale_y_continuous(
+    limits = c(0, 75000000),
+    labels = scales::label_number(suffix = " Mil", scale = 1e-6)
+  ) +
+  ggplot2::scale_x_continuous(breaks = c(1995, 2000, 2005),
+    labels = c('1995', '2000', '2005')) +
+  # viridis::scale_color_viridis(direction = -1,
+  #   discrete = TRUE, 
+  #   option = "I") +
+  ggplot2::scale_color_discrete(
+    type = c("#56B4E9", "#E69F00", "#D55E00")) +
+  ggplot2::labs(
+    title = "Movie Budgets by MPAA Ratings",
+    subtitle = "Example of adjusting y-axis height",
+    x = "Year", 
+    y = "Movie Budget",
+    color = "MPAA rating",
+    caption = "color pallete from the viridis package\n(more accessible colors for colorblindness)"
+    ) + 
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DO] #5: Use Transparency Effectively
+
+--
+
+.font80[
+
+To avoid overplotting, make sure background data aren’t obscured by ordering and using transparency effectively.
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r do_5_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+palmerpenguins::penguins |>
+  tidyr::drop_na() |>
+  ggplot2::ggplot(aes(x = bill_length_mm)) +
+  ggplot2::geom_density(aes(fill = species), bins = 30) +
+  ggplot2::labs(
+    title = "Distribution of Palmer Penguins Bill Length",
+    subtitle = "Effective transparancy example",
+    x = "Bill Length (mm)", 
+    y = "Count",
+    fill = "Species"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r do_5_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+palmerpenguins::penguins |>
+  tidyr::drop_na() |>
+  ggplot2::ggplot(aes(x = bill_length_mm)) +
+  ggplot2::geom_density(aes(fill = species), 
+    alpha = 1/2,
+    bins = 30) +
+  viridis::scale_fill_viridis(direction = -1,
+    discrete = TRUE, 
+    option = "C") +
+  ggplot2::labs(title = "Distribution of Palmer Penguins Bill Length",
+    subtitle = "Effective transparancy example",
+    x = "Bill Length (mm)", 
+    y = "Count",
+    fill = "Species"
+    ) + 
+    ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+<br><br><br><br><br><br>
+
+# .large[Graph .fancy[don'ts]]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #1: Distort The Axis 
+
+--
+
+.font80[
+
+Don't distort the upper and lower limits of the `y` (or `x`) axis. This cuts off (i.e., truncates) the bars and exaggerates or minimizes the visual comparison.
+
+]
+
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+.code50[
+```{r dont_1_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+dplyr::starwars |>
+  dplyr::filter(name %in% c("Boba Fett",
+    "Dooku", "Jango Fett")) |>
+  ggplot2::ggplot(data = sw_short_names,
+    mapping = aes(
+      x = name, 
+      y = mass)) +
+  ggplot2::geom_col(aes(fill = name), show.legend = FALSE) +
+  ggplot2::coord_cartesian(ylim = c(77, 83)) +
+  ggplot2::labs(
+    title = "Mass of Select StarWars Characters",
+    subtitle = "Example of truncated y axis",
+    x = "Name",
+    y = "Mass",
+    fill = "Name"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+]
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+.code50[
+```{r dont_1_fix, echo=FALSE, eval=TRUE, fig.align='center'}
+dplyr::starwars |> 
+  dplyr::filter(
+    name %in% c("Boba Fett", 
+      "Dooku", "Jango Fett")) |> 
+  ggplot2::ggplot(data = sw_short_names, 
+      mapping = aes(
+                    x = name, 
+                    y = mass)) + 
+  ggplot2::geom_col(aes(fill = name), show.legend = FALSE) + 
+  viridis::scale_fill_viridis(discrete = TRUE, option = "G") +
+  ggplot2::labs(
+    title = "Mass of Select StarWars Characters", 
+    subtitle = "Example of truncated y axis",
+    x = "Name",
+    y = "Mass",
+    fill = "Name"
+    ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #2: Use More Than Five Color Categories  
+
+.font80[
+
+Limit the total number of different colors in your graph to five. This makes it easier for the audience to distinguish and compare groups. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r dont_2_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+movies_data |> 
+  ggplot(aes(x = budget, y = rating)) +
+    geom_point(
+      aes(color = genres), 
+        size = 4, alpha = 2/3) +
+    ggplot2::scale_x_continuous(
+      labels = scales::dollar_format()) +
+  labs(title = "IMDB movie ratings", 
+    subtitle = "Example of too many colors", 
+    x = "Budget ($)", 
+    y = "Rating", 
+    color = "Genre") + 
+  ggplot2::theme_minimal(base_size = 9)
+```
+
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r dont_2_fix, echo=FALSE, eval=TRUE, fig.align='center'}
+movies_data |>
+  dplyr::mutate(
+    genre_cat = case_when(
+      str_detect(genres, "^action") ~ "Action",
+      str_detect(genres, "^animation") ~ "Animation",
+      str_detect(genres, "^comedy") ~ "Comedy",
+      str_detect(genres, "^documentary") ~ "Documentary/Short",
+      str_detect(genres, "^drama") ~ "Drama",
+      str_detect(genres, "^short") ~ "Documentary/Short",
+    )
+  ) |>
+  ggplot2::ggplot(
+    aes(
+      x = budget, 
+      y = rating)
+    ) +
+  ggplot2::geom_point(
+    aes(color = genre_cat), 
+    size = 4, alpha = 2/3) +
+  ggplot2::scale_x_continuous(
+    labels = scales::dollar_format()) +
+  ggplot2::labs(
+    title = "IMDB movie ratings",
+    subtitle = "Example of too many colors",
+    x = "Budget ($)",
+    y = "Rating",
+    color = "Genre Category"
+  ) + 
+  ggplot2::scale_color_discrete(
+    type = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2")) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+
+]
+
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #3: Use 3-D (ever!)
+
+```{r plotly, eval=FALSE, echo=FALSE}
+# library(plotly)
+# library(processx)
+# penguins <- palmerpenguins::penguins
+# peng_no_na <- penguins |> tidyr::drop_na()
+# https://stackoverflow.com/questions/45052188/how-to-plot-3d-scatter-diagram-using-ggplot
+# bill_lngth <- peng_no_na$bill_length_mm
+# flip_lngth <- peng_no_na$flipper_length_mm
+# body_mass <- peng_no_na$body_mass_g
+# peng_species <- peng_no_na$species
+# graph_3d <- plotly::plot_ly(
+#   x = bill_lngth,
+#   y = flip_lngth,
+#   z = body_mass,
+#   type = "scatter3d",
+#   mode = "markers",
+#   color = peng_species
+# )
+# x_lab <- list(
+#   title = "Bill Length (mm)"
+# )
+# y_lab <- list(
+#   title = "Flipper Length (mm)"
+# )
+# z_lab <- list(
+#   title = "Body Mass (g)"
+# )
+# graph_3d |>
+#   layout(title = 'Palmer Penguins',
+#     plot_bgcolor = "#e5ecf6") |>
+#   layout(scene = list(
+#     xaxis = x_lab,
+#     yaxis = y_lab,
+#     zaxis = z_lab
+#   ))
+```
+
+--
+
+.font80[
+
+Don't use 3-dimensional plots--they skew perception of the data and the axes. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r dont_3_bad, eval=TRUE, out.height="50%", echo=FALSE, fig.align='center'}
+knitr::include_graphics(path = "img/graph-3d-small.png")
+```
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r dont_3_fix, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center'}
+penguins <- palmerpenguins::penguins
+peng_no_na <- penguins |> tidyr::drop_na()
+peng_no_na |> # glimpse()
+  ggplot2::ggplot(aes(
+    x = bill_length_mm,
+    y = flipper_length_mm,
+    size = body_mass_g, 
+    fill = species)) +
+  ggplot2::geom_point(
+    alpha = 0.5,
+    shape = 21,
+    color = "black", 
+    show.legend = TRUE) +
+  ggplot2::scale_size(range = c(0.05, 7), 
+    name = "Body Mass (g)") +
+  viridis::scale_fill_viridis(
+    discrete = TRUE, direction = -1,
+    option = "C") +
+  ggplot2::labs(
+    title = "Bill length vs. flipper length of Palmer Penguins",
+    subtitle = "Example of NOT using 3-D",
+    x = "Bill Length (mm)",
+    y = "Flipper Length (mm)",
+    size = "Body Mass (g)",
+    color = "Species",
+    caption = "viridis package = more accessible colors for colorblindness"
+  ) +
+  ggplot2::theme_minimal(base_size = 10) +
+  ggplot2::theme(legend.position = "bottom") 
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #4: Create Misleading Patterns
+
+--
+
+.font80[
+
+Make sure the patterns or associations in your graph aren't dubious, spurious, or misleading. Google ['Simpson’s paradox'](https://plato.stanford.edu/entries/paradox-simpson/#:~:text) to learn more!
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r dont_4_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+peng_no_na |> # glimpse()
+  ggplot2::ggplot(
+    aes(
+      x = bill_length_mm,
+      y = bill_depth_mm)
+    ) +
+  ggplot2::geom_point(
+      alpha = 0.33, 
+      size = 4) + 
+  ggplot2::geom_smooth(
+    method = "lm", 
+    color = "black", 
+    se = FALSE) + 
+  ggplot2::labs(
+    title = "Bill length vs. bill depth  of Palmer Penguins",
+    subtitle = "Example of misleading patterns",
+    x = "Bill Length (mm)",
+    y = "Bill Depth (mm)"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r dont_4_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+peng_no_na |> # glimpse()
+  ggplot2::ggplot(
+    aes(
+      x = bill_length_mm,
+      y = bill_depth_mm,
+      group = species)
+    ) +
+  ggplot2::geom_point(
+    aes(
+      color = species), 
+        alpha = 0.40, 
+        size = 4, 
+        show.legend = FALSE) +
+  ggplot2::geom_smooth(
+    aes(
+      color = species), 
+      method = "lm", 
+      se = FALSE) + 
+  ggplot2::labs(
+    title = "Bill length vs. bill depth  of Palmer Penguins",
+    subtitle = "Example of misleading patterns",
+    x = "Bill Length (mm)",
+    y = "Bill Depth (mm)", 
+    color = "Species"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+## Graph .red[DON'T] #5: Don't Overload The Graph
+
+--
+
+.font80[
+
+Including too much information in a single graph makes it difficult to make comparisons. Use small multiples (or a different graph type) instead. 
+
+]
+
+--
+
+.leftcol[
+
+.red[Wrong]
+
+```{r dont_5_bad, eval=TRUE, echo=FALSE, fig.align='center'}
+movies |> 
+  filter(mpaa != "") |> 
+  ggplot2::ggplot(
+    aes(
+      x = budget,
+      y = rating, 
+      group = mpaa,
+      color = mpaa
+    )) +
+  ggplot2::geom_smooth(method = "lm", se = FALSE, 
+    size = 2.5, alpha = 3/4) +
+  ggplot2::geom_point(
+    aes(
+      size = length, 
+      fill = mpaa), 
+        shape = 21, 
+        color = "black", 
+        alpha = 1/2) +
+  ggplot2::scale_size(
+    range = c(.001, 6.5), name = "Length (min)") + 
+  ggplot2::scale_x_continuous(
+    labels = scales::label_number(suffix = " Mil", scale = 1e-6)
+  ) + 
+  ggplot2::labs(
+    title = "Movie Ratings by Film Budget and Length", 
+    subtitle = "Example of graph overload", 
+    x = "Total budget (if known) in US dollars", 
+    y = "Average IMDB user rating")
+```
+
+
+]
+
+--
+
+.rightcol[
+
+.green[Better]
+
+```{r dont_5_fix, eval=TRUE, echo=FALSE, fig.align='center'}
+movies |> 
+  filter(mpaa != "") |> 
+  ggplot2::ggplot(
+    aes(
+      x = budget,
+      y = rating, 
+      group = mpaa,
+      color = mpaa
+    )) +
+  ggplot2::geom_smooth(method = "lm", se = FALSE, 
+    size = 1, alpha = 3/4, show.legend = FALSE) +
+  ggplot2::geom_point(
+    aes(
+      size = length, 
+      fill = mpaa), 
+      shape = 21, 
+      color = "black", 
+      alpha = 1/2, 
+      show.legend = TRUE) +
+  ggplot2::scale_size(
+    range = c(.001, 5.0), name = "Length (min)") + 
+  ggplot2::scale_x_continuous(
+    labels = scales::label_number(
+      suffix = " Mil", 
+      scale = 1e-6)
+  ) + 
+  viridis::scale_color_viridis(
+    option = "H",
+    discrete = TRUE, 
+    direction = -1) +
+  viridis::scale_fill_viridis(
+    option = "H",
+    discrete = TRUE, 
+    direction = -1) +
+  ggplot2::facet_wrap(. ~ mpaa, nrow = 2) + 
+  ggplot2::labs(
+    title = "Movie Ratings by Film Budget and Length", 
+    subtitle = "Example of graph overload", 
+    x = "Total budget (if known) in US dollars", 
+    y = "Average IMDB user rating") + 
+  ggplot2::theme_minimal(base_size = 9) + 
+  ggplot2::theme(legend.position = "bottom")
+```
+
+]
+
+---
+class: inverse, center, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+
+<br><br><br><br><br><br>
+
+# .large[Recap]
+
+---
+class: left, top
+background-image: url(img/ggplot2.png)
+background-position: 95% 8%
+background-size: 6%
+
+<br><br>
+
+.leftcol[
+
+# Visualization .green[Do's]
+
+1. Order Data Appropriately  
+
+2. Use Colorblind-Friendly Colors
+
+3. Rotate The Axis 
+
+4. Use Chart Space Effectively
+
+5. Use Transparency Effectively
+
+
+]
+
+--
+
+.rightcol[
+
+# Visualization .red[Don'ts]
+
+1. Distort The Axis 
+
+2. Use More Than Five Color Categories  
+
+3. Use 3-D (ever!)
+
+4. Create Misleading Patterns
+
+5. Don't Overload The Graph
+
+]

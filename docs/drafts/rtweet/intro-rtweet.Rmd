@@ -1,0 +1,94 @@
+---
+title: "Twitter data"
+date: "`r Sys.Date()`"
+description: |
+  "An example using `rtweet` package."
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: yes
+    toc_depth: 2
+
+
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(janitor)
+# base options ----
+base::options(
+  tibble.print_max = 25,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999
+)
+# knitr chunk options ----
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  dpi = 320,
+  out.width = "80%",
+  fig.width = 6,
+  fig.asp = 0.618,
+  fig.retina = 2,
+  fig.align = "center",
+  fig.show = "hold"
+  )
+# knitr knit settings ----
+knitr::opts_knit$set(
+  width = 78
+)
+knitr::opts_knit$set(root.dir = '/Users/mjfrigaard/Dropbox/@projects/high-priority/@data-journalism/course-website/FA22-JOUR301/drafts/rtweet/')
+```
+
+## Motivation
+
+This document will cover an example EDA project using the `rtweet` package to gather Twitter data.
+
+Below we install and load the `rtweet` package...
+
+```{r install-dev-rtweet}
+# install.packages("rtweet", repos = 'https://ropensci.r-universe.dev')
+library(rtweet)
+```
+
+## Get authentication access key 
+
+Follow the instructions [on the website](https://docs.ropensci.org/rtweet/articles/auth.html) for registering an app and getting an authentication key.  
+
+I have developer access (it's not hard to get, and if you plan on using twitter data for your final project, I recommend setting one up), so create a new application for this course: 
+
+```{r rtweet-dev-create-app, echo=FALSE}
+knitr::include_graphics(path = "img/rtweet-dev-create-app.png")
+```
+
+
+```{r eval=FALSE}
+auth <- rtweet_app()
+```
+
+```{r test-df, eval=FALSE}
+df <- rtweet::search_tweets("#rstats", token = auth)
+```
+
+
+```{r import-df, echo=FALSE}
+# we don't want this to run every time we knit, so we'll import it from 
+# data/raw (with timestamp)
+df <- readr::read_rds("data/raw/2022-10-24-rtweet-test.rds")
+# now when we run code below, it looks like it worked!
+```
+
+```{r glimpse-df, eval=TRUE}
+glimpse(df)
+```
+
+
+

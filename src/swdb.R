@@ -34,3 +34,4 @@ big_starwars <- dplyr::left_join(x = people_veh_spec,
     name:vehicle, starts_with("hw_"))
 
 vroom::vroom_write(x = big_starwars, file = "data/big_starwars.csv", delim = ",")
+readr::write_rds(x = big_starwars, file = "data/big_starwars.rds")

@@ -37,12 +37,12 @@ navbar:
           href: slides/ggp2-part-02b.html
         - text: "Data Reshaping with tidyr"
           href: slides/data-reshape.html
-        - text: "Introduction to the tidyverse (under construction)"
+        - text: "Introduction to the tidyverse (part 1)"
           href: slides/intro-to-tidyverse.html
         - text: "Data Joins with dplyr"
           href: slides/data-joins.html
-        - text: "Data Visualization with ggplot2 part 3 (under construction)"
-          href: 
+        - text: "Data Visualization with ggplot2 part 3"
+          href: slides/ggp2-part-03.html
         - text: "Buidling maps in R (under construction)"
           href: 
         - text: "Case study: Twitter data (under construction)"
@@ -93,6 +93,8 @@ navbar:
           href: exercises/fixing-bad-graphs-econ.html
         - text: "6) data reshaping in R (exercises)"
           href: exercises/data-reshape.html
+        - text: "7) table joins (exercises)"
+          href: exercises/table-joins.html
           
     - text: "Assignments"
       menu:
@@ -106,5 +108,7 @@ navbar:
           href: assignments/wk8-intro-to-dplyr.Rmd
         - text: "5) tidyr part 1 (assignment)"
           href: assignments/wk10-data-reshaping.Rmd
+        - text: "4) dplyr part 2 (assignment)"
+          href: assignments/wk11-table-joins.html
       
 output: distill::distill_article
