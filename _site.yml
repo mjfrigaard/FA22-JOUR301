@@ -108,7 +108,7 @@ navbar:
           href: assignments/wk8-intro-to-dplyr.Rmd
         - text: "5) tidyr part 1 (assignment)"
           href: assignments/wk10-data-reshaping.Rmd
-        - text: "4) dplyr part 2 (assignment)"
+        - text: "6) dplyr part 2 (assignment)"
           href: assignments/wk11-table-joins.html
       
 output: distill::distill_article

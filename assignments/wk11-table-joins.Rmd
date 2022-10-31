@@ -38,7 +38,7 @@ options(
   pillar.print_min = 10)
 ```
 
-For this assignment, you're going to re-create this .html file and get to use some of the data joining functions from the `dplyr` package. 
+For this assignment, you're going to re-create this .html file and use some of the data joining functions from the `dplyr` package. 
 
 You can review the slides for this assignment  [here](https://mjfrigaard.github.io/FA22-JOUR301/slides/data-joins.html#1), and the exercises are [here](https://mjfrigaard.github.io/FA22-JOUR301/exercises/table-joins.html)
 
@@ -169,14 +169,37 @@ knitr::include_graphics("https://ucd5b5a6674c0b8c2e60daf45012.previews.dropboxus
 
 **Step 6 Exercises:**
 
-+ Copy and paste the necessary sections from the [exercises](https://mjfrigaard.github.io/FA22-JOUR301/exercises/table-joins.html) to get the **Example** and **Solution** to work
++ Copy and paste the necessary sections from the [exercises](https://mjfrigaard.github.io/FA22-JOUR301/exercises/table-joins.html) to get the **Example** and **Solution** to work (I've included the first two below to get you started)
+
+
+````{verbatim}
+```{r StarWarsDataModel, message=FALSE, warning=FALSE}
+StarWarsDataModel <- dm::dm_draw(dm = starwars_dm(), 
+                                 view_type = "all",
+                                 graph_name = "StarWarsDataModel")
+StarWarsDataModel
+```
+````
+
+````{verbatim}
+```{r StarWarsFilms}
+StarWarsFilms <- starwarsdb::films %>% 
+                    select(-c(opening_crawl, director, producer)) %>% 
+                    filter(episode_id >= 4 & episode_id <= 6)
+StarWarsFilms
+```
+````
+
 
 + All of the exercises should have the code chunks set to `eval=TRUE`
 
 + You can set the `setup` chunk to `error=TRUE`, so if a code chunk doesn't render and look like the example in the exercises, read the error and try to de-bug (this is a huge part of coding)
 
-***Knit, and knit often:***
+**Knit, and knit often:**
 
 + Every time you change an `eval` argument, click on the "Knit" icon in R Studio and review the output. This will prevent errors from building up (and you get to see your handy work!)
 
 
+**When you're finished:**
+
+Email me the final knitted .html file with the **Examples** and **Solutions**
