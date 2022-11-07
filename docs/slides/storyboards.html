@@ -66,7 +66,7 @@ class: title-slide, center, middle, inverse
 
 Written: September 21 2022
 
-Updated: November 06 2022
+Updated: November 07 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -94,7 +94,7 @@ background-size: 6%
    - `library(flexdashboard)`
  
 - Download storyboard template ✅   
-  - [Link]()
+  - [Link](https://mjfrigaard.github.io/FA22-JOUR301/)
 
 ]
 ]
@@ -108,9 +108,9 @@ background-size: 6%
 
 - Layout ✅
 
-  - `storyboard: true`  
-  - `{.storyboard}` class  
+  - `YAML` header  
   - `data-commentary-width=`  
+  - `theme` 
 
 - Composition ✅ 
 
@@ -210,12 +210,31 @@ background-size: 6%
 
 # Download Template
 
-Download the storyboard template from [this link]() 
+.leftcol[
+
+.font80[
+Download the storyboard template from [this link](https://mjfrigaard.github.io/FA22-JOUR301/assignments/wk12-storyboard.Rmd) 
+
+Save the `.Rmd` file in the project folder: 
+]
+
+.border[
+&lt;img src="img/wk12-save-rmd.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+]
 
 --
 
-Save it in the project folder: 
+.rightcol[
 
+.font80[
+*It should be in this location:*
+]
+
+.border[
+&lt;img src="img/wk12-save-in-project.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+]
 
 
 ---
@@ -226,6 +245,113 @@ background-size: 6%
 
 # Knit the `storyboard`
 
+.leftcol[
+.font80[
+Open and knit the `.Rmd` file (and set 'Knit on Save')
+]
+.border[
+&lt;img src="img/wk12-knit.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+]
+
+--
+
+.rightcol[
+.font80[
+You'll see the output in the **Viewer** pane: 
+]
+.border[
+&lt;img src="img/wk12-knitted-sb-01.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Storyboard layout: `YAML` 
+
+&lt;br&gt;
+
+.leftcol[
+
+.font80[
+The `YAML` header in your `.Rmd` file contains the following: 
+]
+
+.code70[
+```
+---
+title: "Storyboard Template"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: default
+    storyboard: true
+---
+```
+]
+]
+
+--
+
+.rightcol[
+
+.font80[
+Give your storyboard a new `title:` (in quotes) and re-knit
+]
+
+.code70[
+```
+---
+title: "My Storyboard"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: default
+    storyboard: true
+---
+```
+]
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Storyboard layout: page sections 
+
+.font80[
++ Create a new section in your storyboard layout with a three level header (`###`) 
+
++ Adjust the width of the commentary box with `data-commentary-width=`
+]
+
+--
+
+.border[
+&lt;img src="img/wk12-knitted-sb-02.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Storyboard layout: section contents
+
+.font80[
++ The content for each section is placed beneath the three level header (`###`) 
+]
+
+--
+
+.border[
+&lt;img src="img/wk12-knitted-sb-03.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
 
 
 ---
@@ -234,9 +360,17 @@ background-image: url(img/flexdashboard.png)
 background-position: 95% 8%
 background-size: 6%
 
-# Customize the layout
+# Storyboard layout: `data-commentary` 
 
+.font80[
++ The content for the `data-commentary` section begins after the horizontal rule separator (`***`) 
+]
 
+--
+
+.border[
+&lt;img src="img/wk12-knitted-sb-04.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
 
 ---
 class: left, top
@@ -244,7 +378,164 @@ background-image: url(img/flexdashboard.png)
 background-position: 95% 8%
 background-size: 6%
 
-# Customize the layout
+# Customize the `theme`
+
+&lt;br&gt;
+
+.leftcol30[
+.font70[
+Change the `theme:` in the `YAML` header to one of the following: 
+
+  + `“bootstrap”`   
+  + `“cerulean”`  
+  + `“cosmo”`  
+  + `“journal”`  
+  + `"flatly"`  
+  + `“lumen”`  
+  + `“paper”`  
+  + `“readable”`  
+  + `“sandstone”`  
+  + **`“simplex”`**  
+  + `“spacelab”`  
+  + `“united”`  
+  + `“yeti”`
+]
+]
+
+--
+
+.rightcol70[
+
+.border[
+
+&lt;img src="img/wk12-knitted-sb-05.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Customize the `theme`
+
+&lt;br&gt;
+
+.leftcol30[
+.font70[
+Change the `theme:` in the `YAML` header to one of the following: 
+
+  + `“bootstrap”`   
+  + `“cerulean”`  
+  + `“cosmo”`  
+  + `“journal”`  
+  + **`"flatly"`**  
+  + `“lumen”`  
+  + `“paper”`  
+  + `“readable”`  
+  + `“sandstone”`  
+  + `“simplex”`  
+  + `“spacelab”`  
+  + `“united”`  
+  + `“yeti”`
+]
+]
+
+--
+
+.rightcol70[
+
+.border[
+
+&lt;img src="img/wk12-knitted-sb-06.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Composition
+
+.font80[
+Use markdown syntax when composing each section (see example below)
+]
+
+--
+
+.border[
+
+&lt;img src="img/wk12-knitted-sb-07.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Composition
+
+&lt;br&gt;
+
+.font80[
+Include more information or links in the `data-commentary` section (after the horizontal rule separator (`***`))
+]
+
+--
+
+.border[
+
+&lt;img src="img/wk12-knitted-sb-08.png" width="100%" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/flexdashboard.png)
+background-position: 95% 8%
+background-size: 6%
+
+# To complete assignment 
+
+--
+
+.leftcol[
+.font80[
+1. Give your storyboard a name (in the `title:`)  
+
+2. Pick a `theme:`  
+
+3. Add `self_contained: true` to `YAML` header (under `storyboard: true`)
+]
+]
+
+--
+
+.rightcol[
+.font80[
+4. Create the following sections (`###`) with `data-commentary` sidebars:  
+
+   - `Background`
+   - `Import`  
+   - `Tidy/Wrangle`   
+   - `Visualize`  
+   - `Future Work`
+   
+4. Knit the document
+
+6. Turn in the `.html` document
+]
+]
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

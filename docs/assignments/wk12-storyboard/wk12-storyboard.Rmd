@@ -1,9 +1,10 @@
 ---
-title: "Storyboard Template"
+title: "My Storyboard"
 output: 
   flexdashboard::flex_dashboard:
     theme: default
     storyboard: true
+    self_contained: true
 
 ---
 
@@ -37,14 +38,21 @@ options(
 
 ### Background {data-commentary-width=350}
 
-Background information on the dataset...
+The Palmer Penguins datasets comes from the [`palmerpenguins` package](https://allisonhorst.github.io/palmerpenguins/). You can install it using the code below:
 
-```{r}
+```{r install_palmerpenguins, eval=FALSE}
+install.packages("palmerpenguins")
+# or 
+# install.packages("remotes")
+remotes::install_github("allisonhorst/palmerpenguins")
 ```
 
 *** 
 
-Additional links or sources...
+Original paper on Palmer Penguins: 
+
+*Ecological Sexual Dimorphism and Environmental Variability within a Community of Antarctic Penguins (Genus Pygoscelis)*  
+Kristen B. Gorman, Tony D. Williams, William R. Fraser. [PloS ONE](https://doi.org/10.1371/journal.pone.0090081)
 
 ### Data {data-commentary-width=350}
 
