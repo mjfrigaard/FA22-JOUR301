@@ -1,0 +1,18 @@
+...make dated notes about changes to the project in this file in reverse chronological order (i.e., most recent first). This file is the equivalent of a lab notebook, and should contain entries like those shown below.
+
+## 2016-04-08
+
+* Switched to cubic interpolation as default.
+
+* Moved question about family's TB history to end of questionnaire.
+
+## 2016-04-06
+
+* Added option for cubic interpolation.
+
+* Removed question about staph exposure (can be inferred from blood test results).
+
+
+
+
+source: https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/

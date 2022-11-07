@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.Rmd is adapted from usethis::use_readme_rmd(). See the source file here on Github: https://github.com/r-lib/usethis/blob/master/inst/templates/project-README -->
+
+<!-- README.md is generated from README.Rmd. Please edit that file. -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# [Your Project] 
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of [Your Project] is to ...
+
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. 
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+

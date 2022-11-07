@@ -1,0 +1,9 @@
+Make the project citable (3e) by including a CITATION file in the project's home directory that describes how to cite this project as a whole, and where to find (and how to cite) any data sets, code, figures, and other artifacts that have their own DOIs.
+
+
+Please cite this work as:
+
+
+Morris, B.D. and E.P. White. 2013. 'The EcoData Retriever:
+improving access to existing ecological data.'PLOS ONE 8:e65848.
+http://doi.org/doi:10.1371/journal.pone.0065848

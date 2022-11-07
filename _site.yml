@@ -43,8 +43,8 @@ navbar:
           href: slides/data-joins.html
         - text: "Data Visualization with ggplot2 part 3"
           href: slides/ggp2-part-03.html
-        - text: "Buidling maps in R (under construction)"
-          href: 
+        - text: "Storyboards with flexdashboard"
+          href: slides/storyboards.html
         - text: "Case study: Twitter data (under construction)"
           href: 
         - text: "Case study: Scraping data from the web (under construction)"
@@ -110,5 +110,7 @@ navbar:
           href: assignments/wk10-data-reshaping.Rmd
         - text: "6) dplyr part 2 (assignment)"
           href: assignments/wk11-table-joins.html
+        - text: "7) storyboard template (assignment)"
+          href: assignments/wk12-storyboard.Rmd
       
 output: distill::distill_article

@@ -1,0 +1,69 @@
+---
+title: "Storyboard Template"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: default
+    storyboard: true
+
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+# create www folder
+fs::dir_create("www/")
+# options for chunks
+knitr::opts_chunk$set(
+  cache = FALSE,
+  echo = TRUE,
+  collapse = FALSE,
+  eval = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  dev = "ragg_png",
+  out.width = '85%',
+  fig.path = "www/",
+  dpi = 320,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5.5,
+  fig.retina = 2
+  )
+# tibble printing
+options(
+  pillar.print_max = 10, 
+  pillar.print_min = 10)
+```
+
+
+### Background {data-commentary-width=350}
+
+Background information on the dataset...
+
+```{r}
+```
+
+*** 
+
+Additional links or sources...
+
+### Data {data-commentary-width=350}
+
+Code for obtaining data...
+
+```{r}
+```
+
+*** 
+
+Information about the dataset...
+
+### Graphs {data-commentary-width=400}
+
+Code for creating graphs...
+
+```{r}
+```
+
+*** 
+
+Graphs for data...

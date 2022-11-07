@@ -120,7 +120,7 @@ background-size: 6%
    - `library(flexdashboard)`
  
 - Download storyboard template `r emoji::emoji("white_check_mark")`   
-  - [Link]()
+  - [Link](https://mjfrigaard.github.io/FA22-JOUR301/)
 
 ]
 ]
@@ -234,11 +234,21 @@ background-size: 6%
 
 # Download Template
 
+.leftcol[
+
 Download the storyboard template from [this link]() 
 
---
+]
+
+.rightcol[
 
 Save it in the project folder: 
+
+
+
+]
+
+
 
 
 
