@@ -1,8 +1,8 @@
 ---
-title: "Storyboard Template"
+title: "My Storyboard"
 output: 
   flexdashboard::flex_dashboard:
-    theme: default
+    theme: flatly
     storyboard: true
 
 ---
