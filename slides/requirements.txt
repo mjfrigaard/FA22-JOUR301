@@ -1,0 +1,9 @@
+# Requirements 
+
+
+'Make dependencies and requirements explicit. This is usually done on a per-project rather than per-program basis, i.e., by adding a file called something like requirements.txt to the root directory of the project' 
+
+
+
+
+source: https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/
