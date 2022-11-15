@@ -16,13 +16,13 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 ```
 
-```{r IRAhandle_tweets_7_raw}
-IRAhandle_tweets_7_raw <- readr::read_csv("https://raw.githubusercontent.com/fivethirtyeight/russian-troll-tweets/master/IRAhandle_tweets_7.csv")
-glimpse(IRAhandle_tweets_7_raw)
+```{r IRAhandle_tweets_6_top100k_raw}
+IRAhandle_tweets_6_top100k_raw <- readr::read_csv("https://raw.githubusercontent.com/fivethirtyeight/russian-troll-tweets/master/IRAhandle_tweets_6.csv", n_max = 100000)
+glimpse(IRAhandle_tweets_6_top100k_raw)
 ```
 
 | Variable      | Definition                                                                                                                                                                |
-|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-------------|-----------------------------------------------------------|
 | ID            | 9-18 digit internal Twitter author account ID                                                                                                                             |
 | Handle        | Twitter handle for author ("*JOHAAJOTS*", "*JOHANNBERGBERG*", "*JOHAN_NIGEL*")                                                                                            |
 | Tweet Content | Tweet (i.e., "*#jobb Fake News Media Ignoring This! <https://t.co/kKF36W6Tfr> #job <https://t.co/BAJMuiSmke>*")                                                           |
