@@ -45,6 +45,8 @@ navbar:
           href: slides/ggp2-part-03.html
         - text: "Storyboards with flexdashboard"
           href: slides/storyboards.html
+        - text: "Describing Data"
+          href: slides/describe-data.html
         - text: "Case study: Twitter data (under construction)"
           href: 
         - text: "Case study: Scraping data from the web (under construction)"

@@ -58,7 +58,7 @@ name: title-slide
 class: title-slide, center, middle, inverse
 
 # Describing Data
-#.fancy[Communicating the data to your audience]
+#.fancy[Communicating data to your audience]
 
 &lt;br&gt;
 
@@ -66,7 +66,7 @@ class: title-slide, center, middle, inverse
 
 Written: September 21 2022
 
-Updated: October 24 2022
+Updated: November 14 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -79,17 +79,19 @@ background-image: url(img/tidyverse.png)
 background-position: 95% 8%
 background-size: 6%
 
-## Outline 
-
-&lt;br&gt;
+# Outline
 
 .leftcol[
 
-- What are data? 
+### .blue[What do the data represent?]
 
-- Two
+&lt;br&gt;
 
-- Three
+### .blue[How were the data collected?]
+
+&lt;br&gt;
+
+### .blue[What is the data’s provenance?]
 
 ]
 
@@ -97,12 +99,452 @@ background-size: 6%
 
 .rightcol[
 
-- Four 
 
-- Five
 
-- Six
+#### - .font80[.green[*What was measured? (people, cities, stocks, penguins, etc.)*]]
 
+#### - .font80[.green[*Where did they come from? (social media, survey, instrument)*]]
+
+
+#### - .font80[.green[*How have the data changed? (format, transformations, etc.)*]]
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# The .large[.red[Who]]
+
+--
+
+Describe who collected the data
+  
+  - .font80[*Include a description of the categories, values, numbers with units.*]
+  
+--
+
+.font80[
+
+&gt; *".red[We obtained complete data] from 196 US-American individuals who participated in an online study via Amazon Mechanical Turk"* - [source](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153419#sec002)
+
+]
+
+
+--
+
+.font80[
+
+&gt; *"For their study, .red[Liam Cross, Andrea Piovesan, and Gray Atherton] utilized 196 participants to serve as their sample"* - [source](https://www.psypost.org/2022/11/autistic-people-outperform-neurotypicals-in-a-cartoon-version-of-an-emotion-recognition-task-64294)
+
+]
+
+--
+
+.font80[
+
+&gt; *".red[The Times analyzed] country-level trade data from .red[the Observatory of Economic Complexity]..."* - [source](https://www.nytimes.com/interactive/2022/10/30/business/economy/russia-trade-ukraine-war.html)
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# The .large[.red[How]]
+
+--
+
+Describe how the data were collected:
+
+  - .font80[*i.e., was it a poll, device, or digital source (like an API)?*]
+
+--
+
+.font80[
+
+&gt; *"The tweets were obtained .red[from sources familiar with Twitter’s data systems] after the company removed the tweets from public view"* - [source](https://www.wired.com/story/how-americans-wound-up-on-twitters-list-of-russian-bots/)
+
+]
+
+--
+
+.font80[
+
+&gt; "*symptoms were assessed .red[at baseline and two months after the last experimental session].*" - [source](https://www.nature.com/articles/s41591-021-01336-3)
+
+]
+
+--
+
+.font80[
+
+&gt; "*The study was conducted as .red[an online questionnaire].*" - [source](https://www.tandfonline.com/doi/full/10.1080/15213269.2017.1338964)
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# The .large[.red[When]]
+
+--
+
+Describe when the data were collected:
+
+  - .font80[*the data collection dates, publication date, time-span, etc.*]
+
+--
+
+.font80[
+
+&gt; *"From .red[2014 to mid-2016 (January – June)], 75 people have died while attempting to photograph themselves"* - [source](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6131996/)
+
+]
+
+--
+
+.font80[
+
+&gt; "*As of .red[November 2020], 800 million monthly TikTok users have been reported, and 738 million first-time installs .red[in 2019 have been estimated]*" - [source](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8010681/)
+
+]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# The .large[.red[What]]
+
+--
+
+Describe what the values represent
+
+  - .font80[*Describe the sample, measurement categories and/or numbers with units.*]
+
+--
+
+.font80[
+
+&gt; *"data for 2012–2016 indicates the average one-way commute is .red[26 minutes] in the United States"* - [source](https://www.tandfonline.com/doi/full/10.1080/01441647.2019.1649317)
+
+]
+
+--
+
+.font80[
+
+&gt; *"The data includes almost .red[300,000 tweets from approximately 3,000 Twitter handles]"* - [source](https://fivethirtyeight.com/features/why-were-sharing-3-million-russian-troll-tweets/)
+
+]
+
+--
+
+.font80[
+
+&gt; *"The Times analyzed country-level trade data from the Observatory of Economic Complexity, which collects .red[national-level data from government sources in a selection of countries]."* - [source](https://www.nytimes.com/interactive/2022/10/30/business/economy/russia-trade-ukraine-war.html)
+
+]
+
+---
+class: inverse, center, middle
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# .large[Data Collection]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing data .large[.red[Collection]]
+
+--
+
+#### When and where did the study take place?
+
+&lt;br&gt;
+
+--
+
+&gt; *Who designed the study?* 
+
+--
+
+&gt; *Where are the participants from?*
+
+--
+
+&gt; *How were the participants recruited?* 
+
+--
+
+&gt; ***.red[What makes them different/similar to your audience?]***
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing data .large[.red[Collection]]
+
+--
+
+#### What was measured, and how was it collected?
+
+&lt;br&gt;
+
+--
+
+&gt; *What methods and procedures were used to collect the data?* 
+
+--
+
+&gt; *What was the primary outcome of interest?*
+
+--
+
+&gt; *What other measurements were included?*
+
+--
+
+&gt; ***.red[What wasn't included or measured?]***
+
+---
+class: inverse, center, middle
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# .large[Data Preparation]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing .large[.red[Preparation]] 
+
+--
+
+#### What has been done to the raw data?
+
+&lt;br&gt;
+
+--
+
+&gt; *What all the data included? If not, why were they excluded?* 
+
+--
+
+&gt; *Have these data been combined, aggregated or joined?*
+
+--
+
+&gt; *Have any of the variables been transformed or re-calculated?*
+
+--
+
+&gt; ***.red[How much data are missing? How are the data missing?]***
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing .large[.red[Preparation]]
+
+Take note of excluded participants and sample size:
+
+&gt; "*Anyone who responded that they were self-diagnosed with autism, meaning they had not received a clinical diagnosis from a medical professional, was .red[excluded (n = 2)].*"
+
+--
+
+Limitations aren't always reported in the **limitations** section:
+
+&gt; "*A sample of 100 autistic individuals (50 per condition) was sought. Power analysis using GPower indicated that a sample of 50 per condition afforded above 90% power to detect medium effect sizes*"
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing .large[.red[Preparation]]
+
+Try to identify survey items and scale (i.e., the question and numerical measure)
+
+--
+
+.font90[
+
+&gt; *"Participants responded to .red[“How familiar are you with (television series or film title) in general?”] from .red[`1` = 'Never heard of it' to `7` = 'Very familiar with it']"*
+
+]
+
+
+--
+
+This helps to interpret any statistics: 
+
+.border[
+
+&lt;img src="img/mean-sd-familiarity.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: inverse, center, middle
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# .large[Variables]
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing variables = .large[.red[Codebooks]]
+
+--
+
+Technical codebooks document the name of the column in the dataset and a brief description of the variable. See the example below from the [Russian Troll Tweets](https://github.com/fivethirtyeight/russian-troll-tweets/):
+
+--
+
+&lt;img src="img/tweet-codebook.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Describing variables = .large[.red[Codebooks]]
+
+.leftcol20[
+
+.font70[
+
+Re-write a version of your codebook for non-technical audiences. 
+
+Include examples of values. 
+
+]
+
+]
+
+.rightcol80[
+
+&lt;img src="img/tweet-new-codebook.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Data .large[.red[Summaries]]
+
+.leftcol30[
+
+.font70[
+Summarise the data with a simple table (or graph)
+
+Check out the [`inspectdf`](https://alastairrushworth.github.io/inspectdf/) package for summary graphs. 
+
+]
+
+]
+
+
+.rightcol70[
+
+&lt;img src="img/inspectdf-1.png" width="100%" /&gt;
+
+
+]
+
+
+
+---
+class: left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# Data .large[.red[Summaries]]
+
+.leftcol30[
+
+.font70[
+Summarise the data with a simple table (or graph)
+
+Check out the [`skimr`](https://docs.ropensci.org/skimr/) package for summary tables.
+
+]
+]
+
+.rightcol70[
+
+.font20[
+
+
+
+]
+]
+
+
+
+
+---
+class: inverse, left, top
+background-image: url(img/tidyverse.png)
+background-position: 95% 8%
+background-size: 6%
+
+# References 
+
+.font90[
+
+
+1. Russian Troll Tweets ([538](https://fivethirtyeight.com/features/why-were-sharing-3-million-russian-troll-tweets/), [Wired](https://www.wired.com/story/how-americans-wound-up-on-twitters-list-of-russian-bots/))
+  
+2. [MDMA-assisted therapy for severe PTSD](https://www.nature.com/articles/s41591-021-01336-3)  
+  
+3. [On the Psychology of TikTok Use](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8010681/)
+  
+4. [Autistic people outperform neurotypicals in a cartoon version of an emotion recognition task](https://onlinelibrary.wiley.com/doi/full/10.1002/aur.2782)  
+  
+5. [(Don’t) Tell Me How It Ends: Spoilers, Enjoyment, and Involvement in Television and Film ](https://www.tandfonline.com/doi/full/10.1080/15213269.2017.1338964) 
+
+6. Selfies ([Selfies: A boon or bane?](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6131996/pdf/JFMPC-7-828.pdf), [Selfie-related deaths using web epidemiological intelligence tool (2008–2021): a cross-sectional study](https://academic.oup.com/jtm/article-abstract/29/5/taab170/6404466)
+  
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

@@ -1,0 +1,31 @@
+---
+title: "Tables"
+description: |
+  Tables for slides.
+author:
+  - name: Martin Frigaard
+    url: https://www.martinfrigaard.io/
+    affiliation: JOUR 301
+    affiliation_url: https://mjfrigaard.github.io/FA22-JOUR301/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+```
+
+```{r IRAhandle_tweets_7_raw}
+IRAhandle_tweets_7_raw <- readr::read_csv("https://raw.githubusercontent.com/fivethirtyeight/russian-troll-tweets/master/IRAhandle_tweets_7.csv")
+glimpse(IRAhandle_tweets_7_raw)
+```
+
+| Variable      | Definition                                                                                                                                                                |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ID            | 9-18 digit internal Twitter author account ID                                                                                                                             |
+| Handle        | Twitter handle for author ("*JOHAAJOTS*", "*JOHANNBERGBERG*", "*JOHAN_NIGEL*")                                                                                            |
+| Tweet Content | Tweet (i.e., "*#jobb Fake News Media Ignoring This! <https://t.co/kKF36W6Tfr> #job <https://t.co/BAJMuiSmke>*")                                                           |
+| Region        | A region classification (i.e., "*United States*", "*Germany*", "*Azerbaijan*") determined by [Social Studio](https://help.salesforce.com/articleView?id=000199367&type=1) |
+| Language      | The language of the tweet (i.e., "*English*", "*German*", "*Finnish*")                                                                                                    |
+| Publish Date  | Date and time the original tweet was sent (i.e., "*8/5/2017 11:41*", "*8/5/2017 11:46*", "*8/5/2017 11:51*"                                                               |

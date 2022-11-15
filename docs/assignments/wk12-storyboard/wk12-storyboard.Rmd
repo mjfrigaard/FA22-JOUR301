@@ -54,7 +54,7 @@ Original paper on Palmer Penguins:
 *Ecological Sexual Dimorphism and Environmental Variability within a Community of Antarctic Penguins (Genus Pygoscelis)*  
 Kristen B. Gorman, Tony D. Williams, William R. Fraser. [PloS ONE](https://doi.org/10.1371/journal.pone.0090081)
 
-### Data {data-commentary-width=350}
+### Import {data-commentary-width=350}
 
 Code for obtaining data...
 
@@ -65,13 +65,28 @@ Code for obtaining data...
 
 Information about the dataset...
 
-### Graphs {data-commentary-width=400}
+### Tidy/Wrangle {data-commentary-width=300}
 
-Code for creating graphs...
+Code for tidying/wrangling data
 
 ```{r}
 ```
 
 *** 
 
-Graphs for data...
+More details on data...
+
+### Visualize {data-commentary-width=400}
+
+Code for visualizing the data
+
+```{r}
+
+```
+
+***
+
+More details on visualizations 
+
+### Future Work {data-commentary-width=300}
+
