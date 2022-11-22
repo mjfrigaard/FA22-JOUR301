@@ -47,17 +47,13 @@ navbar:
           href: slides/storyboards.html
         - text: "Describing Data"
           href: slides/describe-data.html
-        - text: "Case study: Twitter data (under construction)"
-          href: 
+        - text: "Collaborating with Git & GitHub"
+          href: slides/git-and-github.html
         - text: "Case study: Scraping data from the web (under construction)"
           href: 
         - text: "Case study: Image files & iteration (under construction)"
           href: 
-        - text: "Collaborating with Git & GitHub (under construction)"
-          href: 
         - text: "Building websites with R Markdown (under construction)"
-          href: 
-        - text: "Finals"
           href: 
 
     - text: "Tutorials"

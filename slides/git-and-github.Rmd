@@ -1,6 +1,6 @@
 ---
-title: "Git and GitHub"
-subtitle: "Managing Changes"
+title: "GitHub, Git, and RStudio"
+subtitle: "Managing changes, collaborating, and Oxford commas"
 author: "Martin Frigaard"
 institute: "California State University | Journalism & Public Relations: Data Journalism"
 output:
@@ -101,21 +101,451 @@ Updated: `r today`
 
 ---
 class: left, top
-background-image: url(img/tidyverse.png)
+background-image: url(img/RStudio.png)
 background-position: 95% 8%
-background-size: 6%
+background-size: 7%
 
-## Outline 
+## .large[Outline]
 
 <br>
 
 .leftcol[
 
-- What are changes? 
+- File changes:  
+  - How can we track them?  
+  - How can we revert to previous versions?  
 
-- How can we track them?
+- Git  
+  - What is Git?
+  - Installation
+  - Configuring Git  
+]
 
-- 
+--
+
+.rightcol[
+
+- RStudio & Git 
+  - Project Options  
+  - Git Pane   
+  - Committing Changes  
+
+- RStudio & GitHub  
+  - HTTPS/SSH keys 
+  - Create new repo  
+  - Push from local 
+  - GitHub pages
+
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[Ch-ch-changes]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Work is captured in changes 
+
+.leftcol60[
+
+#### Example workflow: 
+
+1. Create file:  
+ - `Untitled.docx`  
+2. Save file (.red[*initial changes*]):  
+ - `file.docx`  
+3. Make edits (.red[*my changes*]) to file: 
+  - `file-2.docx`   
+4. Get feedback (.red[*more changes*]): 
+  - `file-2-edits.docx`  
+
+]
+
+--
+
+.rightcol40[
+
+.border[
+
+```{r git-changes, echo=FALSE, out.height='10%'}
+knitr::include_graphics("img/git-changes.png")
+```
+
+]
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# How do we keep track of changes?
+
+#### 1. Manually (with file names)   
+
+  - `file.docx`, `file-2.docx`, `file-2-edits.docx`
+  
+--
+
+#### 2. Clouds 
+
+.border[
+
+```{r git-clouds, echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics("img/git-clouds.png")
+```
+
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# How can we revert to previous versions?
+
+.leftcol40[
+
+<br>
+
+#### 1. Open previous version 
+
+]
+
+--
+
+.rightcol60[
+
+.border[
+```{r git-revert, echo=FALSE, out.width='80%', fig.align='center'}
+knitr::include_graphics("img/git-revert.png")
+```
+]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# How can we revert to previous versions?
+
+.leftcol40[
+
+<br>
+
+#### 3. Use 'Version History' (or some equivalent) 
+
+]
+
+--
+
+.rightcol60[
+
+<br><br>
+
+.border[
+```{r git-cloud-revert, echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("img/git-cloud-revert.png")
+```
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# How can we revert to previous versions?
+
+
+.border[
+```{r git-version-history-drive, echo=FALSE, out.width='85%', fig.align='center'}
+knitr::include_graphics("img/git-version-history-drive.png")
+```
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Changes recap
+
+<br><br>
+
+
+
+1. .font130[ Work is captured in a series of .red[**changes**]]
+
+--
+
+2. .font130[We need a system for:]
+  
+  a) .font130[Tracking these changes]  
+  
+  b) .font130[Reverting to previous versions]
+
+
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[Git]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# What is Git?
+
+.leftcol65[
+
+#### .font140[Git is a version control system]
+
+> Git keeps track of all the changes to files in a Git repository
+
+]
+
+--
+
+.rightcol35[
+
+#### .font140[Git is .purple[difficult]]
+
+> .purple[Everything in Git is explicit (we normally don't have to think about these steps)]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Why is Git (difficult)?
+
+### 1. Leaky abstraction 
+
+.font90[
+
+> *"Abstractions are there to protect us from complexity. A leaky abstraction fails at its job by letting some of the underlying complexity peek through, the same way a leaky umbrella fails at its job of keeping you dry."* - [Git For Humans](https://abookapart.com/products/git-for-humans)
+
+]
+
+
+### 2. Powerful = potentially dangerous
+
+.font90[
+
+> *"Git’s challenging conceptual model is a feature, not a bug. Using Git feels like running with scissors because it’s a powerful tool that will let you bend time and space to your will, which sounds like—and is—a lot of responsibility to put in the hands of mere humans."* - [Git For Humans](https://abookapart.com/products/git-for-humans)
+
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Fortunately, we have great resources! 
+
+
+.leftcol[
+
+## [Happy Git and GitHub for the useR](https://happygitwithr.com/) 
+
+]
+
+.rightcol[
+
+.border[
+```{r git-happy-git, echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("img/git-happy-git.png")
+```
+]
+
+]
+
+
+--
+
+Bookmark this resource! 
+
+--
+
+You'll come back to it often...
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Installing Git 
+
+<br>
+
+#### 1. Download Git from the [website](https://git-scm.com/downloads) based on your operating system:
+
+.leftcol[
+.border[
+```{r git-download-mac, echo=FALSE}
+knitr::include_graphics("img/git-download-mac.png")
+```
+]
+]
+
+.rightcol[
+
+<br>
+
+.border[
+```{r git-download-win, echo=FALSE}
+knitr::include_graphics("img/git-download-win.png")
+```
+]
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Installing Git 
+
+#### 2. Follow the installation instructions 
+
+--
+
+#### 3. Verify that Git was installed on your machine using `which git` or `git --version`
+
+--
+
+```bash
+$ which git
+/usr/bin/git
+$  git --version
+git version 2.37.1 (Apple Git-137.1)
+```
+
+--
+
+#### 4. Problems?
+
+If you run into issues, check out the [Install git chapter from happygitwithr](https://happygitwithr.com/install-git.html)
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Configuring Git 
+
+After you've installed Git, you need to configure Git with a `user.name` and `user.email`
+
+--
+
+You can do this with the following commands in your Terminal pane:
+
+```bash
+$ git config --global user.name 'Martin Frigaard'
+$ git config --global user.email 'mjfrigaard@gmail.com'
+```
+
+--
+
+You can verify your global settings with `git config --global --list`
+
+--
+
+```bash
+$ git config --global --list
+user.name=Martin Frigaard
+user.email=mjfrigaard@gmail.com
+```
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Configuring Git (NOTES)
+
+--
+
+#### What email should you use with `user.email`? 
+
+--
+
+> ["*This email **must** be the email you used to create your GitHub account.*"](https://happygitwithr.com/hello-git.html#more-about-git-config)
+
+--
+
+#### Consider downloading a Git client
+
+--
+
+> ["*No one is giving out Git Nerd merit badges.*"](https://happygitwithr.com/git-client.html#no-one-is-giving-out-git-nerd-merit-badges)
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[RStudio & Git]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & Git (detect Git)
+
+--
+
+#### Make sure you can detect Git From RStudio  
+
+.leftcol[
+
+.border[
+
+```{r git-find-git-mac, echo=FALSE, out.height='100%', out.width='100%', fig.cap="On Mac"}
+knitr::include_graphics("img/git-find-git-mac.png")
+```
+
+]
 
 ]
 
@@ -123,10 +553,724 @@ background-size: 6%
 
 .rightcol[
 
-- Four 
+.border[
 
-- Five
-
-- Six
+```{r git-find-git-win, echo=FALSE, out.height='100%', out.width='100%', fig.align='right', fig.cap="On Windows"}
+knitr::include_graphics("img/git-find-git-win.png")
+```
 
 ]
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & Git (Git executable)
+
+#### Make sure RStudio can see the Git executable
+
+.leftcol[
+
+```{r git-global-options-gitsvn, echo=FALSE, out.height='100%', out.width='60%', fig.align='center'}
+knitr::include_graphics("img/git-global-options-gitsvn.png")
+```
+
+]
+
+--
+
+
+.rightcol[
+
+.border[
+
+```{r git-exec-mac, echo=FALSE, fig.align='left', out.height='50%', out.width='75%', fig.cap="On Mac"}
+knitr::include_graphics("img/git-exec-mac.png")
+```
+
+]
+
+.border[
+```{r git-exec-wim, echo=FALSE, fig.align='left', out.height='50%', out.width='75%', fig.cap="On Windows"}
+knitr::include_graphics("img/git-exec-win.png")
+```
+
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (HTTPS)
+
+#### 1. Personal access token (HTTPS or SSH)
+
+- We communicate with GitHub using one of two methods: **HTTPS** or **SSH**
+
+  - *Differences between **HTTPS** or **SSH** are discussed [here](https://happygitwithr.com/https-pat.html)*  
+  
+--
+
+- We're going to walk through creating a **Personal Access Token** (PAT) with the [`usethis` package](https://usethis.r-lib.org/) 
+
+--
+
+- Install `usethis` using the code below: 
+  
+```{r , eval=FALSE}
+install.packages("usethis")
+library(usethis)
+```
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT in RStudio)
+
+To generate a PAT with `usethis`, we're going to run the `create_github_token()` function: 
+
+```{r create_github_token, eval=FALSE}
+usethis::create_github_token()
+```
+
+--
+
+This will open your Browser and take you to GitHub, and generate the following in your RStudio console:
+
+```r
+• Call `gitcreds::gitcreds_set()` to register this token in the local Git 
+  credential store
+  It is also a great idea to store this token in any password-management 
+  software that you use
+✔ Opening URL 'https://github.com/settings/tokens/new?scopes=repo,user,gist,
+  workflow&description=DESCRIBE THE TOKEN\'S USE CASE'
+```
+
+
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[GitHub]]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT on GitHub)
+
+#### Provide a description in .red[NOTE] and use the default .red[Expiration] date
+
+```{r git-github-pat-create, echo=FALSE, fig.align='center', out.height='87%', out.width='87%'}
+knitr::include_graphics("img/git-github-pat-create.png")
+```
+
+--
+
+.font80[***.red[I stick with the default expiration date because I assume GitHub’s security folks have a good reason for this length of time...]***]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT on GitHub)
+
+.leftcol30[
+
+Under **.red[scopes]**, the *.red[repo]*, *.red[workflow]*, *.red[gist]*, and *.red[user]* should be selected
+
+]
+
+.rightcol70[
+
+```{r git-github-pat-create-scopes, echo=FALSE, fig.align='center', out.height='69%', out.width='69%'}
+knitr::include_graphics("img/git-github-pat-create-scopes.png")
+```
+
+]
+
+--
+
+<br><br>
+
+After entering a description in **.red[NOTE]**, click *Generate Token*.
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT Store)
+
+<br>
+
+#### Copy your PAT to the clipboard! 
+
+```{r git-github-pat-save, echo=FALSE, out.width='100%'}
+knitr::include_graphics(path = "img/git-github-pat-save.png")
+```
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[Back in RStudio]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT Store)
+
+<br>
+
+.leftcol40[
+
+.font90[1) Back in RStudio, store the PAT using `gitcreds::gitcreds_set()`] 
+- .font80[*You won't need to install the `gitcreds` package--it's installed with `usethis`*]
+  
+.code70[
+
+```{r eval=FALSE}
+gitcreds::gitcreds_set()
+```
+
+]
+]
+
+--
+
+.rightcol60[
+.font90[2) You'll see the following:]
+.code60[
+
+```{r eval=FALSE}
+-? Enter password or token: 
+```
+
+]
+
+.font90[3) Paste your PAT and hit **enter/return**]
+
+.code60[
+```{r , eval=FALSE}
+-? Enter password or token: ghp_xxxxxxxx
+-> Adding new credentials...
+-> Removing credentials from cache...
+-> Done.
+```
+]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (PAT Store check)
+
+<br>
+
+Use `gitcreds::gitcreds_get()` to check your GitHub credentials
+
+--
+
+```r
+gitcreds::gitcreds_get()
+ <gitcreds>
+   protocol: https
+   host    : github.com
+   username: PersonalAccessToken
+   password: <-- hidden -->
+```
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio & GitHub (recap)
+
+#### For Git and GitHub to work in RStudio: 
+
+.leftcol[
+.font80[
+
++ **Git must be installed** 
+  - *check this with `which git` or `where git` in Terminal*    
++ **RStudio must be able to locate the Git executable**  
+  - *.red[Tools] > .red[Global options] > .red[Git/SVN] > locate executable*  
++ **Connect RStudio to GitHub with a Personal Access Token**  
+    - *This uses the HTTPS protocol* 
+    - *For SHA protocol follow [these instructions](https://happygitwithr.com/ssh-keys.html)*
+  
+]
+]
+
+--
+
+.rightcol[
+.font80[
+
++ **`usethis::create_github_token()` opens GitHub in browser to create a PAT**   
+  - *Add description and use default settings*     
+  - *Copy PAT to clipboard and store in password manager*  
++ **`gitcreds::gitcreds_set()` stores the PAT in RStudio** 
+  - *Enter your copied PAT to store in RStudio*  
++ **`gitcreds::gitcreds_get()` to check the PAT in RStudio**
+  - *Verify your PAT in RStudio*  
+
+]
+]
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[Typical Workflow]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (typical workflow)
+
+#### You've done the following: 
+
+- `r emoji::emoji("white_check_mark")` Created a project (with an `.Rproj` file)  
+
+- `r emoji::emoji("white_check_mark")` You've written code/produced outputs you'd like to share  
+
+- `r emoji::emoji("white_check_mark")` Your RStudio is setup with Git and GitHub  
+
+--
+
+<br>
+
+> This scenario is outlined in [this chapter of `happygitwithr`](https://happygitwithr.com/existing-github-last.html), "*Existing project, GitHub last*"
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Project Files)
+
+<br>
+
+.leftcol[
+
+#### The project files
+
+- `.Rproj` file (named for the project)
+- Project folders   
+- `README.Rmd`
+
+
+]
+
+.rightcol[
+.border[
+
+```{r git-proj-files, echo=FALSE, out.width='77%', fig.align='left'}
+knitr::include_graphics(path = "img/git-proj-files.png")
+```
+
+]
+]
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[On GitHub]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Create GitHub Repo)
+
+#### Head over to GitHub and create a new repository
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("img/git-github-new-repo.png")
+```
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Create GitHub Repo)
+
+#### Give the new repository a name and description
+
+```{r git-github-new-repo-details, echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("img/git-github-new-repo-details.png")
+```
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Copy Code)
+
+#### Copy the code for 'pushing the existing repository from the command line'
+
+.circle[
+
+```{r git-github-push-local-code, echo=FALSE, out.width='90%', fig.align='center'}
+knitr::include_graphics("img/git-github-push-local-code.png")
+```
+
+]
+
+***.red[Save this for later...]***
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[In RStudio]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Project Options)
+
+#### Tools > Project Options > Git/SVN
+
+.font90[Setup this project to use Git]
+
+```{r git-project-options, echo=FALSE, out.width='75%', fig.align='center'}
+knitr::include_graphics("img/git-project-options.png")
+```
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Restart, twice)
+
+#### Click yes (twice!)
+
+.leftcol[
+
+.font80[First we confirm we want to create a new Git repo:]
+
+```{r git-confirm-new-git-repo, echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics("img/git-confirm-new-git-repo.png")
+```
+
+]
+
+--
+
+.rightcol[
+
+.font80[Then we confirm we want to restart RStudio:]
+
+```{r git-confirm-restart-rstudio, echo=FALSE, out.width='60%', fig.align='center'}
+knitr::include_graphics("img/git-confirm-restart-rstudio.png")
+```
+
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Adding files)
+
+**.font120[Adding files to Git]**
+
+.cols3[
+
+.font80[Enter the following commands into the RStudio Terminal]
+
+.code70[
+```bash
+$ git add -A
+```
+]
+
+
+]
+
+--
+
+.cols3[
+
+<br>
+
+> .font80[Can be read as, "*Git add 'ALL' my files*"]
+
+]
+
+--
+
+.cols3[
+
+.font80[You'll see the following output in the Terminal]
+
+.code70[
+```bash
+$ git add -A
+$ 
+```
+]
+
+.font80[Nothing...]
+
+]
+
+--
+
+<br><br>
+
+***.font90[.red[One of the tricky things about using the command-line is that it doesn't always tell you if something worked (or didn't)]]***
+
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Committing changes)
+
+#### Commit the added changes 
+
+.cols3[
+
+.font90[Now we `commit` our added files with a message (`-m`)]
+
+.code60[
+```bash
+$ git commit -m "first commit"
+```
+]
+
+]
+
+--
+
+.cols3[
+
+> .font90[All changes in Git projects are tracked with **commits**.]
+
+
+> .font90[**Commits** represent .red[changes] to any files being tracked from the `git add` command]
+
+]
+
+--
+
+.cols3[
+
+.code50[
+```bash
+[main (root-commit) 45a7720] first commit
+474 files changed, 12040 insertions(+)
+create mode 100644 .gitignore
+create mode 100644 CITATION
+create mode 100644 LICENSE
+create mode 100644 README.Rmd
+create mode 100644 code/01-import.R
+create mode 100644 code/02-tidy.R
+create mode 100644 code/03-wrangle.R
+create mode 100644 code/04-visualize.R
+create mode 100644 code/05-model.R
+```
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Remotes)
+
+**.font120[Add the `remote` (on GitHub)]**
+
+--
+
+> .font90[Now that we've added and committed the changes to our local Git repo, we need to add the `remote` location (on GitHub).]
+
+--
+
+> .font90[We can do this with the first line of code we copied when we create our GitHub repository:]
+
+--
+
+```bash
+$ git remote add origin https://github.com/mjfrigaard/texas-djc-data.git
+```
+
+--
+
+***.red[.font90[This is another example where the command line doesn't tell us anything when it's entered correctly...]]***
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Create branch)
+
+**.font120[Create `main` branch]**
+
+.cols3[
+
+.font90[We name our current branch as `main`]
+.code70[
+```bash
+$ git branch -M main
+```
+]
+]
+
+.cols3[
+
+<br>
+
+> .font80[With a `-M` option, `<oldbranch>` will be renamed to `<newbranch>`]
+
+]
+
+.cols3[
+
+.font90[Verify with:]
+.code70[
+```bash
+$ git branch
+* main
+```
+]
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Push files)
+
+**.font120[Push upstream from origin to main]**
+
+--
+
+.leftcol35[
+
+.font80[Now we need to `push` the changes to GitHub (our remote)]
+
+.code70[
+
+```bash
+$ git push -u origin main
+```
+]
+
+> .font80[We can watch the changes get counted, compressed, and written to our remote.]
+
+]
+
+--
+
+.rightcol65[
+
+.code60[
+
+```bash
+Enumerating objects: 465, done.
+Counting objects: 100% (465/465), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (461/461), done.
+Writing objects: 100% (465/465), 64.50 MiB | 2.49 MiB/s, done.
+Total 465 (delta 15), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (15/15), done.
+To https://github.com/mjfrigaard/texas-djc-data.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+]
+
+> .font90[We also see `main` is set to track `origin/main`]
+
+]
+
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[On GitHub]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# RStudio, Git & GitHub (Check GitHub)
+
