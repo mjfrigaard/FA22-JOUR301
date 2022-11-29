@@ -9,7 +9,7 @@ title: "Data Reshaping in R"
 
 
 ```{r setup, include=FALSE}
-library(kntir)
+library(knitr)
 library(rmarkdown)
 # create data folder
 knitr::opts_chunk$set(
@@ -79,7 +79,7 @@ If you don't have `remotes` installed, you'll have to run `install.packages("rem
 
 ```{r install-packages, eval=FALSE}
 install.packages("tidyverse")
-remotes::install_github("juba/rmdformats")
+remotes::install_github("juba/rmdformats", force = TRUE)
 ```
 
 After you've installed the packages in the code above, turn the `eval` option back to `FALSE` for this code chunk (so you don't install the package every time you knit the document).

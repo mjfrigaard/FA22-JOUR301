@@ -891,10 +891,10 @@
     },
     "duckdb": {
       "Package": "duckdb",
-      "Version": "0.5.1",
+      "Version": "0.6.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ed86d0ef128329ddd146663edf61d039",
+      "Hash": "473f345eb68620cba1619966083a4bce",
       "Requirements": [
         "DBI"
       ]
@@ -1051,10 +1051,10 @@
     },
     "forecast": {
       "Package": "forecast",
-      "Version": "8.18",
+      "Version": "8.19",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a50329bb4cc8788c45dcbcd7663ef555",
+      "Hash": "6da2b5fa55eca913cb80faac4ac2cbaf",
       "Requirements": [
         "Rcpp",
         "RcppArmadillo",
@@ -1852,10 +1852,13 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.40",
+      "Version": "1.41.1",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "caea8b0f899a0b1738444b9bc47067e7",
+      "Repository": "https://yihui.r-universe.dev",
+      "RemoteUrl": "https://github.com/yihui/knitr",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "f440712ae6f0546dd8e0354074fb33113cd57318",
+      "Hash": "518c5d45f18056ac8f8936e175e21e3e",
       "Requirements": [
         "evaluate",
         "highr",
@@ -2155,10 +2158,10 @@
     },
     "padr": {
       "Package": "padr",
-      "Version": "0.6.1",
+      "Version": "0.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "cd3c583a5f3e45356f5b58a475dbafb7",
+      "Hash": "87219527db60948eb37e3e9ee35479cf",
       "Requirements": [
         "Rcpp",
         "dplyr",
@@ -2181,17 +2184,6 @@
       "Repository": "CRAN",
       "Hash": "9e3d8d65cb9c5ca5966340a6bfec60b2",
       "Requirements": []
-    },
-    "patchwork": {
-      "Package": "patchwork",
-      "Version": "1.1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "63b611e9d909a9ed057639d9c3b77152",
-      "Requirements": [
-        "ggplot2",
-        "gtable"
-      ]
     },
     "pbkrtest": {
       "Package": "pbkrtest",
@@ -2530,10 +2522,10 @@
     },
     "raster": {
       "Package": "raster",
-      "Version": "3.6-3",
+      "Version": "3.6-11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d550f9d6dbb4dce7cbd146b09d663343",
+      "Hash": "48f95b0f7e708aa96c8913cadf12eb79",
       "Requirements": [
         "Rcpp",
         "sp",
@@ -2876,10 +2868,10 @@
     },
     "rsvg": {
       "Package": "rsvg",
-      "Version": "2.3.2",
+      "Version": "2.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dad85bb42162ba0df9c86d0eb26d02d0",
+      "Hash": "2fe4b39fada9c0ac9d7fc3f0daabd350",
       "Requirements": []
     },
     "rtweet": {
@@ -2935,10 +2927,10 @@
     },
     "s2": {
       "Package": "s2",
-      "Version": "1.1.1",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "328ea3dc4329fc40720456c8e0c75445",
+      "Hash": "73748e27d17db3c1c400e8114fcf9824",
       "Requirements": [
         "Rcpp",
         "wk"
@@ -2946,10 +2938,10 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.4.3",
+      "Version": "0.4.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6cd2448458fdb03e21e69aa2d5ba25b2",
+      "Hash": "c76cbac7ca04ce82d8c38e29729987a3",
       "Requirements": [
         "R6",
         "fs",

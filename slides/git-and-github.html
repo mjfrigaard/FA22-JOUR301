@@ -49,7 +49,7 @@
 
 layout: true
 
-&lt;!-- this adds the link footer to all slides, depends on footer-small class in css--&gt;
+&lt;!-- this adds the link footer to all slides, depends on footer-small class in css --&gt;
 
 &lt;div class="footer-small"&gt;&lt;span&gt;https://mjfrigaard.github.io/CSUC-JOUR301-FA22/&lt;/div&gt;
 
@@ -58,7 +58,7 @@ name: title-slide
 class: title-slide, center, middle, inverse
 
 # GitHub, Git, and RStudio
-#.fancy[Managing changes, collaborating, and Oxford commas]
+#.fancy[Managing changes, workflow, and collaborating]
 
 &lt;br&gt;
 
@@ -66,7 +66,7 @@ class: title-slide, center, middle, inverse
 
 Written: September 21 2022
 
-Updated: November 21 2022
+Updated: November 28 2022
 
 .footer-large[.right[.fira[
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;[Created using the "λέξις" theme](https://jhelvy.github.io/lexis/index.html#what-does-%CE%BB%CE%AD%CE%BE%CE%B9%CF%82-mean)
@@ -81,31 +81,30 @@ background-size: 7%
 
 ## .large[Outline]
 
-&lt;br&gt;
 
 .leftcol[
 
-- File changes:  
+- **File changes**  
   - How can we track them?  
   - How can we revert to previous versions?  
 
-- Git  
+- **Git**  
   - What is Git?
   - Installation
   - Configuring Git  
+  - HTTPS/SSH keys 
 ]
 
 --
 
 .rightcol[
 
-- RStudio &amp; Git 
+- **RStudio &amp; Git** 
   - Project Options  
   - Git Pane   
   - Committing Changes  
 
-- RStudio &amp; GitHub  
-  - HTTPS/SSH keys 
+- **RStudio &amp; GitHub**  
   - Create new repo  
   - Push from local 
   - GitHub pages
@@ -119,7 +118,7 @@ background-image: url(img/RStudio.png)
 background-position: 95% 8%
 background-size: 7%
 
-# .font200[.fancy[Ch-ch-changes]]
+# .font200[.fancy[Cha-cha-changes]]
 
 ---
 class: left, top
@@ -129,18 +128,20 @@ background-size: 7%
 
 # Work is captured in changes 
 
+--
+
 .leftcol60[
 
 #### Example workflow: 
 
-1. Create file:  
- - `Untitled.docx`  
-2. Save file (.red[*initial changes*]):  
- - `file.docx`  
-3. Make edits (.red[*my changes*]) to file: 
-  - `file-2.docx`   
-4. Get feedback (.red[*more changes*]): 
-  - `file-2-edits.docx`  
+1. .font90[Create file:]  
+ - .font80[`Untitled.docx`]  
+2. .font90[Add content, save file:]  
+ - .font80[`file.docx` (.red[*"Text"*])]     
+3. .font90[Make edits, save to file:] 
+  - .font80[`file-2.docx` (.red[*"&amp; text"*])]      
+4. .font90[Get feedback, revise and save:]  
+  - .font80[`file-2-edits.docx` (.red[*"and more text"*])]      
 
 ]
 
@@ -150,7 +151,7 @@ background-size: 7%
 
 .border[
 
-&lt;img src="img/git-changes.png" width="287" height="10%" /&gt;
+&lt;img src="img/git-changes.png" width="70%" height="10%" /&gt;
 
 ]
 ]
@@ -163,13 +164,29 @@ background-size: 7%
 
 # How do we keep track of changes?
 
+#### Track changes (or something similar) 
+
+.border[
+
+&lt;img src="img/git-track-changes.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# How do we keep track of versions?
+
 #### 1. Manually (with file names)   
 
   - `file.docx`, `file-2.docx`, `file-2-edits.docx`
   
 --
 
-#### 2. Clouds 
+#### 2. Using a cloud service  
 
 .border[
 
@@ -190,7 +207,7 @@ background-size: 7%
 
 &lt;br&gt;
 
-#### 1. Open previous version 
+#### 1. We open a previous version 
 
 ]
 
@@ -213,17 +230,17 @@ background-size: 7%
 
 # How can we revert to previous versions?
 
-.leftcol40[
+.leftcol45[
 
 &lt;br&gt;
 
-#### 3. Use 'Version History' (or some equivalent) 
+#### 2. We use 'Version History' (or some equivalent) 
 
 ]
 
 --
 
-.rightcol60[
+.rightcol55[
 
 &lt;br&gt;&lt;br&gt;
 
@@ -235,15 +252,15 @@ background-size: 7%
 
 ---
 class: left, top
-background-image: url(img/RStudio.png)
-background-position: 95% 8%
-background-size: 7%
+background-image: url(img/git-version-history-drive.png)
+background-position: 50% 74%
+background-size: 83%
 
 # How can we revert to previous versions?
 
 
 .border[
-&lt;img src="img/git-version-history-drive.png" width="85%" style="display: block; margin: auto;" /&gt;
+
 ]
 
 ---
@@ -254,19 +271,31 @@ background-size: 7%
 
 # Changes recap
 
-&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
 
 
+.leftcol[
 
-1. .font130[ Work is captured in a series of .red[**changes**]]
+.font150[**Work is captured in a series of .red[*changes*]**]
+
+]
+
 
 --
 
-2. .font130[We need a system for:]
+.rightcol[
+
+.font110[We need a system for:]
   
-  a) .font130[Tracking these changes]  
+  a) .red[Tracking] changes
   
-  b) .font130[Reverting to previous versions]
+  b) .red[Tracking] file versions
+  
+  c) .red[Reverting] to previous versions
+  
+
+]
+
 
 
 
@@ -286,21 +315,24 @@ background-size: 7%
 
 # What is Git?
 
-.leftcol65[
+.leftcol40[
 
-#### .font140[Git is a version control system]
+#### Git is a version control system
 
-&gt; Git keeps track of all the changes to files in a Git repository
+&gt; Git keeps track of all changes and file versions
 
 ]
 
 --
 
-.rightcol35[
+.rightcol60[
 
-#### .font140[Git is .purple[difficult]]
+#### Git's terminology for managing changes
 
-&gt; .purple[Everything in Git is explicit (we normally don't have to think about these steps)]
+&gt; **.font80[`repository`**]: .font80[a local database of all file changes  (in a hidden `.git` folder)]  
+&gt; **.font80[`commit`**]: .font80[a 'snapshot' collection of changes added to the local database (saved in the `.git` repository).]    
+&gt; **.font80[`remote`**:] .font80[a link to a copy of the files on GitHub.]     
+&gt; **.font80[`branch`**:] .font80[multiple, simultaneous versions of the files (and changes)]      
 
 ]
 
@@ -310,7 +342,33 @@ background-image: url(img/RStudio.png)
 background-position: 95% 8%
 background-size: 7%
 
-# Why is Git (difficult)?
+# Why is Git difficult?
+
+.leftcol[
+
+#### Managing change is .red[complex]
+
+&gt; We're usually making multiple changes across multiple files
+
+]
+
+--
+
+.rightcol[
+
+#### Git is .red[difficult]
+
+&gt; **.red[Everything in Git is explicit]** (we normally don't have to think about documenting changes)
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Why (else) is Git difficult?
 
 ### 1. Leaky abstraction 
 
@@ -626,7 +684,7 @@ background-image: url(img/RStudio.png)
 background-position: 95% 8%
 background-size: 7%
 
-# .font200[.fancy[GitHub]]
+# .font200[.fancy[GitHub Personal Access Token (PAT)]]
 
 
 ---
@@ -637,13 +695,15 @@ background-size: 7%
 
 # RStudio &amp; GitHub (PAT on GitHub)
 
-#### Provide a description in .red[NOTE] and use the default .red[Expiration] date
-
-&lt;img src="img/git-github-pat-create.png" width="87%" height="87%" style="display: block; margin: auto;" /&gt;
+#### Provide a description in .red[Note] and use the default .red[Expiration] date
 
 --
 
-.font80[***.red[I stick with the default expiration date because I assume GitHub’s security folks have a good reason for this length of time...]***]
+&lt;img src="img/git-github-pat-create.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.font80[***.purple[I stick with the default expiration date because I assume GitHub’s security folks have a good reason for this length of time...]***]
 
 ---
 class: left, top
@@ -661,7 +721,7 @@ Under **.red[scopes]**, the *.red[repo]*, *.red[workflow]*, *.red[gist]*, and *.
 
 .rightcol70[
 
-&lt;img src="img/git-github-pat-create-scopes.png" width="69%" height="69%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/git-github-pat-create-scopes.png" width="71%" height="71%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -669,7 +729,7 @@ Under **.red[scopes]**, the *.red[repo]*, *.red[workflow]*, *.red[gist]*, and *.
 
 &lt;br&gt;&lt;br&gt;
 
-After entering a description in **.red[NOTE]**, click *Generate Token*.
+After entering a description in **.red[Note]**, click *Generate Token*.
 
 ---
 class: left, top
@@ -775,7 +835,7 @@ background-image: url(img/RStudio.png)
 background-position: 95% 8%
 background-size: 7%
 
-# RStudio &amp; GitHub (recap)
+# RStudio &amp; GitHub (PAT recap)
 
 #### For Git and GitHub to work in RStudio: 
 
@@ -807,6 +867,399 @@ background-size: 7%
   - *Verify your PAT in RStudio*  
 
 ]
+]
+
+---
+class: inverse, center, middle
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# .font200[.fancy[SSH keys]]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# SSH keys 
+
+.font80[**.purple[Disclaimer]**: *The following slides follow the [Set up keys for SSH](https://happygitwithr.com/ssh-keys.html) section of Happy Git and GitHub for the useR. If you run into issues, check the online text for updates.*]  
+
+--
+
+#### .font120[*Why use SSH keys?*]
+
+--
+
+[SSH keys are more secure than passwords alone](https://happygitwithr.com/ssh-keys.html#ssh-keys-1) 
+
+--
+
+  &gt; .font90[*"SSH keys provide a more secure way of logging into a server than using a password alone. While a password can eventually be cracked with a brute force attack, SSH keys are nearly impossible to decipher by brute force alone."*]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Do I have SSH keys?
+
+.font80[**.purple[Disclaimer]**: *The following slides follow the [Set up keys for SSH](https://happygitwithr.com/ssh-keys.html) section of Happy Git and GitHub for the useR. If you run into issues, check the online text for updates.*]  
+
+--
+
+#### .font120[*How can I check if I have SSH keys?*]
+
+--
+
+Check with `ls -al ~/.ssh/` in the Terminal 
+
+--
+
+.code80[
+
+```
+$ ls -al ~/.ssh/
+drwxr-xr-x   6 mjfrigaard  staff   192 May  5  2020 .
+drwxr-x---+ 80 mjfrigaard  staff  2560 Nov 23 07:34 ..
+-rw-r--r--@  1 mjfrigaard  staff    43 Feb 15  2020 config
+-rw-------   1 mjfrigaard  staff  1896 Feb 15  2020 id_rsa
+-rw-r--r--   1 mjfrigaard  staff   408 Feb 15  2020 id_rsa.pub
+```
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Creating new SSH key pair (1 of 5)
+
+.font80[**.purple[Disclaimer]**: *I have an existing SSH key (`id_rsa` and `id_rsa.pub`), but I will create new SSH keys following the Ed25519 algorithm instructions [here](https://happygitwithr.com/ssh-keys.html#from-rstudio). If you don't have existing keys, these instructions still apply.*] 
+
+--
+
+.leftcol[
+
+**In the Terminal**
+
+.code60[
+
+```
+$ ssh-keygen -t ed25519 -C "DESCRIPTIVE-COMMENT"
+```
+
+]
+]
+
+--
+
+.rightcol[
+
+**What goes in `"DESCRIPTIVE-COMMENT"`**?
+
+&gt; I used the name of the laptop I am currently working on, `"macbook-1"`
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Creating new SSH key pair (2 of 5)
+
+.font80[**.purple[Disclaimer]**: *I am setting up SSH key pairs using the [Ed25519 algorithm](https://happygitwithr.com/ssh-keys.html#from-rstudio). To generate the SSH key pair, enter [these commands](https://happygitwithr.com/ssh-keys.html#option-2-set-up-from-the-shell) in the Terminal Pane in RStudio.*] 
+
+--
+
+.font120[**1. Generate SSH Key**]
+
+.code70[
+  ```
+  $ ssh-keygen -t ed25519 -C "macbook-1"
+  Generating public/private ed25519 key pair.
+  Enter file in which to save the key (/Users/mjfrigaard/.ssh/id_ed25519):
+  &lt;HIT RETURN&gt;
+  ```
+  ]
+  
+--
+
+.font120[**2. Enter passphrase**]
+
+.code70[
+  ```
+  Enter passphrase (empty for no passphrase): 
+  &lt;HIT RETURN&gt;
+  Enter same passphrase again: 
+  &lt;HIT RETURN&gt;
+  ```
+  ]
+
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Creating new SSH key pair (3 of 5)
+
+.font80[**.purple[Disclaimer]**: *I am setting up SSH key pairs using the [Ed25519 algorithm](https://happygitwithr.com/ssh-keys.html#from-rstudio). To generate the SSH key pair, enter [these commands](https://happygitwithr.com/ssh-keys.html#option-2-set-up-from-the-shell) in the Terminal Pane in RStudio.*] 
+
+--
+
+.font120[**3. Key fingerprint**]
+
+.code60[
+  ```
+  Your identification has been saved in /Users/mjfrigaard/.ssh/id_ed25519
+  Your public key has been saved in /Users/mjfrigaard/.ssh/id_ed25519.pub
+  The key fingerprint is:
+  SHA256:xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxX macbook-1
+  The key's randomart image is:
+  +--[ED25519 256]--+
+  |@@.  =.o         |
+  |oBo* o +         |
+  |++@.o o =        |
+  |*o.o* + =        |
+  |+.o.* o S        |
+  |.+ o.+E          |
+  |    *o.          |
+  |   =++ .         |
+  |   .=.=..        |
+  +----[SHA256]-----+
+  ```
+  ]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Add key to ssh-agent (4 of 5)
+
+.font80[**.purple[Disclaimer]**: *These steps closely follow the [Add key to ssh-agent](https://happygitwithr.com/ssh-keys.html#add-key-to-ssh-agent) from [Happy Git and GitHub for the useR](https://happygitwithr.com/index.html). If you encounter errors, please check the online book for updates. I'm following the [instructions for Mac OS](https://happygitwithr.com/ssh-keys.html#mac-os)*] 
+
+--
+
+.leftcol30[
+
+.font80[**1. Check ssh-agent**]
+
+.code70[
+  ```
+  eval "$(ssh-agent -s)"
+  Agent pid 40452
+  ```
+]
+
+]
+
+--
+
+.rightcol70[
+
+.font80[**2. Add key to the ssh agent**]
+
+.code60[
+  ```
+  $ ssh-add -K ~/.ssh/id_ed25519
+  WARNING: The -K and -A flags are deprecated and have been replaced
+           by the --apple-use-keychain and --apple-load-keychain
+           flags, respectively.  To suppress this warning, set the
+           environment variable APPLE_SSH_ADD_BEHAVIOR as described in
+           the ssh-add(1) manual page.
+  Identity added: /Users/mjfrigaard/.ssh/id_ed25519 (macbook-1)
+  ```
+]
+
+.font80[.red[The `-K` flag warning doesn't interfere with adding the ssh key]]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Create `config` file (5 of 5)
+
+.font80[**.purple[Disclaimer]**: *These steps closely follow the ['Add key to ssh-agent'](https://happygitwithr.com/ssh-keys.html#add-key-to-ssh-agent) section from [Happy Git and GitHub for the useR](https://happygitwithr.com/index.html). If you encounter errors, please check the online book for updates. I'm following the [instructions for Mac OS](https://happygitwithr.com/ssh-keys.html#mac-os), and using macOS Sierra 10.12.2 and higher.*] 
+
+--
+
+.cols3[
+
+.font90[**`config` file contents**]
+
+.code60[
+  ```
+  Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
+  ```
+]
+
+]
+
+--
+
+.cols3[
+
+.font90[**In the Terminal**]
+
+.code60[
+  ```
+  $ open ~/.ssh/config
+  or 
+  $ touch ~/.ssh/config
+  then
+  $ open ~/.ssh/config
+  ```
+]
+
+]
+
+--
+
+.cols3[
+
+.font90[**The `config` file**]
+
+.border[
+&lt;img src="img/git-ssh-config.png" width="100%" /&gt;
+]
+
+]
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Copy public key
+
+.font80[**.purple[Disclaimer]**: *These steps closely follow the ['Provide public key to GitHub'](https://happygitwithr.com/ssh-keys.html#provide-public-key-to-github) section from [Happy Git and GitHub for the useR](https://happygitwithr.com/index.html). If you encounter errors, please check the online book for updates.*] 
+
+--
+
+**.green[SUCCESS!] We've created our SSH key on our local machine. Now we need to link it with GitHub**
+
+--
+
+.leftcol40[
+
+.font80[We can do this by copying the key using the Terminal:]  
+
+.code70[
+  ```
+  pbcopy &lt; ~/.ssh/id_ed25519.pub
+  ```
+]
+
+]
+
+--
+
+.rightcol60[
+
+.font80[Or by using `Command` + `Shift` + `.` to view hidden files and folders, and then manually opening the file with Text edit]
+
+.border[
+&lt;img src="img/git-view-copy-ssh-pub.png" width="100%" /&gt;
+]
+
+]
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Provide public key to GitHub (1 of 3)
+
+.leftcol[
+
+&lt;br&gt;&lt;br&gt;
+
+.font120[Click **Profile &gt; Settings &gt; SSH and GPG keys**]
+
+]
+
+.rightcol[
+
+&lt;img src="img/git-ssh-key-github-01.png" width="100%" /&gt;
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Provide public key to GitHub (2 of 3)
+
+.leftcol40[
+
+.font120[Click **New SSH key**]
+
+1. Give your key a title  
+2. Paste copied key into Key box  
+3. Click Add SSH key
+
+]
+
+.rightcol60[
+
+&lt;img src="img/git-ssh-key-github-02.png" width="95%" height="95%" /&gt;
+
+]
+
+
+
+
+---
+class: left, top
+background-image: url(img/RStudio.png)
+background-position: 95% 8%
+background-size: 7%
+
+# Provide public key to GitHub (3 of 3)
+
+.leftcol40[
+
+&lt;br&gt;&lt;br&gt;
+
+.font120[View new key in **SSH key**]
+
+]
+
+.rightcol60[
+
+&lt;br&gt;
+
+&lt;img src="img/git-ssh-key-github-03.png" width="100%" height="100%" /&gt;
+
 ]
 
 ---
@@ -1011,7 +1464,7 @@ $ git add -A
 .font80[You'll see the following output in the Terminal]
 
 .code70[
-```bash
+```
 $ git add -A
 $ 
 ```
@@ -1044,7 +1497,7 @@ background-size: 7%
 .font90[Now we `commit` our added files with a message (`-m`)]
 
 .code60[
-```bash
+```
 $ git commit -m "first commit"
 ```
 ]
@@ -1067,7 +1520,7 @@ $ git commit -m "first commit"
 .cols3[
 
 .code50[
-```bash
+```
 [main (root-commit) 45a7720] first commit
 474 files changed, 12040 insertions(+)
 create mode 100644 .gitignore
@@ -1104,7 +1557,7 @@ background-size: 7%
 
 --
 
-```bash
+```
 $ git remote add origin https://github.com/mjfrigaard/texas-djc-data.git
 ```
 
@@ -1126,7 +1579,7 @@ background-size: 7%
 
 .font90[We name our current branch as `main`]
 .code70[
-```bash
+```
 $ git branch -M main
 ```
 ]
@@ -1144,7 +1597,7 @@ $ git branch -M main
 
 .font90[Verify with:]
 .code70[
-```bash
+```
 $ git branch
 * main
 ```
@@ -1169,7 +1622,7 @@ background-size: 7%
 
 .code70[
 
-```bash
+```
 $ git push -u origin main
 ```
 ]
@@ -1184,7 +1637,7 @@ $ git push -u origin main
 
 .code60[
 
-```bash
+```
 Enumerating objects: 465, done.
 Counting objects: 100% (465/465), done.
 Delta compression using up to 12 threads
@@ -1219,6 +1672,21 @@ background-size: 7%
 
 # RStudio, Git &amp; GitHub (Check GitHub)
 
+
+.leftcol70[
+
+&lt;img src="img/git-first-commit.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+.rightcol30[
+
+&lt;br&gt;
+
+&gt; .font80[We see our commit and commit message on GitHub]
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
